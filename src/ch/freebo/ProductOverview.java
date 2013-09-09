@@ -3,10 +3,15 @@ package ch.freebo;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
+import android.widget.EditText;
+import android.widget.ListView;
 
 public class ProductOverview extends Activity {
 	
 	private Activity act;
+	
+	private ListView listView;
+	private EditText editTxt;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -29,8 +34,15 @@ public class ProductOverview extends Activity {
 	public void setElements()
 	{
 		
-		setContentView(R.layout.activity_main);
-		setTitle("Prodcts Loyalty Program");
+		setContentView(R.layout.product_overview_layout);
+		
+        //setContentView(R.layout.products_main);
+
+		
+        listView = (ListView) findViewById(R.id.product_list_view);
+        editTxt = (EditText) findViewById(R.id.product_search_box);
+        
+		setTitle("Mobile Product King - Home");
 		
 	}
 
