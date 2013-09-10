@@ -18,6 +18,8 @@ public class ProductOverview extends Activity {
 		this.setAct(this);
 		super.onCreate(savedInstanceState);
 		
+		System.out.println("ProductOverview called!");
+		
 		setElements();
 		
 	}

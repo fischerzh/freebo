@@ -15,15 +15,20 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import ch.freebo.ProductOverview;
 import ch.freebo.R;
+import ch.freebo.utils.SharedPrefEditor;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
 public class AsyncLogin extends AsyncTask<String, String, String>{
 	
 	private Activity act;
+	
+	private SharedPrefEditor editor;
 	
 	public AsyncLogin(Activity act)
 	{
@@ -47,12 +52,22 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		HttpEntity responseEntity = httpResponse.getEntity();
-		System.out.println("responseEntity: " + responseEntity.toString());
+		HttpEntity responseEntity = null;
 		String result = null;
+		if(httpResponse != null)
+		{
+			responseEntity = httpResponse.getEntity();
+			System.out.println("responseEntity: " + responseEntity.toString());
+		}
+		else
+		{
+			return "FAILED";
+		}
 		if (responseEntity != null) {
-
+			
             // A Simple JSON Response Read
             InputStream instream = null;
 			try {
@@ -66,6 +81,19 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
 			}
             result = convertStreamToString(instream);
             // now you have the string representation of the HTML request
+            if(result.contains("HTTP Status 401") || result.contains("Error 500"))
+            {
+            	return "FAILED";
+            }
+            else
+            {
+    			/**LOGIN WORKED, STORE USERNAME AND PASSWORD IN SHARED PREF **/
+    			editor = new SharedPrefEditor(getAct());
+    			
+    			editor.setUsername(params[1]);
+    			editor.setPwd(params[2]);
+            }
+            
             System.out.println("result: " + result);
             try {
 				instream.close();
@@ -80,12 +108,16 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
 	
 	protected void onPostExecute(String result) {
 		super.onPostExecute(result);
-		if(result.contains("ch.freebo.User"))
+		if(result.contains("FAILED"))
 		{
-			Toast toast = Toast.makeText(getAct(), "Failed to Sync", Toast.LENGTH_LONG);
+			Toast toast = Toast.makeText(getAct(), "Failed to Login or Synchronize App!", Toast.LENGTH_LONG);
 			toast.show();
 		}
-		
+		else
+		{
+			Intent intent = new Intent(getAct(), ProductOverview.class);
+			getAct().startActivity(intent);
+		}
 	}	
 	
 	

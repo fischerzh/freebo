@@ -2,16 +2,22 @@ package ch.freebo;
 
 import ch.freebo.login.AsyncLogin;
 import ch.freebo.userdata.OnTokenAcquired;
+import ch.freebo.utils.SharedPrefEditor;
+
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
+import android.content.Context;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
@@ -22,6 +28,7 @@ public class MainActivity extends Activity {
 	private ImageButton googleLogin;
 	
 	private Activity act;
+	private SharedPrefEditor editor;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -56,21 +63,34 @@ public class MainActivity extends Activity {
         login = (Button) findViewById(R.id.btnLogin);
         googleLogin = (ImageButton) findViewById(R.id.btnGoogleLogin);
         
+        editor = new SharedPrefEditor(this);
+        if(isNetworkAvailable())
+        {
+        	if(editor.getUsername()!="" && editor.getPwd()!= "")
+            {
+        		loginUserFromSettings(editor.getUsername(), editor.getPwd());
+            }
+
+        }
+        else
+        {
+        	Toast.makeText(this,"Internet wird benštigt!", Toast.LENGTH_LONG).show();	
+	        finish();
+	        return;
+        }
+        
         login.setOnClickListener(new Button.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 //				Intent intent = new Intent(LoginActivity.this, ProductListActivity.class);
 //				startActivity(intent);
-				String loginStr, pwdStr;
-		        loginStr = username.getText().toString();
-		        pwdStr = password.getText().toString();
-				new AsyncLogin(getAct()).execute("http://192.168.0.16:8080/Freebo/product/loginFromApp", loginStr, pwdStr);
 				
+				if(isNetworkAvailable())
+				{
+					loginUser();
+				}
 			}
-			
-			
-        	
         }
         );
         
@@ -100,6 +120,26 @@ public class MainActivity extends Activity {
         
         
         
+	}
+	
+	private void loginUserFromSettings(String loginStr, String pwdStr)
+	{
+		new AsyncLogin(getAct()).execute("http://192.168.0.16:8080/Freebo/product/loginFromApp", loginStr, pwdStr);
+	}
+	
+	private void loginUser()
+	{
+		String loginStr, pwdStr;
+        loginStr = username.getText().toString();
+        pwdStr = password.getText().toString();
+		new AsyncLogin(getAct()).execute("http://192.168.0.16:8080/Freebo/product/loginFromApp", loginStr, pwdStr);
+	}
+	
+	private boolean isNetworkAvailable() 
+	{
+	    ConnectivityManager connectivityManager = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+	    NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+	    return activeNetworkInfo != null;
 	}
 
 	/**
