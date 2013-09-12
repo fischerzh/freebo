@@ -9,7 +9,7 @@
             android:id="@+id/list_image"
             android:layout_width="50dip"
             android:layout_height="50dip"
-            android:src="@drawable/zweifelpaprika"/>
+            android:src="@drawable/empty"/>
             />
     
     <LinearLayout
@@ -47,14 +47,12 @@
         />
 	</LinearLayout>
 
-    <CheckBox 
-        android:text="" 
-        android:id="@+id/prod_item_checkbox" 
-        android:layout_width="wrap_content" 
-        android:layout_height="wrap_content" 
-        android:focusable="false"
-        android:button="@android:drawable/btn_default" 
-        />
-        
+    <CheckBox
+        android:id="@+id/prod_item_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:layout_height="19dp"
+        android:button="@android:drawable/btn_default"
+        android:focusable="false" />
  
 </LinearLayout>

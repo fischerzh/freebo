@@ -6,11 +6,11 @@
     android:focusableInTouchMode="true"
     android:orientation="vertical" >
 
-    <include
-        android:id="@+id/header"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        layout="@layout/action_bar_home" />
+    <!-- <include -->
+    <!-- android:id="@+id/header" -->
+    <!-- android:layout_width="fill_parent" -->
+    <!-- android:layout_height="wrap_content" -->
+    <!-- layout="@layout/action_bar_home" /> -->
 
     <EditText
         android:id="@+id/product_search_box"
@@ -22,7 +22,8 @@
     <ListView
         android:id="@+id/product_list_view"
         android:layout_width="fill_parent"
-        android:layout_height="326dp" />
+        android:layout_height="326dp"
+        android:layout_weight="1.08" />
 
     <Button
         android:id="@+id/button1"

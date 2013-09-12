@@ -1,14 +1,24 @@
 package ch.freebo;
 
+import java.util.ArrayList;
+
+import ch.freebo.classes.override.ProductBaseAdapter;
+import ch.freebo.utils.ProductKing;
+import ch.freebo.utils.Products;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 
 public class ProductOverview extends Activity {
 	
 	private Activity act;
+	
+	private ProductBaseAdapter adapter;
 	
 	private ListView listView;
 	private EditText editTxt;
@@ -45,6 +55,23 @@ public class ProductOverview extends Activity {
         editTxt = (EditText) findViewById(R.id.product_search_box);
         
 		setTitle("Mobile Product King - Home");
+		
+		adapter = new ProductBaseAdapter(this, (ArrayList<Products>) ProductKing.getStaticProducts());
+		
+        listView.setAdapter(adapter);
+        
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> adapter, View view, int position, long id) {
+//				editTxt.setText("");
+				Products currentItem;
+				
+				System.out.println("Position clicked: " + position + " " + listView.getItemAtPosition(position));
+				
+			}
+			
+        });
 		
 	}
 

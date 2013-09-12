@@ -15,8 +15,13 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.stream.JsonReader;
+
 import ch.freebo.ProductOverview;
 import ch.freebo.R;
+import ch.freebo.utils.ProductKing;
 import ch.freebo.utils.SharedPrefEditor;
 
 import android.app.Activity;
@@ -29,6 +34,8 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
 	private Activity act;
 	
 	private SharedPrefEditor editor;
+	
+	private String jsonResult;
 	
 	public AsyncLogin(Activity act)
 	{
@@ -56,7 +63,7 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
 			e.printStackTrace();
 		}
 		HttpEntity responseEntity = null;
-		String result = null;
+		
 		if(httpResponse != null)
 		{
 			responseEntity = httpResponse.getEntity();
@@ -79,9 +86,9 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-            result = convertStreamToString(instream);
+            setJsonResult(convertStreamToString(instream));
             // now you have the string representation of the HTML request
-            if(result.contains("HTTP Status 401") || result.contains("Error 500"))
+            if(getJsonResult().contains("HTTP Status 401") || getJsonResult().contains("Error 500"))
             {
             	return "FAILED";
             }
@@ -94,7 +101,7 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
     			editor.setPwd(params[2]);
             }
             
-            System.out.println("result: " + result);
+            System.out.println("result: " + getJsonResult());
             try {
 				instream.close();
 			} catch (IOException e) {
@@ -103,22 +110,56 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
 			}
         }
 		
-		return result;
+		return getJsonResult();
 	}
 	
 	protected void onPostExecute(String result) {
 		super.onPostExecute(result);
 		if(result.contains("FAILED"))
 		{
-			Toast toast = Toast.makeText(getAct(), "Failed to Login or Synchronize App!", Toast.LENGTH_LONG);
+			Toast toast = Toast.makeText(getAct(), "Failed to Login!", Toast.LENGTH_LONG);
 			toast.show();
 		}
 		else
 		{
+			
+			parseJSON();
+			
 			Intent intent = new Intent(getAct(), ProductOverview.class);
 			getAct().startActivity(intent);
 		}
 	}	
+	
+	private void parseJSON()
+	{
+		System.out.println("Json Stream reading..");
+		Gson gson = new Gson();
+//		JsonReader reader = new JsonReader(new BufferedReader(new InputStreamReader(getJSONDataFromFile(), "UTF-8")));
+		ProductKing prodKing = null;
+		try {
+    		prodKing = gson.fromJson(getJsonResult(), ProductKing.class); //Product.class
+    		System.out.println("ProductKing loaded: " +prodKing);
+//    		ProductKing prodKing = gson.fromJson(reader, ProductKing.class); //Product.class
+    	}
+    	catch (JsonSyntaxException e) {
+//    		setIsLoaded(false);
+//    		failed = true;
+			System.out.println("JSON Syntax Exception" + e.toString());
+			Toast toast = Toast.makeText(getAct(), "JSON Syntax Exception!", Toast.LENGTH_LONG);
+			toast.show();
+    	}
+    	catch (Exception e)	{
+//    		failed = true;
+//    		setIsLoaded(true);
+    		System.out.println("Exception " + e.toString());
+    		Toast toast = Toast.makeText(getAct(), "Exception!", Toast.LENGTH_LONG);
+			toast.show();
+    	}
+		System.out.println("Name: " + prodKing.getUsername());
+		System.out.println("Products: " +prodKing.getProducts().size());
+		
+		ProductKing.setStaticProducts(prodKing.getProducts());
+	}
 	
 	
 	private static String convertStreamToString(InputStream is) {
@@ -146,6 +187,20 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
 	        }
 	    }
 	    return sb.toString();
+	}
+
+	/**
+	 * @return the jsonResult
+	 */
+	public String getJsonResult() {
+		return jsonResult;
+	}
+
+	/**
+	 * @param jsonResult the jsonResult to set
+	 */
+	public void setJsonResult(String jsonResult) {
+		this.jsonResult = jsonResult;
 	}
 
 	/**
