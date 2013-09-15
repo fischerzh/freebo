@@ -15,6 +15,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -29,6 +30,8 @@ public class ProductOverview extends Activity {
 	private ProductBaseAdapter adapter;
 	
 	private SharedPrefEditor editor;
+	
+	private BaseActivity baseActivityMenu;
 		
 	private ListView listView;
 	private EditText editTxt;
@@ -38,6 +41,8 @@ public class ProductOverview extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		this.setAct(this);
 		super.onCreate(savedInstanceState);
+		
+		baseActivityMenu = new BaseActivity(this);
 		
 		System.out.println("ProductOverview called!");
 		
@@ -54,6 +59,23 @@ public class ProductOverview extends Activity {
 		return true;
 	}
 	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    // Handle item selection
+	    switch (item.getItemId()) {
+//	        case R.id.create_new:
+//	        	baseActivityMenu.logOut();
+//	            return true;
+	        case R.id.log_out:
+	        	baseActivityMenu.logOut();
+	            return true;
+	        case R.id.app_sync:
+	        	baseActivityMenu.syncAppToServer();
+	            return true;
+	        default:
+	            return super.onOptionsItemSelected(item);
+	    }
+	}
 	
 	
 	public void setElements()

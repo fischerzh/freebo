@@ -12,10 +12,14 @@
                   android:title="Open" />
         </menu>
     </item>
-    <item android:id="@+id/file"
+    <item android:id="@+id/log_out"
           android:title="Log Out" >
         <!-- "file" submenu -->
         
     </item>
-
+	<item android:id="@+id/app_sync"
+          android:title="Full App Sync" >
+        <!-- "file" submenu -->
+        
+    </item>
 </menu>

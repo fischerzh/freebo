@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 public class MainActivity extends Activity {
@@ -27,6 +28,7 @@ public class MainActivity extends Activity {
 	private EditText username, password;
 	private Button login;
 	private ImageButton googleLogin;
+	private ProgressBar progressBar;
 	
 	private Activity act;
 	private SharedPrefEditor editor;
@@ -60,6 +62,8 @@ public class MainActivity extends Activity {
         username = (EditText) findViewById(R.id.txtUsername);
         password = (EditText) findViewById(R.id.txtPassword);
         
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.INVISIBLE);
         
         login = (Button) findViewById(R.id.btnLogin);
         googleLogin = (ImageButton) findViewById(R.id.btnGoogleLogin);
@@ -69,6 +73,8 @@ public class MainActivity extends Activity {
         {
         	if(editor.getUsername()!="" && editor.getPwd()!= "")
             {
+        		setProgressBarEnableContent();
+        		
         		loginUserFromSettings(editor.getUsername(), editor.getPwd());
             }
 
@@ -89,6 +95,8 @@ public class MainActivity extends Activity {
 				
 				if(isNetworkAvailable())
 				{
+	        		setProgressBarEnableContent();
+
 					loginUser();
 				}
 			}
@@ -123,6 +131,13 @@ public class MainActivity extends Activity {
         
 	}
 	
+	private void setProgressBarEnableContent() {
+		progressBar.setVisibility(View.VISIBLE);
+		username.setEnabled(false);
+		password.setEnabled(false);
+		login.setEnabled(false);
+	}
+
 	private void loginUserFromSettings(String loginStr, String pwdStr)
 	{
 		new AsyncLogin(getAct()).execute("http://192.168.0.16:8080/Freebo/product/loginFromApp", loginStr, pwdStr);
