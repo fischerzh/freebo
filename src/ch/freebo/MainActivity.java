@@ -1,5 +1,6 @@
 package ch.freebo;
 
+import ch.freebo.R;
 import ch.freebo.login.AsyncLogin;
 import ch.freebo.userdata.OnTokenAcquired;
 import ch.freebo.utils.SharedPrefEditor;

@@ -2,16 +2,24 @@ package ch.freebo;
 
 import java.util.ArrayList;
 
+import ch.freebo.R;
 import ch.freebo.classes.override.ProductBaseAdapter;
+import ch.freebo.classes.override.RightDrawableOnTouchListener;
+import ch.freebo.login.AsyncLogin;
+import ch.freebo.login.AsyncUpdate;
 import ch.freebo.utils.ProductKing;
 import ch.freebo.utils.Products;
+import ch.freebo.utils.SharedPrefEditor;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 public class ProductOverview extends Activity {
@@ -20,8 +28,11 @@ public class ProductOverview extends Activity {
 	
 	private ProductBaseAdapter adapter;
 	
+	private SharedPrefEditor editor;
+		
 	private ListView listView;
 	private EditText editTxt;
+	private ImageButton imageBtn;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +40,8 @@ public class ProductOverview extends Activity {
 		super.onCreate(savedInstanceState);
 		
 		System.out.println("ProductOverview called!");
+		
+		System.out.println("Extras from Intent: " +getCallingActivity() + getIntent().getExtras());
 		
 		setElements();
 		
@@ -49,10 +62,21 @@ public class ProductOverview extends Activity {
 		setContentView(R.layout.product_overview_layout);
 		
         //setContentView(R.layout.products_main);
-
 		
         listView = (ListView) findViewById(R.id.product_list_view);
         editTxt = (EditText) findViewById(R.id.product_search_box);
+	    
+        imageBtn = (ImageButton) findViewById(R.id.product_btn_scan);
+        
+        imageBtn.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(ProductOverview.this, BarCodeScanner.class);
+				startActivity(intent);
+				
+			}
+		});
         
 		setTitle("Mobile Product King - Home");
 		
@@ -65,15 +89,47 @@ public class ProductOverview extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> adapter, View view, int position, long id) {
 //				editTxt.setText("");
-				Products currentItem;
 				
 				System.out.println("Position clicked: " + position + " " + listView.getItemAtPosition(position));
+				updateUserInfo(true, ((Products)listView.getItemAtPosition(position)).getId());
 				
+				if(ProductKing.getStaticProducts().get(position).getOptin())
+				{
+					ProductKing.getStaticProducts().get(position).setOptin(false);
+				}
+				else
+				{
+					ProductKing.getStaticProducts().get(position).setOptin(true);
+				}
+				restartActivity();
+
 			}
 			
         });
+
 		
 	}
+
+	
+	protected void restartActivity() {
+		// TODO Auto-generated method stub
+		finish();
+		startActivity(getIntent());
+//		new AsyncLogin(getAct()).execute("http://192.168.0.16:8080/Freebo/product/loginFromApp", editor.getUsername(), editor.getPwd());
+		
+	}
+
+	private void updateUserInfo(Boolean optIn, Integer productID)
+	{
+		String loginStr, pwdStr;
+		
+		editor = new SharedPrefEditor(getAct());
+		
+        loginStr = editor.getUsername();
+        pwdStr = editor.getPwd();
+		new AsyncUpdate(getAct(), optIn, productID).execute("http://192.168.0.16:8080/Freebo/product/updateUserInfo", loginStr,pwdStr);
+	}
+	
 
 	/**
 	 * @return the act

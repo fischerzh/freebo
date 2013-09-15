@@ -12,12 +12,26 @@
     <!-- android:layout_height="wrap_content" -->
     <!-- layout="@layout/action_bar_home" /> -->
 
-    <EditText
-        android:id="@+id/product_search_box"
+    <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:drawableLeft="@android:drawable/ic_menu_search"
-        android:hint="Search" />
+        android:orientation="horizontal" >
+
+        <EditText
+            android:id="@+id/product_search_box"
+            android:layout_width="289dp"
+            android:layout_height="wrap_content"
+            android:drawableRight="@android:drawable/ic_menu_search"
+            android:hint="Search" />
+
+        <ImageButton
+            android:id="@+id/product_btn_scan"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_vertical"
+            android:background="@null"
+            android:src="@drawable/btn_scan" />
+    </LinearLayout>
 
     <ListView
         android:id="@+id/product_list_view"
@@ -26,7 +40,7 @@
         android:layout_weight="1.08" />
 
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/product_btn_delete"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Delete marked Items" />

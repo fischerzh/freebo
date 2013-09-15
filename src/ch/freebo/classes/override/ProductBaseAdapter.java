@@ -1,6 +1,8 @@
 package ch.freebo.classes.override;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -14,7 +16,11 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 
+import ch.freebo.ProductOverview;
 import ch.freebo.R;
+import ch.freebo.login.AsyncLogin;
+import ch.freebo.login.AsyncUpdate;
+import ch.freebo.utils.ProductKing;
 import ch.freebo.utils.Products;
 import ch.freebo.utils.SharedPrefEditor;
 
@@ -38,38 +44,38 @@ public class ProductBaseAdapter extends BaseAdapter implements Filterable{
 	private LayoutInflater mInflater;
 	private ImageLoader imageLoader;
 	
-	ViewHolder holder;
+	private ViewHolder holder;
 	
 	private DisplayImageOptions options;
 	private Context cont;
 	
-	private int checkBoxCounter, checkBoxInitialized;
-	
+	private SharedPrefEditor editor;
 	
 	public ProductBaseAdapter(Context context, ArrayList<Products> items)
 	{
 		resultList = items;
 		setCont(context);
 		mInflater = LayoutInflater.from(context);
-		
-        /** IMAGE LOADER */
-		File cacheDir = StorageUtils.getOwnCacheDirectory(context, "your folder");
 
-		 // Get singletone instance of ImageLoader
-		 imageLoader = ImageLoader.getInstance();
-		 // Create configuration for ImageLoader (all options are optional)
-		 ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(context)
-		          // You can pass your own memory cache implementation
-		         .discCache(new UnlimitedDiscCache(cacheDir)) // You can pass your own disc cache implementation
-		         .discCacheFileNameGenerator(new HashCodeFileNameGenerator())
-		         .build();
-		 // Initialize ImageLoader with created configuration. Do it once.
-		 imageLoader.init(config);
-		 
-		 options = new DisplayImageOptions.Builder()
-		.showStubImage(R.drawable.empty)//display stub image
-		.displayer(new RoundedBitmapDisplayer(20))
-		.build();
+		/** IMAGE LOADER */
+		File cacheDir = StorageUtils.getOwnCacheDirectory(context,
+				"your folder");
+
+		// Get singletone instance of ImageLoader
+		imageLoader = ImageLoader.getInstance();
+		// Create configuration for ImageLoader (all options are optional)
+		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(context)
+				// You can pass your own memory cache implementation
+				.discCache(new UnlimitedDiscCache(cacheDir))
+				// You can pass your own disc cache implementation
+				.discCacheFileNameGenerator(new HashCodeFileNameGenerator())
+				.build();
+		// Initialize ImageLoader with created configuration. Do it once.
+		imageLoader.init(config);
+
+		options = new DisplayImageOptions.Builder()
+				.showStubImage(R.drawable.empty)// display stub image
+				.displayer(new RoundedBitmapDisplayer(20)).build();
 	}
 
 	@Override
@@ -92,16 +98,10 @@ public class ProductBaseAdapter extends BaseAdapter implements Filterable{
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		
-//		final int pos = position;
-		
-		checkBoxCounter = 0;
-		checkBoxInitialized = 0;
-		
+				
 		//Initialize convertView
 		if(convertView==null)
 		{
-
 			convertView = mInflater.inflate(R.layout.product_item, null);
 			holder = new ViewHolder();
 			holder.setTxtName((TextView)convertView.findViewById(R.id.prod_item_name));
@@ -120,9 +120,15 @@ public class ProductBaseAdapter extends BaseAdapter implements Filterable{
 //					Product currentProd = (Product) holder.chkBox.getTag();
 //					currentProd.setFavorite(buttonView.isChecked());
 
-					/** SAVE FAVORITES OPT-IN PRODUCTS TO SHARED PREF*/
+					/** SAVE FAVORITES OPT-Out PRODUCTS TO SHARED PREF*/
 					saveFavorites();
-					holder.getChkBox().setChecked(true);
+//					holder.getChkBox().setChecked(true);
+					resultList.get(getPosition).setIsdeleted(isChecked);
+					updateUserInfo(false, resultList.get(getPosition).getId());
+//					ProductKing.getStaticProducts().get(getPosition).setOptin(false);
+//					
+//					Intent i = new Intent(getCont(), ProductOverview.class);  //your class
+//				    getCont().startActivity(i); 
 				}
 			});
 			
@@ -137,20 +143,43 @@ public class ProductBaseAdapter extends BaseAdapter implements Filterable{
 		}
 		holder.getChkBox().setTag(position);
 		//setValues
-		holder.getTxtName().setText(""+resultList.get(position).getEan());
-		holder.getTxtProducer().setText(""+resultList.get(position).getId());
-		holder.getTxtEan().setText(""+resultList.get(position).getName());
+		if(resultList.get(position).getOptin())
+		{
+			holder.getTxtName().setText(""+resultList.get(position).getPoints()+" Punkte gesammelt!");
+			holder.getTxtProducer().setText("Rang #"+resultList.get(position).getId() + " von 500");
+			holder.getTxtEan().setText("Neue Wettbewerbe vorhanden!");
+		}
+		else
+		{
+			holder.getTxtName().setText(" ");
+			holder.getTxtProducer().setText("Scan product to join!");
+			holder.getTxtEan().setText(" ");
+		}
+		
+		System.out.println("IsDeleted: "+ resultList.get(position).getIsdeleted());
+		holder.getChkBox().setChecked(resultList.get(position).getIsdeleted());
 		
 		//Image Stuff
 		String imageUri = resultList.get(position).getImagelink();
 		
 		holder.getImgView().setTag(imageUri); //Add this line
+		
 		imageLoader.displayImage(imageUri, holder.getImgView());
-//		MY IDEA!! holder.getImgView().setImageDrawable(drawable);
+//		holder.getImgView().setImageDrawable(drawable);
 //		ProductsHelper.setProductList(resultList);
 			
 		return convertView;
+	}
 	
+	private void updateUserInfo(Boolean optIn, Integer productID)
+	{
+		String loginStr, pwdStr;
+		
+		editor = new SharedPrefEditor(getCont());
+		
+        loginStr = editor.getUsername();
+        pwdStr = editor.getPwd();
+		new AsyncUpdate((Activity)getCont(), optIn, productID).execute("http://192.168.0.16:8080/Freebo/product/updateUserInfo", loginStr,pwdStr);
 	}
 	
 
@@ -206,9 +235,14 @@ public class ProductBaseAdapter extends BaseAdapter implements Filterable{
         return filter;
 	}
 	
+	public void refreshActivity()
+	{
+		
+	}
+	
     public void saveFavorites()
     {
-    	SharedPrefEditor editor = new SharedPrefEditor(cont);
+    	editor = new SharedPrefEditor(cont);
     	/** SAVE OPT-IN PRODUCTS TO SHARED PREF!! AND SYNC TO BACKEND!! */
 //    	editor.saveCurrentFavList();    	
     }

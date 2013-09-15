@@ -28,7 +28,12 @@
         </activity>
         
         <activity
-            android:name=".ProductOverview"
+            android:name="ch.freebo.ProductOverview"
+            android:label="@string/app_name">
+        </activity>
+        
+        <activity
+            android:name="ch.freebo.BarCodeScanner"
             android:label="@string/app_name">
         </activity>
         
