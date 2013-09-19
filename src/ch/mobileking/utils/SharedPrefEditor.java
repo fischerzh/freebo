@@ -1,11 +1,13 @@
-package ch.freebo.utils;
+package ch.mobileking.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
 public class SharedPrefEditor {
 	
-	private String activeURL;
+	private static String updateURL = "http://www.sagax.ch:8080/Freebo/product/updateUserInfo"; //192.168.0.16:8080;
+	private static String loginURL = "http://www.sagax.ch:8080/Freebo/product/loginFromApp"; //192.168.0.16:8080;
+
 	
 	private static final String PREFS_PWD = "Password";
 	private static final String PREFS_USERNAME = "Username";
@@ -58,6 +60,34 @@ public class SharedPrefEditor {
 	    System.out.println("getSharedPref #PWD: " + pwd);
 		
 		return pwd;
+	}
+
+	/**
+	 * @return the activeURL
+	 */
+	public String getUpdateURL() {
+		return updateURL;
+	}
+
+	/**
+	 * @param activeURL the activeURL to set
+	 */
+	public void setUpdateURL(String updateURL) {
+		this.updateURL = updateURL;
+	}
+
+	/**
+	 * @return the loginURL
+	 */
+	public String getLoginURL() {
+		return loginURL;
+	}
+
+	/**
+	 * @param loginURL the loginURL to set
+	 */
+	public void setLoginURL(String loginURL) {
+		SharedPrefEditor.loginURL = loginURL;
 	}
 	
 

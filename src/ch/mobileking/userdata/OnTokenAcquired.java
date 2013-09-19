@@ -1,4 +1,4 @@
-package ch.freebo.userdata;
+package ch.mobileking.userdata;
 
 import java.io.IOException;
 

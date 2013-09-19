@@ -1,22 +1,19 @@
-package ch.freebo;
+package ch.mobileking;
 
 import java.util.ArrayList;
 
-import ch.freebo.R;
-import ch.freebo.classes.override.ProductBaseAdapter;
-import ch.freebo.classes.override.RightDrawableOnTouchListener;
-import ch.freebo.login.AsyncLogin;
-import ch.freebo.login.AsyncUpdate;
-import ch.freebo.utils.ProductKing;
-import ch.freebo.utils.Products;
-import ch.freebo.utils.SharedPrefEditor;
+import ch.mobileking.R;
+import ch.mobileking.classes.override.ProductBaseAdapter;
+import ch.mobileking.login.AsyncUpdate;
+import ch.mobileking.utils.ProductKing;
+import ch.mobileking.utils.Products;
+import ch.mobileking.utils.SharedPrefEditor;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -124,11 +121,8 @@ public class ProductOverview extends Activity {
 					ProductKing.getStaticProducts().get(position).setOptin(true);
 				}
 				restartActivity();
-
 			}
-			
         });
-
 		
 	}
 
@@ -149,7 +143,7 @@ public class ProductOverview extends Activity {
 		
         loginStr = editor.getUsername();
         pwdStr = editor.getPwd();
-		new AsyncUpdate(getAct(), optIn, productID).execute("http://192.168.0.16:8080/Freebo/product/updateUserInfo", loginStr,pwdStr);
+		new AsyncUpdate(getAct(), optIn, productID).execute(loginStr,pwdStr); //http://192.168.0.16:8080
 	}
 	
 

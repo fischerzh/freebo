@@ -1,9 +1,7 @@
-package ch.freebo.classes.override;
+package ch.mobileking.classes.override;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,13 +14,10 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 
-import ch.freebo.ProductOverview;
-import ch.freebo.R;
-import ch.freebo.login.AsyncLogin;
-import ch.freebo.login.AsyncUpdate;
-import ch.freebo.utils.ProductKing;
-import ch.freebo.utils.Products;
-import ch.freebo.utils.SharedPrefEditor;
+import ch.mobileking.R;
+import ch.mobileking.login.AsyncUpdate;
+import ch.mobileking.utils.Products;
+import ch.mobileking.utils.SharedPrefEditor;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -179,7 +174,7 @@ public class ProductBaseAdapter extends BaseAdapter implements Filterable{
 		
         loginStr = editor.getUsername();
         pwdStr = editor.getPwd();
-		new AsyncUpdate((Activity)getCont(), optIn, productID).execute("http://192.168.0.16:8080/Freebo/product/updateUserInfo", loginStr,pwdStr);
+		new AsyncUpdate((Activity)getCont(), optIn, productID).execute(loginStr,pwdStr);
 	}
 	
 

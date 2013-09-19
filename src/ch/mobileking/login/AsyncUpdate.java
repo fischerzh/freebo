@@ -1,4 +1,4 @@
-package ch.freebo.login;
+package ch.mobileking.login;
 
 import java.io.IOException;
 
@@ -12,11 +12,9 @@ import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.widget.Toast;
-import ch.freebo.ProductOverview;
-import ch.freebo.utils.SharedPrefEditor;
+import ch.mobileking.utils.SharedPrefEditor;
 
 public class AsyncUpdate extends AsyncTask<String, String, String>{
 	
@@ -35,26 +33,28 @@ public class AsyncUpdate extends AsyncTask<String, String, String>{
 		this.setAct(act);
 		this.productID = productID;
 		this.optIn = optIn;
+		
+		editor = new SharedPrefEditor(getAct());
 	}
 
 	@Override
 	protected String doInBackground(String... params) {
 		
-		System.out.println("Params: " + params[0]+", "+params[1]+", "+params[2]);
+		System.out.println("Params: " + params[0]+", "+params[1]);
 		HttpClient httpClient = new DefaultHttpClient();
 		HttpGet httpGet;
 		String response = "";
 		if(this.optIn)
 		{
-			httpGet = new HttpGet(params[0]+"?username="+params[1]+"&productid="+this.productID+"&optin=true"); //"username=test&productid=3&optin="true""
+			httpGet = new HttpGet(editor.getUpdateURL()+"?username="+params[0]+"&productid="+this.productID+"&optin=true"); //"username=test&productid=3&optin="true""
 			response = "OPT-IN!";
 		}
 		else
 		{
-			httpGet = new HttpGet(params[0]+"?username="+params[1]+"&productid="+this.productID+"&optout=true"); //"username=test&productid=3&optin="true""
+			httpGet = new HttpGet(editor.getUpdateURL()+"?username="+params[0]+"&productid="+this.productID+"&optout=true"); //"username=test&productid=3&optin="true""
 			response = "OPT-OUT!";
 		}
-		httpGet.addHeader(BasicScheme.authenticate(new UsernamePasswordCredentials(params[1], params[2]),"UTF-8", false));
+		httpGet.addHeader(BasicScheme.authenticate(new UsernamePasswordCredentials(params[0], params[1]),"UTF-8", false));
 
 		HttpResponse httpResponse = null;
 		try {
@@ -92,6 +92,7 @@ public class AsyncUpdate extends AsyncTask<String, String, String>{
 		return response;
 	}
 	
+	@Override
 	protected void onPostExecute(String result) {
 		super.onPostExecute(result);
 		if(result.contains("FAILED"))

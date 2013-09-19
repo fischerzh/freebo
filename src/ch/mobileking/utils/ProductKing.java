@@ -1,4 +1,4 @@
-package ch.freebo.utils;
+package ch.mobileking.utils;
 
 import java.io.Serializable;
 import java.util.List;

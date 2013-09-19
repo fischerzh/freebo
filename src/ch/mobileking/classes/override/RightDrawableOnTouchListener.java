@@ -1,4 +1,4 @@
-package ch.freebo.classes.override;
+package ch.mobileking.classes.override;
 
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;

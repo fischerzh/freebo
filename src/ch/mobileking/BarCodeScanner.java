@@ -1,4 +1,4 @@
-package ch.freebo;
+package ch.mobileking;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -8,8 +8,6 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.mirasense.scanditsdk.ScanditSDKAutoAdjustingBarcodePicker;
-import com.mirasense.scanditsdk.ScanditSDKBarcodePicker;
-import com.mirasense.scanditsdk.ScanditSDKBarcodeReader;
 import com.mirasense.scanditsdk.interfaces.ScanditSDK;
 import com.mirasense.scanditsdk.interfaces.ScanditSDKListener;
 
@@ -89,6 +87,7 @@ public class BarCodeScanner extends Activity implements ScanditSDKListener{
 		// Remove non-relevant characters that might be displayed as rectangles
         // on some devices. Be aware that you normally do not need to do this.
         // Only special GS1 code formats contain such characters.
+		System.out.println("Barcode scanned: " +barcode);
         Toast.makeText(this, symbology + ": " + barcode, Toast.LENGTH_LONG).show();
 
 //        String cleanedBarcode = "";

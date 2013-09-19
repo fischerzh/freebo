@@ -1,11 +1,9 @@
-package ch.freebo.login;
+package ch.mobileking.login;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URL;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -17,12 +15,10 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import com.google.gson.stream.JsonReader;
 
-import ch.freebo.ProductOverview;
-import ch.freebo.R;
-import ch.freebo.utils.ProductKing;
-import ch.freebo.utils.SharedPrefEditor;
+import ch.mobileking.ProductOverview;
+import ch.mobileking.utils.ProductKing;
+import ch.mobileking.utils.SharedPrefEditor;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -39,16 +35,17 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
 	
 	public AsyncLogin(Activity act)
 	{
-		this.act = act;
+		this.setAct(act);
+		editor = new SharedPrefEditor(getAct());
 	}
 
 	@Override
 	protected String doInBackground(String... params) {
 		// TODO Auto-generated method stub
-		System.out.println("Params: " + params[0]+", "+params[1]+", "+params[2]);
+		System.out.println("Params: "+params[0]+", "+params[1]);
 		HttpClient httpClient = new DefaultHttpClient();
-		HttpGet httpGet = new HttpGet(params[0]+"?username="+params[1]); //"http://browserspy.dk/password-ok.php"
-		httpGet.addHeader(BasicScheme.authenticate(new UsernamePasswordCredentials(params[1], params[2]),"UTF-8", false));
+		HttpGet httpGet = new HttpGet(editor.getLoginURL()+"?username="+params[0]); //"http://browserspy.dk/password-ok.php"
+		httpGet.addHeader(BasicScheme.authenticate(new UsernamePasswordCredentials(params[0], params[1]),"UTF-8", false));
 
 		HttpResponse httpResponse = null;
 		try {
@@ -98,7 +95,7 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
     			editor = new SharedPrefEditor(getAct());
     			
     			editor.setUsername(params[1]);
-    			editor.setPwd(params[2]);
+    			editor.setPwd(params[0]);
             }
             
             System.out.println("result: " + getJsonResult());
@@ -113,8 +110,11 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
 		return getJsonResult();
 	}
 	
+	@Override
 	protected void onPostExecute(String result) {
 		super.onPostExecute(result);
+		
+		
 		if(result.contains("FAILED"))
 		{
 			Toast toast = Toast.makeText(getAct(), "Failed to Login!", Toast.LENGTH_LONG);
@@ -125,6 +125,8 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
 			
 			parseJSON();
 			
+//			getAct().setProgressBarVisibility(false);
+
 			Intent intent = new Intent(getAct(), ProductOverview.class);
 			getAct().startActivity(intent);
 		}

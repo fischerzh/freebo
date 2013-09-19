@@ -1,6 +1,6 @@
-package ch.freebo;
+package ch.mobileking;
 
-import ch.freebo.utils.SharedPrefEditor;
+import ch.mobileking.utils.SharedPrefEditor;
 import android.app.Activity;
 import android.content.Intent;
 

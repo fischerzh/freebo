@@ -1,4 +1,4 @@
-package ch.freebo.utils;
+package ch.mobileking.utils;
 
 public class ProductKingHelper {
 

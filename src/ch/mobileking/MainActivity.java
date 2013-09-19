@@ -1,9 +1,9 @@
-package ch.freebo;
+package ch.mobileking;
 
-import ch.freebo.R;
-import ch.freebo.login.AsyncLogin;
-import ch.freebo.userdata.OnTokenAcquired;
-import ch.freebo.utils.SharedPrefEditor;
+import ch.mobileking.R;
+import ch.mobileking.login.AsyncLogin;
+import ch.mobileking.userdata.OnTokenAcquired;
+import ch.mobileking.utils.SharedPrefEditor;
 
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -14,6 +14,7 @@ import android.accounts.AccountManager;
 import android.app.Activity;
 import android.content.Context;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -32,11 +33,14 @@ public class MainActivity extends Activity {
 	
 	private Activity act;
 	private SharedPrefEditor editor;
+	BaseActivity baseActivityMenu;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		this.setAct(this);
 		super.onCreate(savedInstanceState);
+		
+		baseActivityMenu = new BaseActivity(this);
 		
 		setElements();
 		
@@ -49,7 +53,23 @@ public class MainActivity extends Activity {
 		return true;
 	}
 	
-	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    // Handle item selection
+	    switch (item.getItemId()) {
+//	        case R.id.create_new:
+//	        	baseActivityMenu.logOut();
+//	            return true;
+	        case R.id.log_out:
+	        	baseActivityMenu.logOut();
+	            return true;
+	        case R.id.app_sync:
+	        	baseActivityMenu.syncAppToServer();
+	            return true;
+	        default:
+	            return super.onOptionsItemSelected(item);
+	    }
+	}
 	
 	
 	public void setElements()
@@ -73,9 +93,11 @@ public class MainActivity extends Activity {
         {
         	if(editor.getUsername()!="" && editor.getPwd()!= "")
             {
-        		setProgressBarEnableContent();
+        		setProgressBarDisableContent();
         		
         		loginUserFromSettings(editor.getUsername(), editor.getPwd());
+        		
+//        		setProgressBarEnableContent();
             }
 
         }
@@ -95,9 +117,11 @@ public class MainActivity extends Activity {
 				
 				if(isNetworkAvailable())
 				{
-	        		setProgressBarEnableContent();
+	        		setProgressBarDisableContent();
 
 					loginUser();
+					
+//					setProgressBarEnableContent();
 				}
 			}
         }
@@ -106,6 +130,8 @@ public class MainActivity extends Activity {
         googleLogin.setOnClickListener(new Button.OnClickListener() {
         	@Override
 			public void onClick(View v) {
+        		
+        		
         		Account[] accounts = am.getAccountsByType("com.google");
         		Account myAccount_ = null;
 
@@ -128,19 +154,25 @@ public class MainActivity extends Activity {
         );
         
         
-        
 	}
 	
-	private void setProgressBarEnableContent() {
+	public void setProgressBarDisableContent() {
 		progressBar.setVisibility(View.VISIBLE);
 		username.setEnabled(false);
 		password.setEnabled(false);
 		login.setEnabled(false);
 	}
+	
+	public void setProgressBarEnableContent() {
+		progressBar.setVisibility(View.INVISIBLE);
+		username.setEnabled(true);
+		password.setEnabled(true);
+		login.setEnabled(true);
+	}
 
 	private void loginUserFromSettings(String loginStr, String pwdStr)
 	{
-		new AsyncLogin(getAct()).execute("http://192.168.0.16:8080/Freebo/product/loginFromApp", loginStr, pwdStr);
+		new AsyncLogin(getAct()).execute(loginStr, pwdStr);
 	}
 	
 	private void loginUser()
@@ -148,7 +180,7 @@ public class MainActivity extends Activity {
 		String loginStr, pwdStr;
         loginStr = username.getText().toString();
         pwdStr = password.getText().toString();
-		new AsyncLogin(getAct()).execute("http://192.168.0.16:8080/Freebo/product/loginFromApp", loginStr, pwdStr);
+		new AsyncLogin(getAct()).execute(loginStr, pwdStr);
 	}
 	
 	private boolean isNetworkAvailable() 
