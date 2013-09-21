@@ -16,6 +16,7 @@ import com.nostra13.universalimageloader.utils.StorageUtils;
 
 import ch.mobileking.R;
 import ch.mobileking.login.AsyncUpdate;
+import ch.mobileking.utils.ProductKing;
 import ch.mobileking.utils.Products;
 import ch.mobileking.utils.SharedPrefEditor;
 
@@ -25,6 +26,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.Filter;
@@ -40,21 +42,22 @@ public class ProductBaseAdapter extends BaseAdapter implements Filterable{
 	private ImageLoader imageLoader;
 	
 	private ViewHolder holder;
+	private int prodLayoutResourceId;
 	
 	private DisplayImageOptions options;
 	private Context cont;
 	
 	private SharedPrefEditor editor;
 	
-	public ProductBaseAdapter(Context context, ArrayList<Products> items)
+	public ProductBaseAdapter(Context context, int prodLayoutResourceId, ArrayList<Products> items)
 	{
 		resultList = items;
+		setProdLayoutResourceId(prodLayoutResourceId);
 		setCont(context);
 		mInflater = LayoutInflater.from(context);
 
 		/** IMAGE LOADER */
-		File cacheDir = StorageUtils.getOwnCacheDirectory(context,
-				"your folder");
+		File cacheDir = StorageUtils.getOwnCacheDirectory(context,"/cache");
 
 		// Get singletone instance of ImageLoader
 		imageLoader = ImageLoader.getInstance();
@@ -70,6 +73,8 @@ public class ProductBaseAdapter extends BaseAdapter implements Filterable{
 
 		options = new DisplayImageOptions.Builder()
 				.showStubImage(R.drawable.empty)// display stub image
+				.cacheInMemory(true)
+		        .cacheOnDisc(true)
 				.displayer(new RoundedBitmapDisplayer(20)).build();
 	}
 
@@ -97,35 +102,53 @@ public class ProductBaseAdapter extends BaseAdapter implements Filterable{
 		//Initialize convertView
 		if(convertView==null)
 		{
-			convertView = mInflater.inflate(R.layout.product_item, null);
+			convertView = mInflater.inflate(getProdLayoutResourceId(), null); //R.layout.product_item
+			
 			holder = new ViewHolder();
 			holder.setTxtName((TextView)convertView.findViewById(R.id.prod_item_name));
 			holder.setTxtProducer((TextView)convertView.findViewById(R.id.prod_item_producer));
 			holder.setTxtEan((TextView)convertView.findViewById(R.id.prod_item_ean));
 			holder.setChkBox((CheckBox)convertView.findViewById(R.id.prod_item_checkbox));
 			holder.setImgView((ImageView)convertView.findViewById(R.id.list_image));
-			
-//			convertView.setTag(holder);
-			holder.getChkBox().setOnCheckedChangeListener(new OnCheckedChangeListener() {
-				
-				@Override
-				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-					int getPosition = (Integer) buttonView.getTag();
-					System.out.println("Checked item at Position: " + getPosition + " " + resultList.get(getPosition).getName() + " set to Favorite " + isChecked);
-//					Product currentProd = (Product) holder.chkBox.getTag();
-//					currentProd.setFavorite(buttonView.isChecked());
+	        holder.setTxtCrownCnt((TextView)convertView.findViewById(R.id.prod_crown_cnt));
 
-					/** SAVE FAVORITES OPT-Out PRODUCTS TO SHARED PREF*/
-					saveFavorites();
-//					holder.getChkBox().setChecked(true);
-					resultList.get(getPosition).setIsdeleted(isChecked);
-					updateUserInfo(false, resultList.get(getPosition).getId());
-//					ProductKing.getStaticProducts().get(getPosition).setOptin(false);
+//			
+//			if(holder.getChkBox()!=null)
+//			{
+//	//			convertView.setTag(holder);
+//				holder.getChkBox().setOnCheckedChangeListener(new OnCheckedChangeListener() {
 //					
-//					Intent i = new Intent(getCont(), ProductOverview.class);  //your class
-//				    getCont().startActivity(i); 
-				}
-			});
+//					@Override
+//					public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//						int getPosition = (Integer) buttonView.getTag();
+//						if(resultList.get(getPosition).getIsdeleted() && isChecked)
+//						{
+//							System.out.println("Nothing to update!");
+//
+//						}
+//						else
+//						{
+//							System.out.println("Checked item at Position: " + getPosition + " " + resultList.get(getPosition).getName() + " set to Favorite " + isChecked);
+//							resultList.get(getPosition).setIsdeleted(isChecked);
+//							holder.getChkBox().setChecked(true);
+//							ProductKing.setStaticProducts(resultList);
+//						}
+//	//					Product currentProd = (Product) holder.chkBox.getTag();
+//	//					currentProd.setFavorite(buttonView.isChecked());
+//	
+//						/** SAVE FAVORITES OPT-Out PRODUCTS TO SHARED PREF*/
+////						saveFavorites();
+//
+////						updateUserInfo(false, resultList.get(getPosition).getId());
+//						
+//						
+//	//					ProductKing.getStaticProducts().get(getPosition).setOptin(false);
+//	//					
+//	//					Intent i = new Intent(getCont(), ProductOverview.class);  //your class
+//	//				    getCont().startActivity(i); 
+//					}
+//				});
+//			}
 			
 			convertView.setTag(holder);
 			convertView.setTag(R.id.prod_item_name, holder.txtName);
@@ -136,13 +159,17 @@ public class ProductBaseAdapter extends BaseAdapter implements Filterable{
 			holder = (ViewHolder)convertView.getTag();
 
 		}
-		holder.getChkBox().setTag(position);
+		if(holder.getChkBox() != null)
+			holder.getChkBox().setTag(position);
+		
 		//setValues
 		if(resultList.get(position).getOptin())
 		{
 			holder.getTxtName().setText(""+resultList.get(position).getPoints()+" Punkte gesammelt!");
 			holder.getTxtProducer().setText("Rang #"+resultList.get(position).getId() + " von 500");
 			holder.getTxtEan().setText("Neue Wettbewerbe vorhanden!");
+			if(holder.getTxtCrownCnt()!= null)
+				holder.getTxtCrownCnt().setText(""+resultList.get(position).getPoints()+" x");
 		}
 		else
 		{
@@ -152,7 +179,44 @@ public class ProductBaseAdapter extends BaseAdapter implements Filterable{
 		}
 		
 		System.out.println("IsDeleted: "+ resultList.get(position).getIsdeleted());
-		holder.getChkBox().setChecked(resultList.get(position).getIsdeleted());
+		if(holder.getChkBox() != null)
+		{
+			
+			holder.getChkBox().setChecked(resultList.get(position).getIsdeleted());
+		
+			holder.getChkBox().setOnCheckedChangeListener(new OnCheckedChangeListener() {
+				
+				@Override
+				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+					int getPosition = (Integer) buttonView.getTag();
+					if(resultList.get(getPosition).getIsdeleted() && isChecked)
+					{
+						System.out.println("Nothing to update!");
+	
+					}
+					else
+					{
+						System.out.println("Checked item at Position: " + getPosition + " " + resultList.get(getPosition).getName() + " set to Favorite " + isChecked);
+						resultList.get(getPosition).setIsdeleted(isChecked);
+						holder.getChkBox().setChecked(true);
+						ProductKing.setStaticProducts(resultList);
+					}
+	//					Product currentProd = (Product) holder.chkBox.getTag();
+	//					currentProd.setFavorite(buttonView.isChecked());
+	
+					/** SAVE FAVORITES OPT-Out PRODUCTS TO SHARED PREF*/
+	//				saveFavorites();
+	
+	//				updateUserInfo(false, resultList.get(getPosition).getId());
+					
+					
+	//					ProductKing.getStaticProducts().get(getPosition).setOptin(false);
+	//					
+	//					Intent i = new Intent(getCont(), ProductOverview.class);  //your class
+	//				    getCont().startActivity(i); 
+				}
+			});
+		}
 		
 		//Image Stuff
 		String imageUri = resultList.get(position).getImagelink();
@@ -160,22 +224,23 @@ public class ProductBaseAdapter extends BaseAdapter implements Filterable{
 		holder.getImgView().setTag(imageUri); //Add this line
 		
 		imageLoader.displayImage(imageUri, holder.getImgView());
+		
 //		holder.getImgView().setImageDrawable(drawable);
-//		ProductsHelper.setProductList(resultList);
+		ProductKing.setStaticProducts(resultList);
 			
 		return convertView;
 	}
 	
-	private void updateUserInfo(Boolean optIn, Integer productID)
-	{
-		String loginStr, pwdStr;
-		
-		editor = new SharedPrefEditor(getCont());
-		
-        loginStr = editor.getUsername();
-        pwdStr = editor.getPwd();
-		new AsyncUpdate((Activity)getCont(), optIn, productID).execute(loginStr,pwdStr);
-	}
+//	private void updateUserInfo(Boolean optIn, String productID)
+//	{
+//		String loginStr, pwdStr;
+//		
+//		editor = new SharedPrefEditor(getCont());
+//		
+//        loginStr = editor.getUsername();
+//        pwdStr = editor.getPwd();
+//		new AsyncUpdate((Activity)getCont(), optIn, productID).execute(loginStr,pwdStr);
+//	}
 	
 
 
@@ -258,6 +323,20 @@ public class ProductBaseAdapter extends BaseAdapter implements Filterable{
 
 
 	/**
+	 * @return the prodLayoutResourceId
+	 */
+	public int getProdLayoutResourceId() {
+		return prodLayoutResourceId;
+	}
+
+	/**
+	 * @param prodLayoutResourceId the prodLayoutResourceId to set
+	 */
+	public void setProdLayoutResourceId(int textLayoutResourceId) {
+		this.prodLayoutResourceId = textLayoutResourceId;
+	}
+
+	/**
 	 * @return the holder
 	 */
 	public ViewHolder getHolder() {
@@ -278,6 +357,7 @@ public class ProductBaseAdapter extends BaseAdapter implements Filterable{
 		private TextView txtName;
 		private TextView txtProducer;
 		private TextView txtEan;
+		private TextView txtCrownCnt;
 		private CheckBox chkBox;
 		private ImageView imgView;
 
@@ -318,6 +398,20 @@ public class ProductBaseAdapter extends BaseAdapter implements Filterable{
 		public void setTxtProducer(TextView txtProducer) {
 			this.txtProducer = txtProducer;
 		}
+		/**
+		 * @return the txtCrownCnt
+		 */
+		public TextView getTxtCrownCnt() {
+			return txtCrownCnt;
+		}
+
+		/**
+		 * @param txtCrownCnt the txtCrownCnt to set
+		 */
+		public void setTxtCrownCnt(TextView txtCrownCnt) {
+			this.txtCrownCnt = txtCrownCnt;
+		}
+
 		/**
 		 * @return the chkBox
 		 */

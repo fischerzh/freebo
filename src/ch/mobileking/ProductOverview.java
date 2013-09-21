@@ -16,9 +16,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class ProductOverview extends Activity {
 	
@@ -29,10 +31,14 @@ public class ProductOverview extends Activity {
 	private SharedPrefEditor editor;
 	
 	private BaseActivity baseActivityMenu;
+	
+	private int prodLayoutResourceId;
+	private boolean editVisible = false;
 		
 	private ListView listView;
 	private EditText editTxt;
-	private ImageButton imageBtn;
+	private ImageButton imageBtn, editBtn, shareBtn;
+	private Button deleteBtn;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +50,15 @@ public class ProductOverview extends Activity {
 		System.out.println("ProductOverview called!");
 		
 		System.out.println("Extras from Intent: " +getCallingActivity() + getIntent().getExtras());
+		
+		setProdLayoutResourceId(R.layout.product_item);
+		if(getCallingActivity() != null && getIntent().getExtras()!= null)
+		{
+			Toast.makeText(this, "Barcode: " + getIntent().getExtras(), Toast.LENGTH_LONG).show();
+
+			updateUserInfo(true, getIntent().getExtras().toString());
+		}
+	//	else //getCallingActivity().getShortClassName().contains("BarCodeScanner") && getIntent().getExtras()!=null)
 		
 		setElements();
 		
@@ -86,6 +101,15 @@ public class ProductOverview extends Activity {
         editTxt = (EditText) findViewById(R.id.product_search_box);
 	    
         imageBtn = (ImageButton) findViewById(R.id.product_btn_scan);
+        editBtn = (ImageButton) findViewById(R.id.product_btn_edit);
+        shareBtn = (ImageButton) findViewById(R.id.product_btn_share);
+        
+        deleteBtn = (Button) findViewById(R.id.product_btn_delete);
+        
+        if(isEditVisible())
+        	deleteBtn.setVisibility(View.VISIBLE);
+        else
+        	deleteBtn.setVisibility(View.INVISIBLE);
         
         imageBtn.setOnClickListener(new View.OnClickListener() {
 			
@@ -97,9 +121,46 @@ public class ProductOverview extends Activity {
 			}
 		});
         
-		setTitle("Mobile Product King - Home");
+        editBtn.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				if(!isEditVisible())
+				{
+					setEditVisible(true);
+					setProdLayoutResourceId(R.layout.product_item_edit);
+				}
+				else
+				{
+					setEditVisible(false);
+					setProdLayoutResourceId(R.layout.product_item);
+
+				}
+				
+				setElements();
+			}
+		});
+        
+        deleteBtn.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				System.out.println("Delete clicked, UPDATING TO SERVER!");
+				for (Products prod : ProductKing.getStaticProducts())
+				{
+					if(prod.getIsdeleted() && prod.getOptin())
+					{
+						System.out.println("Update Server");
+						updateUserInfo(false, prod.getEan());
+					}
+				}
+				
+			}
+		});
+        
+		setTitle("MobileKing");
 		
-		adapter = new ProductBaseAdapter(this, (ArrayList<Products>) ProductKing.getStaticProducts());
+		adapter = new ProductBaseAdapter(this, getProdLayoutResourceId(), (ArrayList<Products>) ProductKing.getStaticProducts()); //R.layout.product_item
 		
         listView.setAdapter(adapter);
         
@@ -110,7 +171,7 @@ public class ProductOverview extends Activity {
 //				editTxt.setText("");
 				
 				System.out.println("Position clicked: " + position + " " + listView.getItemAtPosition(position));
-				updateUserInfo(true, ((Products)listView.getItemAtPosition(position)).getId());
+				updateUserInfo(true, ((Products)listView.getItemAtPosition(position)).getEan());
 				
 				if(ProductKing.getStaticProducts().get(position).getOptin())
 				{
@@ -135,7 +196,7 @@ public class ProductOverview extends Activity {
 		
 	}
 
-	private void updateUserInfo(Boolean optIn, Integer productID)
+	private void updateUserInfo(Boolean optIn, String productID)
 	{
 		String loginStr, pwdStr;
 		
@@ -143,8 +204,14 @@ public class ProductOverview extends Activity {
 		
         loginStr = editor.getUsername();
         pwdStr = editor.getPwd();
-		new AsyncUpdate(getAct(), optIn, productID).execute(loginStr,pwdStr); //http://192.168.0.16:8080
+        new AsyncUpdate(getAct(), optIn, productID).execute(loginStr,pwdStr); //http://192.168.0.16:8080
+        	
 	}
+	
+    @Override
+    public void onBackPressed() {
+    	System.out.println("Back pressed");
+    }
 	
 
 	/**
@@ -159,6 +226,34 @@ public class ProductOverview extends Activity {
 	 */
 	public void setAct(Activity act) {
 		this.act = act;
+	}
+
+	/**
+	 * @return the prodLayoutResourceId
+	 */
+	public int getProdLayoutResourceId() {
+		return prodLayoutResourceId;
+	}
+
+	/**
+	 * @param prodLayoutResourceId the prodLayoutResourceId to set
+	 */
+	public void setProdLayoutResourceId(int prodLayoutResourceId) {
+		this.prodLayoutResourceId = prodLayoutResourceId;
+	}
+
+	/**
+	 * @return the editVisible
+	 */
+	public boolean isEditVisible() {
+		return editVisible;
+	}
+
+	/**
+	 * @param editVisible the editVisible to set
+	 */
+	public void setEditVisible(boolean editVisible) {
+		this.editVisible = editVisible;
 	}
 
 }

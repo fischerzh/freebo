@@ -62,13 +62,10 @@ public class BarCodeScanner extends Activity implements ScanditSDKListener{
         ScanditSDKAutoAdjustingBarcodePicker picker = new ScanditSDKAutoAdjustingBarcodePicker(
                     this, sScanditSdkAppKey, ScanditSDKAutoAdjustingBarcodePicker.CAMERA_FACING_BACK);
         
-//        ScanditSDKBarcodePicker reader = new ScanditSDKBarcodePicker(this, sScanditSdkAppKey, ScanditSDKAutoAdjustingBarcodePicker.CAMERA_FACING_BACK);
-
-        
+        picker.getOverlayView().setVibrateEnabled(false);
         
         // Add both views to activity, with the scan GUI on top.
         setContentView(picker);
-//        setContentView(reader);
         mBarcodePicker = picker;
         
         // Register listener, in order to be notified about relevant events 

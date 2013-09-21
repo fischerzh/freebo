@@ -24,11 +24,11 @@ public class AsyncUpdate extends AsyncTask<String, String, String>{
 	
 	private String jsonResult;
 
-	private Integer productID;
+	private String productID;
 
 	private Boolean optIn;
 	
-	public AsyncUpdate(Activity act, Boolean optIn, Integer productID)
+	public AsyncUpdate(Activity act, Boolean optIn, String productID)
 	{
 		this.setAct(act);
 		this.productID = productID;

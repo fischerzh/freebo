@@ -181,6 +181,7 @@ public class MainActivity extends Activity {
         loginStr = username.getText().toString();
         pwdStr = password.getText().toString();
 		new AsyncLogin(getAct()).execute(loginStr, pwdStr);
+		this.setProgressBarEnableContent();
 	}
 	
 	private boolean isNetworkAvailable() 
