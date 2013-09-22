@@ -57,7 +57,9 @@
         android:id="@+id/product_list_view"
         android:layout_width="fill_parent"
         android:layout_height="326dp"
-        android:layout_weight="1.08" />
+        android:layout_weight="1.08" 
+        android:paddingTop="10dp"
+        />
 
     <Button
         android:id="@+id/product_btn_delete"

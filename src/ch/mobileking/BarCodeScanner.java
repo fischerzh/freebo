@@ -84,22 +84,17 @@ public class BarCodeScanner extends Activity implements ScanditSDKListener{
 		// Remove non-relevant characters that might be displayed as rectangles
         // on some devices. Be aware that you normally do not need to do this.
         // Only special GS1 code formats contain such characters.
+		
 		System.out.println("Barcode scanned: " +barcode);
-        Toast.makeText(this, symbology + ": " + barcode, Toast.LENGTH_LONG).show();
+//        Toast.makeText(this, symbology + ": " + barcode, Toast.LENGTH_LONG).show();
 
-//        String cleanedBarcode = "";
-//        for (int i = 0 ; i < barcode.length(); i++) {
-//            if (barcode.charAt(i) > 30) {
-//                cleanedBarcode += barcode.charAt(i);
-//            }
-//        }
-        
         mBarcodePicker.stopScanning();
         
-        Intent intent = new Intent();
+        Intent intent = new Intent(this, ProductOverview.class);
         intent.putExtra("barcode", barcode.trim());
         intent.putExtra("symbology", symbology);
         setResult(1, intent);
+        startActivityForResult(intent, 1);
         finish();
         
         // Stop recognition to save resources.
@@ -122,6 +117,12 @@ public class BarCodeScanner extends Activity implements ScanditSDKListener{
 	public void didManualSearch(String entry) {
     	Toast.makeText(this, "User entered: " + entry, Toast.LENGTH_LONG).show();
     	mBarcodePicker.stopScanning();
+    	
+        Intent intent = new Intent(this, ProductOverview.class);
+        intent.putExtra("barcode", entry.trim());
+        setResult(1, intent);
+        startActivityForResult(intent, 1);
+    	
         finish();
 	}
 

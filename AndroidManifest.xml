@@ -44,6 +44,11 @@
             android:label="@string/app_name">
         </activity>
         
+      <activity
+            android:name="ch.mobileking.ProductDetailOverview"
+            android:label="@string/app_name">
+        </activity>
+        
     </application>
 
 </manifest>

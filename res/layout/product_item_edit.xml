@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="60dp"
-    android:minHeight="60dp"
-    android:padding="2dp" >
+    android:layout_height="70dp"
+    android:minHeight="70dp"
+    android:padding="2dp" 
+    android:paddingTop="10dp">
     
     <ImageView
             android:id="@+id/list_image"
@@ -47,15 +48,22 @@
         />
 	</LinearLayout>
 
-    <CheckBox
-        android:id="@+id/prod_item_checkbox"
-        android:layout_width="wrap_content"
-        android:layout_gravity="center_vertical|center_horizontal"
-        android:layout_height="19dp"
-        android:button="@android:drawable/checkbox_off_background"
-        android:focusable="false" 
-        android:checked="false"
-        android:visibility="visible"
+<!--     <CheckBox -->
+<!--         android:id="@+id/prod_item_checkbox" -->
+<!--         android:layout_width="wrap_content" -->
+<!--         android:layout_gravity="center_vertical|center_horizontal" -->
+<!--         android:layout_height="wrap_content" -->
+<!--         android:focusable="false" -->
+<!--         android:button="@android:drawable/btn_star"  -->
+<!--         android:visibility="visible" -->
+<!--         /> -->
+    
+    <CheckBox 
+        android:text="" 
+        android:id="@+id/prod_item_checkbox" 
+        android:layout_width="wrap_content" 
+        android:layout_height="wrap_content" 
+        android:focusable="false"
         />
  
 </LinearLayout>

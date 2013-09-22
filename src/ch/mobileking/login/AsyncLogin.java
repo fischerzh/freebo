@@ -16,6 +16,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
+import ch.mobileking.ITaskComplete;
 import ch.mobileking.ProductOverview;
 import ch.mobileking.utils.ProductKing;
 import ch.mobileking.utils.SharedPrefEditor;
@@ -31,11 +32,24 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
 	
 	private SharedPrefEditor editor;
 	
+	private ITaskComplete listener;
+	
+	private Boolean update = false;
+	
 	private String jsonResult;
 	
-	public AsyncLogin(Activity act)
+	public AsyncLogin(Activity act, Boolean update, ITaskComplete listener)
 	{
 		this.setAct(act);
+		this.update = update;
+		this.listener = listener;
+		editor = new SharedPrefEditor(getAct());
+	}
+	
+	public AsyncLogin(Activity act, Boolean update)
+	{
+		this.setAct(act);
+		this.update = update;
 		editor = new SharedPrefEditor(getAct());
 	}
 
@@ -44,7 +58,8 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
 		// TODO Auto-generated method stub
 		System.out.println("Params: "+params[0]+", "+params[1]);
 		HttpClient httpClient = new DefaultHttpClient();
-		HttpGet httpGet = new HttpGet(editor.getLoginURL()+"?username="+params[0]); //"http://browserspy.dk/password-ok.php"
+//		HttpGet httpGet = new HttpGet(editor.getLoginURL()+"?username="+params[0]);
+		HttpGet httpGet = new HttpGet(editor.getLoginURL());
 		httpGet.addHeader(BasicScheme.authenticate(new UsernamePasswordCredentials(params[0], params[1]),"UTF-8", false));
 
 		HttpResponse httpResponse = null;
@@ -124,11 +139,18 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
 		{
 			
 			parseJSON();
-			
+			System.out.println("update after Sync: " +update);
 //			getAct().setProgressBarVisibility(false);
+			if(!update)
+			{
+				Intent intent = new Intent(getAct(), ProductOverview.class);
+				getAct().startActivity(intent);
+			}
+			else
+			{
+				listener.onLoginCompleted();
+			}
 
-			Intent intent = new Intent(getAct(), ProductOverview.class);
-			getAct().startActivity(intent);
 		}
 	}	
 	

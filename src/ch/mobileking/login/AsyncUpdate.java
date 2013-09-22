@@ -14,6 +14,9 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.widget.Toast;
+import ch.mobileking.ITaskComplete;
+import ch.mobileking.utils.ProductKing;
+import ch.mobileking.utils.Products;
 import ch.mobileking.utils.SharedPrefEditor;
 
 public class AsyncUpdate extends AsyncTask<String, String, String>{
@@ -22,17 +25,33 @@ public class AsyncUpdate extends AsyncTask<String, String, String>{
 	
 	private SharedPrefEditor editor;
 	
+	private ITaskComplete listener;
+	
 	private String jsonResult;
 
 	private String productID;
 
-	private Boolean optIn;
+	private Boolean optIn, updateFromRemote = false, updateAll = false;
 	
-	public AsyncUpdate(Activity act, Boolean optIn, String productID)
+	public AsyncUpdate(Activity act, Boolean optIn, Boolean update, String productID, ITaskComplete listener)
 	{
 		this.setAct(act);
 		this.productID = productID;
 		this.optIn = optIn;
+		this.updateFromRemote = update;
+		this.updateAll = false;
+		this.listener = listener;
+		
+		editor = new SharedPrefEditor(getAct());
+	}
+	
+	public AsyncUpdate(Activity act, Boolean optIn, Boolean updateAll, ITaskComplete listener)
+	{
+		this.setAct(act);
+		this.optIn = optIn;
+		this.updateFromRemote = false;
+		this.updateAll = updateAll;
+		this.listener = listener;
 		
 		editor = new SharedPrefEditor(getAct());
 	}
@@ -41,20 +60,49 @@ public class AsyncUpdate extends AsyncTask<String, String, String>{
 	protected String doInBackground(String... params) {
 		
 		System.out.println("Params: " + params[0]+", "+params[1]);
+		String response = "";
+		if(updateAll)
+		{
+			response = updateAllProducts();
+		}
+		else
+		{
+			response = updateSingleProduct(this.productID, this.optIn);
+		}
+		
+		return response;
+	}
+	
+	private String updateAllProducts()
+	{
+		String response = "";
+		for (Products prod : ProductKing.getStaticProducts())
+		{
+			if(prod.getIsdeleted() && prod.getOptin())
+			{
+				System.out.println("Update Server");
+				response = response+updateSingleProduct(prod.getEan(), !prod.getIsdeleted());
+			}
+		}
+		return response;
+	}
+	
+	private String updateSingleProduct(String ean, Boolean optIn)
+	{
 		HttpClient httpClient = new DefaultHttpClient();
 		HttpGet httpGet;
 		String response = "";
-		if(this.optIn)
+		if(optIn)
 		{
-			httpGet = new HttpGet(editor.getUpdateURL()+"?username="+params[0]+"&productid="+this.productID+"&optin=true"); //"username=test&productid=3&optin="true""
+			httpGet = new HttpGet(editor.getUpdateURL()+"?ean="+ean+"&optin=true"); //"username=test&productid=3&optin="true""
 			response = "OPT-IN!";
 		}
 		else
 		{
-			httpGet = new HttpGet(editor.getUpdateURL()+"?username="+params[0]+"&productid="+this.productID+"&optout=true"); //"username=test&productid=3&optin="true""
+			httpGet = new HttpGet(editor.getUpdateURL()+"?ean="+ean+"&optout=true"); //"username=test&productid=3&optin="true""
 			response = "OPT-OUT!";
 		}
-		httpGet.addHeader(BasicScheme.authenticate(new UsernamePasswordCredentials(params[0], params[1]),"UTF-8", false));
+		httpGet.addHeader(BasicScheme.authenticate(new UsernamePasswordCredentials(editor.getUsername(), editor.getPwd()),"UTF-8", false));
 
 		HttpResponse httpResponse = null;
 		try {
@@ -88,7 +136,6 @@ public class AsyncUpdate extends AsyncTask<String, String, String>{
 		{
 			return "FAILED";
 		}
-		
 		return response;
 	}
 	
@@ -97,7 +144,7 @@ public class AsyncUpdate extends AsyncTask<String, String, String>{
 		super.onPostExecute(result);
 		if(result.contains("FAILED"))
 		{
-			Toast toast = Toast.makeText(getAct(), "Failed to Login!", Toast.LENGTH_LONG);
+			Toast toast = Toast.makeText(getAct(), "Failed to Update!", Toast.LENGTH_LONG);
 			toast.show();
 		}
 		else
@@ -106,7 +153,14 @@ public class AsyncUpdate extends AsyncTask<String, String, String>{
 //			getAct().startActivity(intent);
 			Toast toast = Toast.makeText(getAct(), result, Toast.LENGTH_LONG);
 			toast.show();
+			if(this.updateFromRemote)
+			{
+				new AsyncLogin(getAct(), true, listener).execute(editor.getUsername(), editor.getPwd());
+			}
+			listener.onUpdateCompleted();
+
 		}
+		
 	}
 
 	/**

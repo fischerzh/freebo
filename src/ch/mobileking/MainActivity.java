@@ -172,7 +172,7 @@ public class MainActivity extends Activity {
 
 	private void loginUserFromSettings(String loginStr, String pwdStr)
 	{
-		new AsyncLogin(getAct()).execute(loginStr, pwdStr);
+		new AsyncLogin(getAct(), false).execute(loginStr, pwdStr);
 	}
 	
 	private void loginUser()
@@ -180,7 +180,7 @@ public class MainActivity extends Activity {
 		String loginStr, pwdStr;
         loginStr = username.getText().toString();
         pwdStr = password.getText().toString();
-		new AsyncLogin(getAct()).execute(loginStr, pwdStr);
+		new AsyncLogin(getAct(), false).execute(loginStr, pwdStr);
 		this.setProgressBarEnableContent();
 	}
 	

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import ch.mobileking.R;
 import ch.mobileking.classes.override.ProductBaseAdapter;
+import ch.mobileking.login.AsyncLogin;
 import ch.mobileking.login.AsyncUpdate;
 import ch.mobileking.utils.ProductKing;
 import ch.mobileking.utils.Products;
@@ -22,7 +23,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
-public class ProductOverview extends Activity {
+public class ProductOverview extends Activity implements ITaskComplete{
 	
 	private Activity act;
 	
@@ -34,6 +35,7 @@ public class ProductOverview extends Activity {
 	
 	private int prodLayoutResourceId;
 	private boolean editVisible = false;
+	private boolean canUpdateServer = false;
 		
 	private ListView listView;
 	private EditText editTxt;
@@ -42,10 +44,13 @@ public class ProductOverview extends Activity {
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		this.setAct(this);
 		super.onCreate(savedInstanceState);
 		
+		this.setAct(this);
+		
 		baseActivityMenu = new BaseActivity(this);
+		
+		editor = new SharedPrefEditor(getAct());
 		
 		System.out.println("ProductOverview called!");
 		
@@ -54,9 +59,11 @@ public class ProductOverview extends Activity {
 		setProdLayoutResourceId(R.layout.product_item);
 		if(getCallingActivity() != null && getIntent().getExtras()!= null)
 		{
-			Toast.makeText(this, "Barcode: " + getIntent().getExtras(), Toast.LENGTH_LONG).show();
+			System.out.println("Barcode 1: " + getIntent().getStringExtra("barcode")  );
+			Toast.makeText(this, "Barcode scanned: " + getIntent().getStringExtra("barcode"), Toast.LENGTH_LONG).show();
+			updateUserInfo(true, true, getIntent().getStringExtra("barcode"));
+//			reloadUserInfo();
 
-			updateUserInfo(true, getIntent().getExtras().toString());
 		}
 	//	else //getCallingActivity().getShortClassName().contains("BarCodeScanner") && getIntent().getExtras()!=null)
 		
@@ -146,16 +153,10 @@ public class ProductOverview extends Activity {
 			@Override
 			public void onClick(View v) {
 				System.out.println("Delete clicked, UPDATING TO SERVER!");
-				for (Products prod : ProductKing.getStaticProducts())
-				{
-					if(prod.getIsdeleted() && prod.getOptin())
-					{
-						System.out.println("Update Server");
-						updateUserInfo(false, prod.getEan());
-					}
-				}
-				
+				updateAllUserInfo();
 			}
+			
+			
 		});
         
 		setTitle("MobileKing");
@@ -171,41 +172,49 @@ public class ProductOverview extends Activity {
 //				editTxt.setText("");
 				
 				System.out.println("Position clicked: " + position + " " + listView.getItemAtPosition(position));
-				updateUserInfo(true, ((Products)listView.getItemAtPosition(position)).getEan());
-				
-				if(ProductKing.getStaticProducts().get(position).getOptin())
-				{
-					ProductKing.getStaticProducts().get(position).setOptin(false);
-				}
-				else
-				{
-					ProductKing.getStaticProducts().get(position).setOptin(true);
-				}
-				restartActivity();
+		        Intent intent = new Intent(getApplicationContext(), ProductDetailOverview.class);
+		        intent.putExtra("product", position);
+		        setResult(1, intent);
+		        startActivityForResult(intent, 1);
 			}
         });
 		
 	}
 
 	
-	protected void restartActivity() {
+	private void restartActivity() {
 		// TODO Auto-generated method stub
 		finish();
 		startActivity(getIntent());
-//		new AsyncLogin(getAct()).execute("http://192.168.0.16:8080/Freebo/product/loginFromApp", editor.getUsername(), editor.getPwd());
-		
+	}
+	
+	private void reloadUserInfo()
+	{
+		new AsyncLogin(getAct(), true, this).execute(editor.getUsername(), editor.getPwd());
+	}
+	
+
+	private void updateUserInfo(Boolean optIn, Boolean update, String productID)
+	{
+        new AsyncUpdate(getAct(), optIn, update, productID, this).execute(editor.getUsername(),editor.getPwd()); //http://192.168.0.16:8080
+	}
+	
+	private void updateAllUserInfo()
+	{
+        new AsyncUpdate(getAct(), false, true, this).execute(editor.getUsername(),editor.getPwd()); //http://192.168.0.16:8080
+	}
+	
+	@Override
+	public void onLoginCompleted() {
+		// TODO Auto-generated method stub
+		System.out.println("LoginCompleted! Restarting Activity...");
+		restartActivity();
 	}
 
-	private void updateUserInfo(Boolean optIn, String productID)
-	{
-		String loginStr, pwdStr;
-		
-		editor = new SharedPrefEditor(getAct());
-		
-        loginStr = editor.getUsername();
-        pwdStr = editor.getPwd();
-        new AsyncUpdate(getAct(), optIn, productID).execute(loginStr,pwdStr); //http://192.168.0.16:8080
-        	
+	@Override
+	public void onUpdateCompleted() {
+		System.out.println("UpdateCompleted! Restarting Activity...");
+		reloadUserInfo();
 	}
 	
     @Override
@@ -255,5 +264,20 @@ public class ProductOverview extends Activity {
 	public void setEditVisible(boolean editVisible) {
 		this.editVisible = editVisible;
 	}
+
+	/**
+	 * @return the canUpdateServer
+	 */
+	public boolean isCanUpdateServer() {
+		return canUpdateServer;
+	}
+
+	/**
+	 * @param canUpdateServer the canUpdateServer to set
+	 */
+	public void setCanUpdateServer(boolean canUpdateServer) {
+		this.canUpdateServer = canUpdateServer;
+	}
+
 
 }
