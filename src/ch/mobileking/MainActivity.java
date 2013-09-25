@@ -13,6 +13,7 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -131,24 +132,26 @@ public class MainActivity extends Activity {
         	@Override
 			public void onClick(View v) {
         		
+				Intent intent = new Intent(getAct(), DemoActivity.class);
+				getAct().startActivity(intent);
         		
-        		Account[] accounts = am.getAccountsByType("com.google");
-        		Account myAccount_ = null;
-
-        		//show Intent and get account!!
-        		System.out.println("ACCOUNT: " + accounts[0]);
-
-        		myAccount_ = accounts[0];
-
-        		Bundle options = new Bundle();
-        		
-				am.getAuthToken(
-        			    myAccount_,                     // Account retrieved using getAccountsByType()
-        			    "Manage your tasks",            // Auth scope
-        			    options,                        // Authenticator-specific options
-        			    getAct(),                           // Your activity
-        			    new OnTokenAcquired(),          // Callback called when a token is successfully acquired
-        			    new Handler());    // Callback called if an error occurs
+//        		Account[] accounts = am.getAccountsByType("com.google");
+//        		Account myAccount_ = null;
+//
+//        		//show Intent and get account!!
+//        		System.out.println("ACCOUNT: " + accounts[0]);
+//
+//        		myAccount_ = accounts[0];
+//
+//        		Bundle options = new Bundle();
+//        		
+//				am.getAuthToken(
+//        			    myAccount_,                     // Account retrieved using getAccountsByType()
+//        			    "Manage your tasks",            // Auth scope
+//        			    options,                        // Authenticator-specific options
+//        			    getAct(),                           // Your activity
+//        			    new OnTokenAcquired(),          // Callback called when a token is successfully acquired
+//        			    new Handler());    // Callback called if an error occurs
         	}
         }
         );
