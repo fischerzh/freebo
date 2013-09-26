@@ -3,6 +3,7 @@ package ch.mobileking;
 import java.util.ArrayList;
 
 import ch.mobileking.R;
+import ch.mobileking.classes.override.ImageAdapter;
 import ch.mobileking.classes.override.ProductBaseAdapter;
 import ch.mobileking.login.AsyncLogin;
 import ch.mobileking.login.AsyncUpdate;
@@ -19,6 +20,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -100,84 +102,94 @@ public class ProductOverview extends Activity implements ITaskComplete{
 	public void setElements()
 	{
 		
-		setContentView(R.layout.product_overview_layout);
+//		setContentView(R.layout.product_overview_layout);
+		
+        setContentView(R.layout.grid_layout);
+
 		
         //setContentView(R.layout.products_main);
 		
-        listView = (ListView) findViewById(R.id.product_list_view);
-        editTxt = (EditText) findViewById(R.id.product_search_box);
-	    
-        imageBtn = (ImageButton) findViewById(R.id.product_btn_scan);
-        editBtn = (ImageButton) findViewById(R.id.product_btn_edit);
-        shareBtn = (ImageButton) findViewById(R.id.product_btn_share);
-        
-        deleteBtn = (Button) findViewById(R.id.product_btn_delete);
-        
-        if(isEditVisible())
-        	deleteBtn.setVisibility(View.VISIBLE);
-        else
-        	deleteBtn.setVisibility(View.INVISIBLE);
-        
-        imageBtn.setOnClickListener(new View.OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent(ProductOverview.this, BarCodeScanner.class);
-				startActivity(intent);
-				
-			}
-		});
-        
-        editBtn.setOnClickListener(new View.OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				if(!isEditVisible())
-				{
-					setEditVisible(true);
-					setProdLayoutResourceId(R.layout.product_item_edit);
-				}
-				else
-				{
-					setEditVisible(false);
-					setProdLayoutResourceId(R.layout.product_item);
-
-				}
-				
-				setElements();
-			}
-		});
-        
-        deleteBtn.setOnClickListener(new View.OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				System.out.println("Delete clicked, UPDATING TO SERVER!");
-				updateAllUserInfo();
-			}
-			
-			
-		});
+//        listView = (ListView) findViewById(R.id.product_list_view);
+//        editTxt = (EditText) findViewById(R.id.product_search_box);
+//	    
+//        imageBtn = (ImageButton) findViewById(R.id.product_btn_scan);
+//        editBtn = (ImageButton) findViewById(R.id.product_btn_edit);
+//        shareBtn = (ImageButton) findViewById(R.id.product_btn_share);
+//        
+//        deleteBtn = (Button) findViewById(R.id.product_btn_delete);
+//        
+//        if(isEditVisible())
+//        	deleteBtn.setVisibility(View.VISIBLE);
+//        else
+//        	deleteBtn.setVisibility(View.INVISIBLE);
+//        
+//        imageBtn.setOnClickListener(new View.OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View v) {
+//				Intent intent = new Intent(ProductOverview.this, BarCodeScanner.class);
+//				startActivity(intent);
+//				
+//			}
+//		});
+//        
+//        editBtn.setOnClickListener(new View.OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View v) {
+//				if(!isEditVisible())
+//				{
+//					setEditVisible(true);
+//					setProdLayoutResourceId(R.layout.product_item_edit);
+//				}
+//				else
+//				{
+//					setEditVisible(false);
+//					setProdLayoutResourceId(R.layout.product_item);
+//
+//				}
+//				
+//				setElements();
+//			}
+//		});
+//        
+//        deleteBtn.setOnClickListener(new View.OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View v) {
+//				System.out.println("Delete clicked, UPDATING TO SERVER!");
+//				updateAllUserInfo();
+//			}
+//			
+//			
+//		});
         
 		setTitle("MobileKing");
 		
-		adapter = new ProductBaseAdapter(this, getProdLayoutResourceId(), (ArrayList<Products>) ProductKing.getStaticProducts()); //R.layout.product_item
-		
-        listView.setAdapter(adapter);
+ 
+        GridView gridView = (GridView) findViewById(R.id.grid_view);
+ 
+        // Instance of ImageAdapter Class
+        gridView.setAdapter(new ImageAdapter(this,  (ArrayList<Products>) ProductKing.getStaticProducts()));
         
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> adapter, View view, int position, long id) {
-//				editTxt.setText("");
-				
-				System.out.println("Position clicked: " + position + " " + listView.getItemAtPosition(position));
-		        Intent intent = new Intent(getApplicationContext(), ProductDetailOverview.class);
-		        intent.putExtra("product", position);
-		        setResult(1, intent);
-		        startActivityForResult(intent, 1);
-			}
-        });
+		
+//		adapter = new ProductBaseAdapter(this, getProdLayoutResourceId(), (ArrayList<Products>) ProductKing.getStaticProducts()); //R.layout.product_item
+		
+//        listView.setAdapter(adapter);
+//        
+//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//
+//			@Override
+//			public void onItemClick(AdapterView<?> adapter, View view, int position, long id) {
+////				editTxt.setText("");
+//				
+//				System.out.println("Position clicked: " + position + " " + listView.getItemAtPosition(position));
+//		        Intent intent = new Intent(getApplicationContext(), ProductDetailOverview.class);
+//		        intent.putExtra("product", position);
+//		        setResult(1, intent);
+//		        startActivityForResult(intent, 1);
+//			}
+//        });
 		
 	}
 

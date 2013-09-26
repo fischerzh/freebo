@@ -1,0 +1,63 @@
+<!-- http://stackoverflow.com/questions/16819135/set-fixed-gridview-row-height -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="10dp" 
+    android:paddingTop="10dp">
+    
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="0dip"
+        android:layout_weight="0.8"
+        android:layout_height="fill_parent"
+        >
+
+        <TextView
+            android:id="@+id/prod_item_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Cola Zero"
+            android:textSize="18dp"
+            android:textStyle="bold" 
+            android:paddingTop="5dp"/>
+
+    <TextView
+        android:id="@+id/prod_item_producer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" 
+        android:textSize="12dp"
+        android:textColor="#C0C0C0"
+        android:hint="Coca Cola Company"
+        android:paddingTop="5dp"
+    	/>
+ 
+    <TextView
+        android:id="@+id/prod_item_ranking"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" 
+        android:textSize="12dp"
+        android:hint="Rang #1 (vorher 5)"
+        android:textColor="#D4AF37"
+        android:paddingTop="5dp"
+        />
+	
+    <ImageView
+        android:id="@+id/prod_item_crown"
+        android:layout_width="50dip"
+        android:layout_height="45dip"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:src="@drawable/no_crown"
+        android:visibility="visible" />
+    <TextView
+        android:id="@+id/prod_crown_cnt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" 
+        android:layout_gravity="center_horizontal"
+        android:textSize="10dp"
+        android:textColor="#3B63D4"
+        android:hint="2x"
+    	/>
+    </LinearLayout>
+    
+	
+</LinearLayout>

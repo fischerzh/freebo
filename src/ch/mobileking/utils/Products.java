@@ -13,6 +13,12 @@ public class Products {
 	@SerializedName("name")
 	private String name = " ";
 	
+	@SerializedName("producer")
+	private String producer = " ";	
+	
+	@SerializedName("ingredients")
+	private String ingredients = " ";	
+	
 	@SerializedName("imagelink")
 	private String imagelink = " ";
 	
@@ -71,6 +77,34 @@ public class Products {
 	 */
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	/**
+	 * @return the producer
+	 */
+	public String getProducer() {
+		return producer;
+	}
+
+	/**
+	 * @param producer the producer to set
+	 */
+	public void setProducer(String producer) {
+		this.producer = producer;
+	}
+
+	/**
+	 * @return the ingredient
+	 */
+	public String getIngredients() {
+		return ingredients;
+	}
+
+	/**
+	 * @param ingredient the ingredient to set
+	 */
+	public void setIngredients(String ingredients) {
+		this.ingredients = ingredients;
 	}
 
 	/**
