@@ -5,13 +5,13 @@
     android:layout_height="wrap_content"
     android:numColumns="2"
     android:gravity="center"
-    android:paddingRight="20dp"
-    android:paddingLeft="20dp"
     android:clipToPadding="true"
     android:fitsSystemWindows="true"
     android:stretchMode="columnWidth"
     android:horizontalSpacing="1dp"
     android:verticalSpacing="1dp"
-    >
+    android:background="@android:color/black"
+    android:paddingLeft="1dp"
+    android:paddingTop="1dp" >
  
 </GridView>

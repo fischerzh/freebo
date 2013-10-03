@@ -87,7 +87,7 @@ public class MainActivity extends Activity {
         progressBar.setVisibility(View.INVISIBLE);
         
         login = (Button) findViewById(R.id.btnLogin);
-        googleLogin = (ImageButton) findViewById(R.id.btnGoogleLogin);
+//        googleLogin = (ImageButton) findViewById(R.id.btnGoogleLogin);
         
         editor = new SharedPrefEditor(this);
         if(isNetworkAvailable())
@@ -128,13 +128,13 @@ public class MainActivity extends Activity {
         }
         );
         
-        googleLogin.setOnClickListener(new Button.OnClickListener() {
-        	@Override
-			public void onClick(View v) {
-        		
-				Intent intent = new Intent(getAct(), DemoActivity.class);
-				getAct().startActivity(intent);
-        		
+//        googleLogin.setOnClickListener(new Button.OnClickListener() {
+//        	@Override
+//			public void onClick(View v) {
+//        		
+//				Intent intent = new Intent(getAct(), DemoActivity.class);
+//				getAct().startActivity(intent);
+//        		
 //        		Account[] accounts = am.getAccountsByType("com.google");
 //        		Account myAccount_ = null;
 //
@@ -152,10 +152,10 @@ public class MainActivity extends Activity {
 //        			    getAct(),                           // Your activity
 //        			    new OnTokenAcquired(),          // Callback called when a token is successfully acquired
 //        			    new Handler());    // Callback called if an error occurs
-        	}
-        }
-        );
-        
+//        	}
+//        }
+//        );
+//        
         
 	}
 	

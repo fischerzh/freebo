@@ -11,6 +11,7 @@ import ch.mobileking.utils.Products;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,6 +60,8 @@ public class ImageAdapter extends BaseAdapter{
 		this.position = position;
 		imageView = new ImageView(mContext);
 		
+//		imageView.setBackgroundResource(R.layout.stroke);
+		
 		View gridView;
 		
 		if(convertView == null)
@@ -79,7 +82,7 @@ public class ImageAdapter extends BaseAdapter{
 		txtProdProducer.setText(""+items.get(position).getProducer());
 		
 		TextView txtProdRanking = (TextView) gridView.findViewById(R.id.prod_item_ranking);
-		txtProdRanking.setText("Rang #"+items.get(position).getPoints()+" (vorher 50)");
+		txtProdRanking.setText("Rang #"+items.get(position).getPoints()+" (+2)");
 		
 		ImageView prodItemCrown = (ImageView) gridView.findViewById(R.id.prod_item_crown);
 		prodItemCrown.setImageResource(R.drawable.crown_gold);

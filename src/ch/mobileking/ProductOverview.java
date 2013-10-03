@@ -13,11 +13,13 @@ import ch.mobileking.utils.SharedPrefEditor;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
@@ -168,10 +170,25 @@ public class ProductOverview extends Activity implements ITaskComplete{
 		
  
         GridView gridView = (GridView) findViewById(R.id.grid_view);
+//        gridView.setBackgroundColor(Color.BLACK);
+//        gridView.setVerticalSpacing(1);
+//        gridView.setHorizontalSpacing(1);
  
         // Instance of ImageAdapter Class
         gridView.setAdapter(new ImageAdapter(this,  (ArrayList<Products>) ProductKing.getStaticProducts()));
         
+        gridView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+				// TODO Auto-generated method stub
+				System.out.println("Item clicked: " +position);
+		        Intent intent = new Intent(getApplicationContext(), ProductDetailOverview.class);
+		        intent.putExtra("product", position);
+		        setResult(1, intent);
+		        startActivityForResult(intent, 1);
+			}
+		});
 		
 //		adapter = new ProductBaseAdapter(this, getProdLayoutResourceId(), (ArrayList<Products>) ProductKing.getStaticProducts()); //R.layout.product_item
 		
