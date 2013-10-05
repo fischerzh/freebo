@@ -11,6 +11,7 @@ public class SharedPrefEditor {
 	
 	private static final String PREFS_PWD = "Password";
 	private static final String PREFS_USERNAME = "Username";
+	private static final String PREFS_FIRST_LOGIN = "Login";
 	private Context cont;
 	
 	public SharedPrefEditor(Context context)
@@ -60,6 +61,28 @@ public class SharedPrefEditor {
 	    System.out.println("getSharedPref #PWD: " + pwd);
 		
 		return pwd;
+	}
+	
+	public void setIsFirstRun(Boolean firstRun)
+	{	    
+	    SharedPreferences settings = cont.getSharedPreferences(PREFS_FIRST_LOGIN, 0);
+	    SharedPreferences.Editor editor = settings.edit();
+	    editor.putBoolean(PREFS_FIRST_LOGIN, firstRun);
+	    System.out.println("setSharedPref #FIRST_RUN: " + firstRun);
+	    // Commit the edits!
+	    editor.commit();
+	    
+	}
+	
+	public Boolean getFirstRun()
+	{
+	    Boolean firstRun;
+	    // Restore preferences
+	    SharedPreferences settings = cont.getSharedPreferences(PREFS_FIRST_LOGIN, 0);
+	    firstRun = settings.getBoolean(PREFS_FIRST_LOGIN, false);
+	    System.out.println("getSharedPref #FIRST_RUN: " + firstRun);
+		
+		return firstRun;
 	}
 
 	/**

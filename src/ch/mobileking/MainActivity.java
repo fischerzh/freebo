@@ -47,30 +47,30 @@ public class MainActivity extends Activity {
 		
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
-	}
-	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-	    // Handle item selection
-	    switch (item.getItemId()) {
-//	        case R.id.create_new:
+//	@Override
+//	public boolean onCreateOptionsMenu(Menu menu) {
+//		// Inflate the menu; this adds items to the action bar if it is present.
+//		getMenuInflater().inflate(R.menu.main, menu);
+//		return true;
+//	}
+//	
+//	@Override
+//	public boolean onOptionsItemSelected(MenuItem item) {
+//	    // Handle item selection
+//	    switch (item.getItemId()) {
+////	        case R.id.create_new:
+////	        	baseActivityMenu.logOut();
+////	            return true;
+//	        case R.id.log_out:
 //	        	baseActivityMenu.logOut();
 //	            return true;
-	        case R.id.log_out:
-	        	baseActivityMenu.logOut();
-	            return true;
-	        case R.id.app_sync:
-	        	baseActivityMenu.syncAppToServer();
-	            return true;
-	        default:
-	            return super.onOptionsItemSelected(item);
-	    }
-	}
+//	        case R.id.app_sync:
+//	        	baseActivityMenu.syncAppToServer();
+//	            return true;
+//	        default:
+//	            return super.onOptionsItemSelected(item);
+//	    }
+//	}
 	
 	
 	public void setElements()

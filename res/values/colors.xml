@@ -1,4 +1,5 @@
     <resources>
         <color name="blue_light">#ff33b5e5</color>
         <color name="blue_dark">#ff0099cc</color>
+        <color name="grey_light">#E8E8E8</color>
     </resources>

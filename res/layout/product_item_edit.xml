@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="70dp"
-    android:minHeight="70dp"
+    android:layout_height="@dimen/prod_list_item_size"
+    android:minHeight="@dimen/prod_list_item_size"
     android:padding="2dp" 
     android:paddingTop="10dp">
     
@@ -10,14 +10,17 @@
             android:id="@+id/list_image"
             android:layout_width="50dip"
             android:layout_height="50dip"
-            android:src="@drawable/empty"/>
+            android:src="@drawable/empty"
+            android:layout_gravity="center_vertical|center_horizontal"
             />
+            
     
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="0dip"
-        android:layout_weight="0.8"
+        android:layout_weight="1"
         android:layout_height="fill_parent"
+        android:layout_gravity="center_vertical|center_horizontal"
         >
 
     <TextView
@@ -47,16 +50,6 @@
         android:textColor="#D4AF37"
         />
 	</LinearLayout>
-
-<!--     <CheckBox -->
-<!--         android:id="@+id/prod_item_checkbox" -->
-<!--         android:layout_width="wrap_content" -->
-<!--         android:layout_gravity="center_vertical|center_horizontal" -->
-<!--         android:layout_height="wrap_content" -->
-<!--         android:focusable="false" -->
-<!--         android:button="@android:drawable/btn_star"  -->
-<!--         android:visibility="visible" -->
-<!--         /> -->
     
     <CheckBox 
         android:text="" 

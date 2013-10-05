@@ -42,11 +42,11 @@ private static final long serialVersionUID = 1L;
 	 * @return the staticProducts
 	 */
 	public static List<Products> getStaticProducts() {
-		if(staticProducts.size()%2!=0)
-		{
-			Products prod = new Products();
-			staticProducts.add(prod);
-		}
+//		if(staticProducts.size()%2!=0)
+//		{
+//			Products prod = new Products();
+//			staticProducts.add(prod);
+//		}
 		return staticProducts;
 	}
 

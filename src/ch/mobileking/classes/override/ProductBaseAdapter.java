@@ -22,6 +22,7 @@ import ch.mobileking.utils.SharedPrefEditor;
 
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
@@ -31,6 +32,7 @@ import android.widget.ImageView;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class ProductBaseAdapter extends BaseAdapter implements Filterable{
@@ -107,10 +109,12 @@ public class ProductBaseAdapter extends BaseAdapter implements Filterable{
 			holder = new ViewHolder();
 			holder.setTxtName((TextView)convertView.findViewById(R.id.prod_item_name));
 			holder.setTxtProducer((TextView)convertView.findViewById(R.id.prod_item_producer));
-			holder.setTxtEan((TextView)convertView.findViewById(R.id.prod_item_ean));
+			holder.setTxtRank((TextView)convertView.findViewById(R.id.prod_rank));
 			holder.setChkBox((CheckBox)convertView.findViewById(R.id.prod_item_checkbox));
 			holder.setImgView((ImageView)convertView.findViewById(R.id.list_image));
+			holder.setCrown1((ImageView)convertView.findViewById(R.id.prod_item_crown));
 	        holder.setTxtCrownCnt((TextView)convertView.findViewById(R.id.prod_crown_cnt));
+	        holder.setCrownLayout((LinearLayout)convertView.findViewById(R.id.linearLayoutCrown));
 	        
 	        if(holder.getChkBox() != null)
 			{
@@ -135,16 +139,30 @@ public class ProductBaseAdapter extends BaseAdapter implements Filterable{
 					}
 				});
 			}
+	        
+	        holder.getCrownLayout().setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					int getPosition = (Integer) v.getTag();
+					System.out.println("Crown clicked for item " + getPosition + resultList.get(getPosition).getName());
+				}
+			});
 			
 			convertView.setTag(holder);
 			convertView.setTag(R.id.prod_item_name, holder.txtName);
 			convertView.setTag(R.id.prod_item_checkbox, holder.chkBox);
 		}
+		
 		else
+			
 		{
 			holder = (ViewHolder)convertView.getTag();
 
 		}
+		
+		/** SET INFORMATION  **/
 		if(holder.getChkBox() != null)
 		{
 			holder.getChkBox().setTag(position);
@@ -154,17 +172,21 @@ public class ProductBaseAdapter extends BaseAdapter implements Filterable{
 		//setValues
 		if(resultList.get(position).getOptin())
 		{
-			holder.getTxtName().setText(""+resultList.get(position).getPoints()+" Punkte gesammelt!");
-			holder.getTxtProducer().setText("Rang #"+resultList.get(position).getId() + " von 500");
-			holder.getTxtEan().setText("Neue Wettbewerbe vorhanden!");
+			holder.getTxtName().setText(""+resultList.get(position).getName());
+			holder.getTxtProducer().setText(""+resultList.get(position).getProducer());
+			holder.getTxtRank().setText("Rang "+resultList.get(position).getId() + " (+2)");
+			holder.getCrownLayout().setTag(position);
 			if(holder.getTxtCrownCnt()!= null)
-				holder.getTxtCrownCnt().setText("0 x"); //holder.getTxtCrownCnt().setText(""+resultList.get(position).getPoints()+" x");
+			{
+				holder.getTxtCrownCnt().setText("x 1"); //holder.getTxtCrownCnt().setText(""+resultList.get(position).getPoints()+" x");
+				holder.getCrown1().setImageResource(R.drawable.crown_gold);
+			}
 		}
 		else
 		{
 			holder.getTxtName().setText(" ");
 			holder.getTxtProducer().setText("Scan product to join!");
-			holder.getTxtEan().setText(" ");
+			holder.getTxtRank().setText(" ");
 		}
 		
 		//Image Stuff
@@ -291,16 +313,27 @@ public class ProductBaseAdapter extends BaseAdapter implements Filterable{
 	{
 		private TextView txtName;
 		private TextView txtProducer;
-		private TextView txtEan;
+		private TextView txtRank;
 		private TextView txtCrownCnt;
 		private CheckBox chkBox;
 		private ImageView imgView;
-
+		private ImageView crown1, crown2, crown3;
+		private LinearLayout crownLayout;
 		/**
 		 * @return the txtCategory
 		 */
 		public TextView getTxtName() {
 			return txtName;
+		}
+
+		public void setCrownLayout(LinearLayout crownLayoutId) {
+			// TODO Auto-generated method stub
+			this.crownLayout = crownLayoutId; 
+		}
+		
+		public LinearLayout getCrownLayout()
+		{
+			return this.crownLayout;
 		}
 
 		/**
@@ -312,14 +345,14 @@ public class ProductBaseAdapter extends BaseAdapter implements Filterable{
 		/**
 		 * @return the txtDueDate
 		 */
-		public TextView getTxtEan() {
-			return txtEan;
+		public TextView getTxtRank() {
+			return txtRank;
 		}
 		/**
 		 * @param txtDueDate the txtDueDate to set
 		 */
-		public void setTxtEan(TextView txtEan) {
-			this.txtEan = txtEan;
+		public void setTxtRank(TextView txtRank) {
+			this.txtRank = txtRank;
 		}
 		/**
 		 * @return the txtDescription
@@ -372,6 +405,20 @@ public class ProductBaseAdapter extends BaseAdapter implements Filterable{
 		 */
 		public void setImgView(ImageView imgView) {
 			this.imgView = imgView;
+		}
+
+		/**
+		 * @return the crown1
+		 */
+		public ImageView getCrown1() {
+			return crown1;
+		}
+
+		/**
+		 * @param crown1 the crown1 to set
+		 */
+		public void setCrown1(ImageView crown1) {
+			this.crown1 = crown1;
 		}
 		
 	}

@@ -22,4 +22,9 @@
         <!-- "file" submenu -->
         
     </item>
+    <item android:id="@+id/show_help"
+          android:title="Show Help" >
+        <!-- "file" submenu -->
+        
+    </item>
 </menu>

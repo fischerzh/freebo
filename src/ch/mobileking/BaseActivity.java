@@ -29,10 +29,14 @@ public class BaseActivity {
 		
 	}
 	
-	
-	
-	
-	
+	public void showFirstRunMenu() {
+		
+		editor.setIsFirstRun(false);
+		
+		Intent intent = new Intent(getAct(), ProductOverview.class);
+		getAct().finish();
+		getAct().startActivity(intent);
+	}
 	
 	private void restartApp()
 	{
@@ -44,7 +48,6 @@ public class BaseActivity {
 		getAct().finish();
 		getAct().startActivity(intent);
 	}
-
 
 	/**
 	 * @return the act
