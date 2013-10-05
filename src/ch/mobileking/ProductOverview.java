@@ -114,26 +114,26 @@ public class ProductOverview extends Activity implements ITaskComplete{
 //        listView = (ListView) findViewById(R.id.product_list_view);
 //        editTxt = (EditText) findViewById(R.id.product_search_box);
 //	    
-//        imageBtn = (ImageButton) findViewById(R.id.product_btn_scan);
+        imageBtn = (ImageButton) findViewById(R.id.product_btn_scan);
 //        editBtn = (ImageButton) findViewById(R.id.product_btn_edit);
 //        shareBtn = (ImageButton) findViewById(R.id.product_btn_share);
 //        
-//        deleteBtn = (Button) findViewById(R.id.product_btn_delete);
+        deleteBtn = (Button) findViewById(R.id.product_btn_delete);
 //        
-//        if(isEditVisible())
-//        	deleteBtn.setVisibility(View.VISIBLE);
-//        else
-//        	deleteBtn.setVisibility(View.INVISIBLE);
+        if(isEditVisible())
+        	deleteBtn.setVisibility(View.VISIBLE);
+        else
+        	deleteBtn.setVisibility(View.INVISIBLE);
 //        
-//        imageBtn.setOnClickListener(new View.OnClickListener() {
-//			
-//			@Override
-//			public void onClick(View v) {
-//				Intent intent = new Intent(ProductOverview.this, BarCodeScanner.class);
-//				startActivity(intent);
-//				
-//			}
-//		});
+        imageBtn.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(ProductOverview.this, BarCodeScanner.class);
+				startActivity(intent);
+				
+			}
+		});
 //        
 //        editBtn.setOnClickListener(new View.OnClickListener() {
 //			
@@ -166,13 +166,10 @@ public class ProductOverview extends Activity implements ITaskComplete{
 //			
 //		});
         
-		setTitle("MobileKing");
+		setTitle("Mobile Product King");
 		
  
         GridView gridView = (GridView) findViewById(R.id.grid_view);
-//        gridView.setBackgroundColor(Color.BLACK);
-//        gridView.setVerticalSpacing(1);
-//        gridView.setHorizontalSpacing(1);
  
         // Instance of ImageAdapter Class
         gridView.setAdapter(new ImageAdapter(this,  (ArrayList<Products>) ProductKing.getStaticProducts()));

@@ -82,11 +82,19 @@ public class ImageAdapter extends BaseAdapter{
 		txtProdProducer.setText(""+items.get(position).getProducer());
 		
 		TextView txtProdRanking = (TextView) gridView.findViewById(R.id.prod_item_ranking);
-		txtProdRanking.setText("Rang #"+items.get(position).getPoints()+" (+2)");
+		if(items.get(position).getPoints()>0)
+			txtProdRanking.setText("Rang #"+items.get(position).getPoints()+" (+2)");
+		else
+			txtProdRanking.setText(" ");
 		
 		ImageView prodItemCrown = (ImageView) gridView.findViewById(R.id.prod_item_crown);
-		prodItemCrown.setImageResource(R.drawable.crown_gold);
+		if(items.get(position).getPoints()>0)
+			prodItemCrown.setImageResource(R.drawable.crown_gold);
+		else
+			prodItemCrown.setImageResource(R.drawable.empty);
 		
+		ImageView prodItemPict = (ImageView) gridView.findViewById(R.id.prod_item_pict);
+		prodItemPict.setImageResource(R.drawable.empty);
 		
 //		ImageView prodItemProd = (ImageView) gridView.findViewById(R.id.prod_item_product);
 
@@ -103,7 +111,7 @@ public class ImageAdapter extends BaseAdapter{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		prodItemCrown.setImageBitmap(image);
+		prodItemPict.setImageBitmap(image);
 		
 		prodItemCrown.setOnClickListener(new OnClickListener() {
 			
