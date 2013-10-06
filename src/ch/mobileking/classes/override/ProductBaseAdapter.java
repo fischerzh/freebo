@@ -2,7 +2,17 @@ package ch.mobileking.classes.override;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,12 +24,15 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 
+import ch.mobileking.BadgesDetailOverview;
+import ch.mobileking.ProductDetailOverview;
 import ch.mobileking.R;
 import ch.mobileking.login.AsyncUpdate;
 import ch.mobileking.utils.ProductKing;
 import ch.mobileking.utils.Products;
 import ch.mobileking.utils.SharedPrefEditor;
 
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -113,6 +126,8 @@ public class ProductBaseAdapter extends BaseAdapter implements Filterable{
 			holder.setChkBox((CheckBox)convertView.findViewById(R.id.prod_item_checkbox));
 			holder.setImgView((ImageView)convertView.findViewById(R.id.list_image));
 			holder.setCrown1((ImageView)convertView.findViewById(R.id.prod_item_crown));
+			holder.setCrown2((ImageView)convertView.findViewById(R.id.prod_item_crown_2));
+			holder.setCrown3((ImageView)convertView.findViewById(R.id.prod_item_crown_3));
 	        holder.setTxtCrownCnt((TextView)convertView.findViewById(R.id.prod_crown_cnt));
 	        holder.setCrownLayout((LinearLayout)convertView.findViewById(R.id.linearLayoutCrown));
 	        
@@ -145,8 +160,16 @@ public class ProductBaseAdapter extends BaseAdapter implements Filterable{
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-					int getPosition = (Integer) v.getTag();
-					System.out.println("Crown clicked for item " + getPosition + resultList.get(getPosition).getName());
+					int getPosition = (Integer) v.getTag();			        
+					Products prod = resultList.get(getPosition);
+
+					System.out.println("Position: " + getPosition + ", Crown clicked for item " + resultList.get(getPosition).getId() + resultList.get(getPosition).getName());
+			        Intent intent = new Intent(getCont(), BadgesDetailOverview.class);
+			        intent.putExtra("product", String.valueOf(getPosition));
+
+			        ((Activity)getCont()).setResult(1, intent);
+			        ((Activity)getCont()).startActivityForResult(intent, 1);
+					
 				}
 			});
 			
@@ -180,6 +203,8 @@ public class ProductBaseAdapter extends BaseAdapter implements Filterable{
 			{
 				holder.getTxtCrownCnt().setText("x 1"); //holder.getTxtCrownCnt().setText(""+resultList.get(position).getPoints()+" x");
 				holder.getCrown1().setImageResource(R.drawable.crown_gold);
+				holder.getCrown2().setImageResource(R.drawable.crown_silver);
+				holder.getCrown3().setImageResource(R.drawable.crown_bronce);
 			}
 		}
 		else
@@ -189,15 +214,91 @@ public class ProductBaseAdapter extends BaseAdapter implements Filterable{
 			holder.getTxtRank().setText(" ");
 		}
 		
+		String imageName = resultList.get(position).getId()+".png";
+		String imagePath = "";
+		Bitmap image = null;
+		
+		if(imageExists(imageName))
+		{
+			image = loadImage(imageName);
+			imagePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/MobileKingImages/"+imageName;
+		}
+		else
+		{
+			try {
+				image = BitmapFactory.decodeStream((InputStream)new URL(resultList.get(position).getImagelink()).getContent());
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			imagePath = saveBitmap(image, imageName);
+			
+		}
 		//Image Stuff
-		String imageUri = resultList.get(position).getImagelink();
-		holder.getImgView().setTag(imageUri); //Add this line
-		imageLoader.displayImage(imageUri, holder.getImgView());
+		resultList.get(position).setImagepath(imagePath);
+		
+//		prodItemPict.setImageBitmap(image);
+		
+		holder.getImgView().setImageBitmap(image);
+		
+//		String imageUri = resultList.get(position).getImagelink();
+//		holder.getImgView().setTag(imageUri); //Add this line
+//		imageLoader.displayImage(imageUri, holder.getImgView());
 		
 //		holder.getImgView().setImageDrawable(drawable);
 		ProductKing.setStaticProducts(resultList);
 			
 		return convertView;
+	}
+	
+	private String saveBitmap(Bitmap bmp, String imageName)
+	{
+	    String file_path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/MobileKingImages";
+        File dir = new File(file_path);
+        if(!dir.exists())
+           dir.mkdirs();
+        File file = new File(dir, imageName);
+        FileOutputStream fOut = null;
+		try {
+			fOut = new FileOutputStream(file);
+			bmp.compress(Bitmap.CompressFormat.PNG, 85, fOut);
+			fOut.flush();
+	        fOut.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	    System.out.println("Saved Image to SD card: " +file.getAbsolutePath());
+	    return file.getAbsolutePath();
+	}
+	
+	private boolean imageExists(String imageName)
+	{
+		String file_path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/MobileKingImages";
+		File imgFile = new File(file_path, imageName);
+		if(imgFile.exists())
+			System.out.println("Image exists SD card: " + imgFile.getAbsolutePath());
+		return imgFile.exists();
+	}
+	
+	private Bitmap loadImage(String imageName)
+	{
+		String file_path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/MobileKingImages";
+		File imgFile = new File(file_path, imageName);
+		Bitmap myBitmap = null;
+		
+		if(imgFile.exists())
+		{
+			System.out.println("Found Image on SD card: " + imgFile.getAbsolutePath());
+			
+			myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+		}
+		return myBitmap;
 	}
 	
 
@@ -419,6 +520,34 @@ public class ProductBaseAdapter extends BaseAdapter implements Filterable{
 		 */
 		public void setCrown1(ImageView crown1) {
 			this.crown1 = crown1;
+		}
+
+		/**
+		 * @return the crown2
+		 */
+		public ImageView getCrown2() {
+			return crown2;
+		}
+
+		/**
+		 * @param crown2 the crown2 to set
+		 */
+		public void setCrown2(ImageView crown2) {
+			this.crown2 = crown2;
+		}
+
+		/**
+		 * @return the crown3
+		 */
+		public ImageView getCrown3() {
+			return crown3;
+		}
+
+		/**
+		 * @param crown3 the crown3 to set
+		 */
+		public void setCrown3(ImageView crown3) {
+			this.crown3 = crown3;
 		}
 		
 	}

@@ -1,5 +1,9 @@
 package ch.mobileking.utils;
 
+import java.util.ArrayList;
+import java.util.List;
+
+
 import com.google.gson.annotations.SerializedName;
 
 public class Products {
@@ -19,8 +23,14 @@ public class Products {
 	@SerializedName("ingredients")
 	private String ingredients = " ";	
 	
+	@SerializedName("category")
+	private String category = " ";	
+	
 	@SerializedName("imagelink")
 	private String imagelink = " ";
+	
+	@SerializedName("imagepath")
+	private String imagepath = " ";
 	
 	@SerializedName("optin")
 	private Boolean optin = false;
@@ -36,6 +46,9 @@ public class Products {
 	
 	@SerializedName("participants")
 	private Integer participants = 0;
+	
+	@SerializedName("crowns")
+	private List<Crown> crowns;
 	
 	/**
 	 * @return the id
@@ -108,6 +121,20 @@ public class Products {
 	}
 
 	/**
+	 * @return the category
+	 */
+	public String getCategory() {
+		return category;
+	}
+
+	/**
+	 * @param category the category to set
+	 */
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
+	/**
 	 * @return the imagelink
 	 */
 	public String getImagelink() {
@@ -119,6 +146,20 @@ public class Products {
 	 */
 	public void setImagelink(String imagelink) {
 		this.imagelink = imagelink;
+	}
+
+	/**
+	 * @return the imagepath
+	 */
+	public String getImagepath() {
+		return imagepath;
+	}
+
+	/**
+	 * @param imagepath the imagepath to set
+	 */
+	public void setImagepath(String imagepath) {
+		this.imagepath = imagepath;
 	}
 
 	/**
@@ -189,6 +230,20 @@ public class Products {
 	 */
 	public void setParticipants(Integer participants) {
 		this.participants = participants;
+	}
+
+	/**
+	 * @return the crowns
+	 */
+	public List<Crown> getCrowns() {
+		return crowns;
+	}
+
+	/**
+	 * @param crowns the crowns to set
+	 */
+	public void setCrowns(List<Crown> crowns) {
+		this.crowns = crowns;
 	}
 
 }

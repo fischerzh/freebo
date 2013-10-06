@@ -1,24 +1,20 @@
 package ch.mobileking.classes.override;
 
-import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
 import ch.mobileking.R;
+import ch.mobileking.utils.Crown;
 import ch.mobileking.utils.Products;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -38,7 +34,7 @@ public class ImageAdapter extends BaseAdapter{
 	
 	private Context mContext;
 	
-	private ArrayList<Products> items;
+	private ArrayList<Crown> items;
 	
 	private ArrayList<Bitmap> bitmArray; 
 	
@@ -46,21 +42,21 @@ public class ImageAdapter extends BaseAdapter{
 	
 	private int position;
 	
-	public ImageAdapter(Context c, ArrayList<Products> items)
+	public ImageAdapter(Context c, ArrayList<Crown> items)
 	{
+		System.out.println("Got Crowns: " + items);
 		mContext = c;
-		this.items = new ArrayList<Products>(items);
+		this.items = new ArrayList<Crown>(items);
 	}
 	
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		
+		System.out.println("Get View from ImageAdapter");
 		LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 		this.position = position;
 		imageView = new ImageView(mContext);
-		
-//		imageView.setBackgroundResource(R.layout.stroke);
 		
 		View gridView;
 		
@@ -68,67 +64,36 @@ public class ImageAdapter extends BaseAdapter{
 		{
 			gridView = new View(mContext);
 			
-			gridView = inflater.inflate(R.layout.grid_item, null);
+			gridView = inflater.inflate(R.layout.badges_detail_item, parent, false);
 		}
 		else
 		{
 			gridView = (View)convertView;
 		}
 		
-		TextView txtProdName = (TextView) gridView.findViewById(R.id.prod_item_name);
-		txtProdName.setText(""+items.get(position).getName());
+		TextView txtSalesPoint = (TextView) gridView.findViewById(R.id.badges_item_salespoint);
+		txtSalesPoint.setText(""+items.get(position).getSalespoint());
 		
-		TextView txtProdProducer = (TextView) gridView.findViewById(R.id.prod_item_producer);
-		txtProdProducer.setText(""+items.get(position).getProducer());
+		TextView txtRank = (TextView) gridView.findViewById(R.id.badges_item_rank);
+		txtRank.setText("Rang "+items.get(position).getRank());
 		
-		TextView txtProdRanking = (TextView) gridView.findViewById(R.id.prod_item_ranking);
-		if(items.get(position).getPoints()>0)
-			txtProdRanking.setText("Rang #"+items.get(position).getPoints()+" (+2)");
-		else
-			txtProdRanking.setText(" ");
-		
-		ImageView prodItemCrown = (ImageView) gridView.findViewById(R.id.prod_item_crown);
-		if(items.get(position).getPoints()>0)
+		ImageView prodItemCrown = (ImageView) gridView.findViewById(R.id.badges_item_crown);
+		switch(items.get(position).getCrownstatus())
+		{
+		case 1:
 			prodItemCrown.setImageResource(R.drawable.crown_gold);
-		else
-			prodItemCrown.setImageResource(R.drawable.empty);
-		
-		ImageView prodItemPict = (ImageView) gridView.findViewById(R.id.prod_item_pict);
-		prodItemPict.setImageResource(R.drawable.empty);
-		
-//		ImageView prodItemProd = (ImageView) gridView.findViewById(R.id.prod_item_product);
-
-		
-//		new DownloadImageTask().execute(items.get(position).getImagelink());
-//		imageView.setImageResource(R.drawable.zweifelpaprika);
-		Bitmap image = null;
-		try {
-			image = BitmapFactory.decodeStream((InputStream)new URL(items.get(position).getImagelink()).getContent());
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			break;
+		case 2:
+			prodItemCrown.setImageResource(R.drawable.crown_silver);
+			break;
+		case 3:
+			prodItemCrown.setImageResource(R.drawable.crown_bronce);
+			break;
+		default:
+			prodItemCrown.setImageResource(R.drawable.crown_none);
 		}
-		prodItemPict.setImageBitmap(image);
-		
-		prodItemCrown.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				System.out.println("Clicked on item! ");
-			}
-		});
-
 		
 		return gridView;
-
-		//		imageView.setImageBitmap(image);
-//        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-//        imageView.setLayoutParams(new GridView.LayoutParams(120, 70));
-//        return imageView;
 	}
 
 

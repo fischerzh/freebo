@@ -1,85 +1,79 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/main_layout" >
+    android:id="@+id/main_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
 
-<LinearLayout
-    android:id="@+id/LinearLayout01"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:focusable="true"
-    android:focusableInTouchMode="true"
-    android:orientation="vertical" >
-
-        <LinearLayout
+    <LinearLayout
+        android:id="@+id/LinearLayout01"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+        android:layout_height="fill_parent"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:orientation="vertical" >
 
-        <ImageButton
-            android:id="@+id/product_btn_scan"
-            android:layout_width="fill_parent"
-            android:layout_height="50dp"
-            android:layout_gravity="center_vertical"
-            android:background="@null"
-            android:layout_weight="0.2"
-            android:src="@drawable/scan_btn" />
+<!--         <LinearLayout -->
+<!--             android:layout_width="fill_parent" -->
+<!--             android:layout_height="wrap_content" -->
+<!--             android:orientation="horizontal" > -->
 
-        <ImageButton
-            android:id="@+id/product_btn_edit"
+<!--             <ImageButton -->
+<!--                 android:id="@+id/product_btn_scan" -->
+<!--                 android:layout_width="fill_parent" -->
+<!--                 android:layout_height="50dp" -->
+<!--                 android:layout_gravity="center_vertical" -->
+<!--                 android:layout_weight="0.2" -->
+<!--                 android:background="@null" -->
+<!--                 android:src="@drawable/scan_btn" /> -->
+
+<!--             <ImageButton -->
+<!--                 android:id="@+id/product_btn_edit" -->
+<!--                 android:layout_width="fill_parent" -->
+<!--                 android:layout_height="fill_parent" -->
+<!--                 android:layout_gravity="center_vertical" -->
+<!--                 android:layout_weight="0.8" -->
+<!--                 android:background="@null" -->
+<!--                 android:src="@android:drawable/ic_menu_edit" /> -->
+<!--         </LinearLayout> -->
+
+        <ListView
+            android:id="@+id/product_list_view"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="0.8"
-            android:background="@null"
-            android:src="@android:drawable/ic_menu_edit" />
+            android:layout_height="326dp"
+            android:layout_weight="1.08"
+            android:paddingTop="10dp" />
+
+        <Button
+            android:id="@+id/product_btn_delete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Delete marked Items" />
     </LinearLayout>
 
-    <ListView
-        android:id="@+id/product_list_view"
-        android:layout_width="fill_parent"
-        android:layout_height="326dp"
-        android:layout_weight="1.08" 
-        android:paddingTop="10dp"
-        />
-
-    <Button
-        android:id="@+id/product_btn_delete"
+    <RelativeLayout
+        android:id="@+id/top_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Delete marked Items" />
-
-</LinearLayout>
-
-<RelativeLayout
-    	android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#88666666"
-        android:id="@+id/top_layout">
- 
-    <ImageView
-        android:id="@+id/ivInstruction"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginRight="15dp"
-        android:clickable="false"
-        android:paddingLeft="20dip"
-        android:paddingTop="5dp"
-        android:scaleType="center"
-        android:src="@drawable/menu_overlay_scan" />
-    
-    <ImageView
-        android:id="@+id/ivInstruction"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:clickable="false"
-        android:paddingLeft="5dip"
-        android:paddingRight="5dip"
-        android:paddingTop="80dp"
-        android:scaleType="center"
-        android:src="@drawable/menu_overlay_click_prod" />
- 
+        android:gravity="right" >
+
+        <ImageView
+            android:id="@+id/ivInstruction_scan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:clickable="false"
+            android:paddingTop="5dp"
+            android:scaleType="center"
+            android:src="@drawable/menu_overlay_scan" />
+
+        <ImageView
+            android:id="@+id/ivInstruction_prod"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:paddingTop="80dp"
+            android:scaleType="center"
+            android:src="@drawable/menu_overlay_click_prod" />
     </RelativeLayout>
 
 </FrameLayout>

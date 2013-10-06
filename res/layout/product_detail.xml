@@ -24,7 +24,7 @@
         android:orientation="horizontal" >
 
         <ImageView
-            android:id="@+id/list_image"
+            android:id="@+id/prod_detail_image"
             android:layout_width="50dip"
             android:layout_height="50dip"
             android:layout_gravity="center_vertical|center_horizontal"

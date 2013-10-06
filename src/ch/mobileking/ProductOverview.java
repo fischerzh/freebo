@@ -2,8 +2,20 @@ package ch.mobileking;
 
 import java.util.ArrayList;
 
-import ch.mobileking.R;
-import ch.mobileking.classes.override.ImageAdapter;
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ListView;
+import android.widget.Toast;
 import ch.mobileking.classes.override.ProductBaseAdapter;
 import ch.mobileking.login.AsyncLogin;
 import ch.mobileking.login.AsyncUpdate;
@@ -11,24 +23,6 @@ import ch.mobileking.utils.ProductKing;
 import ch.mobileking.utils.Products;
 import ch.mobileking.utils.SharedPrefEditor;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.GridView;
-import android.widget.ImageButton;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 public class ProductOverview extends Activity implements ITaskComplete{
 	
@@ -79,25 +73,32 @@ public class ProductOverview extends Activity implements ITaskComplete{
 		
 	}
 
+//	@Override
+//	public boolean onCreateOptionsMenu(Menu menu) {
+//		// Inflate the menu; this adds items to the action bar if it is present.
+//		getMenuInflater().inflate(R.menu.main, menu);
+//		return true;
+//	}
+	
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
-	}
+	  public boolean onCreateOptionsMenu(Menu menu) {
+	    MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.action_bar, menu);
+	    return true;
+	  } 
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    // Handle item selection
 	    switch (item.getItemId()) {
-	        case R.id.show_help:
+	        case R.id.action_show_help:
 	        	baseActivityMenu.showFirstRunMenu();
 	            return true;
-	        case R.id.log_out:
+	        case R.id.action_logout:
 	        	baseActivityMenu.logOut();
 	            return true;
-	        case R.id.app_sync:
-	        	baseActivityMenu.syncAppToServer();
+	        case R.id.action_scan:
+	        	startBarcodeScanner();
 	            return true;
 	        default:
 	            return super.onOptionsItemSelected(item);
@@ -122,8 +123,8 @@ public class ProductOverview extends Activity implements ITaskComplete{
         listView = (ListView) findViewById(R.id.product_list_view);
         editTxt = (EditText) findViewById(R.id.product_search_box);
 	    
-        imageBtn = (ImageButton) findViewById(R.id.product_btn_scan);
-        editBtn = (ImageButton) findViewById(R.id.product_btn_edit);
+//        imageBtn = (ImageButton) findViewById(R.id.product_btn_scan);
+//        editBtn = (ImageButton) findViewById(R.id.product_btn_edit);
 //        shareBtn = (ImageButton) findViewById(R.id.product_btn_share);
         deleteBtn = (Button) findViewById(R.id.product_btn_delete);
 
@@ -132,34 +133,34 @@ public class ProductOverview extends Activity implements ITaskComplete{
         else
         	deleteBtn.setVisibility(View.INVISIBLE);
         
-        imageBtn.setOnClickListener(new View.OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent(ProductOverview.this, BarCodeScanner.class);
-				startActivity(intent);
-				
-			}
-		});
+//        imageBtn.setOnClickListener(new View.OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View v) {
+//				Intent intent = new Intent(ProductOverview.this, BarCodeScanner.class);
+//				startActivity(intent);
+//				
+//			}
+//		});
         
-        editBtn.setOnClickListener(new View.OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				if(!isEditVisible())
-				{
-					setEditVisible(true);
-					setProdLayoutResourceId(R.layout.product_item_edit);
-				}
-				else
-				{
-					setEditVisible(false);
-					setProdLayoutResourceId(R.layout.product_item);
-				}
-				
-				setElements();
-			}
-		});
+//        editBtn.setOnClickListener(new View.OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View v) {
+//				if(!isEditVisible())
+//				{
+//					setEditVisible(true);
+//					setProdLayoutResourceId(R.layout.product_item_edit);
+//				}
+//				else
+//				{
+//					setEditVisible(false);
+//					setProdLayoutResourceId(R.layout.product_item);
+//				}
+//				
+//				setElements();
+//			}
+//		});
         
         deleteBtn.setOnClickListener(new View.OnClickListener() {
 			
@@ -203,9 +204,10 @@ public class ProductOverview extends Activity implements ITaskComplete{
 			public void onItemClick(AdapterView<?> adapter, View view, int position, long id) {
 //				editTxt.setText("");
 				
-				System.out.println("Position clicked: " + position + " " + listView.getItemAtPosition(position));
+				System.out.println("Position clicked: " + position + " " + ((Products)listView.getItemAtPosition(position)).getName());
 		        Intent intent = new Intent(getApplicationContext(), ProductDetailOverview.class);
-		        intent.putExtra("product", position);
+//		        Products prod = (Products) listView.getItemAtPosition(position);
+		        intent.putExtra("product", String.valueOf(position));
 		        setResult(1, intent);
 		        startActivityForResult(intent, 1);
 			}
@@ -233,6 +235,12 @@ public class ProductOverview extends Activity implements ITaskComplete{
 
 	}
 	return ranBefore;
+	}
+	
+	private void startBarcodeScanner()
+	{
+		Intent intent = new Intent(ProductOverview.this, BarCodeScanner.class);
+		startActivity(intent);
 	}
 
 	
