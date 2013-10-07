@@ -173,7 +173,7 @@ public class ProductOverview extends Activity implements ITaskComplete{
 			
 		});
         
-		setTitle("Mobile Product King");
+		setTitle("Product King");
 		
  
 //        GridView gridView = (GridView) findViewById(R.id.grid_view);

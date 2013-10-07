@@ -75,6 +75,7 @@ public class MainActivity extends Activity {
 	
 	public void setElements()
 	{
+		setTitle("Product King");
 		
 		setContentView(R.layout.activity_main);
 
