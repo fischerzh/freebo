@@ -9,19 +9,20 @@
     android:paddingTop="5dp" 
     >
 
-    <TextView
+    <ch.mobileking.classes.override.RobotoTextView
         android:id="@+id/prod_item_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="Rivella Rot"
-        android:textSize="18dp" />
+        android:text="Rivella Rot"
+        android:textStyle="italic"
+        android:textSize="20dp" />
 
-    <TextView
+    <ch.mobileking.classes.override.RobotoTextView
         android:id="@+id/prod_item_producer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Von Rivella"
-        android:textColor="@android:color/darker_gray"
+        android:textColor="@android:color/black"
         android:textSize="14dp" />
 
     <View
@@ -53,29 +54,36 @@
             android:layout_height="fill_parent"
             android:layout_gravity="center_vertical|center_horizontal"
             android:layout_weight="0.5"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
             android:orientation="vertical" >
 
-            <TextView
+            <ch.mobileking.classes.override.RobotoTextView
                 android:id="@+id/prod_rank"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="Rang 21 ( +2)"
+                android:text="RANG 21 (+2)"
          		android:textColor="@color/blue_light"
-                android:textSize="20dp"
-                android:textStyle="bold" 
+                android:textSize="18dp"
+                android:textStyle="bold"
+                android:background="@color/grey_light"
                 android:gravity="center_horizontal|center_vertical"
+                android:drawablePadding="5sp"
+                android:drawableRight="@drawable/ic_arrow_up_black"
                 />
 
-            <TextView
+            <ch.mobileking.classes.override.RobotoTextView
                 android:id="@+id/prod_collected"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:text="12 neue Punkte gesammelt"
-                android:textColor="@color/grey_dark"
+                android:textStyle="bold"
+                android:textColor="@color/blue_light"
                 android:textSize="12dp" 
                 android:gravity="center_vertical|center_horizontal"
+
                 />
         </LinearLayout>
 
@@ -83,9 +91,8 @@
             android:id="@+id/linearLayoutCrown"
             android:layout_width="0dip"
             android:layout_height="fill_parent"
-            android:layout_weight="0.5"
-            android:orientation="vertical" 
-            >
+            android:layout_weight="0.35"
+            android:orientation="vertical" >
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -100,10 +107,10 @@
                     android:layout_height="@dimen/prod_crown_width"
                     android:layout_gravity="center_horizontal"
                     android:layout_weight="1"
-                    android:src="@drawable/no_crown"
+                    android:src="@drawable/ic_krone_gold"
                     android:visibility="visible" />
 
-                <TextView
+                <ch.mobileking.classes.override.RobotoTextView
                     android:id="@+id/prod_crown_cnt"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -111,7 +118,7 @@
                     android:layout_weight="1"
                     android:hint="x 2"
                     android:textColor="#3B63D4"
-                    android:textSize="18dp" />
+                    android:textSize="20dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -127,10 +134,10 @@
                     android:layout_height="@dimen/prod_crown_width"
                     android:layout_gravity="center_horizontal"
                     android:layout_weight="1"
-                    android:src="@drawable/no_crown"
+                    android:src="@drawable/ic_krone_silber"
                     android:visibility="visible" />
 
-                <TextView
+                <ch.mobileking.classes.override.RobotoTextView
                     android:id="@+id/prod_crown_cnt_2"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -138,7 +145,7 @@
                     android:layout_weight="1"
                     android:hint="x 0"
                     android:textColor="#3B63D4"
-                    android:textSize="18dp" />
+                    android:textSize="20dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -154,10 +161,10 @@
                     android:layout_height="@dimen/prod_crown_width"
                     android:layout_gravity="center_horizontal"
                     android:layout_weight="1"
-                    android:src="@drawable/no_crown"
+                    android:src="@drawable/ic_krone_bronze"
                     android:visibility="visible" />
 
-                <TextView
+                <ch.mobileking.classes.override.RobotoTextView
                     android:id="@+id/prod_crown_cnt_3"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -165,7 +172,7 @@
                     android:layout_weight="1"
                     android:hint="x 0"
                     android:textColor="#3B63D4"
-                    android:textSize="18dp" />
+                    android:textSize="20dp" />
             </LinearLayout>
         </LinearLayout>
 

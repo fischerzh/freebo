@@ -6,13 +6,13 @@
         android:id="@+id/action_scan"
         android:orderInCategory="100"
         android:showAsAction="always"
-        android:icon="@drawable/btn_scan"
+        android:icon="@drawable/ic_scan"
         android:title="Scan"/>
     <item
         android:id="@+id/action_edit"
         android:orderInCategory="100"
         android:showAsAction="always"
-        android:icon="@android:drawable/ic_menu_edit"
+        android:icon="@drawable/ic_pen"
         android:title="Edit Items"/>
     
     <item

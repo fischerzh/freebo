@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -119,9 +120,13 @@ public class ProductBaseAdapter extends BaseAdapter implements Filterable{
 		{
 			convertView = mInflater.inflate(getProdLayoutResourceId(), parent, false); //R.layout.product_item
 			
+			Typeface font = Typeface.createFromAsset(getCont().getAssets(), "Roboto-Thin.ttf");
+			
 			holder = new ViewHolder();
 			holder.setTxtName((TextView)convertView.findViewById(R.id.prod_item_name));
+//			holder.getTxtName().setTypeface(font);
 			holder.setTxtProducer((TextView)convertView.findViewById(R.id.prod_item_producer));
+//			holder.getTxtProducer().setTypeface(font);
 			holder.setTxtRank((TextView)convertView.findViewById(R.id.prod_rank));
 			holder.setChkBox((CheckBox)convertView.findViewById(R.id.prod_item_checkbox));
 			holder.setImgView((ImageView)convertView.findViewById(R.id.list_image));
@@ -192,19 +197,22 @@ public class ProductBaseAdapter extends BaseAdapter implements Filterable{
 			holder.getChkBox().setChecked(resultList.get(position).getIsdeleted());
 		}
 		
-		//setValues
+		/*
+		 *  SET THE VALUES!
+		 * 
+		 */
 		if(resultList.get(position).getOptin())
 		{
 			holder.getTxtName().setText(""+resultList.get(position).getName());
 			holder.getTxtProducer().setText(""+resultList.get(position).getProducer());
-			holder.getTxtRank().setText("Rang "+resultList.get(position).getId() + " (+2)");
+			holder.getTxtRank().setText("RANG "+resultList.get(position).getId() + " (+2)");
 			holder.getCrownLayout().setTag(position);
 			if(holder.getTxtCrownCnt()!= null)
 			{
 				holder.getTxtCrownCnt().setText("x 1"); //holder.getTxtCrownCnt().setText(""+resultList.get(position).getPoints()+" x");
-				holder.getCrown1().setImageResource(R.drawable.crown_gold);
-				holder.getCrown2().setImageResource(R.drawable.crown_silver);
-				holder.getCrown3().setImageResource(R.drawable.crown_bronce);
+				holder.getCrown1().setImageResource(R.drawable.ic_krone_gold);
+				holder.getCrown2().setImageResource(R.drawable.ic_krone_silber);
+				holder.getCrown3().setImageResource(R.drawable.ic_krone_bronze);
 			}
 		}
 		else
