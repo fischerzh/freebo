@@ -34,19 +34,22 @@ public class ImageAdapter extends BaseAdapter{
 	
 	private Context mContext;
 	
-	private ArrayList<Crown> items;
+	private ArrayList<Object> items;
 	
 	private ArrayList<Bitmap> bitmArray; 
+	
+	private int layoutId;
 	
 	private ImageView imageView;
 	
 	private int position;
 	
-	public ImageAdapter(Context c, ArrayList<Crown> items)
+	public ImageAdapter(Context c, ArrayList<Object> items, int layoutId)
 	{
 		System.out.println("Got Crowns: " + items);
 		mContext = c;
-		this.items = new ArrayList<Crown>(items);
+		this.items = new ArrayList<Object>(items);
+		this.layoutId = layoutId;
 	}
 	
 	@Override
@@ -63,35 +66,43 @@ public class ImageAdapter extends BaseAdapter{
 		if(convertView == null)
 		{
 			gridView = new View(mContext);
-			
-			gridView = inflater.inflate(R.layout.badges_detail_item, parent, false);
+			gridView = inflater.inflate(this.layoutId, parent, false);
 		}
 		else
 		{
 			gridView = (View)convertView;
 		}
 		
-		TextView txtSalesPoint = (TextView) gridView.findViewById(R.id.badges_item_salespoint);
-		txtSalesPoint.setText(""+items.get(position).getSalespoint());
-		
-		TextView txtRank = (TextView) gridView.findViewById(R.id.badges_item_rank);
-		txtRank.setText("Rang "+items.get(position).getRank());
-		
-		ImageView prodItemCrown = (ImageView) gridView.findViewById(R.id.badges_item_crown);
-		switch(items.get(position).getCrownstatus())
+		if(this.layoutId == R.layout.badges_detail_item)
 		{
-		case 1:
-			prodItemCrown.setImageResource(R.drawable.crown_gold);
-			break;
-		case 2:
-			prodItemCrown.setImageResource(R.drawable.crown_silver);
-			break;
-		case 3:
-			prodItemCrown.setImageResource(R.drawable.crown_bronce);
-			break;
-		default:
-			prodItemCrown.setImageResource(R.drawable.crown_none);
+			TextView txtSalesPoint = (TextView) gridView.findViewById(R.id.badges_item_salespoint);
+			txtSalesPoint.setText(""+((Crown) items.get(position)).getSalespoint());
+			
+			TextView txtRank = (TextView) gridView.findViewById(R.id.badges_item_rank);
+			txtRank.setText("Rang "+((Crown) items.get(position)).getRank());
+			
+			ImageView prodItemCrown = (ImageView) gridView.findViewById(R.id.badges_item_crown);
+			switch(((Crown) items.get(position)).getCrownstatus())
+			{
+			case 1:
+				prodItemCrown.setImageResource(R.drawable.crown_gold);
+				break;
+			case 2:
+				prodItemCrown.setImageResource(R.drawable.crown_silver);
+				break;
+			case 3:
+				prodItemCrown.setImageResource(R.drawable.crown_bronce);
+				break;
+			default:
+				prodItemCrown.setImageResource(R.drawable.crown_none);
+			}
 		}
+		else if(this.layoutId == R.layout.recommend_item)
+		{
+			TextView txtProduct = (TextView) gridView.findViewById(R.id.prod_item_name);
+			txtProduct.setText(""+((Products) items.get(position)).getName());
+		}
+		
 		
 		return gridView;
 	}

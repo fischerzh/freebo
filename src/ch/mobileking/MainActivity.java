@@ -21,6 +21,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends Activity {
@@ -28,6 +29,7 @@ public class MainActivity extends Activity {
 	private AccountManager am;
 	
 	private EditText username, password;
+	private TextView forgotPw;
 	private Button login;
 	private ImageButton googleLogin;
 	private ProgressBar progressBar;
@@ -84,11 +86,25 @@ public class MainActivity extends Activity {
         username = (EditText) findViewById(R.id.txtUsername);
         password = (EditText) findViewById(R.id.txtPassword);
         
+        forgotPw = (TextView) findViewById(R.id.main_forgot_pw_txt);
+        
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setVisibility(View.INVISIBLE);
         
         login = (Button) findViewById(R.id.btnLogin);
+        
+        
 //        googleLogin = (ImageButton) findViewById(R.id.btnGoogleLogin);
+        
+        forgotPw.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent intent = new Intent(MainActivity.this, RecommActivity.class);
+				startActivity(intent);
+			}
+		});
         
         editor = new SharedPrefEditor(this);
         if(isNetworkAvailable())
@@ -128,36 +144,6 @@ public class MainActivity extends Activity {
 			}
         }
         );
-        
-//        googleLogin.setOnClickListener(new Button.OnClickListener() {
-//        	@Override
-//			public void onClick(View v) {
-//        		
-//				Intent intent = new Intent(getAct(), DemoActivity.class);
-//				getAct().startActivity(intent);
-//        		
-//        		Account[] accounts = am.getAccountsByType("com.google");
-//        		Account myAccount_ = null;
-//
-//        		//show Intent and get account!!
-//        		System.out.println("ACCOUNT: " + accounts[0]);
-//
-//        		myAccount_ = accounts[0];
-//
-//        		Bundle options = new Bundle();
-//        		
-//				am.getAuthToken(
-//        			    myAccount_,                     // Account retrieved using getAccountsByType()
-//        			    "Manage your tasks",            // Auth scope
-//        			    options,                        // Authenticator-specific options
-//        			    getAct(),                           // Your activity
-//        			    new OnTokenAcquired(),          // Callback called when a token is successfully acquired
-//        			    new Handler());    // Callback called if an error occurs
-//        	}
-//        }
-//        );
-//        
-        
 	}
 	
 	public void setProgressBarDisableContent() {
@@ -176,6 +162,7 @@ public class MainActivity extends Activity {
 
 	private void loginUserFromSettings(String loginStr, String pwdStr)
 	{
+		/** REFACTOR, CALL ASYNC LOGIN TASK, WAIT FOR CALLBACK, OnPostExecute() or similar AND THEN CALL ACCORDING VIEW BASED ON LGOIN SUCCESS, FAILURE OR FIRST LOGIN!! */
 		new AsyncLogin(getAct(), false).execute(loginStr, pwdStr);
 	}
 	

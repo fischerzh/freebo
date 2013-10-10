@@ -25,12 +25,15 @@ public class RobotoTextView extends TextView {
     }
 
     public void setTypeface(Typeface tf, int style) {
+    	
+    	if(this.isInEditMode())
+    		return;
         if (style == Typeface.NORMAL) {
-            super.setTypeface(Typeface.createFromAsset(getContext().getAssets(), "Roboto-Thin.ttf"));
+            super.setTypeface(Typeface.createFromAsset(getContext().getAssets(), "fonts/robotothin.ttf"));
         } else if (style == Typeface.ITALIC) {
-            super.setTypeface(Typeface.createFromAsset(getContext().getAssets(), "Roboto-LightItalic.ttf"));
+            super.setTypeface(Typeface.createFromAsset(getContext().getAssets(), "fonts/robotolightitalic.ttf"));
         } else if (style == Typeface.BOLD) {
-            super.setTypeface(Typeface.createFromAsset(getContext().getAssets(), "RobotoCondensed-Regular.ttf"));
+            super.setTypeface(Typeface.createFromAsset(getContext().getAssets(), "fonts/robotobold.ttf"));
         }
     }
     

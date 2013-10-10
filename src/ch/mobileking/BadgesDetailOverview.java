@@ -51,8 +51,8 @@ public class BadgesDetailOverview extends Activity {
 		GridView gridView = (GridView) findViewById(R.id.badges_grid_view);
 
 		// Instance of ImageAdapter Class
-		ArrayList<Crown> crowns;
-		crowns = new ArrayList<Crown>();
+		ArrayList<Object> crowns;
+		crowns = new ArrayList<Object>();
 
 		Crown cr = new Crown();
 		cr.setCrownstatus(1);
@@ -81,7 +81,12 @@ public class BadgesDetailOverview extends Activity {
 		//(ArrayList<Crown>) product.getCrowns();
 		System.out.println("Get Crowns: " + product.getCrowns());
 
-		ImageAdapter adapter = new ImageAdapter(getApplicationContext(), crowns); //(ArrayList<Crown>)product.getCrowns()
+		ArrayList<Object> crownList = new ArrayList<Object>();
+		crownList.addAll(product.getCrowns());
+		
+		//(ArrayList<Crown>)product.getCrowns()
+		
+		ImageAdapter adapter = new ImageAdapter(getApplicationContext(), crownList, R.layout.badges_detail_item); 
 
 		gridView.setAdapter(adapter);
 

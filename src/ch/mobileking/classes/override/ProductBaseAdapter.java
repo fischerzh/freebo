@@ -120,13 +120,10 @@ public class ProductBaseAdapter extends BaseAdapter implements Filterable{
 		{
 			convertView = mInflater.inflate(getProdLayoutResourceId(), parent, false); //R.layout.product_item
 			
-			Typeface font = Typeface.createFromAsset(getCont().getAssets(), "Roboto-Thin.ttf");
 			
 			holder = new ViewHolder();
 			holder.setTxtName((TextView)convertView.findViewById(R.id.prod_item_name));
-//			holder.getTxtName().setTypeface(font);
 			holder.setTxtProducer((TextView)convertView.findViewById(R.id.prod_item_producer));
-//			holder.getTxtProducer().setTypeface(font);
 			holder.setTxtRank((TextView)convertView.findViewById(R.id.prod_rank));
 			holder.setChkBox((CheckBox)convertView.findViewById(R.id.prod_item_checkbox));
 			holder.setImgView((ImageView)convertView.findViewById(R.id.list_image));

@@ -11,30 +11,6 @@
         android:focusableInTouchMode="true"
         android:orientation="vertical" >
 
-<!--         <LinearLayout -->
-<!--             android:layout_width="fill_parent" -->
-<!--             android:layout_height="wrap_content" -->
-<!--             android:orientation="horizontal" > -->
-
-<!--             <ImageButton -->
-<!--                 android:id="@+id/product_btn_scan" -->
-<!--                 android:layout_width="fill_parent" -->
-<!--                 android:layout_height="50dp" -->
-<!--                 android:layout_gravity="center_vertical" -->
-<!--                 android:layout_weight="0.2" -->
-<!--                 android:background="@null" -->
-<!--                 android:src="@drawable/scan_btn" /> -->
-
-<!--             <ImageButton -->
-<!--                 android:id="@+id/product_btn_edit" -->
-<!--                 android:layout_width="fill_parent" -->
-<!--                 android:layout_height="fill_parent" -->
-<!--                 android:layout_gravity="center_vertical" -->
-<!--                 android:layout_weight="0.8" -->
-<!--                 android:background="@null" -->
-<!--                 android:src="@android:drawable/ic_menu_edit" /> -->
-<!--         </LinearLayout> -->
-
         <ListView
             android:id="@+id/product_list_view"
             android:layout_width="fill_parent"
@@ -47,17 +23,21 @@
 
         <Button
             android:id="@+id/product_btn_delete"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Delete marked Items" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:background="@android:color/black"
+        android:textColor="@android:color/white"
+        android:text="Loyalitätsprogramm verlassen!" />
+
     </LinearLayout>
 
     <RelativeLayout
-        android:id="@+id/top_layout"
+        android:id="@+id/product_menuoverlay_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#88666666"
-        android:gravity="right" >
+        android:gravity="top" >
 
         <ImageView
             android:id="@+id/ivInstruction_scan"
@@ -77,6 +57,41 @@
             android:paddingTop="80dp"
             android:scaleType="center"
             android:src="@drawable/menu_overlay_click_prod" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/prod_relative_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#88666666"
+        android:gravity="center_vertical" 
+        android:visibility="invisible">
+
+        <ProgressBar
+            android:id="@+id/product_progressBar"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="177dp"
+            android:visibility="visible" />
+
+        <ch.mobileking.classes.override.RobotoTextView
+            android:id="@+id/prod_update_info_text"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_alignBottom="@+id/product_progressBar"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="139dp"
+            android:background="@color/grey_light"
+            android:paddingTop="30dp"
+            android:text="Aktualisierung Erfolgreich: Du bist erfolgreich einem Loyalitätsprogramm beigetreten!"
+            android:textSize="20dp"
+            android:gravity="center_horizontal|center_vertical"
+            android:visibility="invisible"/>
+
     </RelativeLayout>
 
 </FrameLayout>

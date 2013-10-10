@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -15,6 +16,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 import ch.mobileking.classes.override.ProductBaseAdapter;
 import ch.mobileking.login.AsyncLogin;
@@ -39,10 +42,12 @@ public class ProductOverview extends Activity implements ITaskComplete{
 	private boolean canUpdateServer = false;
 		
 	private ListView listView;
-	private View topLevelLayout;
+	private View topLevelLayout, progressBarLayout;
 	private EditText editTxt;
+	private TextView prodUpdateText;
 	private ImageButton imageBtn, editBtn, shareBtn;
 	private Button deleteBtn;
+	private ProgressBar pgBar;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -56,20 +61,34 @@ public class ProductOverview extends Activity implements ITaskComplete{
 		
 		System.out.println("ProductOverview called!");
 		
-		System.out.println("Extras from Intent: " +getCallingActivity() + getIntent().getExtras());
+//		System.out.println("Extras from Intent: " +getCallingActivity() + getIntent().getExtras());
+		
+		
+		Intent iin= getIntent();
+	    Bundle b = iin.getExtras();
+	    String barcode = "";
+	    if(b!=null)
+	    	barcode = (String) b.get("barcode");
 		
 		setProdLayoutResourceId(R.layout.product_item);
-		if(getCallingActivity() != null && getIntent().getExtras()!= null)
+		
+		setElements();
+		
+//		if(getCallingActivity() != null && getIntent().getExtras()!= null)
+		if(!barcode.isEmpty())
 		{
-			System.out.println("Barcode 1: " + getIntent().getStringExtra("barcode")  );
-			Toast.makeText(this, "Barcode scanned: " + getIntent().getStringExtra("barcode"), Toast.LENGTH_LONG).show();
-			updateUserInfo(true, true, getIntent().getStringExtra("barcode"));
+			showInfoUpdated(false);
+			
+			System.out.println("Barcode: " + getIntent().getStringExtra("barcode")  );
+			Toast.makeText(this, "Bitte warten, wir aktualisieren....: ", Toast.LENGTH_LONG).show();
+			updateUserInfo(true, true, barcode);
+//			getIntent().getStringExtra("barcode")
 //			reloadUserInfo();
 
 		}
 	//	else //getCallingActivity().getShortClassName().contains("BarCodeScanner") && getIntent().getExtras()!=null)
 		
-		setElements();
+//		setElements();
 		
 	}
 
@@ -79,6 +98,18 @@ public class ProductOverview extends Activity implements ITaskComplete{
 //		getMenuInflater().inflate(R.menu.main, menu);
 //		return true;
 //	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		
+		System.out.println("Request Code: " + requestCode);
+		System.out.println("Result Code:  " +resultCode);
+            if (resultCode == RESULT_OK) {
+                // A contact was picked.  Here we will just display it
+                // to the user.
+            }
+    }
 	
 	@Override
 	  public boolean onCreateOptionsMenu(Menu menu) {
@@ -111,7 +142,14 @@ public class ProductOverview extends Activity implements ITaskComplete{
 		
 		setContentView(R.layout.product_overview_layout);
 		
-		topLevelLayout = findViewById(R.id.top_layout);
+		topLevelLayout = findViewById(R.id.product_menuoverlay_layout);
+		
+		progressBarLayout = findViewById(R.id.prod_relative_layout);
+		progressBarLayout.setVisibility(View.INVISIBLE);
+		
+		pgBar = (ProgressBar) findViewById(R.id.product_progressBar);
+		
+		prodUpdateText = (TextView) findViewById(R.id.prod_update_info_text);
 		
 		if(isFirstTime())
 		{
@@ -175,25 +213,6 @@ public class ProductOverview extends Activity implements ITaskComplete{
         
 		setTitle("Product King");
 		
- 
-//        GridView gridView = (GridView) findViewById(R.id.grid_view);
-// 
-//        // Instance of ImageAdapter Class
-//        gridView.setAdapter(new ImageAdapter(this,  (ArrayList<Products>) ProductKing.getStaticProducts()));
-//        
-//        gridView.setOnItemClickListener(new OnItemClickListener() {
-//
-//			@Override
-//			public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
-//				// TODO Auto-generated method stub
-//				System.out.println("Item clicked: " +position);
-//		        Intent intent = new Intent(getApplicationContext(), ProductDetailOverview.class);
-//		        intent.putExtra("product", position);
-//		        setResult(1, intent);
-//		        startActivityForResult(intent, 1);
-//			}
-//		});
-		
 		adapter = new ProductBaseAdapter(this, getProdLayoutResourceId(), (ArrayList<Products>) ProductKing.getStaticProducts()); //R.layout.product_item
 		
         listView.setAdapter(adapter);
@@ -240,7 +259,7 @@ public class ProductOverview extends Activity implements ITaskComplete{
 	private void startBarcodeScanner()
 	{
 		Intent intent = new Intent(ProductOverview.this, BarCodeScanner.class);
-		startActivity(intent);
+		startActivityForResult(intent, 1);
 	}
 
 	
@@ -266,9 +285,33 @@ public class ProductOverview extends Activity implements ITaskComplete{
         new AsyncUpdate(getAct(), false, true, this).execute(editor.getUsername(),editor.getPwd()); //http://192.168.0.16:8080
 	}
 	
+	private void showInfoUpdated(boolean isUpdate)
+	{
+		if(isUpdate)
+		{
+			pgBar.setVisibility(View.INVISIBLE);
+			progressBarLayout.setVisibility(View.VISIBLE);
+			prodUpdateText.setVisibility(View.VISIBLE);
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		else
+		{
+			pgBar.setVisibility(View.VISIBLE);
+			progressBarLayout.setVisibility(View.VISIBLE);
+			prodUpdateText.setVisibility(View.INVISIBLE);
+		}
+
+	}
+	
 	@Override
 	public void onLoginCompleted() {
 		// TODO Auto-generated method stub
+		showInfoUpdated(true);
 		System.out.println("LoginCompleted! Restarting Activity...");
 		restartActivity();
 	}

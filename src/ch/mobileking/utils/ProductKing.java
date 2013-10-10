@@ -42,15 +42,15 @@ private static final long serialVersionUID = 1L;
 	 * @return the staticProducts
 	 */
 	public static List<Products> getStaticProducts() {
-		if(staticProducts.size()==0)
-		{
-			Products prod = new Products();
-			prod.setName("Dein Lieblingsprodukt");
-			prod.setOptin(true);
-			prod.setProducer("Dein Lieblingshersteller");
-			prod.setUserrank(1);
-			staticProducts.add(prod);
-		}
+//		if(staticProducts.size()==0)
+//		{
+//			Products prod = new Products();
+//			prod.setName("Dein Lieblingsprodukt");
+//			prod.setOptin(true);
+//			prod.setProducer("Dein Lieblingshersteller");
+//			prod.setUserrank(1);
+//			staticProducts.add(prod);
+//		}
 		return staticProducts;
 	}
 
