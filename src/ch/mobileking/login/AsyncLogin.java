@@ -16,8 +16,10 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
-import ch.mobileking.ITaskComplete;
+import ch.mobileking.MainActivity;
 import ch.mobileking.ProductOverview;
+import ch.mobileking.RecommActivity;
+import ch.mobileking.utils.ITaskComplete;
 import ch.mobileking.utils.ProductKing;
 import ch.mobileking.utils.SharedPrefEditor;
 
@@ -100,7 +102,7 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
 			}
             setJsonResult(convertStreamToString(instream));
             // now you have the string representation of the HTML request
-            if(getJsonResult().contains("HTTP Status 401") || getJsonResult().contains("Error 500"))
+            if(getJsonResult().contains("HTTP Status 401") || getJsonResult().contains("Error"))
             {
             	return "FAILED";
             }
@@ -141,10 +143,22 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
 			parseJSON();
 			System.out.println("update after Sync: " +update);
 //			getAct().setProgressBarVisibility(false);
+			
 			if(!update)
 			{
-				Intent intent = new Intent(getAct(), ProductOverview.class);
-				getAct().startActivity(intent);
+				/** FIRST LOGIN **/
+				if(ProductKing.getIsActive())
+				{
+					Intent intent = new Intent(getAct(), ProductOverview.class);
+					getAct().startActivity(intent);
+				}
+				else
+				{
+					Intent intent = new Intent(getAct(), RecommActivity.class);
+					getAct().startActivity(intent);
+				}
+				
+				
 			}
 			else
 			{
@@ -181,7 +195,7 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
     	}
 		System.out.println("Name: " + prodKing.getUsername());
 		System.out.println("Products: " +prodKing.getProducts().size());
-		
+		ProductKing.setIsActive(prodKing.getIsactiveapp());
 		ProductKing.setStaticProducts(prodKing.getProducts());
 	}
 	

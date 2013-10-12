@@ -3,6 +3,8 @@ package ch.mobileking;
 import ch.mobileking.R;
 import ch.mobileking.login.AsyncLogin;
 import ch.mobileking.userdata.OnTokenAcquired;
+import ch.mobileking.utils.BaseActivity;
+import ch.mobileking.utils.ITaskComplete;
 import ch.mobileking.utils.SharedPrefEditor;
 
 import android.net.ConnectivityManager;
@@ -24,7 +26,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements ITaskComplete{
 
 	private AccountManager am;
 	
@@ -135,11 +137,10 @@ public class MainActivity extends Activity {
 				
 				if(isNetworkAvailable())
 				{
-	        		setProgressBarDisableContent();
+	        		setProgressBarEnableContent();
 
 					loginUser();
 					
-//					setProgressBarEnableContent();
 				}
 			}
         }
@@ -147,17 +148,17 @@ public class MainActivity extends Activity {
 	}
 	
 	public void setProgressBarDisableContent() {
-		progressBar.setVisibility(View.VISIBLE);
-		username.setEnabled(false);
-		password.setEnabled(false);
-		login.setEnabled(false);
-	}
-	
-	public void setProgressBarEnableContent() {
 		progressBar.setVisibility(View.INVISIBLE);
 		username.setEnabled(true);
 		password.setEnabled(true);
 		login.setEnabled(true);
+	}
+	
+	public void setProgressBarEnableContent() {
+		progressBar.setVisibility(View.VISIBLE);
+		username.setEnabled(false);
+		password.setEnabled(false);
+		login.setEnabled(false);
 	}
 
 	private void loginUserFromSettings(String loginStr, String pwdStr)
@@ -171,7 +172,8 @@ public class MainActivity extends Activity {
 		String loginStr, pwdStr;
         loginStr = username.getText().toString();
         pwdStr = password.getText().toString();
-		new AsyncLogin(getAct(), false).execute(loginStr, pwdStr);
+//		new AsyncLogin(getAct(), false).execute(loginStr, pwdStr);
+		new AsyncLogin(getAct(), false, this).execute(loginStr, pwdStr);
 		this.setProgressBarEnableContent();
 	}
 	
@@ -194,6 +196,19 @@ public class MainActivity extends Activity {
 	 */
 	public void setAct(Activity act) {
 		this.act = act;
+	}
+
+	@Override
+	public void onLoginCompleted() {
+		// TODO Auto-generated method stub
+		setProgressBarDisableContent();
+
+	}
+
+	@Override
+	public void onUpdateCompleted() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

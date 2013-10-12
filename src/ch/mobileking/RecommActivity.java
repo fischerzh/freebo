@@ -4,15 +4,23 @@ import java.util.ArrayList;
 
 import ch.mobileking.classes.override.ImageAdapter;
 import ch.mobileking.utils.Crown;
+import ch.mobileking.utils.ProductKing;
 import ch.mobileking.utils.Products;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ListView;
 
 public class RecommActivity extends Activity {
+	
+	private Button nextBtn;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -31,14 +39,24 @@ public class RecommActivity extends Activity {
 		catList.add("Cremen");
 		catList.add("Desserts");
 		catList.add("Spirituosen");
-
 		
-		ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_multiple_choice, catList);
+		ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.select_dialog_multichoice, catList);
 		
 		listview.setAdapter(adapter);		
 		
+		listview.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> adapter, View view, int position, long arg3) {
+				// TODO Auto-generated method stub
+				listview.setItemChecked(position, true);
+			}
+		});
+		
+		
 		setGrid();
 		
+		setElements();
 		
 	}
 	
@@ -49,29 +67,28 @@ public class RecommActivity extends Activity {
 
 		// Instance of ImageAdapter Class
 		ArrayList<Object> prods = new ArrayList<Object>();
-
-		Products pr1 = new Products();
-		pr1.setName("Zweifel Chips");
-
-		Products pr2 = new Products();
-		pr2.setName("Nestea Peach");
-		
-		Products pr3 = new Products();
-		pr3.setName("Rivella Blau");
-		
-		Products pr4 = new Products();
-		pr4.setName("Studentenfutter");
-		
-		prods.add(pr1);
-		prods.add(pr2);
-		prods.add(pr3);
-		prods.add(pr4);
-
+		prods.addAll(ProductKing.getRecommenderProducts());
 		//(ArrayList<Crown>) product.getCrowns();
 
 		ImageAdapter adapter = new ImageAdapter(getApplicationContext(), prods, R.layout.recommend_item); //(ArrayList<Crown>)product.getCrowns()
 
 		gridView.setAdapter(adapter);
+	}
+	
+	private void setElements()
+	{
+		
+		nextBtn = (Button) findViewById(R.id.prod_recomm_btnNext);
+		nextBtn.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent intent = new Intent(RecommActivity.this, ProductOverview.class);
+				startActivity(intent);
+			}
+		});
+		
 	}
 
 }

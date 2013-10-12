@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import ch.mobileking.R;
 import ch.mobileking.utils.Crown;
 import ch.mobileking.utils.Products;
+import ch.mobileking.utils.Utils;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -85,22 +86,27 @@ public class ImageAdapter extends BaseAdapter{
 			switch(((Crown) items.get(position)).getCrownstatus())
 			{
 			case 1:
-				prodItemCrown.setImageResource(R.drawable.crown_gold);
+				prodItemCrown.setImageResource(R.drawable.ic_krone_gold);
 				break;
 			case 2:
-				prodItemCrown.setImageResource(R.drawable.crown_silver);
+				prodItemCrown.setImageResource(R.drawable.ic_krone_silber);
 				break;
 			case 3:
-				prodItemCrown.setImageResource(R.drawable.crown_bronce);
+				prodItemCrown.setImageResource(R.drawable.ic_krone_bronze);
 				break;
 			default:
-				prodItemCrown.setImageResource(R.drawable.crown_none);
+				prodItemCrown.setImageResource(R.drawable.ic_krone_inactive);
 			}
 		}
 		else if(this.layoutId == R.layout.recommend_item)
 		{
-			TextView txtProduct = (TextView) gridView.findViewById(R.id.prod_item_name);
-			txtProduct.setText(""+((Products) items.get(position)).getName());
+//			TextView txtProduct = (TextView) gridView.findViewById(R.id.prod_item_name);
+//			txtProduct.setText(""+((Products) items.get(position)).getName());
+			
+			ImageView recommItem = (ImageView) gridView.findViewById(R.id.recomm_item_pict);
+			String imagePath = ((Products)items.get(position)).getId()+".png";
+			System.out.println("ImagePath: " + imagePath);
+			recommItem.setImageBitmap(Utils.loadImage(imagePath));
 		}
 		
 		

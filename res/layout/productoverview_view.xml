@@ -32,33 +32,9 @@
 
     </LinearLayout>
 
-    <RelativeLayout
-        android:id="@+id/product_menuoverlay_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#88666666"
-        android:gravity="top" >
-
-        <ImageView
-            android:id="@+id/ivInstruction_scan"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:clickable="false"
-            android:paddingTop="5dp"
-            android:scaleType="center"
-            android:src="@drawable/menu_overlay_scan" />
-
-        <ImageView
-            android:id="@+id/ivInstruction_prod"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="false"
-            android:paddingTop="80dp"
-            android:scaleType="center"
-            android:src="@drawable/menu_overlay_click_prod" />
-
-    </RelativeLayout>
+    <include 
+        layout="@layout/loyalty_instructions"
+        />
 
     <RelativeLayout
         android:id="@+id/prod_relative_layout"

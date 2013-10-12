@@ -6,7 +6,7 @@
     android:focusableInTouchMode="true"
     android:orientation="vertical" >
 
-    <TextView
+    <ch.mobileking.classes.override.RobotoTextView
         android:id="@+id/badges_productDetails"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -15,8 +15,8 @@
         android:paddingTop="5dp"
         android:text="Produkt Details"
         android:textColor="#FFFFFF"
-        android:textSize="14dp"
-        android:textStyle="bold" />
+        android:textSize="20dp"
+        android:textStyle="italic"/>
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -32,49 +32,48 @@
 
         <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="107dp"
+            android:layout_height="125dp"
             android:layout_marginLeft="10dp"
             android:orientation="vertical" >
 
-            <TextView
+            <ch.mobileking.classes.override.RobotoTextView
                 android:id="@+id/badges_detail_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:hint="Zweifel Chips"
-                android:textColor="#3B63D4"
-                android:textSize="14dp"
-                android:textStyle="bold" />
+                android:textSize="20dp"
+                android:textStyle="italic"
+                 />
 
-            <TextView
+            <ch.mobileking.classes.override.RobotoTextView
                 android:id="@+id/badges_detail_manufacturer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="Zweifel Pomy-Chips AG"
-                android:textSize="12dp" />
+                android:textSize="16dp" />
 
-            <TextView
+            <ch.mobileking.classes.override.RobotoTextView
                 android:id="@+id/badges_detail_category"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:text="Snacks"
-                android:textColor="#33b5e5"
-                android:textSize="12dp" />
+                android:textSize="16dp" />
 
-            <TextView
+            <ch.mobileking.classes.override.RobotoTextView
                 android:id="@+id/badges_detail_cnt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:text="55 x gesammelt"
                 android:textColor="@android:color/black"
-                android:textSize="12dp"
+                android:textSize="16dp"
                 android:textStyle="bold" />
         </LinearLayout>
     </LinearLayout>
 
-    <TextView
+    <ch.mobileking.classes.override.RobotoTextView
         android:id="@+id/badges_detail_header2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -83,8 +82,8 @@
         android:paddingTop="5dp"
         android:text="Kronen und Ranking"
         android:textColor="#FFFFFF"
-        android:textSize="14dp"
-        android:textStyle="bold" />
+        android:textSize="20dp"
+        android:textStyle="italic" />
 
     <GridView
 	    android:id="@+id/badges_grid_view"

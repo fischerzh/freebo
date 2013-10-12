@@ -14,7 +14,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.widget.Toast;
-import ch.mobileking.ITaskComplete;
+import ch.mobileking.utils.ITaskComplete;
 import ch.mobileking.utils.ProductKing;
 import ch.mobileking.utils.Products;
 import ch.mobileking.utils.SharedPrefEditor;

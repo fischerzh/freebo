@@ -82,7 +82,9 @@ public class BadgesDetailOverview extends Activity {
 		System.out.println("Get Crowns: " + product.getCrowns());
 
 		ArrayList<Object> crownList = new ArrayList<Object>();
-		crownList.addAll(product.getCrowns());
+//		crownList.addAll(product.getCrowns());
+		
+		crownList.addAll(crowns);
 		
 		//(ArrayList<Crown>)product.getCrowns()
 		

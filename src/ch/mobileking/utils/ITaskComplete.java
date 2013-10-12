@@ -1,4 +1,4 @@
-package ch.mobileking;
+package ch.mobileking.utils;
 
 public interface ITaskComplete {
 	

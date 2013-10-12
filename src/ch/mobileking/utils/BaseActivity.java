@@ -1,6 +1,7 @@
-package ch.mobileking;
+package ch.mobileking.utils;
 
-import ch.mobileking.utils.SharedPrefEditor;
+import ch.mobileking.MainActivity;
+import ch.mobileking.ProductOverview;
 import android.app.Activity;
 import android.content.Intent;
 

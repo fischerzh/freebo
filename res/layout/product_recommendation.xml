@@ -22,7 +22,7 @@
         android:layout_marginTop="10dp"
         android:text="Aktuelle Bestseller"
         android:textColor="@android:color/darker_gray"
-        android:textSize="16dp"
+        android:textSize="20dp"
         android:textStyle="italic" />
 
     <View
@@ -37,7 +37,7 @@
     <GridView
         android:id="@+id/prod_recomm_grid_view"
         android:layout_width="fill_parent"
-        android:layout_height="125dp"
+        android:layout_height="110dp"
         android:background="@android:color/white"
         android:clipToPadding="true"
         android:gravity="center"
@@ -63,7 +63,8 @@
             android:layout_marginLeft="5dp"
             android:text="Oder wähle aus einer Kategorie aus"
             android:textColor="@android:color/darker_gray"
-            android:textSize="16dp" />
+            android:textStyle="italic"
+       		android:textSize="20dp" />
 
         <View
             android:id="@+id/separator"
@@ -83,7 +84,7 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/prod_recomm_btnDelete"
+        android:id="@+id/prod_recomm_btnNext"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@android:color/black"

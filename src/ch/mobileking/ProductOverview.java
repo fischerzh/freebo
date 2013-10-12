@@ -3,9 +3,12 @@ package ch.mobileking;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -22,6 +25,8 @@ import android.widget.Toast;
 import ch.mobileking.classes.override.ProductBaseAdapter;
 import ch.mobileking.login.AsyncLogin;
 import ch.mobileking.login.AsyncUpdate;
+import ch.mobileking.utils.BaseActivity;
+import ch.mobileking.utils.ITaskComplete;
 import ch.mobileking.utils.ProductKing;
 import ch.mobileking.utils.Products;
 import ch.mobileking.utils.SharedPrefEditor;
@@ -140,7 +145,7 @@ public class ProductOverview extends Activity implements ITaskComplete{
 	public void setElements()
 	{
 		
-		setContentView(R.layout.product_overview_layout);
+		setContentView(R.layout.productoverview_view);
 		
 		topLevelLayout = findViewById(R.id.product_menuoverlay_layout);
 		
@@ -292,12 +297,19 @@ public class ProductOverview extends Activity implements ITaskComplete{
 			pgBar.setVisibility(View.INVISIBLE);
 			progressBarLayout.setVisibility(View.VISIBLE);
 			prodUpdateText.setVisibility(View.VISIBLE);
-			try {
-				Thread.sleep(2000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			
+//			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//
+//			 TextView Mytitle = new TextView(this);
+//			 Mytitle.setText("My Custom title"); 
+//			 Mytitle.setTextSize(20);
+//			 Mytitle.setPadding(5, 15, 5, 5);
+//			 Mytitle.setGravity(Gravity.CENTER);
+//			 Mytitle.setTypeface(Typeface.createFromAsset(this.getAssets(), "fonts/robotobold.ttf"));
+//			 
+//			 builder.setCustomTitle(Mytitle);
+//			 builder.show();
+			
 		}
 		else
 		{
