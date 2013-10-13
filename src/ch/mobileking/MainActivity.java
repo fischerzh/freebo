@@ -164,7 +164,9 @@ public class MainActivity extends Activity implements ITaskComplete{
 	private void loginUserFromSettings(String loginStr, String pwdStr)
 	{
 		/** REFACTOR, CALL ASYNC LOGIN TASK, WAIT FOR CALLBACK, OnPostExecute() or similar AND THEN CALL ACCORDING VIEW BASED ON LGOIN SUCCESS, FAILURE OR FIRST LOGIN!! */
-		new AsyncLogin(getAct(), false).execute(loginStr, pwdStr);
+		new AsyncLogin(getAct(), false, this).execute(loginStr, pwdStr);
+		this.setProgressBarEnableContent();
+
 	}
 	
 	private void loginUser()

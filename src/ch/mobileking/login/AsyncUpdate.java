@@ -151,8 +151,8 @@ public class AsyncUpdate extends AsyncTask<String, String, String>{
 		{
 //			Intent intent = new Intent(getAct(), ProductOverview.class);
 //			getAct().startActivity(intent);
-			Toast toast = Toast.makeText(getAct(), result, Toast.LENGTH_LONG);
-			toast.show();
+//			Toast toast = Toast.makeText(getAct(), result, Toast.LENGTH_LONG);
+//			toast.show();
 			if(this.updateFromRemote)
 			{
 				new AsyncLogin(getAct(), true, listener).execute(editor.getUsername(), editor.getPwd());

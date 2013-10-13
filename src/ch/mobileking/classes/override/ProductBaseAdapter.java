@@ -120,7 +120,6 @@ public class ProductBaseAdapter extends BaseAdapter implements Filterable{
 		{
 			convertView = mInflater.inflate(getProdLayoutResourceId(), parent, false); //R.layout.product_item
 			
-			
 			holder = new ViewHolder();
 			holder.setTxtName((TextView)convertView.findViewById(R.id.prod_item_name));
 			holder.setTxtProducer((TextView)convertView.findViewById(R.id.prod_item_producer));

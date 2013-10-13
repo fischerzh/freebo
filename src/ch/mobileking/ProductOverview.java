@@ -71,29 +71,26 @@ public class ProductOverview extends Activity implements ITaskComplete{
 		
 		Intent iin= getIntent();
 	    Bundle b = iin.getExtras();
-	    String barcode = "";
+	    String barcode = "empty";
 	    if(b!=null)
 	    	barcode = (String) b.get("barcode");
 		
 		setProdLayoutResourceId(R.layout.product_item);
 		
 		setElements();
+		clearInfoUpdate();
 		
-//		if(getCallingActivity() != null && getIntent().getExtras()!= null)
-		if(!barcode.isEmpty())
+		if(barcode!="empty")
 		{
 			showInfoUpdated(false);
 			
 			System.out.println("Barcode: " + getIntent().getStringExtra("barcode")  );
-			Toast.makeText(this, "Bitte warten, wir aktualisieren....: ", Toast.LENGTH_LONG).show();
+			Toast.makeText(this, "Bitte warten, wir aktualisieren....", Toast.LENGTH_LONG).show();
 			updateUserInfo(true, true, barcode);
-//			getIntent().getStringExtra("barcode")
 //			reloadUserInfo();
 
 		}
-	//	else //getCallingActivity().getShortClassName().contains("BarCodeScanner") && getIntent().getExtras()!=null)
 		
-//		setElements();
 		
 	}
 
@@ -106,7 +103,7 @@ public class ProductOverview extends Activity implements ITaskComplete{
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
+//		super.onActivityResult(requestCode, resultCode, data);
 		
 		System.out.println("Request Code: " + requestCode);
 		System.out.println("Result Code:  " +resultCode);
@@ -128,7 +125,9 @@ public class ProductOverview extends Activity implements ITaskComplete{
 	    // Handle item selection
 	    switch (item.getItemId()) {
 	        case R.id.action_show_help:
-	        	baseActivityMenu.showFirstRunMenu();
+//	        	baseActivityMenu.showFirstRunMenu();
+	        	editor.setIsFirstRun(false);
+	        	setElements();
 	            return true;
 	        case R.id.action_logout:
 	        	baseActivityMenu.logOut();
@@ -136,6 +135,9 @@ public class ProductOverview extends Activity implements ITaskComplete{
 	        case R.id.action_scan:
 	        	startBarcodeScanner();
 	            return true;
+	        case R.id.action_edit:
+	        	setEditStyle();
+	        	return true;
 	        default:
 	            return super.onOptionsItemSelected(item);
 	    }
@@ -164,52 +166,20 @@ public class ProductOverview extends Activity implements ITaskComplete{
 //        setContentView(R.layout.grid_layout);
 		
         listView = (ListView) findViewById(R.id.product_list_view);
-        editTxt = (EditText) findViewById(R.id.product_search_box);
 	    
-//        imageBtn = (ImageButton) findViewById(R.id.product_btn_scan);
-//        editBtn = (ImageButton) findViewById(R.id.product_btn_edit);
-//        shareBtn = (ImageButton) findViewById(R.id.product_btn_share);
         deleteBtn = (Button) findViewById(R.id.product_btn_delete);
-
-        if(isEditVisible())
-        	deleteBtn.setVisibility(View.VISIBLE);
-        else
-        	deleteBtn.setVisibility(View.INVISIBLE);
-        
-//        imageBtn.setOnClickListener(new View.OnClickListener() {
-//			
-//			@Override
-//			public void onClick(View v) {
-//				Intent intent = new Intent(ProductOverview.this, BarCodeScanner.class);
-//				startActivity(intent);
-//				
-//			}
-//		});
-        
-//        editBtn.setOnClickListener(new View.OnClickListener() {
-//			
-//			@Override
-//			public void onClick(View v) {
-//				if(!isEditVisible())
-//				{
-//					setEditVisible(true);
-//					setProdLayoutResourceId(R.layout.product_item_edit);
-//				}
-//				else
-//				{
-//					setEditVisible(false);
-//					setProdLayoutResourceId(R.layout.product_item);
-//				}
-//				
-//				setElements();
-//			}
-//		});
+        deleteBtn.setVisibility(View.INVISIBLE);
         
         deleteBtn.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 				System.out.println("Delete clicked, UPDATING TO SERVER!");
+				
+				setEditStyle();
+				
+				showInfoUpdated(false);
+				
 				updateAllUserInfo();
 			}
 			
@@ -226,7 +196,6 @@ public class ProductOverview extends Activity implements ITaskComplete{
 
 			@Override
 			public void onItemClick(AdapterView<?> adapter, View view, int position, long id) {
-//				editTxt.setText("");
 				
 				System.out.println("Position clicked: " + position + " " + ((Products)listView.getItemAtPosition(position)).getName());
 		        Intent intent = new Intent(getApplicationContext(), ProductDetailOverview.class);
@@ -239,26 +208,47 @@ public class ProductOverview extends Activity implements ITaskComplete{
 		
 	}
 	
+	private void setEditStyle()
+	{
+		if(!isEditVisible())
+		{
+			setEditVisible(true);
+	        deleteBtn.setVisibility(View.VISIBLE);
+			setProdLayoutResourceId(R.layout.product_item_edit);
+			adapter = new ProductBaseAdapter(this, getProdLayoutResourceId(), (ArrayList<Products>) ProductKing.getStaticProducts());
+			listView.setAdapter(adapter);
+			
+		}
+		else
+		{
+			setEditVisible(false);
+        	deleteBtn.setVisibility(View.INVISIBLE);
+			setProdLayoutResourceId(R.layout.product_item);
+			adapter = new ProductBaseAdapter(this, getProdLayoutResourceId(), (ArrayList<Products>) ProductKing.getStaticProducts());
+			listView.setAdapter(adapter);
+		}
+	}
+	
 	private boolean isFirstTime()
 	{
-    Boolean ranBefore = editor.getFirstRun();
-    if (!ranBefore) 
-    {
-    	editor.setIsFirstRun(true);
-        topLevelLayout.setVisibility(View.VISIBLE);
-        topLevelLayout.setOnTouchListener(new View.OnTouchListener()
-        {
-
-			@Override
-			public boolean onTouch(View v, MotionEvent event) 
-			{
-				topLevelLayout.setVisibility(View.INVISIBLE);
-				return false;
-			}
-	    });
-
-	}
-	return ranBefore;
+	    Boolean ranBefore = editor.getFirstRun();
+	    if (!ranBefore) 
+	    {
+	    	editor.setIsFirstRun(true);
+	        topLevelLayout.setVisibility(View.VISIBLE);
+	        topLevelLayout.setOnTouchListener(new View.OnTouchListener()
+	        {
+	
+				@Override
+				public boolean onTouch(View v, MotionEvent event) 
+				{
+					topLevelLayout.setVisibility(View.INVISIBLE);
+					return false;
+				}
+		    });
+	
+		}
+	    return ranBefore;
 	}
 	
 	private void startBarcodeScanner()
@@ -320,12 +310,23 @@ public class ProductOverview extends Activity implements ITaskComplete{
 
 	}
 	
+	private void clearInfoUpdate()
+	{
+		pgBar.setVisibility(View.INVISIBLE);
+		progressBarLayout.setVisibility(View.INVISIBLE);
+		prodUpdateText.setVisibility(View.INVISIBLE);
+	}
+	
 	@Override
 	public void onLoginCompleted() {
 		// TODO Auto-generated method stub
-		showInfoUpdated(true);
+		clearInfoUpdate();
 		System.out.println("LoginCompleted! Restarting Activity...");
-		restartActivity();
+//		restartActivity();
+		adapter = new ProductBaseAdapter(this, getProdLayoutResourceId(), (ArrayList<Products>) ProductKing.getStaticProducts()); //R.layout.product_item
+		
+		adapter.notifyDataSetChanged();
+		listView.setAdapter(adapter);
 	}
 
 	@Override

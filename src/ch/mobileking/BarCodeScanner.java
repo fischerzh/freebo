@@ -95,7 +95,7 @@ public class BarCodeScanner extends Activity implements ScanditSDKListener{
         setResult(1, intent);
 //        startActivityForResult(intent, 1);
         
-        startActivity(intent);
+        startActivityForResult(intent, 1);
         
         finish();
         // Stop recognition to save resources.

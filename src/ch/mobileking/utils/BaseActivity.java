@@ -41,7 +41,6 @@ public class BaseActivity {
 	
 	private void restartApp()
 	{
-//        finish();
 
 		Intent intent = new Intent(getAct(), MainActivity.class);
 //        intent.putExtra("symbology", symbology);

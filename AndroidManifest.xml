@@ -81,6 +81,15 @@
             android:label="@string/app_name">
         </activity>
         
+        <activity
+            android:name="ch.mobileking.LoyaltyCardActivity"
+            android:label="@string/app_name">
+        </activity>
+        
+        <activity
+            android:name="ch.mobileking.ServerRequest"
+            android:label="@string/app_name">
+        </activity>
         
       <!--
           WakefulBroadcastReceiver that will receive intents from GCM

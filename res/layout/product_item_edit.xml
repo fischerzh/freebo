@@ -2,61 +2,108 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="@dimen/prod_list_item_size"
+    android:layout_marginLeft="5dp"
     android:minHeight="@dimen/prod_list_item_size"
-    android:padding="2dp" 
-    android:paddingTop="10dp">
-    
-    <ImageView
-            android:id="@+id/list_image"
-            android:layout_width="50dip"
-            android:layout_height="50dip"
-            android:src="@drawable/empty"
-            android:layout_gravity="center_vertical|center_horizontal"
-            />
-            
-    
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="0dip"
-        android:layout_weight="1"
-        android:layout_height="fill_parent"
-        android:layout_gravity="center_vertical|center_horizontal"
-        >
+    android:orientation="vertical"
+    android:paddingLeft="5dp"
+    android:paddingTop="5dp" 
+    >
 
-    <TextView
+    <ch.mobileking.classes.override.RobotoTextView
         android:id="@+id/prod_item_name"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" 
-        android:textSize="12dp"
-        android:textColor="#3B63D4"
-        android:hint="55 Punkte"
-    	/>
-    
-    <TextView
+        android:layout_height="wrap_content"
+        android:text="Rivella Rot"
+        android:textStyle="italic"
+        android:textSize="20dp" />
+
+    <ch.mobileking.classes.override.RobotoTextView
         android:id="@+id/prod_item_producer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="14dp"
-        android:textStyle="bold"
-        android:hint="Rang #1 von 530"
-        />
- 
-    <TextView
-        android:id="@+id/prod_item_ean"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" 
-        android:textSize="12dp"
-        android:hint="Neue Wettbewerbe vorhanden!"
-        android:textColor="#D4AF37"
-        />
-	</LinearLayout>
-    
-    <CheckBox 
-        android:text="" 
-        android:id="@+id/prod_item_checkbox" 
-        android:layout_width="wrap_content" 
-        android:layout_height="wrap_content" 
-        android:focusable="false"
-        />
- 
+        android:text="Von Rivella"
+        android:textColor="@android:color/black"
+        android:textSize="14dp" />
+
+    <View
+        android:id="@+id/separator"
+        android:layout_width="fill_parent"
+        android:layout_height="1dip"
+        android:layout_marginRight="5dp"
+        android:background="@color/common_action_bar_splitter" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:padding="2dp"
+        android:paddingTop="5dp" 
+        >
+
+        <ImageView
+            android:id="@+id/list_image"
+            android:layout_width="50dip"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:scaleType="centerInside"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="0.03"
+            android:src="@drawable/empty" />
+
+        <LinearLayout
+            android:layout_width="0dip"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:layout_weight="0.5"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:orientation="vertical" >
+
+            <ch.mobileking.classes.override.RobotoTextView
+                android:id="@+id/prod_rank"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="RANG 21 (+2)"
+         		android:textColor="@color/blue_light"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                android:background="@color/grey_light"
+                android:gravity="center_horizontal|center_vertical"
+                android:drawablePadding="5sp"
+                android:drawableRight="@drawable/ic_arrow_up_black"
+                />
+
+            <ch.mobileking.classes.override.RobotoTextView
+                android:id="@+id/prod_collected"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="12 neue Punkte gesammelt"
+                android:textStyle="bold"
+                android:textColor="@color/blue_light"
+                android:textSize="12dp" 
+                android:gravity="center_vertical|center_horizontal"
+
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayoutCrown"
+            android:layout_width="0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.35"
+            android:orientation="vertical" >
+
+            <CheckBox
+                android:id="@+id/prod_item_checkbox"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:focusable="false"
+                android:text="" />
+            
+        </LinearLayout>
+
+    </LinearLayout>
+
 </LinearLayout>

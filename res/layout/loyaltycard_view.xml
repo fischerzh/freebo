@@ -16,11 +16,14 @@
             android:src="@android:drawable/ic_input_add" />
 
         <LinearLayout
+            android:id="@+id/loyalty_ll_cumulus"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content" 
+            android:clickable = "true"
+            >
 
             <ImageView
-                android:id="@+id/imageView1"
+                android:id="@+id/loyalty_img_cumulus"
                 android:layout_width="100dp"
                 android:layout_height="63dp"
                 android:src="@drawable/ic_cumulus_small" />

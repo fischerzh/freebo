@@ -16,6 +16,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
+import ch.mobileking.LoyaltyCardActivity;
 import ch.mobileking.MainActivity;
 import ch.mobileking.ProductOverview;
 import ch.mobileking.RecommActivity;
@@ -139,7 +140,6 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
 		}
 		else
 		{
-			
 			parseJSON();
 			System.out.println("update after Sync: " +update);
 //			getAct().setProgressBarVisibility(false);
@@ -150,14 +150,14 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
 				if(ProductKing.getIsActive())
 				{
 					Intent intent = new Intent(getAct(), ProductOverview.class);
-					getAct().startActivity(intent);
+					intent.putExtra("updatedInfo", true);
+					getAct().startActivityForResult(intent, 1);
 				}
 				else
 				{
-					Intent intent = new Intent(getAct(), RecommActivity.class);
+					Intent intent = new Intent(getAct(), LoyaltyCardActivity.class);
 					getAct().startActivity(intent);
 				}
-				
 				
 			}
 			else

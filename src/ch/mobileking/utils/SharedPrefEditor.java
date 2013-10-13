@@ -7,6 +7,7 @@ public class SharedPrefEditor {
 	
 	private static String updateURL = "http://www.sagax.ch:8080/Freebo/product/updateUserInfo"; //192.168.0.16:8080;
 	private static String loginURL = "http://www.sagax.ch:8080/Freebo/product/loginFromApp"; //192.168.0.16:8080;
+	private static String updateCumulusURL = "http://www.sagax.ch:8080/Freebo/product/updateCumulusInfo"; //192.168.0.16:8080;
 
 	
 	private static final String PREFS_PWD = "Password";
@@ -93,13 +94,6 @@ public class SharedPrefEditor {
 	}
 
 	/**
-	 * @param activeURL the activeURL to set
-	 */
-	public void setUpdateURL(String updateURL) {
-		this.updateURL = updateURL;
-	}
-
-	/**
 	 * @return the loginURL
 	 */
 	public String getLoginURL() {
@@ -107,11 +101,11 @@ public class SharedPrefEditor {
 	}
 
 	/**
-	 * @param loginURL the loginURL to set
+	 * @return the updateCumulusURL
 	 */
-	public void setLoginURL(String loginURL) {
-		SharedPrefEditor.loginURL = loginURL;
+	public String getUpdateCumulusURL() {
+		return updateCumulusURL;
 	}
-	
+
 
 }
