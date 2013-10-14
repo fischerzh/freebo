@@ -116,7 +116,7 @@ public class ProductOverview extends Activity implements ITaskComplete{
 	@Override
 	  public boolean onCreateOptionsMenu(Menu menu) {
 	    MenuInflater inflater = getMenuInflater();
-	    inflater.inflate(R.menu.action_bar, menu);
+	    inflater.inflate(R.menu.main, menu);
 	    return true;
 	  } 
 	
