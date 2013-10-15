@@ -54,11 +54,6 @@ public class BarCodeScanner extends Activity implements ScanditSDKListener{
                              WindowManager.LayoutParams.FLAG_FULLSCREEN);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         
-        // We instantiate the automatically adjusting barcode picker that will
-        // choose the correct picker to instantiate. Be aware that this picker
-        // should only be instantiated if the picker is shown full screen as the
-        // legacy picker will rotate the orientation and not properly work in
-        // non-fullscreen.
         ScanditSDKAutoAdjustingBarcodePicker picker = new ScanditSDKAutoAdjustingBarcodePicker(
                     this, sScanditSdkAppKey, ScanditSDKAutoAdjustingBarcodePicker.CAMERA_FACING_BACK);
         
@@ -81,21 +76,16 @@ public class BarCodeScanner extends Activity implements ScanditSDKListener{
 
 	@Override
 	public void didScanBarcode(String barcode, String symbology) {
-		// Remove non-relevant characters that might be displayed as rectangles
-        // on some devices. Be aware that you normally do not need to do this.
-        // Only special GS1 code formats contain such characters.
 		
 		System.out.println("Barcode scanned: " +barcode);
-//        Toast.makeText(this, symbology + ": " + barcode, Toast.LENGTH_LONG).show();
 
         mBarcodePicker.stopScanning();
         
-        Intent intent = new Intent(this, ProductOverview.class);
+        Intent intent = new Intent(this, MainTabActivity.class);
         intent.putExtra("barcode", barcode.trim());
-        setResult(1, intent);
-//        startActivityForResult(intent, 1);
+        setResult(11, intent);
         
-        startActivityForResult(intent, 1);
+//        startActivityForResult(intent, 1);
         
         finish();
         // Stop recognition to save resources.

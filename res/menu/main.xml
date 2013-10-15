@@ -3,25 +3,12 @@
     <item
         android:id="@+id/action_logout"
         android:title="Logout"
-                android:showAsAction="ifRoom"
-        
         />
+    
     <item
-        android:id="@+id/action_show_help"
-        android:icon="@android:drawable/ic_menu_help"
-        android:showAsAction="ifRoom"
-        android:title="Show Help"/>
-    <item
-        android:id="@+id/action_edit"
-        android:icon="@drawable/ic_pen"
+        android:id="@+id/action_sync"
+        android:icon="@drawable/ic_menu_refresh"
         android:orderInCategory="100"
-        android:showAsAction="always"
-        android:title="Edit Items"/>
-    <item
-        android:id="@+id/action_scan"
-        android:icon="@drawable/ic_scan"
-        android:orderInCategory="100"
-        android:showAsAction="always"
-        android:title="Scan"/>
+        android:title="Sync"/>
 
 </menu>

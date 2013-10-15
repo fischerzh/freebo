@@ -18,6 +18,7 @@ import com.google.gson.JsonSyntaxException;
 
 import ch.mobileking.LoyaltyCardActivity;
 import ch.mobileking.MainActivity;
+import ch.mobileking.MainTabActivity;
 import ch.mobileking.ProductOverview;
 import ch.mobileking.RecommActivity;
 import ch.mobileking.utils.ITaskComplete;
@@ -149,7 +150,7 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
 				/** FIRST LOGIN **/
 				if(ProductKing.getIsActive())
 				{
-					Intent intent = new Intent(getAct(), ProductOverview.class);
+					Intent intent = new Intent(getAct(), MainTabActivity.class);
 					intent.putExtra("updatedInfo", true);
 					getAct().startActivityForResult(intent, 1);
 				}

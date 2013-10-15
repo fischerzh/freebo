@@ -1,8 +1,9 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/product_menuoverlay_layout"
-    android:layout_width="match_parent"
-    android:layout_height="fill_parent"
-    android:background="#88666666" >
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" 
+    android:background="@android:color/white"
+    >
 
     <LinearLayout
         android:layout_width="300dp"
@@ -38,28 +39,6 @@
             android:paddingTop="5dp"
             android:text="So funktioniert&apos;s. Oben rechts auf Scanner Button clicken und Barcode einlesen - Fertig!"
             android:textSize="20dp" />
-
-        <View
-            android:id="@+id/separator2"
-            android:layout_width="fill_parent"
-            android:layout_height="1dip"
-            android:background="@color/blue_dark" />
-
-                <View
-            android:id="@+id/separator2"
-            android:layout_width="fill_parent"
-            android:layout_height="1dip"
-            android:background="@color/common_action_bar_splitter" />
-        
-        
-        <Button
-            android:id="@+id/prod_recomm_btnNext"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@android:color/white"
-            android:text="Weiter"
-            android:textColor="@android:color/black"
-            android:visibility="visible" />
     </LinearLayout>
 
 </FrameLayout>
