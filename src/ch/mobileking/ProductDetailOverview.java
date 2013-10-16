@@ -4,6 +4,7 @@ import java.io.File;
 
 import ch.mobileking.utils.ProductKing;
 import ch.mobileking.utils.Products;
+import ch.mobileking.utils.Utils;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -22,6 +23,8 @@ public class ProductDetailOverview extends Activity {
 		super.onCreate(savedInstanceState);
 		
 		setContentView(R.layout.product_detail);
+		
+		setTitle("Product King");
 		
 		if(getCallingActivity() != null && getIntent().getExtras()!= null)
 		{
@@ -55,24 +58,12 @@ public class ProductDetailOverview extends Activity {
 //			prod_package.setText(product.get());
 			prod_content.setText(""+product.getIngredients());
 			
-			productImage.setImageBitmap(loadImage(product.getImagepath()));
+			productImage.setImageBitmap(Utils.loadImageFromPath(product));
 			
 		}
 		
 	}
 	
-	private Bitmap loadImage(String imagePath)
-	{
-		File imgFile = new File(imagePath);
-		Bitmap myBitmap = null;
-		
-		if(imgFile.exists())
-		{
-			System.out.println("Found Image on SD card: " + imgFile.getAbsolutePath());
-			
-			myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-		}
-		return myBitmap;
-	}
+	
 
 }

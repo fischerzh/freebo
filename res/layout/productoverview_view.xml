@@ -32,9 +32,9 @@
 
     </LinearLayout>
 
-    <include 
-        layout="@layout/loyalty_instructions"
-        />
+<!--     <include  -->
+<!--         layout="@layout/loyalty_instructions" -->
+<!--         /> -->
 
     <RelativeLayout
         android:id="@+id/prod_relative_layout"

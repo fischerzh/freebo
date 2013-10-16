@@ -9,6 +9,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
+        android:text="Willkommen! Bitte wähle zuerst einige Kategorien aus, damit wir Dir interessante Angebote zeigen können!"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="14dp"
+        android:textStyle="italic" />
+
+    <ch.mobileking.classes.override.RobotoTextView
+        android:id="@+id/prod_recomm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
         android:layout_marginTop="10dp"
         android:text="Persönliche Empfehlungen"
         android:textColor="@android:color/darker_gray"
@@ -70,8 +80,16 @@
             android:layout_height="match_parent"
             android:divider="@color/grey_dark"
             android:dividerHeight="2px"
-            android:listSelector="@layout/list_selector"
             android:paddingTop="10dp" />
     </LinearLayout>
+
+    <Button
+        android:id="@+id/prod_recomm_btnNext"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@android:color/black"
+        android:text="Next"
+        android:textColor="@android:color/white"
+        android:visibility="visible" />
 
 </LinearLayout>

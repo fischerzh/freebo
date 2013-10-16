@@ -29,11 +29,11 @@ public class RobotoTextView extends TextView {
     	if(this.isInEditMode())
     		return;
         if (style == Typeface.NORMAL) {
-            super.setTypeface(Typeface.createFromAsset(getContext().getAssets(), "fonts/robotothin.ttf"));
+            super.setTypeface(Typeface.createFromAsset(getContext().getAssets(), "fonts/robotolight.ttf"));
         } else if (style == Typeface.ITALIC) {
             super.setTypeface(Typeface.createFromAsset(getContext().getAssets(), "fonts/robotolightitalic.ttf"));
         } else if (style == Typeface.BOLD) {
-            super.setTypeface(Typeface.createFromAsset(getContext().getAssets(), "fonts/robotobold.ttf"));
+            super.setTypeface(Typeface.createFromAsset(getContext().getAssets(), "fonts/robotoitalic.ttf"));
         }
     }
     

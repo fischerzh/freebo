@@ -2,14 +2,11 @@ package ch.mobileking;
 
 import java.util.ArrayList;
 
-import ch.mobileking.classes.override.MessageDialog;
-import ch.mobileking.classes.override.ProductBaseAdapter;
 import ch.mobileking.login.AsyncLogin;
 import ch.mobileking.login.AsyncUpdate;
 import ch.mobileking.tabs.MainProductFragment;
 import ch.mobileking.tabs.TabsPagerAdapter;
 import ch.mobileking.utils.ITaskComplete;
-import ch.mobileking.utils.ProductKing;
 import ch.mobileking.utils.Products;
 import ch.mobileking.utils.SharedPrefEditor;
 import android.content.Intent;
@@ -37,7 +34,7 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
     private TabsPagerAdapter mAdapter;
     private ActionBar actionBar;
     
-    private String[] tabs = { "Meine Produkte", "Recommendations"};
+    private String[] tabs = { "MEINE PRODUKTE", "EMPFEHLUNGEN"};
 	private View topLevelLayout;
 	private SharedPrefEditor editor;
     
@@ -73,6 +70,7 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
                 // on changing the page
                 // make respected tab selected
                 actionBar.setSelectedNavigationItem(position);
+                
             }
  
             @Override
@@ -161,6 +159,7 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
 		System.out.println("LoginCompleted! Restarting Activity...");
 //		restartActivity();
 		((MainProductFragment)mAdapter.getItem(0)).updateAdapterData();
+		viewPager.setCurrentItem(0);
 	}
 
 	@Override

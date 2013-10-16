@@ -29,9 +29,11 @@ import ch.mobileking.BadgesDetailOverview;
 import ch.mobileking.ProductDetailOverview;
 import ch.mobileking.R;
 import ch.mobileking.login.AsyncUpdate;
+import ch.mobileking.utils.Crown;
 import ch.mobileking.utils.ProductKing;
 import ch.mobileking.utils.Products;
 import ch.mobileking.utils.SharedPrefEditor;
+import ch.mobileking.utils.Utils;
 
 import android.os.Environment;
 import android.view.LayoutInflater;
@@ -49,7 +51,7 @@ import android.widget.Filterable;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class ProductBaseAdapter extends BaseAdapter implements Filterable{
+public class ProductBaseAdapter extends BaseAdapter{
 	
 	private static ArrayList<Products> resultList;
 	private ArrayList<Products> originalValues;
@@ -124,12 +126,16 @@ public class ProductBaseAdapter extends BaseAdapter implements Filterable{
 			holder.setTxtName((TextView)convertView.findViewById(R.id.prod_item_name));
 			holder.setTxtProducer((TextView)convertView.findViewById(R.id.prod_item_producer));
 			holder.setTxtRank((TextView)convertView.findViewById(R.id.prod_rank));
+			holder.setTxtCollectedCnt((TextView)convertView.findViewById(R.id.prod_collected_cnt));
 			holder.setChkBox((CheckBox)convertView.findViewById(R.id.prod_item_checkbox));
 			holder.setImgView((ImageView)convertView.findViewById(R.id.list_image));
 			holder.setCrown1((ImageView)convertView.findViewById(R.id.prod_item_crown));
 			holder.setCrown2((ImageView)convertView.findViewById(R.id.prod_item_crown_2));
 			holder.setCrown3((ImageView)convertView.findViewById(R.id.prod_item_crown_3));
-	        holder.setTxtCrownCnt((TextView)convertView.findViewById(R.id.prod_crown_cnt));
+	        holder.setTxtCrownCnt1((TextView)convertView.findViewById(R.id.prod_crown_cnt));
+	        holder.setTxtCrownCnt2((TextView)convertView.findViewById(R.id.prod_crown_cnt_2));
+	        holder.setTxtCrownCnt3((TextView)convertView.findViewById(R.id.prod_crown_cnt_3));
+
 	        holder.setCrownLayout((LinearLayout)convertView.findViewById(R.id.linearLayoutCrown));
 	        
 	        if(holder.getChkBox() != null)
@@ -201,15 +207,27 @@ public class ProductBaseAdapter extends BaseAdapter implements Filterable{
 		{
 			holder.getTxtName().setText(""+resultList.get(position).getName());
 			holder.getTxtProducer().setText(""+resultList.get(position).getProducer());
-			holder.getTxtRank().setText("RANG "+resultList.get(position).getId() + " (+2)");
-			holder.getCrownLayout().setTag(position);
-			if(holder.getTxtCrownCnt()!= null)
+			holder.getTxtRank().setText("GESAMTRANG "+resultList.get(position).getId() + " (+2)");
+			holder.getTxtCollectedCnt().setText(resultList.get(position).getPoints()+" Punkte gesammelt!");
+			if(holder.getTxtCrownCnt1()!= null)
 			{
-				holder.getTxtCrownCnt().setText("x 1"); //holder.getTxtCrownCnt().setText(""+resultList.get(position).getPoints()+" x");
+			int countGold = countCrowns(resultList.get(position).getCrowns(), 1);
+			int countSilver = countCrowns(resultList.get(position).getCrowns(), 2);
+			int countBronce = countCrowns(resultList.get(position).getCrowns(), 3);
+
+				holder.getTxtCrownCnt1().setText("x "+countGold); //holder.getTxtCrownCnt().setText(""+resultList.get(position).getPoints()+" x");
+				holder.getTxtCrownCnt2().setText("x "+countSilver); 
+				holder.getTxtCrownCnt3().setText("x "+countBronce); 
+
 				holder.getCrown1().setImageResource(R.drawable.ic_krone_gold);
 				holder.getCrown2().setImageResource(R.drawable.ic_krone_silber);
 				holder.getCrown3().setImageResource(R.drawable.ic_krone_bronze);
 			}
+				
+			/** SET THE POSITION TO REFERENCE FROM LATER **/
+				
+			holder.getCrownLayout().setTag(position);
+		
 		}
 		else
 		{
@@ -218,19 +236,21 @@ public class ProductBaseAdapter extends BaseAdapter implements Filterable{
 			holder.getTxtRank().setText(" ");
 		}
 		
+		Products prod = resultList.get(position);
+		
 		String imageName = resultList.get(position).getId()+".png";
 		String imagePath = "";
 		Bitmap image = null;
 		
-		if(imageExists(imageName))
+		if(Utils.imageExists(prod))
 		{
-			image = loadImage(imageName);
+			image = Utils.loadImageFromPath(prod);
 			imagePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/MobileKingImages/"+imageName;
 		}
 		else
 		{
 			try {
-				image = BitmapFactory.decodeStream((InputStream)new URL(resultList.get(position).getImagelink()).getContent());
+				image = BitmapFactory.decodeStream((InputStream)new URL(prod.getImagelink()).getContent());
 			} catch (MalformedURLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -281,85 +301,36 @@ public class ProductBaseAdapter extends BaseAdapter implements Filterable{
 	    return file.getAbsolutePath();
 	}
 	
-	private boolean imageExists(String imageName)
+
+	public int countCrowns(List<Crown> crowns, int color)
 	{
-		String file_path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/MobileKingImages";
-		File imgFile = new File(file_path, imageName);
-		if(imgFile.exists())
-			System.out.println("Image exists SD card: " + imgFile.getAbsolutePath());
-		return imgFile.exists();
-	}
-	
-	private Bitmap loadImage(String imageName)
-	{
-		String file_path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/MobileKingImages";
-		File imgFile = new File(file_path, imageName);
-		Bitmap myBitmap = null;
-		
-		if(imgFile.exists())
+		int gold=0, silver=0, bronze=0;
+		for (Crown crown : crowns)
 		{
-			System.out.println("Found Image on SD card: " + imgFile.getAbsolutePath());
-			
-			myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+			switch(crown.getCrownstatus())
+			{
+			case 1:
+				gold+=1;
+				break;
+			case 2:
+				silver+=1;
+				break;
+			case 3:
+				bronze+=1;
+				break;
+			}
 		}
-		return myBitmap;
-	}
-	
-
-	@Override
-	public Filter getFilter() {
-		// TODO Auto-generated method stub
-		
-		Filter filter = new Filter() {
-
-            @SuppressWarnings("unchecked")
-            @Override
-            protected void publishResults(CharSequence constraint,FilterResults results) {
-
-                resultList = (ArrayList<Products>) results.values; // has the filtered values
-                notifyDataSetChanged();  // notifies the data with new filtered values
-            }
-
-            @Override
-            protected FilterResults performFiltering(CharSequence constraint) {
-                FilterResults results = new FilterResults();        // Holds the results of a filtering operation in values
-                List<Products> FilteredArrList = new ArrayList<Products>();
-
-                if (originalValues == null) {
-                	originalValues = new ArrayList<Products>(resultList); // saves the original data in mOriginalValues
-                }
-
-                /* 
-                 * If constraint(CharSequence that is received) is null returns the mOriginalValues(Original) values
-                 * else does the Filtering and returns FilteredArrList(Filtered)  
-                 */
-                if (constraint == null || constraint.length() == 0) {
-
-                    // set the Original result to return  
-                    results.count = originalValues.size();
-                    results.values = originalValues;
-                } else {
-                    constraint = constraint.toString().toLowerCase();
-                    for (int i = 0; i < originalValues.size(); i++) {
-                        Products data = originalValues.get(i);
-                        if (data.getName().toLowerCase().contains(constraint.toString())) {
-                        	System.out.println("Add Filter: " + data.getName());
-                            FilteredArrList.add(data);
-                        }
-                    }
-                    // set the Filtered result to return
-                    results.count = FilteredArrList.size();
-                    results.values = FilteredArrList;
-                }
-                return results;
-            }
-        };
-        return filter;
-	}
-	
-	public void refreshActivity()
-	{
-		
+		switch(color)
+		{
+		case 1:
+			return gold;
+		case 2:
+			return silver;
+		case 3:
+			return bronze;
+		default:
+			return 0;
+		}
 	}
 	
     public void saveFavorites()
@@ -418,8 +389,8 @@ public class ProductBaseAdapter extends BaseAdapter implements Filterable{
 	{
 		private TextView txtName;
 		private TextView txtProducer;
-		private TextView txtRank;
-		private TextView txtCrownCnt;
+		private TextView txtRank, txtCollectedCnt;
+		private TextView txtCrownCnt1, txtCrownCnt2, txtCrownCnt3;
 		private CheckBox chkBox;
 		private ImageView imgView;
 		private ImageView crown1, crown2, crown3;
@@ -460,6 +431,20 @@ public class ProductBaseAdapter extends BaseAdapter implements Filterable{
 			this.txtRank = txtRank;
 		}
 		/**
+		 * @return the txtCollectedCnt
+		 */
+		public TextView getTxtCollectedCnt() {
+			return txtCollectedCnt;
+		}
+
+		/**
+		 * @param txtCollectedCnt the txtCollectedCnt to set
+		 */
+		public void setTxtCollectedCnt(TextView txtCollectedCnt) {
+			this.txtCollectedCnt = txtCollectedCnt;
+		}
+
+		/**
 		 * @return the txtDescription
 		 */
 		public TextView getTxtProducer() {
@@ -474,15 +459,43 @@ public class ProductBaseAdapter extends BaseAdapter implements Filterable{
 		/**
 		 * @return the txtCrownCnt
 		 */
-		public TextView getTxtCrownCnt() {
-			return txtCrownCnt;
+		public TextView getTxtCrownCnt1() {
+			return txtCrownCnt1;
 		}
 
 		/**
 		 * @param txtCrownCnt the txtCrownCnt to set
 		 */
-		public void setTxtCrownCnt(TextView txtCrownCnt) {
-			this.txtCrownCnt = txtCrownCnt;
+		public void setTxtCrownCnt1(TextView txtCrownCnt) {
+			this.txtCrownCnt1 = txtCrownCnt;
+		}
+
+		/**
+		 * @return the txtCrownCnt2
+		 */
+		public TextView getTxtCrownCnt2() {
+			return txtCrownCnt2;
+		}
+
+		/**
+		 * @param txtCrownCnt2 the txtCrownCnt2 to set
+		 */
+		public void setTxtCrownCnt2(TextView txtCrownCnt2) {
+			this.txtCrownCnt2 = txtCrownCnt2;
+		}
+
+		/**
+		 * @return the txtCrownCnt3
+		 */
+		public TextView getTxtCrownCnt3() {
+			return txtCrownCnt3;
+		}
+
+		/**
+		 * @param txtCrownCnt3 the txtCrownCnt3 to set
+		 */
+		public void setTxtCrownCnt3(TextView txtCrownCnt3) {
+			this.txtCrownCnt3 = txtCrownCnt3;
 		}
 
 		/**

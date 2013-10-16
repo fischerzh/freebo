@@ -1,0 +1,10 @@
+<ch.mobileking.classes.override.RobotoTextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/simple_select_item_txt"
+    android:layout_width="match_parent"
+    android:layout_height="?android:attr/listPreferredItemHeight"
+    android:gravity="center_vertical"
+    android:paddingLeft="8dip"
+    android:paddingRight="8dip"
+    android:text="Kategorie"
+/>

@@ -103,12 +103,12 @@ public class ImageAdapter extends BaseAdapter{
 //			TextView txtProduct = (TextView) gridView.findViewById(R.id.prod_item_name);
 //			txtProduct.setText(""+((Products) items.get(position)).getName());
 			
+			Products prod = (Products)items.get(position);
+			
 			ImageView recommItem = (ImageView) gridView.findViewById(R.id.recomm_item_pict);
-			String imagePath = ((Products)items.get(position)).getId()+".png";
-			System.out.println("ImagePath: " + imagePath);
-			recommItem.setImageBitmap(Utils.loadImage(imagePath));
+			if(Utils.imageExists(prod))
+				recommItem.setImageBitmap(Utils.loadImageFromPath(prod));
 		}
-		
 		
 		return gridView;
 	}

@@ -186,7 +186,7 @@ public class ProductOverview extends Activity implements ITaskComplete{
 			
 		});
         
-		setTitle("Product King");
+		setTitle("ProductKing");
 		
 		adapter = new ProductBaseAdapter(this, getProdLayoutResourceId(), (ArrayList<Products>) ProductKing.getStaticProducts()); //R.layout.product_item
 		

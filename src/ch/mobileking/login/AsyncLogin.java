@@ -198,6 +198,8 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
 		System.out.println("Products: " +prodKing.getProducts().size());
 		ProductKing.setIsActive(prodKing.getIsactiveapp());
 		ProductKing.setStaticProducts(prodKing.getProducts());
+		ProductKing.setRecommenderProducts(prodKing.getRecommendations());
+		System.out.println("Recommendations :" +prodKing.getRecommendations());
 	}
 	
 	

@@ -48,7 +48,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:text="55 x gesammelt"
+                android:text="Total: 55 x gesammelt"
                 android:textColor="@color/blue_light"
                 android:textSize="14dp"
                 android:textStyle="bold" />
@@ -68,7 +68,6 @@
         android:id="@+id/separator"
         android:layout_width="fill_parent"
         android:layout_height="1dip"
-        android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:background="@color/common_action_bar_splitter" />
 
