@@ -8,6 +8,9 @@ import ch.mobileking.ProductDetailOverview;
 import ch.mobileking.R;
 import ch.mobileking.classes.override.MessageDialog;
 import ch.mobileking.classes.override.ProductBaseAdapter;
+import ch.mobileking.login.AsyncLogin;
+import ch.mobileking.login.AsyncUpdate;
+import ch.mobileking.utils.ITaskComplete;
 import ch.mobileking.utils.ProductKing;
 import ch.mobileking.utils.Products;
 import ch.mobileking.utils.SharedPrefEditor;
@@ -22,13 +25,16 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.webkit.WebView.FindListener;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 
-public class MainProductFragment extends Fragment{
+public class MainProductFragment extends Fragment implements ITaskComplete {
 	
 	private static final int BARCODE_REQUEST = 1;
 	
@@ -37,6 +43,8 @@ public class MainProductFragment extends Fragment{
 	private ProductBaseAdapter adapter;
 
 	private Button btn_delete;
+	
+	private RelativeLayout progressLayout;
 	
 	private int prodLayoutResourceId;
 	
@@ -86,6 +94,20 @@ public class MainProductFragment extends Fragment{
         btn_delete = (Button) getActivity().findViewById(R.id.tab_main_btn_delete);
         btn_delete.setVisibility(View.INVISIBLE);
         
+        btn_delete.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+//				showInfoUpdated(false);
+				
+				updateAllUserInfo();
+			}
+		});
+        
+        progressLayout = (RelativeLayout) getActivity().findViewById(R.id.tab_main_progressLayout);
+        progressLayout.setVisibility(View.INVISIBLE);
+        
 		if(isFirstTime())
 		{
 			setHelpActive();
@@ -105,9 +127,46 @@ public class MainProductFragment extends Fragment{
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
 //    	super.onActivityResult(requestCode, resultCode, data);
-    	System.out.println("On Activity Result code");
+    	System.out.println("On Activity Result code: " + requestCode + ", Request Code: " + requestCode );
 
     }
+    
+	@Override
+	public void onLoginCompleted(boolean completed) {
+		System.out.println("MainProductFragment, LoginCompleted! Restarting Activity...");
+//		restartActivity();
+//		adapter = new ProductBaseAdapter(this, getProdLayoutResourceId(), (ArrayList<Products>) ProductKing.getStaticProducts()); 
+		updateAdapterData();
+//		adapter.notifyDataSetChanged();
+//		listView.setAdapter(adapter);
+        progressLayout.setVisibility(View.INVISIBLE);
+		DialogFragment newFragment = MessageDialog.newInstance(R.layout.loyalty_alerts);
+	    newFragment.show(getFragmentManager(), "dialog");
+	}
+
+	@Override
+	public void onUpdateCompleted(boolean completed) {
+		if(completed)
+		{
+			System.out.println("MainProductFragment, UpdateCompleted! Restarting Activity...");
+			reloadUserInfo();
+		}
+
+	        progressLayout.setVisibility(View.INVISIBLE);
+
+	}
+    
+	@Override
+	public void startUpdate() {
+        progressLayout.setVisibility(View.VISIBLE);
+
+	}
+
+	@Override
+	public void startLogin() {
+		// TODO Auto-generated method stub
+		
+	}
     
     public void updateAdapterData()
     {
@@ -117,12 +176,24 @@ public class MainProductFragment extends Fragment{
     	if(isAdded())
     	{
 //    		setProdLayoutResourceId(R.layout.product_item);
-        	adapter = new ProductBaseAdapter(getActivity() ,getProdLayoutResourceId(), (ArrayList<Products>) ProductKing.getStaticProducts()); //R.layout.product_item
+    		System.out.println("Fragment is ready... refresh Adapter!");
+        	adapter = new ProductBaseAdapter(getActivity() ,getProdLayoutResourceId(), (ArrayList<Products>) ProductKing.getStaticProducts()); 
             listView.setAdapter(adapter);
             adapter.notifyDataSetChanged();
     	}
 
     }
+    
+    private void updateAllUserInfo()
+    {
+        progressLayout.setVisibility(View.VISIBLE);
+        new AsyncUpdate(getActivity(), false, true, this).execute(editor.getUsername(),editor.getPwd()); //http://192.168.0.16:8080
+    }
+    
+	private void reloadUserInfo()
+	{
+		new AsyncLogin(getActivity(), true, this).execute(editor.getUsername(), editor.getPwd());
+	}
     
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -133,7 +204,7 @@ public class MainProductFragment extends Fragment{
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
             super.onOptionsItemSelected(item);
-            System.out.println("On Options Item Selected!");
+            System.out.println("Options Menu Selected: " + item.getItemId());
             switch (item.getItemId()) {
             case R.id.action_edit:
                 setEditStyle();
@@ -152,24 +223,26 @@ public class MainProductFragment extends Fragment{
     
 	private void setHelpActive()
 	{
-		DialogFragment newFragment = new MessageDialog();
-	    newFragment.show(getFragmentManager(), "Hilfe");
+		DialogFragment newFragment = MessageDialog.newInstance(R.layout.loyalty_instructions);
+	    newFragment.show(getFragmentManager(), "dialog");
 	}
 	
 	private void startBarcodeScanner()
 	{
+		// Set this Fragment as a listener through its Parent activity which will get the Result of the Barcode Scanner
+		((MainTabActivity)getActivity()).setTaskListener(this);
 		Intent intent = new Intent(getActivity(), BarCodeScanner.class);
 		startActivityForResult(intent, 1);
 	}
 	
 	private boolean isFirstTime()
 	{
-	    Boolean ranBefore = editor.getFirstRun();
-	    if (!ranBefore) 
+	    Boolean isFirstRun = editor.getFirstRun();
+	    if (isFirstRun) 
 	    {
-	    	editor.setIsFirstRun(true);
+	    	editor.setIsFirstRun(false);
 		}
-	    return ranBefore;
+	    return isFirstRun;
 	}
 	
 	private void setEditStyle()
@@ -221,7 +294,8 @@ public class MainProductFragment extends Fragment{
 	public void setEditVisible(boolean editVisible) {
 		this.editVisible = editVisible;
 	}
-    
+
+
 
 }
 

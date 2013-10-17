@@ -20,7 +20,9 @@ public class BarCodeScanner extends Activity implements ScanditSDKListener{
     // Your Scandit SDK App key is available via your Scandit SDK web account.
     public static final String sScanditSdkAppKey = "cWur/h3fEeOQEl8eE1cvKXIQzCRT4s/vNKGMA076yYo";
 
-	
+	private static final int BARCODE_RESPONSE = 11;
+    
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,7 +85,7 @@ public class BarCodeScanner extends Activity implements ScanditSDKListener{
         
         Intent intent = new Intent(this, MainTabActivity.class);
         intent.putExtra("barcode", barcode.trim());
-        setResult(11, intent);
+        setResult(BARCODE_RESPONSE, intent);
         
 //        startActivityForResult(intent, 1);
         

@@ -146,6 +146,7 @@ public class AsyncUpdate extends AsyncTask<String, String, String>{
 		{
 			Toast toast = Toast.makeText(getAct(), "Failed to Update!", Toast.LENGTH_LONG);
 			toast.show();
+			listener.onUpdateCompleted(false);
 		}
 		else
 		{
@@ -157,7 +158,7 @@ public class AsyncUpdate extends AsyncTask<String, String, String>{
 			{
 				new AsyncLogin(getAct(), true, listener).execute(editor.getUsername(), editor.getPwd());
 			}
-			listener.onUpdateCompleted();
+			listener.onUpdateCompleted(true);
 
 		}
 		

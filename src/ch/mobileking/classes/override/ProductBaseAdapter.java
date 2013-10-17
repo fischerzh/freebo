@@ -203,8 +203,8 @@ public class ProductBaseAdapter extends BaseAdapter{
 		 *  SET THE VALUES!
 		 * 
 		 */
-		if(resultList.get(position).getOptin())
-		{
+//		if(resultList.get(position).getOptin())
+//		{
 			holder.getTxtName().setText(""+resultList.get(position).getName());
 			holder.getTxtProducer().setText(""+resultList.get(position).getProducer());
 			holder.getTxtRank().setText("GESAMTRANG "+resultList.get(position).getId() + " (+2)");
@@ -228,13 +228,13 @@ public class ProductBaseAdapter extends BaseAdapter{
 				
 			holder.getCrownLayout().setTag(position);
 		
-		}
-		else
-		{
-			holder.getTxtName().setText(" ");
-			holder.getTxtProducer().setText("Scan product to join!");
-			holder.getTxtRank().setText(" ");
-		}
+//		}
+//		else
+//		{
+//			holder.getTxtName().setText(" ");
+//			holder.getTxtProducer().setText("Scan product to join!");
+//			holder.getTxtRank().setText(" ");
+//		}
 		
 		Products prod = resultList.get(position);
 		

@@ -116,16 +116,16 @@ public class MainActivity extends Activity implements ITaskComplete{
         login.setOnClickListener(new Button.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-//				Intent intent = new Intent(LoginActivity.this, ProductListActivity.class);
-//				startActivity(intent);
 				
 				if(isNetworkAvailable())
 				{
 	        		setProgressBarEnableContent();
 
 					loginUser();
-					
+				}
+				else
+				{
+					Toast.makeText(MainActivity.this,"Internet wird benštigt!", Toast.LENGTH_LONG).show();	
 				}
 			}
         }
@@ -184,16 +184,39 @@ public class MainActivity extends Activity implements ITaskComplete{
 	public void setAct(Activity act) {
 		this.act = act;
 	}
+	
 
 	@Override
-	public void onLoginCompleted() {
+	public void onLoginCompleted(boolean completed) {
 		// TODO Auto-generated method stub
-		setProgressBarDisableContent();
+		System.out.println("MainActivity: LoginCompleted: " + completed);
+		if(completed)
+		{
+			Intent intent = new Intent(getAct(), MainTabActivity.class);
+			getAct().startActivity(intent);
+		}
+		else
+		{
+			Toast.makeText(MainActivity.this,"Internet wird benštigt!", Toast.LENGTH_LONG).show();	
 
+		}
+		setProgressBarDisableContent();
 	}
 
 	@Override
-	public void onUpdateCompleted() {
+	public void onUpdateCompleted(boolean completed) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void startUpdate() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void startLogin() {
 		// TODO Auto-generated method stub
 		
 	}

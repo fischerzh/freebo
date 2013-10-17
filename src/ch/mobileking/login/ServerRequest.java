@@ -219,15 +219,17 @@ public class ServerRequest {
 			Boolean responseOk = checkForErrors(response);
 			System.out.println("responseOk: " +responseOk);
 			
-			listener.onUpdateCompleted();
+			listener.onUpdateCompleted(true);
 			return response;
 //			if(responseOk)
 //			{
 //				return response;
+//				listener.onUpdateCompleted(true);
 //			}
 //			else
 //			{
 //				return null;
+//			listener.onUpdateCompleted(false);
 //			}
 		}
 		
@@ -237,7 +239,7 @@ public class ServerRequest {
 			
 			if(result!=null)
 			{
-				listener.onUpdateCompleted();
+				listener.onUpdateCompleted(true);
 			}
 		}
 		

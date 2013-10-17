@@ -10,8 +10,10 @@ import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.params.HttpClientParams;
 import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.HttpConnectionParams;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -62,21 +64,20 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
 		// TODO Auto-generated method stub
 		System.out.println("Params: "+params[0]+", "+params[1]);
 		HttpClient httpClient = new DefaultHttpClient();
-//		HttpGet httpGet = new HttpGet(editor.getLoginURL()+"?username="+params[0]);
+
+		httpClient.getParams().setParameter(HttpConnectionParams.CONNECTION_TIMEOUT, 5000);
+		httpClient.getParams().setParameter(HttpConnectionParams.SO_TIMEOUT, 5000);
+
+		
 		HttpGet httpGet = new HttpGet(editor.getLoginURL());
 		httpGet.addHeader(BasicScheme.authenticate(new UsernamePasswordCredentials(params[0], params[1]),"UTF-8", false));
 
 		HttpResponse httpResponse = null;
 		try {
 			httpResponse = httpClient.execute(httpGet);
-		} catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();
+			listener.onLoginCompleted(false);
 		}
 		HttpEntity responseEntity = null;
 		
@@ -95,12 +96,10 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
             InputStream instream = null;
 			try {
 				instream = responseEntity.getContent();
-			} catch (IllegalStateException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				listener.onLoginCompleted(false);
 			}
             setJsonResult(convertStreamToString(instream));
             // now you have the string representation of the HTML request
@@ -136,8 +135,7 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
 		
 		if(result.contains("FAILED"))
 		{
-			Toast toast = Toast.makeText(getAct(), "Failed to Login!", Toast.LENGTH_LONG);
-			toast.show();
+			listener.onLoginCompleted(false);
 		}
 		else
 		{
@@ -150,9 +148,10 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
 				/** FIRST LOGIN **/
 				if(ProductKing.getIsActive())
 				{
-					Intent intent = new Intent(getAct(), MainTabActivity.class);
-					intent.putExtra("updatedInfo", true);
-					getAct().startActivityForResult(intent, 1);
+//					Intent intent = new Intent(getAct(), MainTabActivity.class);
+//					intent.putExtra("updatedInfo", true);
+//					getAct().startActivityForResult(intent, 1);
+					listener.onLoginCompleted(true);
 				}
 				else
 				{
@@ -163,7 +162,7 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
 			}
 			else
 			{
-				listener.onLoginCompleted();
+				listener.onLoginCompleted(true);
 			}
 
 		}

@@ -2,9 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"  >
-     
-    
+    android:gravity="center_horizontal"
+    android:orientation="vertical" >
+
     <LinearLayout
         android:id="@+id/tab_main_linearLayout"
         android:layout_width="fill_parent"
@@ -18,20 +18,39 @@
             android:layout_width="fill_parent"
             android:layout_height="326dp"
             android:layout_weight="1.08"
-            android:paddingTop="10dp" 
             android:divider="@color/grey_dark"
-    		android:dividerHeight="2px"
-            />
+            android:dividerHeight="2px"
+            android:paddingTop="10dp" >
+        </ListView>
 
         <Button
             android:id="@+id/tab_main_btn_delete"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:background="@android:color/black"
-        android:textColor="@android:color/white"
-        android:text="Loyalitätsprogramm verlassen!" />
-
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="@android:color/black"
+            android:text="Loyalitätsprogramm verlassen!"
+            android:textColor="@android:color/white" />
     </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/tab_main_progressLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1.08"
+        android:background="#88666666"
+        android:gravity="center_vertical"
+        android:visibility="invisible" >
+
+        <ProgressBar
+            android:id="@+id/tab_main_progressBar"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="177dp"
+            android:visibility="visible" />
+    </RelativeLayout>
  
 </RelativeLayout>

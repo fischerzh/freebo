@@ -103,16 +103,28 @@ public class LoyaltyCardActivity extends Activity implements ITaskComplete{
 	}
 
 	@Override
-	public void onLoginCompleted() {
+	public void onLoginCompleted(boolean completed) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void onUpdateCompleted() {
+	public void onUpdateCompleted(boolean completed) {
 		// TODO Auto-generated method stub
 		System.out.println("Loyalty Card updated!!!!");
 		Intent intent = new Intent(LoyaltyCardActivity.this, RecommActivity.class);
 		startActivity(intent);
+	}
+
+	@Override
+	public void startUpdate() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void startLogin() {
+		// TODO Auto-generated method stub
+		
 	}
 }

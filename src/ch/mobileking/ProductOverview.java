@@ -149,7 +149,7 @@ public class ProductOverview extends Activity implements ITaskComplete{
 		
 		setContentView(R.layout.productoverview_view);
 		
-		topLevelLayout = findViewById(R.id.product_menuoverlay_layout);
+		topLevelLayout = findViewById(R.id.loyalty_instructions_frame);
 		
 		progressBarLayout = findViewById(R.id.prod_relative_layout);
 		progressBarLayout.setVisibility(View.INVISIBLE);
@@ -318,7 +318,7 @@ public class ProductOverview extends Activity implements ITaskComplete{
 	}
 	
 	@Override
-	public void onLoginCompleted() {
+	public void onLoginCompleted(boolean completed) {
 		// TODO Auto-generated method stub
 		clearInfoUpdate();
 		System.out.println("LoginCompleted! Restarting Activity...");
@@ -330,7 +330,7 @@ public class ProductOverview extends Activity implements ITaskComplete{
 	}
 
 	@Override
-	public void onUpdateCompleted() {
+	public void onUpdateCompleted(boolean completed) {
 		System.out.println("UpdateCompleted! Restarting Activity...");
 		reloadUserInfo();
 	}
@@ -395,6 +395,18 @@ public class ProductOverview extends Activity implements ITaskComplete{
 	 */
 	public void setCanUpdateServer(boolean canUpdateServer) {
 		this.canUpdateServer = canUpdateServer;
+	}
+
+	@Override
+	public void startUpdate() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void startLogin() {
+		// TODO Auto-generated method stub
+		
 	}
 
 

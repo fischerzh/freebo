@@ -65,10 +65,9 @@ public class RecommendProductFragment extends Fragment{
 		catList.add("Snacks");
 		catList.add("Gemüse");
 		catList.add("Pudding, Cremen");
-		catList.add("Fleisch");
-		catList.add("Cremen");
+		catList.add("Joghurtdrinks");
 		catList.add("Desserts");
-		catList.add("Spirituosen");
+		catList.add("Süsswaren");
 		
 		adapter = new ArrayAdapter(getActivity(), R.layout.simple_selectable_item, catList); //android.R.layout.simple_selectable_list_item
 		

@@ -11,7 +11,7 @@ import ch.mobileking.utils.Products;
 import ch.mobileking.utils.SharedPrefEditor;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
+import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
@@ -33,10 +33,12 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
 	private ViewPager viewPager;
     private TabsPagerAdapter mAdapter;
     private ActionBar actionBar;
+    private ITaskComplete listener;
     
     private String[] tabs = { "MEINE PRODUKTE", "EMPFEHLUNGEN"};
 	private View topLevelLayout;
 	private SharedPrefEditor editor;
+	private boolean doubleBackToExitPressedOnce;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +96,9 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
 	    // Handle item selection
 	    switch (item.getItemId()) {
 	        case R.id.action_logout:
+	        	editor.setPwd("");
+	        	editor.setUsername("");
+	        	finish();
 	            return true;
 	        case R.id.action_sync:
 	        	return true;
@@ -121,61 +126,89 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
 		
 	}
 	
-//	private void setHelpActive()
-//	{
-//		DialogFragment newFragment = new MessageDialog();
-//	    newFragment.show(getSupportFragmentManager(), "Hilfe");
-//	}
-//	
-//	private void startBarcodeScanner()
-//	{
-//		Intent intent = new Intent(MainTabActivity.this, BarCodeScanner.class);
-//		startActivityForResult(intent, 1);
-//	}
-//	
+	public void setTaskListener(ITaskComplete listener)
+	{
+		System.out.println("Setting Listener from Fragment");
+		this.listener = listener;
+	}
+	
+	
 	@Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
-            // code to handle data from CAMERA_REQUEST
-		System.out.println("onActivityResult: " +requestCode+", " + resultCode);
+        // code to handle data from CAMERA_REQUEST
+    	System.out.println("MainTabActivity, Barcode request: " + resultCode);
 		if(resultCode == BARCODE_REQUEST)
 		{
-        	System.out.println("MainTabActivity, Barcode request: " + resultCode);
-        	System.out.println("MainTabActivity, Extras from Barcode: " + getIntent().getStringExtra("barcode"));
 //        	mAdapter.getItem(0).
 //        	((MainProductFragment)mAdapter.getItem(0)).updateAdapterData();
         	System.out.println("MainTabActivity, Barcode" + data.getStringExtra("barcode"));
         	String barcode = data.getStringExtra("barcode");
 			Toast.makeText(this, "Bitte warten, wir aktualisieren....", Toast.LENGTH_LONG).show();
+			this.listener.startUpdate();
 			updateUserInfo(true, true, barcode);
 		}
 
     }
 	
-	@Override
-	public void onLoginCompleted() {
+//	@Override
+	public void onLoginCompleted(boolean completed) {
 		// TODO Auto-generated method stub
 //		clearInfoUpdate();
 		System.out.println("LoginCompleted! Restarting Activity...");
 //		restartActivity();
-		((MainProductFragment)mAdapter.getItem(0)).updateAdapterData();
-		viewPager.setCurrentItem(0);
+//		((MainProductFragment)mAdapter.getItem(0)).updateAdapterData();
+//		viewPager.setCurrentItem(0);
 	}
 
 	@Override
-	public void onUpdateCompleted() {
-		System.out.println("UpdateCompleted! Restarting Activity...");
-		reloadUserInfo();
+	public void onUpdateCompleted(boolean completed) {
+		System.out.println("MainTabActivity, UpdateCompleted! Restarting Activity...");
+//		reloadUserInfo();
+		this.listener.onUpdateCompleted(completed);
 	}
 	
-	private void reloadUserInfo()
-	{
-		new AsyncLogin(this, true, this).execute(editor.getUsername(), editor.getPwd());
-	}
+//	private void reloadUserInfo()
+//	{
+//		new AsyncLogin(this, true, this.listener).execute(editor.getUsername(), editor.getPwd());
+//	}
 	
 	private void updateUserInfo(Boolean optIn, Boolean update, String productID)
 	{
         new AsyncUpdate(this, optIn, update, productID, this).execute(editor.getUsername(),editor.getPwd()); //http://192.168.0.16:8080
 	}
+
+	@Override
+	public void startUpdate() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void startLogin() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+    @Override
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+        	Intent intent = new Intent(Intent.ACTION_MAIN);
+        	intent.addCategory(Intent.CATEGORY_HOME);
+        	intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        	startActivity(intent);
+        	return;
+        }
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+             doubleBackToExitPressedOnce=false;   
+
+            }
+        }, 2000);
+    }
 
 }

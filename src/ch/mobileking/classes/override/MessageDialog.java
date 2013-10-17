@@ -11,15 +11,27 @@ import android.view.LayoutInflater;
 
 
 public class MessageDialog extends DialogFragment{
-
 	
+	public static MessageDialog newInstance(int styleID)
+	{
+		MessageDialog f = new MessageDialog();
+		
+		Bundle args = new Bundle();
+		args.putInt("style", styleID);
+		f.setArguments(args);
+		return f;
+	}
+
 	@Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+		
+		int styleID = getArguments().getInt("style");
+		
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 	    // Get the layout inflater
 	    LayoutInflater inflater = getActivity().getLayoutInflater();
-
-	    builder.setView(inflater.inflate(R.layout.loyalty_instructions, null))
+	    
+	    builder.setView(inflater.inflate(styleID, null))
 	           .setPositiveButton("Weiter", new DialogInterface.OnClickListener() {
 	               @Override
 	               public void onClick(DialogInterface dialog, int id) {
@@ -30,7 +42,7 @@ public class MessageDialog extends DialogFragment{
 	    builder.setCancelable(true);
 	    
 	    builder.setInverseBackgroundForced(true);
-	           
+	    
 	    return builder.create();
     }
 }
