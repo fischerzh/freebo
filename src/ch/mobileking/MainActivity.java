@@ -53,7 +53,7 @@ public class MainActivity extends Activity implements ITaskComplete{
 	
 	public void setElements()
 	{
-		setTitle("Product King");
+		setTitle("ProductKing");
 		
 		setContentView(R.layout.activity_main);
 

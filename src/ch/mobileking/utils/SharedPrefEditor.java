@@ -13,6 +13,8 @@ public class SharedPrefEditor {
 	private static final String PREFS_PWD = "Password";
 	private static final String PREFS_USERNAME = "Username";
 	private static final String PREFS_FIRST_LOGIN = "Login";
+	private static final String PREFS_REGID = "Registration";
+	private static final String PREFS_APPV = "Appversion";
 	private Context cont;
 	
 	public SharedPrefEditor(Context context)
@@ -86,6 +88,49 @@ public class SharedPrefEditor {
 		return firstRun;
 	}
 
+	public void setRegId(String regId)
+	{	    
+	    SharedPreferences settings = cont.getSharedPreferences(PREFS_REGID, 0);
+	    SharedPreferences.Editor editor = settings.edit();
+	    editor.putString(PREFS_REGID, regId);
+	    System.out.println("setRegistrationId #REGID: " + regId);
+	    // Commit the edits!
+	    editor.commit();
+	    
+	}
+	
+	public String getRegId()
+	{
+	    String regId;
+	    // Restore preferences
+	    SharedPreferences settings = cont.getSharedPreferences(PREFS_REGID, 0);
+	    regId = settings.getString(PREFS_REGID, "");
+	    System.out.println("getRegistrationId #REGID: " + regId);
+		
+		return regId;
+	}
+	
+	public void setAppVersion(int appVersion)
+	{	    
+	    SharedPreferences settings = cont.getSharedPreferences(PREFS_APPV, 0);
+	    SharedPreferences.Editor editor = settings.edit();
+	    editor.putInt(PREFS_APPV, appVersion);
+	    System.out.println("setAppVersion #APPV: " + appVersion);
+	    // Commit the edits!
+	    editor.commit();
+	    
+	}
+	
+	public int getAppVersion()
+	{
+	    int appVersion;
+	    // Restore preferences
+	    SharedPreferences settings = cont.getSharedPreferences(PREFS_APPV, 0);
+	    appVersion = settings.getInt(PREFS_APPV, Integer.MIN_VALUE);
+	    System.out.println("getAppVersion #APPV: " + appVersion);
+		return appVersion;
+	}
+	
 	/**
 	 * @return the activeURL
 	 */

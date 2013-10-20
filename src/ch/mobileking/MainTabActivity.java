@@ -9,6 +9,8 @@ import ch.mobileking.tabs.TabsPagerAdapter;
 import ch.mobileking.utils.ITaskComplete;
 import ch.mobileking.utils.Products;
 import ch.mobileking.utils.SharedPrefEditor;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -24,6 +26,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -35,7 +38,7 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
     private ActionBar actionBar;
     private ITaskComplete listener;
     
-    private String[] tabs = { "MEINE PRODUKTE", "EMPFEHLUNGEN"};
+    private String[] tabs = { "FAVORITEN", "NOTIFICATIONS"};
 	private View topLevelLayout;
 	private SharedPrefEditor editor;
 	private boolean doubleBackToExitPressedOnce;
@@ -45,10 +48,15 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tab_activity_main);
         
-		setTitle("Product King");
+		setTitle("ProductKing");
 		
 		editor = new SharedPrefEditor(this);
- 
+		System.out.println("MainTabActivity called");
+	    String intentResponse = getIntent().getStringExtra("gcmnotification");
+	    System.out.println("Response from GCM: " + intentResponse);
+	    if(intentResponse!=null)
+	    	createAlert(intentResponse);
+		
         // Initilization
         viewPager = (ViewPager) findViewById(R.id.pager);
         actionBar = getSupportActionBar();
@@ -106,6 +114,36 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
 	            return super.onOptionsItemSelected(item);
 	    }
 	}
+	
+	@Override
+	public void onResume() {
+	    super.onResume();  // Always call the superclass method first
+
+		System.out.println("MainTabActivity resumed!");
+		
+//	    String intentResponse = getIntent().getStringExtra("gcmnotification");
+//	    System.out.println("Response from GCM: " + intentResponse);
+//	    if(intentResponse!=null)
+//	    	createAlert(intentResponse);
+	}
+	
+	private void createAlert(String message) {
+		// Build the dialog
+		AlertDialog.Builder alert = new AlertDialog.Builder(this);
+		alert.setTitle("ProductKing: Neuer Status!");
+		alert.setMessage(message);
+		// Create TextView
+		final TextView input = new TextView (this);
+		alert.setView(input);
+
+		alert.setPositiveButton("Weiter", new DialogInterface.OnClickListener() {
+		public void onClick(DialogInterface dialog, int whichButton) {
+		    // Do something with value!
+		  }
+		});
+
+		alert.show();
+	}
  
 	
 	@Override
@@ -140,8 +178,6 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
     	System.out.println("MainTabActivity, Barcode request: " + resultCode);
 		if(resultCode == BARCODE_REQUEST)
 		{
-//        	mAdapter.getItem(0).
-//        	((MainProductFragment)mAdapter.getItem(0)).updateAdapterData();
         	System.out.println("MainTabActivity, Barcode" + data.getStringExtra("barcode"));
         	String barcode = data.getStringExtra("barcode");
 			Toast.makeText(this, "Bitte warten, wir aktualisieren....", Toast.LENGTH_LONG).show();
@@ -151,12 +187,10 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
 
     }
 	
-//	@Override
+	@Override
 	public void onLoginCompleted(boolean completed) {
 		// TODO Auto-generated method stub
-//		clearInfoUpdate();
 		System.out.println("LoginCompleted! Restarting Activity...");
-//		restartActivity();
 //		((MainProductFragment)mAdapter.getItem(0)).updateAdapterData();
 //		viewPager.setCurrentItem(0);
 	}

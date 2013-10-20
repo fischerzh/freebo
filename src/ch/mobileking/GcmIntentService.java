@@ -67,16 +67,8 @@ public class GcmIntentService extends IntentService {
             // If it's a regular GCM message, do some work.
             } else if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(messageType)) {
                 // This loop represents the service doing some work.
-//                for (int i = 0; i < 5; i++) {
-//                    Log.i(TAG, "Working... " + (i + 1)
-//                            + "/5 @ " + SystemClock.elapsedRealtime());
-//                    try {
-//                        Thread.sleep(1000);
-//                    } catch (InterruptedException e) {
-//                    }
-//                }
+
             	System.out.println("Received: " + extras.toString());
-//                Log.i(TAG, "Completed work @ " + SystemClock.elapsedRealtime());
                 // Post notification of received message.
                 sendNotification("Received: " + extras.toString());
                 Log.i(TAG, "Received: " + extras.toString());
@@ -95,14 +87,18 @@ public class GcmIntentService extends IntentService {
         Intent intent = new Intent(this, MainTabActivity.class);
         intent.putExtra("gcmnotification", msg);
         
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, MainTabActivity.class), 0);
+        /** SET THE ACTIVITY TO OPEN **/
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        
+        long[] pattern = {0, 300, 200, 100, 500};
         
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
         .setSmallIcon(R.drawable.ic_launcher_new)
         .setContentTitle("ProductKing Notification")
         .setStyle(new NotificationCompat.BigTextStyle()
         .bigText(msg))
-        .setContentText(msg);
+        .setContentText(msg)
+        .setVibrate(pattern);
 
         mBuilder.setContentIntent(contentIntent);
         mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());

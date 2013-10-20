@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URI;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -13,20 +14,31 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
+import org.apache.http.util.EntityUtils;
 
 import ch.mobileking.ProductOverview;
+import ch.mobileking.R;
 import ch.mobileking.RecommActivity;
 import ch.mobileking.utils.ITaskComplete;
 import ch.mobileking.utils.SharedPrefEditor;
+import ch.mobileking.utils.Utils;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 
 public class ServerRequest {
 	
 	private Activity activity;
+	
+	private Context context;
 	
 	private HttpClient httpClient;
 	private HttpGet httpGet;
@@ -40,6 +52,7 @@ public class ServerRequest {
 	public ServerRequest(Activity act, ITaskComplete listener)
 	{
 		this.activity = act;
+		setContext(act);
 		this.editor = new SharedPrefEditor(act);
 		this.listener = listener;
 	}
@@ -63,6 +76,65 @@ public class ServerRequest {
 		
 		
 		
+	}
+	
+	private void sendRegistrationIdToBackend() {
+		System.out.println("Send registration ID to Backend!");
+		String responseString = null;
+		String regid = getRegistrationId(getContext());
+		try {
+			URI url = new URI("http://192.168.0.16:8080/gcm-demo/register?regId=" + regid);
+			HttpGet httpGet = new HttpGet(url);
+			// defaultHttpClient
+			HttpParams httpParameters = new BasicHttpParams();
+
+			// The default value is zero, that means the timeout is not used.
+			int timeoutConnection = 3000;
+			HttpConnectionParams.setConnectionTimeout(httpParameters,
+					timeoutConnection);
+			// in milliseconds which is the timeout for waiting for data.
+			int timeoutSocket = 5000;
+			HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
+
+			DefaultHttpClient httpClient = new DefaultHttpClient(httpParameters);
+
+			HttpResponse httpResponse = httpClient.execute(httpGet);
+			HttpEntity httpEntity = httpResponse.getEntity();
+
+			if (httpResponse.getStatusLine().getStatusCode() != 200) {
+				Log.e(getContext().getString(R.string.app_name),
+						"Server Call Failed : Got Status Code "
+								+ httpResponse.getStatusLine().getStatusCode()
+								+ " and ContentType "
+								+ httpEntity.getContentType().getValue());
+			}
+
+			responseString = EntityUtils.toString(httpEntity);
+		} catch (Exception e) {
+			Log.e(getContext().getString(R.string.app_name),
+					e.toString(), e);
+			// add code to handle error
+		}
+
+	}
+	
+	private String getRegistrationId(Context context) {
+		
+		String registrationId = editor.getRegId();
+		if (registrationId.isEmpty()) {
+			System.out.println("Registration not found.");
+			return "";
+		}
+		// Check if app was updated; if so, it must clear the registration ID
+		// since the existing regID is not guaranteed to work with the new
+		// app version.
+		int registeredVersion = editor.getAppVersion();
+		int currentVersion = Utils.getAppVersion(context);
+		if (registeredVersion != currentVersion) {
+			System.out.println("App version changed.");
+			return "";
+		}
+		return registrationId;
 	}
 	
 	
@@ -195,6 +267,21 @@ public class ServerRequest {
 	}
 
 	
+	/**
+	 * @return the context
+	 */
+	public Context getContext() {
+		return context;
+	}
+
+	/**
+	 * @param context the context to set
+	 */
+	public void setContext(Context context) {
+		this.context = context;
+	}
+
+
 	private class Login extends AsyncTask<String, String, String>
 	{
 
