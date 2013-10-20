@@ -2,40 +2,60 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ch.mobileking"
     android:versionCode="2"
-    android:versionName="1.2" 
-    >
+    android:versionName="1.2" >
 
     <uses-sdk
         android:minSdkVersion="9"
-        android:targetSdkVersion="9" 
-        />
-    
-    <uses-permission android:name="android.permission.INTERNET"/>
-	<uses-permission android:name="android.permission.GET_ACCOUNTS" />
-    <uses-permission android:name="android.permission.CAMERA"/>
+        android:targetSdkVersion="9" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-	<uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <!--
      Creates a custom permission so only this app can receive its messages.
 
      NOTE: the permission *must* be called PACKAGE.permission.C2D_MESSAGE,
            where PACKAGE is the application's package name.
     -->
-    <permission android:name="ch.mobileking.permission.C2D_MESSAGE"
+    <permission
+        android:name="ch.mobileking.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
+
     <uses-permission android:name="ch.mobileking.permission.C2D_MESSAGE" />
-    
-    
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+
     <application
         android:allowBackup="true"
+        android:debuggable="true"
         android:icon="@drawable/ic_launcher_new"
         android:label="@string/app_name"
-        android:theme="@style/Theme.AppCompat.Light.DarkActionBar" 
-        android:debuggable="true"
-        >
+        android:theme="@style/Theme.AppCompat.Light.DarkActionBar" >
+
+        <!--
+     WakefulBroadcastReceiver that will receive intents from GCM
+     services and hand them to the custom IntentService.
+
+     The com.google.android.c2dm.permission.SEND permission is necessary
+     so only GCM services can send data messages for the app.
+        -->
+        <receiver
+            android:name=".GcmBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+
+                <!-- Receives the actual messages. -->
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+
+                <category android:name="ch.mobileking" />
+            </intent-filter>
+        </receiver>
+
+        <service android:name=".GcmIntentService" />
+
         <activity
             android:name="ch.mobileking.MainActivity"
             android:label="@string/app_name" >
@@ -45,76 +65,42 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
         <activity
             android:name="ch.mobileking.ProductOverview"
-            android:label="@string/app_name">
+            android:label="@string/app_name" >
         </activity>
-        
         <activity
             android:name="ch.mobileking.BarCodeScanner"
-            android:label="@string/app_name">
+            android:label="@string/app_name" >
         </activity>
-        
         <activity
             android:name="ch.mobileking.utils.BaseActivity"
-            android:label="@string/app_name">
+            android:label="@string/app_name" >
         </activity>
-        
-      <activity
+        <activity
             android:name="ch.mobileking.ProductDetailOverview"
-            android:label="@string/app_name">
+            android:label="@string/app_name" >
         </activity>
-        
-      <activity
+        <activity
             android:name="ch.mobileking.BadgesDetailOverview"
-            android:label="@string/app_name">
+            android:label="@string/app_name" >
         </activity>
-        
-       <activity
+        <activity
             android:name="ch.mobileking.DemoActivity"
-            android:label="@string/app_name">
+            android:label="@string/app_name" >
         </activity>
-        
-       <activity
+        <activity
             android:name="ch.mobileking.RecommActivity"
-            android:label="@string/app_name">
+            android:label="@string/app_name" >
         </activity>
-        
         <activity
             android:name="ch.mobileking.LoyaltyCardActivity"
-            android:label="@string/app_name">
+            android:label="@string/app_name" >
         </activity>
-        
-       <activity
+        <activity
             android:name="ch.mobileking.MainTabActivity"
-            android:label="@string/app_name">
+            android:label="@string/app_name" >
         </activity>
-        
-      <!--
-          WakefulBroadcastReceiver that will receive intents from GCM
-          services and hand them to the custom IntentService.
-
-          The com.google.android.c2dm.permission.SEND permission is necessary
-          so only GCM services can send data messages for the app.
-        -->
-        <receiver
-            android:name=".GcmBroadcastReceiver"
-            android:permission="com.google.android.c2dm.permission.SEND" >
-            <intent-filter>
-                <!-- Receives the actual messages. -->
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-                <category android:name="ch.mobileking" />
-            </intent-filter>
-<!--             <intent-filter> -->
-<!--                 Receives the actual messages. -->
-<!--                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" /> -->
-<!--                 <category android:name="ch.mobileking" /> -->
-<!--             </intent-filter> -->
-        </receiver>
-        <service android:name=".GcmIntentService" />
-        
-        
     </application>
 
 </manifest>

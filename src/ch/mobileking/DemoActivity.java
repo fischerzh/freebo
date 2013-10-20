@@ -15,15 +15,16 @@
  */
 package ch.mobileking;
 
-import ch.mobileking.R;
-
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
-
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -34,7 +35,17 @@ import android.view.View;
 import android.widget.TextView;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
+import org.apache.http.util.EntityUtils;
 
 /**
  * Main UI for the demo app.
@@ -50,7 +61,7 @@ public class DemoActivity extends Activity {
      * Substitute you own sender ID here. This is the project number you got
      * from the API Console, as described in "Getting Started."
      */
-    String SENDER_ID = "Your-Sender-ID";
+    String SENDER_ID = "73370755379";
 
     /**
      * Tag used on log messages.
@@ -76,13 +87,15 @@ public class DemoActivity extends Activity {
         // Check device for Play Services APK. If check succeeds, proceed with GCM registration.
         if (checkPlayServices()) {
             gcm = GoogleCloudMessaging.getInstance(this);
-            Log.i(TAG, "Got GoogleCloudMessaging Instance: "  + gcm);
             regid = getRegistrationId(context);
-
+            System.out.println("Regid: " + regid);
+            mDisplay.setText(regid);
+//            sendRegistrationIdToBackend();
             if (regid.isEmpty()) {
                 registerInBackground();
             }
         } else {
+        	System.out.println("No valid Google Play Services APK found");
             Log.i(TAG, "No valid Google Play Services APK found.");
         }
     }
@@ -101,15 +114,19 @@ public class DemoActivity extends Activity {
      */
     private boolean checkPlayServices() {
         int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+        System.out.println("Check play services");
         if (resultCode != ConnectionResult.SUCCESS) {
             if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
-                GooglePlayServicesUtil.getErrorDialog(resultCode, this, PLAY_SERVICES_RESOLUTION_REQUEST).show();
+                GooglePlayServicesUtil.getErrorDialog(resultCode, this,
+                        PLAY_SERVICES_RESOLUTION_REQUEST).show();
             } else {
+            	System.out.println("checkPlayServices: This device is not supported");
                 Log.i(TAG, "This device is not supported.");
                 finish();
             }
             return false;
         }
+        System.out.println("true");
         return true;
     }
 
@@ -123,6 +140,7 @@ public class DemoActivity extends Activity {
     private void storeRegistrationId(Context context, String regId) {
         final SharedPreferences prefs = getGcmPreferences(context);
         int appVersion = getAppVersion(context);
+        System.out.println("Store regId on app");
         Log.i(TAG, "Saving regId on app version " + appVersion);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString(PROPERTY_REG_ID, regId);
@@ -142,6 +160,7 @@ public class DemoActivity extends Activity {
         final SharedPreferences prefs = getGcmPreferences(context);
         String registrationId = prefs.getString(PROPERTY_REG_ID, "");
         if (registrationId.isEmpty()) {
+        	System.out.println("Registration not found.");
             Log.i(TAG, "Registration not found.");
             return "";
         }
@@ -167,6 +186,7 @@ public class DemoActivity extends Activity {
         new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... params) {
+            	System.out.println("Register in background");
                 String msg = "";
                 try {
                     if (gcm == null) {
@@ -174,7 +194,7 @@ public class DemoActivity extends Activity {
                     }
                     regid = gcm.register(SENDER_ID);
                     msg = "Device registered, registration ID=" + regid;
-
+                    System.out.println("Device registered: "+regid);
                     // You should send the registration ID to your server over HTTP, so it
                     // can use GCM/HTTP or CCS to send messages to your app.
                     sendRegistrationIdToBackend();
@@ -212,7 +232,7 @@ public class DemoActivity extends Activity {
                     try {
                         Bundle data = new Bundle();
                         data.putString("my_message", "Hello World");
-                        data.putString("my_action", "com.google.android.gcm.demo.app.ECHO_NOW");
+                        data.putString("my_action", "ch.mobileking.ECHO_NOW");
                         String id = Integer.toString(msgId.incrementAndGet());
                         gcm.send(SENDER_ID + "@gcm.googleapis.com", id, data);
                         msg = "Sent message";
@@ -236,6 +256,26 @@ public class DemoActivity extends Activity {
     protected void onDestroy() {
         super.onDestroy();
     }
+    
+    private void createAlert(String message)
+    {
+    	// Build the dialog
+        AlertDialog.Builder alert = new AlertDialog.Builder(getApplicationContext());
+
+        alert.setTitle("ALARM REMINDER");
+        alert.setMessage(message);
+        alert.setCancelable(false);
+
+        alert.setPositiveButton("Dismiss", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+            	System.out.println("clicked");
+            }
+        });
+
+        // Create and return the dialog
+        AlertDialog dlg = alert.create();
+        dlg.show();
+    }
 
     /**
      * @return Application's version code from the {@code PackageManager}.
@@ -257,7 +297,8 @@ public class DemoActivity extends Activity {
     private SharedPreferences getGcmPreferences(Context context) {
         // This sample app persists the registration ID in shared preferences, but
         // how you store the regID in your app is up to you.
-        return getSharedPreferences(DemoActivity.class.getSimpleName(), Context.MODE_PRIVATE);
+        return getSharedPreferences(DemoActivity.class.getSimpleName(),
+                Context.MODE_PRIVATE);
     }
     /**
      * Sends the registration ID to your server over HTTP, so it can use GCM/HTTP or CCS to send
@@ -265,6 +306,51 @@ public class DemoActivity extends Activity {
      * to a server that echoes back the message using the 'from' address in the message.
      */
     private void sendRegistrationIdToBackend() {
-      // Your implementation here.
+    	System.out.println("Send registration ID to Backend!");
+    	String responseString= null;
+    	String regid = getRegistrationId(context);
+    	  try {
+    	    URI url            = new URI ("http://192.168.0.16:8080/gcm-demo/register?regId="+regid);
+    	    HttpGet httpGet    = new HttpGet (url);
+    	    // defaultHttpClient
+    	    HttpParams	      httpParameters   = new BasicHttpParams();
+
+    	    // Set the timeout in milliseconds until a connection is established.
+    	    // The default value is zero, that means the timeout is not used. 
+    	    int
+    	      timeoutConnection= 3000;
+    	    HttpConnectionParams.setConnectionTimeout (
+    	      httpParameters,
+    	      timeoutConnection
+    	                         );
+
+    	    // Set the default socket timeout (SO_TIMEOUT) 
+    	    // in milliseconds which is the timeout for waiting for data.
+    	    int timeoutSocket  = 5000;
+    	    HttpConnectionParams.setSoTimeout (
+    	      httpParameters,
+    	      timeoutSocket
+    	                         );
+
+    	    DefaultHttpClient    httpClient        = new DefaultHttpClient (httpParameters);
+
+    	    HttpResponse  	      httpResponse     = httpClient.execute (httpGet);
+    	    HttpEntity  	      httpEntity       = httpResponse.getEntity ();
+
+    	    if (httpResponse.getStatusLine().getStatusCode() != 200)
+    	    {
+    	      Log.e (
+    	        getApplicationContext().getString(R.string.app_name),
+    	        "Server Call Failed : Got Status Code " + httpResponse.getStatusLine().getStatusCode() + " and ContentType " + httpEntity.getContentType().getValue()
+    	                         );
+    	      // add code to handle error
+    	    }
+
+    	    responseString     = EntityUtils.toString (httpEntity);
+    	  } catch (Exception e) {
+    	    Log.e(getApplicationContext().getString(R.string.app_name),e.toString(),e);
+    	    // add code to handle error
+    	  } 
+
     }
 }

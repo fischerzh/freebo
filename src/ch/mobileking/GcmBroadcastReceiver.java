@@ -16,8 +16,10 @@
 package ch.mobileking;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.content.WakefulBroadcastReceiver;
 
@@ -33,12 +35,24 @@ import android.support.v4.content.WakefulBroadcastReceiver;
 
 public class GcmBroadcastReceiver extends WakefulBroadcastReceiver {
 
+	private Context cont;
+	
     @Override
     public void onReceive(Context context, Intent intent) {
         // Explicitly specify that GcmIntentService will handle the intent.
-        ComponentName comp = new ComponentName(context.getPackageName(), GcmIntentService.class.getName());
+    	System.out.println("GCMBroadcastReceiver");
+    	this.cont = context;
+        ComponentName comp = new ComponentName(context.getPackageName(),
+                GcmIntentService.class.getName());
+        System.out.println("GCMBroadCastReceiver: PackageName: " + context.getPackageName() +" intent.getAction(): "+ intent.getAction());
         // Start the service, keeping the device awake while it is launching.
+        System.out.println("Received: "+ intent.getExtras().getString("message"));
         startWakefulService(context, (intent.setComponent(comp)));
+//        createAlert(intent.getExtras().getString("message"));
         setResultCode(Activity.RESULT_OK);
     }
+    
+    
+    
+    
 }
