@@ -26,7 +26,7 @@ public class BadgesDetailOverview extends Activity {
 
 		setContentView(R.layout.badges_detail);
 		
-		setTitle("Product King");
+		setTitle("ProductKing");
 
 		if (getCallingActivity() != null && getIntent().getExtras() != null) {
 

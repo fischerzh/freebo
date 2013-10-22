@@ -10,11 +10,10 @@
 
      <ImageView
          android:id="@+id/badges_item_crown"
-         android:layout_width="0dp"
+         android:layout_width="@dimen/prod_crown_width"
          android:layout_height="@dimen/prod_crown_height"
          android:layout_gravity="center_horizontal|center_vertical"
          android:scaleType="fitCenter"
-         android:layout_weight="1"
          android:src="@drawable/ic_krone_inactive"
          android:visibility="visible" />
 

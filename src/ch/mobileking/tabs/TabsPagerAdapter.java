@@ -1,5 +1,6 @@
 package ch.mobileking.tabs;
 
+import ch.mobileking.tabs.old.RecommendProductFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -19,7 +20,7 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
             return new MainProductFragment();
         case 1:
             // Games fragment activity
-            return new RecommendProductFragment();
+            return new MainBadgeFragment();
         }
  
         return null;

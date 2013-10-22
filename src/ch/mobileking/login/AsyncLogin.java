@@ -21,8 +21,8 @@ import com.google.gson.JsonSyntaxException;
 import ch.mobileking.LoyaltyCardActivity;
 import ch.mobileking.MainActivity;
 import ch.mobileking.MainTabActivity;
-import ch.mobileking.ProductOverview;
 import ch.mobileking.RecommActivity;
+import ch.mobileking.activity.old.ProductOverview;
 import ch.mobileking.utils.ITaskComplete;
 import ch.mobileking.utils.ProductKing;
 import ch.mobileking.utils.SharedPrefEditor;
@@ -77,7 +77,8 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
 			httpResponse = httpClient.execute(httpGet);
 		} catch (Exception e) {
 			e.printStackTrace();
-			listener.onLoginCompleted(false);
+			if(listener!=null)
+				listener.onLoginCompleted(false);
 		}
 		HttpEntity responseEntity = null;
 		
@@ -176,6 +177,8 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
 		ProductKing prodKing = null;
 		try {
     		prodKing = gson.fromJson(getJsonResult(), ProductKing.class); //Product.class
+    		if(prodKing.equals(null))
+    			throw new Exception("prodKing null!"+prodKing);
     		System.out.println("ProductKing loaded: " +prodKing);
 //    		ProductKing prodKing = gson.fromJson(reader, ProductKing.class); //Product.class
     	}
@@ -193,12 +196,12 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
     		Toast toast = Toast.makeText(getAct(), "Exception!", Toast.LENGTH_LONG);
 			toast.show();
     	}
-		System.out.println("Name: " + prodKing.getUsername());
-		System.out.println("Products: " +prodKing.getProducts().size());
+//		System.out.println("Name: " + prodKing.getUsername());
+//		System.out.println("Products: " +prodKing.getProducts().size());
 		ProductKing.setIsActive(prodKing.getIsactiveapp());
 		ProductKing.setStaticProducts(prodKing.getProducts());
 		ProductKing.setRecommenderProducts(prodKing.getRecommendations());
-		System.out.println("Recommendations :" +prodKing.getRecommendations());
+//		System.out.println("Recommendations :" +prodKing.getRecommendations());
 	}
 	
 	

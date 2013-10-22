@@ -11,6 +11,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
@@ -21,8 +22,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,10 +38,13 @@ public class MainActivity extends Activity implements ITaskComplete{
 	private Button login;
 	private ImageButton googleLogin;
 	private ProgressBar progressBar;
+	private FrameLayout main_rel_layout;
 	
 	private Activity act;
 	private SharedPrefEditor editor;
 	BaseActivity baseActivityMenu;
+	
+	private String gcmResponseMessage;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -68,9 +74,12 @@ public class MainActivity extends Activity implements ITaskComplete{
         
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setVisibility(View.INVISIBLE);
+
+        main_rel_layout = (FrameLayout) findViewById(R.id.main_rel_layout);
         
         login = (Button) findViewById(R.id.btnLogin);
         
+        gcmResponseMessage = getIntent().getStringExtra("gcmnotification");
         
 //        googleLogin = (ImageButton) findViewById(R.id.btnGoogleLogin);
         
@@ -102,7 +111,6 @@ public class MainActivity extends Activity implements ITaskComplete{
         		
         		loginUserFromSettings(editor.getUsername(), editor.getPwd());
         		
-//        		setProgressBarEnableContent();
             }
 
         }
@@ -134,6 +142,7 @@ public class MainActivity extends Activity implements ITaskComplete{
 	
 	public void setProgressBarDisableContent() {
 		progressBar.setVisibility(View.INVISIBLE);
+		main_rel_layout.setVisibility(View.INVISIBLE);
 		username.setEnabled(true);
 		password.setEnabled(true);
 		login.setEnabled(true);
@@ -141,6 +150,8 @@ public class MainActivity extends Activity implements ITaskComplete{
 	
 	public void setProgressBarEnableContent() {
 		progressBar.setVisibility(View.VISIBLE);
+		main_rel_layout.setVisibility(View.VISIBLE);
+		progressBar.bringToFront();
 		username.setEnabled(false);
 		password.setEnabled(false);
 		login.setEnabled(false);
@@ -193,14 +204,24 @@ public class MainActivity extends Activity implements ITaskComplete{
 		if(completed)
 		{
 			Intent intent = new Intent(getAct(), MainTabActivity.class);
+			if(gcmResponseMessage!=null)
+				intent.putExtra("gcmnotification", gcmResponseMessage);
 			getAct().startActivity(intent);
+			setProgressBarDisableContent();
 		}
 		else
 		{
-			Toast.makeText(MainActivity.this,"Internet wird benštigt!", Toast.LENGTH_LONG).show();	
-
+			runOnUiThread(new Runnable() 
+			{
+			   public void run() 
+			   {
+				   Toast.makeText(MainActivity.this,"Timeout: Internet wird benštigt!", Toast.LENGTH_LONG).show(); 
+				   finish();
+			   }
+			}); 
+			
 		}
-		setProgressBarDisableContent();
+
 	}
 
 	@Override

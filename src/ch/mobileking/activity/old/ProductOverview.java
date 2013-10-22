@@ -1,4 +1,4 @@
-package ch.mobileking;
+package ch.mobileking.activity.old;
 
 import java.util.ArrayList;
 
@@ -22,6 +22,12 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import ch.mobileking.BarCodeScanner;
+import ch.mobileking.ProductDetailOverview;
+import ch.mobileking.R;
+import ch.mobileking.R.id;
+import ch.mobileking.R.layout;
+import ch.mobileking.R.menu;
 import ch.mobileking.classes.override.ProductBaseAdapter;
 import ch.mobileking.login.AsyncLogin;
 import ch.mobileking.login.AsyncUpdate;

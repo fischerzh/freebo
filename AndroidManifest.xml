@@ -67,7 +67,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="ch.mobileking.ProductOverview"
+            android:name="ch.mobileking.activity.old.ProductOverview"
             android:label="@string/app_name" >
         </activity>
         <activity

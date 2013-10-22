@@ -1,4 +1,4 @@
-package ch.mobileking.tabs;
+package ch.mobileking.tabs.old;
 
 import java.util.ArrayList;
 

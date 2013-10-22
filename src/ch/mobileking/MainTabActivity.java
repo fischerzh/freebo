@@ -38,7 +38,7 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
     private ActionBar actionBar;
     private ITaskComplete listener;
     
-    private String[] tabs = { "FAVORITEN", "NOTIFICATIONS"};
+    private String[] tabs = { "FAVORITEN", "ERRUNGENSCHAFTEN"};
 	private View topLevelLayout;
 	private SharedPrefEditor editor;
 	private boolean doubleBackToExitPressedOnce;
@@ -115,17 +115,17 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
 	    }
 	}
 	
-	@Override
-	public void onResume() {
-	    super.onResume();  // Always call the superclass method first
-
-		System.out.println("MainTabActivity resumed!");
-		
-//	    String intentResponse = getIntent().getStringExtra("gcmnotification");
-//	    System.out.println("Response from GCM: " + intentResponse);
-//	    if(intentResponse!=null)
-//	    	createAlert(intentResponse);
-	}
+//	@Override
+//	public void onResume() {
+//	    super.onResume();  // Always call the superclass method first
+//
+//		System.out.println("MainTabActivity resumed!");
+//		
+////	    String intentResponse = getIntent().getStringExtra("gcmnotification");
+////	    System.out.println("Response from GCM: " + intentResponse);
+////	    if(intentResponse!=null)
+////	    	createAlert(intentResponse);
+//	}
 	
 	private void createAlert(String message) {
 		// Build the dialog

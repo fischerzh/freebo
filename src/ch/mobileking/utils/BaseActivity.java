@@ -1,7 +1,7 @@
 package ch.mobileking.utils;
 
 import ch.mobileking.MainActivity;
-import ch.mobileking.ProductOverview;
+import ch.mobileking.activity.old.ProductOverview;
 import android.app.Activity;
 import android.content.Intent;
 

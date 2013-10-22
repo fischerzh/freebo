@@ -49,6 +49,7 @@ public class GcmIntentService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         Bundle extras = intent.getExtras();
+        
         GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(this);
         // The getMessageType() intent parameter must be the intent you received
         // in your BroadcastReceiver.
@@ -67,10 +68,10 @@ public class GcmIntentService extends IntentService {
             // If it's a regular GCM message, do some work.
             } else if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(messageType)) {
                 // This loop represents the service doing some work.
-
-            	System.out.println("Received: " + extras.toString());
+            	String msg = extras.getString("1");
+            	System.out.println("Received: " + msg);
                 // Post notification of received message.
-                sendNotification("Received: " + extras.toString());
+                sendNotification("Neuigkeiten: " +msg);
                 Log.i(TAG, "Received: " + extras.toString());
             }
         }
@@ -84,7 +85,7 @@ public class GcmIntentService extends IntentService {
     private void sendNotification(String msg) {
         mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        Intent intent = new Intent(this, MainTabActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("gcmnotification", msg);
         
         /** SET THE ACTIVITY TO OPEN **/
