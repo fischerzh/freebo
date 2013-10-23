@@ -46,7 +46,6 @@
             android:id="@+id/prod_rank"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
-            android:background="@color/grey_light"
             android:paddingLeft="5dp"
             android:drawablePadding="5sp"
             android:layout_marginLeft="5dp"

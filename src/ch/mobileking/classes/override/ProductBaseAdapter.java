@@ -25,7 +25,7 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 
-import ch.mobileking.BadgesDetailOverview;
+import ch.mobileking.CrownDetailOverview;
 import ch.mobileking.ProductDetailOverview;
 import ch.mobileking.R;
 import ch.mobileking.login.AsyncUpdate;
@@ -171,7 +171,7 @@ public class ProductBaseAdapter extends BaseAdapter{
 					Products prod = resultList.get(getPosition);
 
 					System.out.println("Position: " + getPosition + ", Crown clicked for item " + resultList.get(getPosition).getId() + resultList.get(getPosition).getName());
-			        Intent intent = new Intent(getCont(), BadgesDetailOverview.class);
+			        Intent intent = new Intent(getCont(), CrownDetailOverview.class);
 			        intent.putExtra("product", String.valueOf(getPosition));
 
 			        ((Activity)getCont()).setResult(1, intent);
@@ -208,7 +208,7 @@ public class ProductBaseAdapter extends BaseAdapter{
 			holder.getTxtName().setText(""+resultList.get(position).getName());
 			holder.getTxtProducer().setText(""+resultList.get(position).getProducer());
 			holder.getTxtRank().setText("GESAMTRANG "+resultList.get(position).getId() + " (+2)");
-			holder.getTxtCollectedCnt().setText(resultList.get(position).getPoints()+" Punkte gesammelt!");
+			holder.getTxtCollectedCnt().setText(resultList.get(position).getPoints()+" x Punkte gesammelt!");
 			if(holder.getTxtCrownCnt1()!= null)
 			{
 			int countGold = countCrowns(resultList.get(position).getCrowns(), 1);

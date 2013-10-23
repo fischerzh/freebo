@@ -82,10 +82,13 @@ public class SharedPrefEditor {
 	    Boolean firstRun;
 	    // Restore preferences
 	    SharedPreferences settings = cont.getSharedPreferences(PREFS_FIRST_LOGIN, 0);
-	    firstRun = settings.getBoolean(PREFS_FIRST_LOGIN, false);
+	    Boolean tmp = null;
+	    firstRun = settings.getBoolean(PREFS_FIRST_LOGIN, true);
 	    System.out.println("getSharedPref #FIRST_RUN: " + firstRun);
-		
-		return firstRun;
+		if(firstRun!=null)
+			return firstRun;
+		else
+			return true;
 	}
 
 	public void setRegId(String regId)
@@ -151,6 +154,7 @@ public class SharedPrefEditor {
 	public String getUpdateCumulusURL() {
 		return updateCumulusURL;
 	}
+
 
 
 }

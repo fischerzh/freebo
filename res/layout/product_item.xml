@@ -7,6 +7,8 @@
     android:orientation="vertical"
     android:paddingLeft="5dp"
     android:paddingTop="5dp" 
+        android:background="@android:color/white"
+    
     >
 
     <ch.mobileking.classes.override.RobotoTextView
@@ -64,12 +66,11 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:text="RANG: 21 (+2)"
-         		android:textColor="@color/blue_light"
+         		android:textColor="@color/grey_light"
                 android:textSize="16dp"
-                android:background="@color/grey_light"
                 android:gravity="center_horizontal|center_vertical"
-                android:drawablePadding="5sp"
-                android:drawableRight="@drawable/ic_arrow_up_black"
+                android:drawablePadding="2sp"
+                android:drawableRight="@drawable/ic_arrow_up_green"
                 android:textStyle="bold"
                 />
 
@@ -81,7 +82,8 @@
                 android:text="12 neue Punkte gesammelt"
                 android:textStyle="bold"
                 android:textColor="@color/blue_light"
-                android:textSize="12dp" 
+                android:textSize="14dp" 
+                android:layout_gravity="center_horizontal"
                 android:gravity="center_vertical|center_horizontal"
 
                 />

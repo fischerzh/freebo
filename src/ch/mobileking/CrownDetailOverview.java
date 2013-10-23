@@ -13,7 +13,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class BadgesDetailOverview extends Activity {
+public class CrownDetailOverview extends Activity {
 
 	private TextView prod_name, prod_manuf, prod_cat, prod_cnt;
 
@@ -24,7 +24,7 @@ public class BadgesDetailOverview extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.badges_detail);
+		setContentView(R.layout.crown_detail);
 		
 		setTitle("ProductKing");
 
@@ -36,7 +36,7 @@ public class BadgesDetailOverview extends Activity {
 			product = ProductKing.getStaticProducts().get(
 					Integer.parseInt(prodId));
 
-			System.out.println("BadgesDetailOverview: Found Product: " + product.getName());
+			System.out.println("CrownDetailOverview: Found Product: " + product.getName());
 			prod_name = (TextView) findViewById(R.id.badges_detail_name);
 			prod_manuf = (TextView) findViewById(R.id.badges_detail_manufacturer);
 //			prod_cat = (TextView) findViewById(R.id.badges_detail_category);
@@ -60,37 +60,13 @@ public class BadgesDetailOverview extends Activity {
 
 		// Instance of ImageAdapter Class
 		ArrayList<Object> crowns = new ArrayList<Object>();
-//
-//		Crown cr = new Crown();
-//		cr.setCrownstatus(1);
-//		cr.setRank(1);
-//		cr.setSalespoint("Migros ZŸrich HB");
-//
-//		Crown cr2 = new Crown();
-//		cr2.setCrownstatus(3);
-//		cr2.setRank(10);
-//		cr2.setSalespoint("Coop St. Annahof");
-//
-//		Crown cr3 = new Crown();
-//		cr3.setCrownstatus(2);
-//		cr3.setRank(10);
-//		cr3.setSalespoint("Migros Brunaupark");
-//		
-//		Crown cr4 = new Crown();
-//		cr4.setRank(99);
-//		cr4.setSalespoint("Coop City Stadelhofen");
-//		
-//		crowns.add(cr);
-//		crowns.add(cr2);
-//		crowns.add(cr3);
-//		crowns.add(cr4);
 
 		//(ArrayList<Crown>) product.getCrowns();
 		System.out.println("Get Crowns: " + product.getCrowns());
 		
 		crowns.addAll(product.getCrowns());
 		
-		ImageAdapter adapter = new ImageAdapter(getApplicationContext(), crowns, R.layout.badges_detail_item); 
+		ImageAdapter adapter = new ImageAdapter(getApplicationContext(), crowns, R.layout.crown_detail_item); 
 
 		gridView.setAdapter(adapter);
 

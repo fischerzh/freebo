@@ -3,7 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
-    android:orientation="vertical" >
+    >
+
+	<ImageView
+	    android:layout_width="100dp"
+	    android:layout_height="fill_parent"
+	    android:layout_centerHorizontal="true"
+	    android:src="@drawable/ic_mehr_scannen" />
 
     <LinearLayout
         android:id="@+id/tab_main_linearLayout"
@@ -11,7 +17,9 @@
         android:layout_height="fill_parent"
         android:focusable="true"
         android:focusableInTouchMode="true"
-        android:orientation="vertical" >
+        android:orientation="vertical" 
+        
+        >
 
         <ListView
             android:id="@+id/tab_main_listView"
@@ -20,7 +28,8 @@
             android:layout_weight="1.08"
             android:divider="@color/grey_dark"
             android:dividerHeight="2px"
-            android:paddingTop="10dp" >
+            android:paddingTop="10dp" 
+            >
         </ListView>
 
         <Button

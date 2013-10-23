@@ -1,0 +1,201 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/activity_badge_main_ll"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <ch.mobileking.classes.override.RobotoTextView
+        android:id="@+id/badge_main_titel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Badges gesammelt"
+        android:textColor="@android:color/black"
+        android:textSize="18dp" />
+
+    <View
+        android:id="@+id/separator"
+        android:layout_width="fill_parent"
+        android:layout_height="1dip"
+        android:layout_marginRight="5dp"
+        android:background="@color/common_action_bar_splitter" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <ch.mobileking.classes.override.RobotoTextView
+                android:id="@+id/RobotoTextView02"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_weight="1"
+                android:background="@drawable/ic_badge_ach1_blue"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="1st Login"
+                android:textColor="@color/grey_light"
+                android:textSize="16dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/TextView02"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                android:text="Starter"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <ch.mobileking.classes.override.RobotoTextView
+                android:id="@+id/prod_rank"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:background="@drawable/ic_badge_ach1_no"
+                android:drawablePadding="2sp"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="50x Login"
+                android:textColor="@color/grey_light"
+                android:textSize="16dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Shopper"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <ch.mobileking.classes.override.RobotoTextView
+                android:id="@+id/RobotoTextView01"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:background="@drawable/ic_badge_ach1_no"
+                android:drawablePadding="2sp"
+                android:gravity="center|center_vertical"
+                android:text="100x Login"
+                android:textColor="@color/grey_light"
+                android:textSize="16dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/TextView01"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Shoppaholic"
+                android:gravity="center"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+        </LinearLayout>
+    </LinearLayout>
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_weight="1"
+        android:orientation="vertical" >
+
+        <ch.mobileking.classes.override.RobotoTextView
+            android:id="@+id/RobotoTextView02"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@drawable/ic_badge_ach2_no"
+            android:gravity="center_horizontal|center_vertical"
+            android:text="1st Opt-In"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="16dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/TextView02"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Lonely"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_weight="1"
+        android:orientation="vertical" >
+
+        <ch.mobileking.classes.override.RobotoTextView
+            android:id="@+id/prod_rank"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@drawable/ic_badge_ach2_no"
+            android:drawablePadding="2sp"
+            android:gravity="center_horizontal|center_vertical"
+            android:text="5x Opt-In"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="16dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Lover"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_weight="1"
+        android:orientation="vertical" >
+
+        <ch.mobileking.classes.override.RobotoTextView
+            android:id="@+id/RobotoTextView01"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@drawable/ic_badge_ach2_no"
+            android:drawablePadding="2sp"
+            android:gravity="center_horizontal|center_vertical"
+            android:text="10x Opt-In"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="16dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/TextView01"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Addicted"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+    </LinearLayout>
+</LinearLayout>
+
+</LinearLayout>

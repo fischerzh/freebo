@@ -55,8 +55,14 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
 	    String intentResponse = getIntent().getStringExtra("gcmnotification");
 	    System.out.println("Response from GCM: " + intentResponse);
 	    if(intentResponse!=null)
-	    	createAlert(intentResponse);
+	    	createAlert(intentResponse, "Neuigkeiten", R.drawable.ic_launcher);
 		
+	    if(editor.getFirstRun())
+	    {
+	    	createAlert("1. Login: Du hast einen neuen Badge gesammelt! \nSchau nach was du noch für Badges sammeln kannst!", "Glückwunsch!", R.drawable.ic_badge_ach1_blue);
+	    	
+	    	editor.setIsFirstRun(false);
+	    }
         // Initilization
         viewPager = (ViewPager) findViewById(R.id.pager);
         actionBar = getSupportActionBar();
@@ -127,14 +133,15 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
 ////	    	createAlert(intentResponse);
 //	}
 	
-	private void createAlert(String message) {
+	private void createAlert(String message, String title, int iconId) {
 		// Build the dialog
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
-		alert.setTitle("ProductKing: Neuer Status!");
+		alert.setTitle(title);
 		alert.setMessage(message);
 		// Create TextView
 		final TextView input = new TextView (this);
 		alert.setView(input);
+		alert.setIcon(iconId);
 
 		alert.setPositiveButton("Weiter", new DialogInterface.OnClickListener() {
 		public void onClick(DialogInterface dialog, int whichButton) {

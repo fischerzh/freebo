@@ -26,6 +26,7 @@ import ch.mobileking.activity.old.ProductOverview;
 import ch.mobileking.utils.ITaskComplete;
 import ch.mobileking.utils.ProductKing;
 import ch.mobileking.utils.SharedPrefEditor;
+import ch.mobileking.utils.Utils;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -37,6 +38,8 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
 	private Activity act;
 	
 	private SharedPrefEditor editor;
+	
+	private Utils utils;
 	
 	private ITaskComplete listener;
 	
@@ -50,6 +53,7 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
 		this.update = update;
 		this.listener = listener;
 		editor = new SharedPrefEditor(getAct());
+		utils = new Utils(getAct());
 	}
 	
 	public AsyncLogin(Activity act, Boolean update)
@@ -64,12 +68,20 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
 		// TODO Auto-generated method stub
 		System.out.println("Params: "+params[0]+", "+params[1]);
 		HttpClient httpClient = new DefaultHttpClient();
+		
+		String loginUrl = editor.getLoginURL();
+		if(editor.getFirstRun())
+		{
+			Utils.registerDevice(act);
+			loginUrl=loginUrl+getAndroidInfo();
+			System.out.println("New Login URL: " + loginUrl);
+		}
 
-		httpClient.getParams().setParameter(HttpConnectionParams.CONNECTION_TIMEOUT, 5000);
-		httpClient.getParams().setParameter(HttpConnectionParams.SO_TIMEOUT, 5000);
+		httpClient.getParams().setParameter(HttpConnectionParams.CONNECTION_TIMEOUT, 10000);
+		httpClient.getParams().setParameter(HttpConnectionParams.SO_TIMEOUT, 10000);
 
 		
-		HttpGet httpGet = new HttpGet(editor.getLoginURL());
+		HttpGet httpGet = new HttpGet(loginUrl);
 		httpGet.addHeader(BasicScheme.authenticate(new UsernamePasswordCredentials(params[0], params[1]),"UTF-8", false));
 
 		HttpResponse httpResponse = null;
@@ -129,6 +141,16 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
 		return getJsonResult();
 	}
 	
+	private String getAndroidInfo() {
+		String osVersion = android.os.Build.VERSION.RELEASE;
+		String manufacturer = android.os.Build.MANUFACTURER;
+		String model = android.os.Build.MODEL;
+		
+		String regId = Utils.getRegistrationId(getAct());
+		
+		return "?regId="+regId+"&deviceType='"+manufacturer+"'&deviceOs="+osVersion;
+	}
+
 	@Override
 	protected void onPostExecute(String result) {
 		super.onPostExecute(result);
@@ -149,9 +171,6 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
 				/** FIRST LOGIN **/
 				if(ProductKing.getIsActive())
 				{
-//					Intent intent = new Intent(getAct(), MainTabActivity.class);
-//					intent.putExtra("updatedInfo", true);
-//					getAct().startActivityForResult(intent, 1);
 					listener.onLoginCompleted(true);
 				}
 				else
@@ -183,25 +202,18 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
 //    		ProductKing prodKing = gson.fromJson(reader, ProductKing.class); //Product.class
     	}
     	catch (JsonSyntaxException e) {
-//    		setIsLoaded(false);
-//    		failed = true;
 			System.out.println("JSON Syntax Exception" + e.toString());
 			Toast toast = Toast.makeText(getAct(), "JSON Syntax Exception!", Toast.LENGTH_LONG);
 			toast.show();
     	}
     	catch (Exception e)	{
-//    		failed = true;
-//    		setIsLoaded(true);
     		System.out.println("Exception " + e.toString());
     		Toast toast = Toast.makeText(getAct(), "Exception!", Toast.LENGTH_LONG);
 			toast.show();
     	}
-//		System.out.println("Name: " + prodKing.getUsername());
-//		System.out.println("Products: " +prodKing.getProducts().size());
 		ProductKing.setIsActive(prodKing.getIsactiveapp());
 		ProductKing.setStaticProducts(prodKing.getProducts());
 		ProductKing.setRecommenderProducts(prodKing.getRecommendations());
-//		System.out.println("Recommendations :" +prodKing.getRecommendations());
 	}
 	
 	

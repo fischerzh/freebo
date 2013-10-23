@@ -74,7 +74,7 @@ public class ImageAdapter extends BaseAdapter{
 			gridView = (View)convertView;
 		}
 		
-		if(this.layoutId == R.layout.badges_detail_item)
+		if(this.layoutId == R.layout.crown_detail_item)
 		{
 			TextView txtSalesPoint = (TextView) gridView.findViewById(R.id.badges_item_salespoint);
 			txtSalesPoint.setText(""+((Crown) items.get(position)).getSalespoint());
@@ -108,6 +108,15 @@ public class ImageAdapter extends BaseAdapter{
 			ImageView recommItem = (ImageView) gridView.findViewById(R.id.recomm_item_pict);
 			if(Utils.imageExists(prod))
 				recommItem.setImageBitmap(Utils.loadImageFromPath(prod));
+		}
+		else if(this.layoutId == R.layout.activity_storehero_item)
+		{
+			TextView storehero_item_pts_txt = (TextView) gridView.findViewById(R.id.storehero_item_pts_txt);
+			storehero_item_pts_txt.setText(((Crown) items.get(position)).getRank()+" x gesammelt");
+			
+			TextView storehero_item_location = (TextView) gridView.findViewById(R.id.storehero_item_location);
+			storehero_item_location.setText(""+((Crown) items.get(position)).getSalespoint());
+			
 		}
 		
 		return gridView;
