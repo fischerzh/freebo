@@ -43,6 +43,12 @@ public class Products {
 	
 	@SerializedName("userrank")
 	private Integer userrank = 0;
+
+	@SerializedName("olduserrank")
+	private Integer olduserrank = 0;
+	
+	@SerializedName("newrankachieved")
+	private Boolean newrankachieved = false;
 	
 	@SerializedName("participants")
 	private Integer participants = 0;
@@ -216,6 +222,34 @@ public class Products {
 	 */
 	public void setUserrank(Integer userrank) {
 		this.userrank = userrank;
+	}
+
+	/**
+	 * @return the olduserrank
+	 */
+	public Integer getOlduserrank() {
+		return olduserrank;
+	}
+
+	/**
+	 * @param olduserrank the olduserrank to set
+	 */
+	public void setOlduserrank(Integer olduserrank) {
+		this.olduserrank = olduserrank;
+	}
+
+	/**
+	 * @return the newrankachieved
+	 */
+	public Boolean getNewrankachieved() {
+		return newrankachieved;
+	}
+
+	/**
+	 * @param newrankachieved the newrankachieved to set
+	 */
+	public void setNewrankachieved(Boolean newrankachieved) {
+		this.newrankachieved = newrankachieved;
 	}
 
 	/**

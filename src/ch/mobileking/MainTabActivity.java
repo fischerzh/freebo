@@ -7,6 +7,7 @@ import ch.mobileking.login.AsyncUpdate;
 import ch.mobileking.tabs.MainProductFragment;
 import ch.mobileking.tabs.TabsPagerAdapter;
 import ch.mobileking.utils.ITaskComplete;
+import ch.mobileking.utils.ProductKing;
 import ch.mobileking.utils.Products;
 import ch.mobileking.utils.SharedPrefEditor;
 import android.app.AlertDialog;
@@ -57,7 +58,7 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
 	    if(intentResponse!=null)
 	    	createAlert(intentResponse, "Neuigkeiten", R.drawable.ic_launcher);
 		
-	    if(editor.getFirstRun())
+	    if(editor.getFirstRun() || !ProductKing.getIsActive())
 	    {
 	    	createAlert("1. Login: Du hast einen neuen Badge gesammelt! \nSchau nach was du noch für Badges sammeln kannst!", "Glückwunsch!", R.drawable.ic_badge_ach1_blue);
 	    	
@@ -112,7 +113,7 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
 	        case R.id.action_logout:
 	        	editor.setPwd("");
 	        	editor.setUsername("");
-	        	finish();
+	        	startMainActivity();
 	            return true;
 	        case R.id.action_sync:
 	        	return true;
@@ -121,17 +122,12 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
 	    }
 	}
 	
-//	@Override
-//	public void onResume() {
-//	    super.onResume();  // Always call the superclass method first
-//
-//		System.out.println("MainTabActivity resumed!");
-//		
-////	    String intentResponse = getIntent().getStringExtra("gcmnotification");
-////	    System.out.println("Response from GCM: " + intentResponse);
-////	    if(intentResponse!=null)
-////	    	createAlert(intentResponse);
-//	}
+	private void startMainActivity()
+	{
+		Intent intent = new Intent(this, MainActivity.class);
+    	startActivity(intent);
+    	finish();
+	}
 	
 	private void createAlert(String message, String title, int iconId) {
 		// Build the dialog
@@ -196,23 +192,16 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
 	
 	@Override
 	public void onLoginCompleted(boolean completed) {
-		// TODO Auto-generated method stub
 		System.out.println("LoginCompleted! Restarting Activity...");
-//		((MainProductFragment)mAdapter.getItem(0)).updateAdapterData();
-//		viewPager.setCurrentItem(0);
 	}
 
 	@Override
 	public void onUpdateCompleted(boolean completed) {
 		System.out.println("MainTabActivity, UpdateCompleted! Restarting Activity...");
-//		reloadUserInfo();
 		this.listener.onUpdateCompleted(completed);
 	}
 	
-//	private void reloadUserInfo()
-//	{
-//		new AsyncLogin(this, true, this.listener).execute(editor.getUsername(), editor.getPwd());
-//	}
+
 	
 	private void updateUserInfo(Boolean optIn, Boolean update, String productID)
 	{

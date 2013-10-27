@@ -8,53 +8,69 @@
         android:layout_height="match_parent"
         android:orientation="vertical" >
 
-        <ImageButton
-            android:id="@+id/imageButton1"
+        <TextView
+            android:id="@+id/textView1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:src="@android:drawable/ic_input_add" />
+            android:text="Cumulus Anmeldung"
+            android:textSize="20dp"/>
 
-        <LinearLayout
-            android:id="@+id/loyalty_ll_cumulus"
+        <View
+            android:id="@+id/divider"
+            android:layout_width="fill_parent"
+            android:layout_height="1dip"
+            android:background="@color/grey_light" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Verbinden Sie Ihr Cumulus-Konto. Ihre Daten werden vertraulich behandelt. Niemand ausser Ihnen stehen die Daten Ihrer Einkäufe im Detail zur Verfügung. Falls Sie sich jedoch für ein Loyalitätsprogramm bei einem Hersteller entscheiden, können wir auf Wunsch dem Hersteller Ihre Einkäufe ausschliesslich nur über dieses Produkt mitteilen, damit dieser Ihnen spezielle Benefits (Punkte, Eintauschmöglichkeiten) dazu geben kann."
+            android:textColor="@color/grey_light"
+            android:textSize="12dp"/>
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/migros_cumulus_image" />
+
+        <EditText
+            android:id="@+id/editText1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" 
-            android:clickable = "true"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName" 
+            android:hint="Benutzername von M-connect"
             >
 
-            <ImageView
-                android:id="@+id/loyalty_img_cumulus"
-                android:layout_width="100dp"
-                android:layout_height="63dp"
-                android:src="@drawable/ic_cumulus_small" />
+            <requestFocus />
+        </EditText>
 
-            <TextView
-                android:id="@+id/textView1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="Cumulus" />
-
-        </LinearLayout>
-
-        <LinearLayout
+        <EditText
+            android:id="@+id/editText2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPassword"
+            android:hint="Kennwort" />
 
-            <ImageView
-                android:id="@+id/imageView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_supercard_small" />
+        <EditText
+            android:id="@+id/editText3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="number" 
+            android:hint="Cumulus Nummer"
+            />
 
-            <TextView
-                android:id="@+id/TextView01"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:text="Supercard" />
-
-        </LinearLayout>
+        <Button
+            android:id="@+id/loyalty_card_next_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/black"
+            android:text="Weiter"
+            android:textColor="@android:color/white" />
 
     </LinearLayout>
     

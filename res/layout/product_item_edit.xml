@@ -66,16 +66,15 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:text="RANG: 21 (+2)"
-         		android:textColor="@color/blue_light"
+         		android:textColor="@color/grey_light"
                 android:textSize="16dp"
-                android:background="@color/grey_light"
                 android:gravity="center_horizontal|center_vertical"
-                android:drawablePadding="5sp"
-                android:drawableRight="@drawable/ic_arrow_up_black"
+                android:drawablePadding="2sp"
+                android:drawableRight="@drawable/ic_arrow_up_green"
                 android:textStyle="bold"
                 />
 
-                       <ch.mobileking.classes.override.RobotoTextView
+            <ch.mobileking.classes.override.RobotoTextView
                 android:id="@+id/prod_collected_cnt"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
@@ -83,7 +82,8 @@
                 android:text="12 neue Punkte gesammelt"
                 android:textStyle="bold"
                 android:textColor="@color/blue_light"
-                android:textSize="12dp" 
+                android:textSize="14dp" 
+                android:layout_gravity="center_horizontal"
                 android:gravity="center_vertical|center_horizontal"
 
                 />

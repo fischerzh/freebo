@@ -24,9 +24,15 @@ private static final long serialVersionUID = 1L;
 	@SerializedName("products")
 	private List<Products> products;
 	
+	@SerializedName("badges")
+	private List<Badge> badges;
+	
+	
 	private static List<Products> staticProducts;
 	
 	private static List<Products> recommenderProducts;
+	
+	private static List<Badge> staticBadges;
 	
 	private static Boolean isActive = false;
 	
@@ -78,6 +84,20 @@ private static final long serialVersionUID = 1L;
 	}
 
 	/**
+	 * @return the badges
+	 */
+	public List<Badge> getBadges() {
+		return badges;
+	}
+
+	/**
+	 * @param badges the badges to set
+	 */
+	public void setBadges(List<Badge> badges) {
+		this.badges = badges;
+	}
+
+	/**
 	 * @return the username
 	 */
 	public String getUsername() {
@@ -88,15 +108,6 @@ private static final long serialVersionUID = 1L;
 	 * @return the staticProducts
 	 */
 	public static List<Products> getStaticProducts() {
-//		if(staticProducts.size()==0)
-//		{
-//			Products prod = new Products();
-//			prod.setName("Dein Lieblingsprodukt");
-//			prod.setOptin(true);
-//			prod.setProducer("Dein Lieblingshersteller");
-//			prod.setUserrank(1);
-//			staticProducts.add(prod);
-//		}
 		return staticProducts;
 	}
 
@@ -105,6 +116,20 @@ private static final long serialVersionUID = 1L;
 	 */
 	public static void setStaticProducts(List<Products> staticProducts) {
 		ProductKing.staticProducts = staticProducts;
+	}
+
+	/**
+	 * @return the staticBadges
+	 */
+	public static List<Badge> getStaticBadges() {
+		return staticBadges;
+	}
+
+	/**
+	 * @param staticBadges the staticBadges to set
+	 */
+	public static void setStaticBadges(List<Badge> staticBadges) {
+		ProductKing.staticBadges = staticBadges;
 	}
 
 	/**

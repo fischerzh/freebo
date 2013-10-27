@@ -203,17 +203,32 @@ public class ProductBaseAdapter extends BaseAdapter{
 		 *  SET THE VALUES!
 		 * 
 		 */
+		Products prod = resultList.get(position);
 //		if(resultList.get(position).getOptin())
 //		{
-			holder.getTxtName().setText(""+resultList.get(position).getName());
-			holder.getTxtProducer().setText(""+resultList.get(position).getProducer());
-			holder.getTxtRank().setText("GESAMTRANG "+resultList.get(position).getId() + " (+2)");
-			holder.getTxtCollectedCnt().setText(resultList.get(position).getPoints()+" x Punkte gesammelt!");
+			holder.getTxtName().setText(""+prod.getName());
+			holder.getTxtProducer().setText(""+prod.getProducer());
+			if(prod.getOlduserrank()-prod.getUserrank()>0)
+			{
+				holder.getTxtRank().setText("GESAMTRANG "+prod.getUserrank() + " (+"+(prod.getOlduserrank()-prod.getUserrank())+")");
+				holder.getTxtRank().setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_up_green, 0);
+			}
+			else if(prod.getOlduserrank()-prod.getUserrank()<0)
+			{
+				holder.getTxtRank().setText("GESAMTRANG "+prod.getUserrank() + " ("+(prod.getOlduserrank()-prod.getUserrank())+")");
+				holder.getTxtRank().setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down_red, 0);
+			}
+			else
+			{
+				holder.getTxtRank().setText("GESAMTRANG "+prod.getUserrank() + " (+-0)");
+				holder.getTxtRank().setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_nochange, 0);
+			}
+			holder.getTxtCollectedCnt().setText(prod.getPoints()+" x Punkte gesammelt!");
 			if(holder.getTxtCrownCnt1()!= null)
 			{
-			int countGold = countCrowns(resultList.get(position).getCrowns(), 1);
-			int countSilver = countCrowns(resultList.get(position).getCrowns(), 2);
-			int countBronce = countCrowns(resultList.get(position).getCrowns(), 3);
+			int countGold = countCrowns(prod.getCrowns(), 1);
+			int countSilver = countCrowns(prod.getCrowns(), 2);
+			int countBronce = countCrowns(prod.getCrowns(), 3);
 
 				holder.getTxtCrownCnt1().setText("x "+countGold); //holder.getTxtCrownCnt().setText(""+resultList.get(position).getPoints()+" x");
 				holder.getTxtCrownCnt2().setText("x "+countSilver); 
@@ -236,9 +251,9 @@ public class ProductBaseAdapter extends BaseAdapter{
 //			holder.getTxtRank().setText(" ");
 //		}
 		
-		Products prod = resultList.get(position);
+//		Products prod = resultList.get(position);
 		
-		String imageName = resultList.get(position).getId()+".png";
+		String imageName = prod.getId()+".png";
 		String imagePath = "";
 		Bitmap image = null;
 		

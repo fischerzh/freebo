@@ -13,6 +13,7 @@ public class SharedPrefEditor {
 	private static final String PREFS_PWD = "Password";
 	private static final String PREFS_USERNAME = "Username";
 	private static final String PREFS_FIRST_LOGIN = "Login";
+	private static final String PREFS_STAY_LOGGED_IN = "LoggedIn";
 	private static final String PREFS_REGID = "Registration";
 	private static final String PREFS_APPV = "Appversion";
 	private Context cont;
@@ -87,6 +88,30 @@ public class SharedPrefEditor {
 	    System.out.println("getSharedPref #FIRST_RUN: " + firstRun);
 		if(firstRun!=null)
 			return firstRun;
+		else
+			return true;
+	}
+	
+	public void setStayLoggedIn(Boolean stayLoggedIn)
+	{	    
+	    SharedPreferences settings = cont.getSharedPreferences(PREFS_STAY_LOGGED_IN, 0);
+	    SharedPreferences.Editor editor = settings.edit();
+	    editor.putBoolean(PREFS_STAY_LOGGED_IN, stayLoggedIn);
+	    System.out.println("setSharedPref #STAY_LOGGED_IN: " + stayLoggedIn);
+	    // Commit the edits!
+	    editor.commit();
+	    
+	}
+	
+	public Boolean getStayLoggedIn()
+	{
+	    Boolean loggedIn;
+	    // Restore preferences
+	    SharedPreferences settings = cont.getSharedPreferences(PREFS_STAY_LOGGED_IN, 0);
+	    loggedIn = settings.getBoolean(PREFS_STAY_LOGGED_IN, true);
+	    System.out.println("getSharedPref #STAY_LOGGED_IN: " + loggedIn);
+		if(loggedIn!=null)
+			return loggedIn;
 		else
 			return true;
 	}

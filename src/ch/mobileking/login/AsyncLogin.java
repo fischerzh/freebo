@@ -65,8 +65,11 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
 
 	@Override
 	protected String doInBackground(String... params) {
-		// TODO Auto-generated method stub
-		System.out.println("Params: "+params[0]+", "+params[1]);
+
+		String user = params[0];
+		String pwd = params[1];
+		
+		System.out.println("Params: "+user+", "+pwd);
 		HttpClient httpClient = new DefaultHttpClient();
 		
 		String loginUrl = editor.getLoginURL();
@@ -82,7 +85,7 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
 
 		
 		HttpGet httpGet = new HttpGet(loginUrl);
-		httpGet.addHeader(BasicScheme.authenticate(new UsernamePasswordCredentials(params[0], params[1]),"UTF-8", false));
+		httpGet.addHeader(BasicScheme.authenticate(new UsernamePasswordCredentials(user, pwd),"UTF-8", false));
 
 		HttpResponse httpResponse = null;
 		try {
@@ -123,10 +126,11 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
             else
             {
     			/**LOGIN WORKED, STORE USERNAME AND PASSWORD IN SHARED PREF **/
+            	System.out.println("Login worked, set Username/Password");
     			editor = new SharedPrefEditor(getAct());
     			
-    			editor.setUsername(params[1]);
-    			editor.setPwd(params[0]);
+    			editor.setUsername(user);
+    			editor.setPwd(pwd);
             }
             
             System.out.println("result: " + getJsonResult());
@@ -168,13 +172,13 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
 			
 			if(!update)
 			{
-				/** FIRST LOGIN **/
 				if(ProductKing.getIsActive())
 				{
 					listener.onLoginCompleted(true);
 				}
 				else
 				{
+					/** FIRST LOGIN **/
 					Intent intent = new Intent(getAct(), LoyaltyCardActivity.class);
 					getAct().startActivity(intent);
 				}
@@ -214,6 +218,8 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
 		ProductKing.setIsActive(prodKing.getIsactiveapp());
 		ProductKing.setStaticProducts(prodKing.getProducts());
 		ProductKing.setRecommenderProducts(prodKing.getRecommendations());
+		ProductKing.setStaticBadges(prodKing.getBadges());
+		
 	}
 	
 	

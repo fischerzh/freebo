@@ -25,6 +25,8 @@ public class LoyaltyCardActivity extends Activity implements ITaskComplete{
 	
 	private Button loyalty_edit_btnNext;
 
+	private Button loyalty_card_next_btn;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -32,62 +34,26 @@ public class LoyaltyCardActivity extends Activity implements ITaskComplete{
 		this.setAct(this);
 	
 		request = new ServerRequest(this, this);
-
 		
-		if(isEdit)
-		{
-			setEditContent();
-		}
-		else
-		{
-			setNormalContent();
-		}
-		
-	}
-	
-	private void setNormalContent()
-	{
 		setContentView(R.layout.loyaltycard_view);
-		loyalty_ll_cumulus = (LinearLayout) findViewById(R.id.loyalty_ll_cumulus);
-		loyalty_ll_cumulus.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				setEditContent();
-			}
-		});
-	}
-	
-	private void setEditContent()
-	{
-		setContentView(R.layout.loyaltycard_edit);
-		loyalty_edit_card_txt = (EditText) findViewById(R.id.loyalty_edit_card_txt);
 		
-		loyalty_edit_btnNext = (Button) findViewById(R.id.loyalty_edit_btnNext);
-		loyalty_edit_btnNext.setOnClickListener(new OnClickListener() {
+		loyalty_card_next_btn = (Button)findViewById(R.id.loyalty_card_next_btn);
+		loyalty_card_next_btn.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				
+
+				//TODO: Call Service request and send cumulus info to server
 //				request.startUdateCumulus();
+				System.out.println("Loyalty Card needs Update!!!!");
 				
-				Intent intent = new Intent(LoyaltyCardActivity.this, RecommActivity.class);
+				Intent intent = new Intent(LoyaltyCardActivity.this, MainTabActivity.class);
 				startActivity(intent);
-				
 			}
 		});
+		
 	}
 	
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) 
-	{
-
-		// TODO Auto-generated method stub
-		Intent intent = new Intent(LoyaltyCardActivity.this, RecommActivity.class);
-		startActivity(intent);
-	}
-
 	/**
 	 * @return the act
 	 */
@@ -112,7 +78,7 @@ public class LoyaltyCardActivity extends Activity implements ITaskComplete{
 	public void onUpdateCompleted(boolean completed) {
 		// TODO Auto-generated method stub
 		System.out.println("Loyalty Card updated!!!!");
-		Intent intent = new Intent(LoyaltyCardActivity.this, RecommActivity.class);
+		Intent intent = new Intent(LoyaltyCardActivity.this, MainTabActivity.class);
 		startActivity(intent);
 	}
 

@@ -21,6 +21,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -45,6 +48,8 @@ public class MainActivity extends Activity implements ITaskComplete{
 	BaseActivity baseActivityMenu;
 	
 	private String gcmResponseMessage;
+
+	private CheckBox main_stay_loggedIn_chkB;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +57,8 @@ public class MainActivity extends Activity implements ITaskComplete{
 		super.onCreate(savedInstanceState);
 		
 		baseActivityMenu = new BaseActivity(this);
+		
+        editor = new SharedPrefEditor(this);
 		
 		setElements();
 		
@@ -66,7 +73,10 @@ public class MainActivity extends Activity implements ITaskComplete{
 		am = AccountManager.get(this); // "this" references the current Context
 		
         username = (EditText) findViewById(R.id.txtUsername);
+        username.setText(editor.getUsername());
+        
         password = (EditText) findViewById(R.id.txtPassword);
+        password.setText(editor.getPwd());
         
         forgotPw = (TextView) findViewById(R.id.main_forgot_pw_txt);
         
@@ -74,6 +84,17 @@ public class MainActivity extends Activity implements ITaskComplete{
         
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setVisibility(View.INVISIBLE);
+        
+        main_stay_loggedIn_chkB = (CheckBox) findViewById(R.id.main_stay_loggedIn_chkB);
+        main_stay_loggedIn_chkB.setChecked(editor.getStayLoggedIn());
+        main_stay_loggedIn_chkB.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				// TODO Auto-generated method stub
+				editor.setStayLoggedIn(isChecked);
+			}
+		});
 
         main_rel_layout = (FrameLayout) findViewById(R.id.main_rel_layout);
         
@@ -88,7 +109,7 @@ public class MainActivity extends Activity implements ITaskComplete{
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Intent intent = new Intent(MainActivity.this, RecommActivity.class);
+				Intent intent = new Intent(MainActivity.this, LoyaltyCardActivity.class);
 				startActivity(intent);
 			}
 		});
@@ -102,10 +123,10 @@ public class MainActivity extends Activity implements ITaskComplete{
 			}
 		});
         
-        editor = new SharedPrefEditor(this);
         if(isNetworkAvailable())
         {
-        	if(editor.getUsername()!="" && editor.getPwd()!= "")
+//        	if(editor.getUsername()!="" && editor.getPwd()!= "")
+        	if(editor.getStayLoggedIn() && editor.getUsername()!="" && editor.getPwd()!= "" )
             {
         		setProgressBarDisableContent();
         		
@@ -128,7 +149,7 @@ public class MainActivity extends Activity implements ITaskComplete{
 				if(isNetworkAvailable())
 				{
 	        		setProgressBarEnableContent();
-
+	        		
 					loginUser();
 				}
 				else
@@ -169,8 +190,10 @@ public class MainActivity extends Activity implements ITaskComplete{
 	{
 		String loginStr, pwdStr;
         loginStr = username.getText().toString();
+        System.out.println("Username: " + loginStr);
         pwdStr = password.getText().toString();
-//		new AsyncLogin(getAct(), false).execute(loginStr, pwdStr);
+        System.out.println("Pwd: " + pwdStr);
+
 		new AsyncLogin(getAct(), false, this).execute(loginStr, pwdStr);
 		this.setProgressBarEnableContent();
 	}
@@ -195,6 +218,16 @@ public class MainActivity extends Activity implements ITaskComplete{
 	public void setAct(Activity act) {
 		this.act = act;
 	}
+	
+	@Override
+	public void onResume()
+	{
+		super.onResume();
+		
+        username.setText(editor.getUsername());
+        password.setText(editor.getPwd());
+	}
+	
 	
 
 	@Override
