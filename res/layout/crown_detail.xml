@@ -43,7 +43,7 @@
             android:src="@drawable/zweifelpaprika" />
 
         <ch.mobileking.classes.override.RobotoTextView
-            android:id="@+id/prod_rank"
+            android:id="@+id/badges_detail_prod_rank"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:paddingLeft="5dp"

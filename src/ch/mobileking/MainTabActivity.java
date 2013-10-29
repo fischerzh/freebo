@@ -55,6 +55,7 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
 		System.out.println("MainTabActivity called");
 	    String intentResponse = getIntent().getStringExtra("gcmnotification");
 	    System.out.println("Response from GCM: " + intentResponse);
+	    System.out.println("Message in ProductKing: " + ProductKing.getNotifications());
 	    if(intentResponse!=null)
 	    	createAlert(intentResponse, "Neuigkeiten", R.drawable.ic_launcher);
 		

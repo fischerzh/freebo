@@ -16,6 +16,8 @@
 
 package ch.mobileking;
 
+import ch.mobileking.utils.ProductKing;
+
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import android.app.IntentService;
@@ -68,10 +70,15 @@ public class GcmIntentService extends IntentService {
             // If it's a regular GCM message, do some work.
             } else if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(messageType)) {
                 // This loop represents the service doing some work.
-            	String msg = extras.getString("1");
-            	System.out.println("Received: " + msg);
-                // Post notification of received message.
-                sendNotification("Neuigkeiten: " +msg);
+            	if(extras.containsKey("MESSAGE"))
+                	sendNotification("Neue Message: " +extras.getString("MESSAGE"));
+            	if(extras.containsKey("STATUS"))
+                	sendNotification("Neuer Status: " +extras.getString("STATUS"));
+            	if(extras.containsKey("BADGE"))
+                	sendNotification("Neuer Badge: " +extras.getString("BADGE"));
+            	if(extras.containsKey("RANG"))
+                	sendNotification("Neuer Rang: " +extras.getString("RANG"));
+
                 Log.i(TAG, "Received: " + extras.toString());
             }
         }
@@ -84,9 +91,12 @@ public class GcmIntentService extends IntentService {
     // a GCM message.
     private void sendNotification(String msg) {
         mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
-
+        System.out.println("Got Message: " +msg);
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("gcmnotification", msg);
+        
+        ProductKing.initNotifications();
+        ProductKing.getNotifications().add(msg);
         
         /** SET THE ACTIVITY TO OPEN **/
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);

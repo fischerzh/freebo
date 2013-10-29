@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 public class CrownDetailOverview extends Activity {
 
-	private TextView prod_name, prod_manuf, prod_cat, prod_cnt;
+	private TextView prod_name, prod_manuf, prod_cat, prod_cnt, prod_rank;
 
 	private ImageView prod_Image;
 	
@@ -39,13 +39,29 @@ public class CrownDetailOverview extends Activity {
 			System.out.println("CrownDetailOverview: Found Product: " + product.getName());
 			prod_name = (TextView) findViewById(R.id.badges_detail_name);
 			prod_manuf = (TextView) findViewById(R.id.badges_detail_manufacturer);
-//			prod_cat = (TextView) findViewById(R.id.badges_detail_category);
+			prod_rank = (TextView) findViewById(R.id.badges_detail_prod_rank);
 			prod_cnt = (TextView) findViewById(R.id.badges_detail_cnt);
 			prod_Image = (ImageView) findViewById(R.id.badges_detail_image);
 
 			prod_name.setText(product.getName());
 			prod_manuf.setText(product.getProducer());
-//			prod_cat.setText("Kategorie: Snacks ");
+			
+			if(product.getOlduserrank()-product.getUserrank()>0 && product.getOlduserrank()!=0)
+			{
+				prod_rank.setText("RANG "+product.getUserrank() + " (+"+(product.getOlduserrank()-product.getUserrank())+")");
+				prod_rank.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_up_green, 0);
+			}
+			else if(product.getOlduserrank()-product.getUserrank()<0 && product.getOlduserrank()!=0)
+			{
+				prod_rank.setText("RANG "+product.getUserrank() + " ("+(product.getOlduserrank()-product.getUserrank())+")");
+				prod_rank.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down_red, 0);
+			}
+			else
+			{
+				prod_rank.setText("RANG "+product.getUserrank() + " (+-0)");
+				prod_rank.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_nochange, 0);
+			}
+			
 			prod_cnt.setText(product.getPoints()+" x Punkte gesammelt!");
 			prod_Image.setImageBitmap(Utils.loadImageFromPath(product));
 

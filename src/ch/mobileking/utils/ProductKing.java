@@ -27,12 +27,13 @@ private static final long serialVersionUID = 1L;
 	@SerializedName("badges")
 	private List<Badge> badges;
 	
-	
 	private static List<Products> staticProducts;
 	
 	private static List<Products> recommenderProducts;
 	
 	private static List<Badge> staticBadges;
+	
+	private static List<String> notifications;
 	
 	private static Boolean isActive = false;
 	
@@ -163,6 +164,20 @@ private static final long serialVersionUID = 1L;
 	}
 
 	/**
+	 * @return the notifications
+	 */
+	public static List<String> getNotifications() {
+		return notifications;
+	}
+
+	/**
+	 * @param notifications the notifications to set
+	 */
+	public static void initNotifications() {
+		ProductKing.notifications = new ArrayList<String>();
+	}
+	
+	/**
 	 * @return the isactiveapp
 	 */
 	public Boolean getIsactiveapp() {
@@ -189,6 +204,7 @@ private static final long serialVersionUID = 1L;
 	public static void setIsActive(Boolean isActive) {
 		ProductKing.isActive = isActive;
 	}
+
 
 	
 }

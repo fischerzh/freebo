@@ -16,6 +16,8 @@ public class SharedPrefEditor {
 	private static final String PREFS_STAY_LOGGED_IN = "LoggedIn";
 	private static final String PREFS_REGID = "Registration";
 	private static final String PREFS_APPV = "Appversion";
+	private static final String PREFS_LOGIN_CNT = "LoginCount";
+	
 	private Context cont;
 	
 	public SharedPrefEditor(Context context)
@@ -157,6 +159,28 @@ public class SharedPrefEditor {
 	    appVersion = settings.getInt(PREFS_APPV, Integer.MIN_VALUE);
 	    System.out.println("getAppVersion #APPV: " + appVersion);
 		return appVersion;
+	}
+	
+	public void updateLoginCount()
+	{	    
+		int loginCnt = getLoginCount();
+	    SharedPreferences settings = cont.getSharedPreferences(PREFS_LOGIN_CNT, 0);
+	    SharedPreferences.Editor editor = settings.edit();
+	    editor.putInt(PREFS_LOGIN_CNT, loginCnt+1);
+	    System.out.println("setAppVersion #LOGIN_CNT: " + loginCnt+1);
+	    // Commit the edits!
+	    editor.commit();
+	    
+	}
+	
+	public int getLoginCount()
+	{
+	    int loginCnt;
+	    // Restore preferences
+	    SharedPreferences settings = cont.getSharedPreferences(PREFS_LOGIN_CNT, 0);
+	    loginCnt = settings.getInt(PREFS_LOGIN_CNT, Integer.MIN_VALUE);
+	    System.out.println("getAppVersion #LOGIN_CNT: " + loginCnt);
+		return loginCnt;
 	}
 	
 	/**

@@ -69,6 +69,12 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
 		String user = params[0];
 		String pwd = params[1];
 		
+		if(!this.update)
+		{
+			editor.updateLoginCount();
+			System.out.println("Update Login Count..");
+		}
+		
 		System.out.println("Params: "+user+", "+pwd);
 		HttpClient httpClient = new DefaultHttpClient();
 		
