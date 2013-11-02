@@ -27,22 +27,26 @@ public class BadgeActivity extends Activity {
 		
 		System.out.println("Get Badges " + ProductKing.getStaticBadges());
 		
-		for (Badge badge : ProductKing.getStaticBadges())
+		if(ProductKing.getStaticBadges()!=null)
 		{
-			if(badge.getName().contentEquals("Starter"))
+			for (Badge badge : ProductKing.getStaticBadges())
 			{
-				badge_main_ach1_starter.setBackgroundDrawable(getResources().getDrawable(R.drawable.ic_badge_ach1_blue));
-			}
-			else if(badge.getName().contentEquals("Shopper"))
-			{
-				badge_main_ach1_shopper.setBackgroundDrawable(getResources().getDrawable(R.drawable.ic_badge_ach1_blue));
-			}
-			else if(badge.getName().contentEquals("Shoppaholic"))
-			{
-				badge_main_ach1_shoppaholic.setBackgroundDrawable(getResources().getDrawable(R.drawable.ic_badge_ach1_blue));
+				if(badge.getName().contentEquals("Starter"))
+				{
+					badge_main_ach1_starter.setBackgroundDrawable(getResources().getDrawable(R.drawable.ic_badge_ach1_blue));
+				}
+				else if(badge.getName().contentEquals("Shopper"))
+				{
+					badge_main_ach1_shopper.setBackgroundDrawable(getResources().getDrawable(R.drawable.ic_badge_ach1_blue));
+				}
+				else if(badge.getName().contentEquals("Shoppaholic"))
+				{
+					badge_main_ach1_shoppaholic.setBackgroundDrawable(getResources().getDrawable(R.drawable.ic_badge_ach1_blue));
 
+				}
 			}
 		}
+
 		
 	}
 }

@@ -5,9 +5,13 @@ import android.content.SharedPreferences;
 
 public class SharedPrefEditor {
 	
-	private static String updateURL = "http://www.sagax.ch:8080/Freebo/product/updateUserInfo"; //192.168.0.16:8080;
-	private static String loginURL = "http://www.sagax.ch:8080/Freebo/product/loginFromApp"; //192.168.0.16:8080;
-	private static String updateCumulusURL = "http://www.sagax.ch:8080/Freebo/product/updateCumulusInfo"; //192.168.0.16:8080;
+	private static String testServer = "http://192.168.0.16:8080";
+	private static String liveServer = "http://www.sagax.ch:8080";
+	private static String prefix = liveServer+"/Freebo/";
+	private static String updateURL = prefix+"product/updateUserInfo"; //192.168.0.16:8080;
+	private static String loginURL = prefix+"product/loginFromApp"; //192.168.0.16:8080;
+	private static String updateCumulusURL = prefix+"updateCumulusInfo"; //192.168.0.16:8080;
+	private static String registerURL = prefix+"user/create";
 
 	
 	private static final String PREFS_PWD = "Password";
@@ -42,7 +46,7 @@ public class SharedPrefEditor {
 	    // Restore preferences
 	    SharedPreferences settings = cont.getSharedPreferences(PREFS_USERNAME, 0);
 	    username = settings.getString(PREFS_USERNAME, "");
-	    System.out.println("getSharedPref #USERNAME: " + username);
+	    System.out.println("getSharedPref #USERNAME");
 		
 		return username;
 	}
@@ -52,7 +56,7 @@ public class SharedPrefEditor {
 	    SharedPreferences settings = cont.getSharedPreferences(PREFS_PWD, 0);
 	    SharedPreferences.Editor editor = settings.edit();
 	    editor.putString(PREFS_PWD, pwd);
-	    System.out.println("setSharedPref #PWD: " + pwd);
+	    System.out.println("setSharedPref #PWD");
 	    // Commit the edits!
 	    editor.commit();
 	    
@@ -64,7 +68,7 @@ public class SharedPrefEditor {
 	    // Restore preferences
 	    SharedPreferences settings = cont.getSharedPreferences(PREFS_PWD, 0);
 	    pwd = settings.getString(PREFS_PWD, "");
-	    System.out.println("getSharedPref #PWD: " + pwd);
+	    System.out.println("getSharedPref #PWD");
 		
 		return pwd;
 	}
@@ -204,6 +208,12 @@ public class SharedPrefEditor {
 		return updateCumulusURL;
 	}
 
+	/**
+	 * @return the registerURL
+	 */
+	public static String getRegisterURL() {
+		return registerURL;
+	}
 
 
 }

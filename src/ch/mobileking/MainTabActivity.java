@@ -56,14 +56,18 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
 	    String intentResponse = getIntent().getStringExtra("gcmnotification");
 	    System.out.println("Response from GCM: " + intentResponse);
 	    System.out.println("Message in ProductKing: " + ProductKing.getNotifications());
-	    if(intentResponse!=null)
+	    if(ProductKing.getNotifications()!=null)
+	    {
+	    	ProductKing.getNotifications().get(0);
 	    	createAlert(intentResponse, "Neuigkeiten", R.drawable.ic_launcher);
+	    }
 		
 	    if(editor.getFirstRun() || !ProductKing.getIsActive())
 	    {
 	    	createAlert("1. Login: Du hast einen neuen Badge gesammelt! \nSchau nach was du noch für Badges sammeln kannst!", "Glückwunsch!", R.drawable.ic_badge_ach1_blue);
 	    	
 	    	editor.setIsFirstRun(false);
+	    	
 	    }
         // Initilization
         viewPager = (ViewPager) findViewById(R.id.pager);
@@ -193,7 +197,7 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
 	
 	@Override
 	public void onLoginCompleted(boolean completed) {
-		System.out.println("LoginCompleted! Restarting Activity...");
+		System.out.println("MainTabActivity, LoginCompleted! Restarting Activity...");
 	}
 
 	@Override

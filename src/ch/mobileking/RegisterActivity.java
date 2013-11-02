@@ -1,7 +1,10 @@
 package ch.mobileking;
 
+import ch.mobileking.login.ServerRequest;
 import ch.mobileking.utils.BaseActivity;
+import ch.mobileking.utils.ITaskComplete;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -12,17 +15,19 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 
-public class RegisterActivity extends Activity {
+public class RegisterActivity extends Activity implements ITaskComplete{
 	
 	private Activity act;
 	
-	private EditText pwd1, pwd2, mail;
+	private EditText pwd1, pwd2, mail, register_username_txt;
 	
 	private Button register_btn;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		this.setAct(this);
 		
 		setTitle("ProductKing");
 		
@@ -34,6 +39,8 @@ public class RegisterActivity extends Activity {
 		
 		mail = (EditText) findViewById(R.id.register_mail_txt);
 		
+		register_username_txt = (EditText) findViewById(R.id.register_username_txt);
+		
 		register_btn = (Button) findViewById(R.id.register_btn);
 
 		register_btn.setOnClickListener(new View.OnClickListener() {
@@ -44,6 +51,7 @@ public class RegisterActivity extends Activity {
 				{	
 					System.out.println("Mail " + mail.getText().toString());
 					mail.setError("Fill out correct mail address!");
+					return;
 				}
 				
 				// TODO Auto-generated method stub
@@ -53,7 +61,17 @@ public class RegisterActivity extends Activity {
 					Animation shake = AnimationUtils.loadAnimation(RegisterActivity.this, R.anim.shake); 
 					pwd2.startAnimation(shake);
 					pwd2.setError("Password's did not match!");
+					return;
 				}
+				
+				if(register_username_txt.getText().toString().equalsIgnoreCase(""))
+				{
+					register_username_txt.setError("Please enter username!");
+					return;
+				}
+				
+				ServerRequest httpRequester = new ServerRequest(getAct(), RegisterActivity.this);
+				httpRequester.startRegisterUser(register_username_txt.getText().toString(), pwd1.getText().toString(), mail.getText().toString());
 			}
 		});
 	}
@@ -64,6 +82,48 @@ public class RegisterActivity extends Activity {
 	    } else {
 	        return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
 	    }
+	}
+
+	@Override
+	public void onLoginCompleted(boolean b) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onUpdateCompleted(boolean b) {
+		// TODO Auto-generated method stub
+		System.out.println("Registration completed successfully!");
+		
+		Intent intent = new Intent(this, MainActivity.class);
+    	startActivity(intent);
+    	finish();
+	}
+
+	@Override
+	public void startUpdate() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void startLogin() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/**
+	 * @return the act
+	 */
+	public Activity getAct() {
+		return act;
+	}
+
+	/**
+	 * @param act the act to set
+	 */
+	public void setAct(Activity act) {
+		this.act = act;
 	}
 
 }

@@ -109,8 +109,8 @@ public class MainActivity extends Activity implements ITaskComplete{
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Intent intent = new Intent(MainActivity.this, LoyaltyCardActivity.class);
-				startActivity(intent);
+//				Intent intent = new Intent(MainActivity.this, LoyaltyCardActivity.class);
+//				startActivity(intent);
 			}
 		});
         

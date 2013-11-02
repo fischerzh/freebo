@@ -92,6 +92,10 @@ public class AsyncUpdate extends AsyncTask<String, String, String>{
 		HttpClient httpClient = new DefaultHttpClient();
 		HttpGet httpGet;
 		String response = "";
+		if(ean.isEmpty() || ean.contentEquals(""))
+		{
+			return "FAILED";
+		}
 		if(optIn)
 		{
 			httpGet = new HttpGet(editor.getUpdateURL()+"?ean="+ean+"&optin=true"); //"username=test&productid=3&optin="true""

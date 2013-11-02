@@ -325,32 +325,41 @@ public class ProductBaseAdapter extends BaseAdapter{
 	public int countCrowns(List<Crown> crowns, int color)
 	{
 		int gold=0, silver=0, bronze=0;
-		for (Crown crown : crowns)
+		
+		if(crowns!=null)
 		{
-			switch(crown.getCrownstatus())
+			for (Crown crown : crowns)
+			{
+				switch(crown.getCrownstatus())
+				{
+				case 1:
+					gold+=1;
+					break;
+				case 2:
+					silver+=1;
+					break;
+				case 3:
+					bronze+=1;
+					break;
+				}
+			}
+			switch(color)
 			{
 			case 1:
-				gold+=1;
-				break;
+				return gold;
 			case 2:
-				silver+=1;
-				break;
+				return silver;
 			case 3:
-				bronze+=1;
-				break;
+				return bronze;
+			default:
+				return 0;
 			}
 		}
-		switch(color)
+		else
 		{
-		case 1:
-			return gold;
-		case 2:
-			return silver;
-		case 3:
-			return bronze;
-		default:
 			return 0;
 		}
+		
 	}
 	
     public void saveFavorites()

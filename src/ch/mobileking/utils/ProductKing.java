@@ -27,6 +27,12 @@ private static final long serialVersionUID = 1L;
 	@SerializedName("badges")
 	private List<Badge> badges;
 	
+	@SerializedName("status")
+	private String status = " ";
+
+	@SerializedName("exception")
+	private String exception = " ";
+	
 	private static List<Products> staticProducts;
 	
 	private static List<Products> recommenderProducts;
@@ -203,6 +209,34 @@ private static final long serialVersionUID = 1L;
 	 */
 	public static void setIsActive(Boolean isActive) {
 		ProductKing.isActive = isActive;
+	}
+
+	/**
+	 * @return the status
+	 */
+	public String getStatus() {
+		return status;
+	}
+
+	/**
+	 * @param status the status to set
+	 */
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	/**
+	 * @return the exception
+	 */
+	public String getException() {
+		return exception;
+	}
+
+	/**
+	 * @param exception the exception to set
+	 */
+	public void setException(String exception) {
+		this.exception = exception;
 	}
 
 

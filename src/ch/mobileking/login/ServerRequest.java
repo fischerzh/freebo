@@ -12,6 +12,7 @@ import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
@@ -42,6 +43,7 @@ public class ServerRequest {
 	
 	private HttpClient httpClient;
 	private HttpGet httpGet;
+	private HttpPost httpPost;
 	
 	private SharedPrefEditor editor;
 	
@@ -60,83 +62,32 @@ public class ServerRequest {
 	public void startUdateCumulus()
 	{
 		setServerURL(editor.getUpdateCumulusURL());
-		setUpHttpClient();
+		setUpHttpClient(editor.getUsername(), editor.getPwd());
 		new UpdateCumulusInfo().execute();
 		
 	}
 	
+	public void startRegisterUser(String username, String pwd, String mail)
+	{
+		System.out.println("Start registration to Backend...");
+		setServerURL(editor.getRegisterURL()+"?username="+username+"&password="+pwd+"&email="+mail+"&enabled=true"+"&createFromApp=true");
+		setUpHttpPost();
+		System.out.println("registration URL: " +getServerURL());
+		new RegisterUser().execute(username, pwd);
+	}
+	
 	public void startUpdateOptIn()
 	{
+		//@TODO: Refactor from AsyncUpdate
 		
 	}
 	
 	
 	public void startLogin(String username, String pwd)
 	{
-		
-		
+		//@TODO: Refactor from AsyncLogin
 		
 	}
-	
-	private void sendRegistrationIdToBackend() {
-		System.out.println("Send registration ID to Backend!");
-		String responseString = null;
-		String regid = getRegistrationId(getContext());
-		try {
-			URI url = new URI("http://192.168.0.16:8080/gcm-demo/register?regId=" + regid);
-			HttpGet httpGet = new HttpGet(url);
-			// defaultHttpClient
-			HttpParams httpParameters = new BasicHttpParams();
-
-			// The default value is zero, that means the timeout is not used.
-			int timeoutConnection = 3000;
-			HttpConnectionParams.setConnectionTimeout(httpParameters,
-					timeoutConnection);
-			// in milliseconds which is the timeout for waiting for data.
-			int timeoutSocket = 5000;
-			HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
-
-			DefaultHttpClient httpClient = new DefaultHttpClient(httpParameters);
-
-			HttpResponse httpResponse = httpClient.execute(httpGet);
-			HttpEntity httpEntity = httpResponse.getEntity();
-
-			if (httpResponse.getStatusLine().getStatusCode() != 200) {
-				Log.e(getContext().getString(R.string.app_name),
-						"Server Call Failed : Got Status Code "
-								+ httpResponse.getStatusLine().getStatusCode()
-								+ " and ContentType "
-								+ httpEntity.getContentType().getValue());
-			}
-
-			responseString = EntityUtils.toString(httpEntity);
-		} catch (Exception e) {
-			Log.e(getContext().getString(R.string.app_name),
-					e.toString(), e);
-			// add code to handle error
-		}
-
-	}
-	
-	private String getRegistrationId(Context context) {
-		
-		String registrationId = editor.getRegId();
-		if (registrationId.isEmpty()) {
-			System.out.println("Registration not found.");
-			return "";
-		}
-		// Check if app was updated; if so, it must clear the registration ID
-		// since the existing regID is not guaranteed to work with the new
-		// app version.
-		int registeredVersion = editor.getAppVersion();
-		int currentVersion = Utils.getAppVersion(context);
-		if (registeredVersion != currentVersion) {
-			System.out.println("App version changed.");
-			return "";
-		}
-		return registrationId;
-	}
-	
 	
 	
 	private Boolean isLoggedIn()
@@ -145,21 +96,30 @@ public class ServerRequest {
 	}
 	
 	
-	private void setUpHttpClient()
+	private void setUpHttpClient(String user, String pwd)
 	{
 		httpClient = new DefaultHttpClient();
 		httpGet = new HttpGet(getServerURL());
 		
-		httpGet.addHeader(BasicScheme.authenticate(new UsernamePasswordCredentials(editor.getUsername(), editor.getPwd()),"UTF-8", false));
+		httpGet.addHeader(BasicScheme.authenticate(new UsernamePasswordCredentials(user, pwd),"UTF-8", false));
 
 	}
 	
-	private String getHttpResponse()
+	private void setUpHttpPost()
+	{
+		httpClient = new DefaultHttpClient();
+		httpPost = new HttpPost(getServerURL());
+	}
+	
+	private String getHttpResponse(HttpGet httpGet, HttpPost httpPost)
 	{
 		HttpResponse httpResponse = null;
 		String response = "";
 		try {
-			httpResponse = httpClient.execute(httpGet);
+			if(httpPost!=null)
+				httpResponse = httpClient.execute(httpPost);
+			else if (httpGet != null)
+				httpResponse = httpClient.execute(httpGet);
 		} catch (ClientProtocolException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -184,6 +144,7 @@ public class ServerRequest {
 				instream = responseEntity.getContent();
 				response = convertStreamToString(instream);
 				instream.close();
+				
 			} catch (IllegalStateException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -197,7 +158,7 @@ public class ServerRequest {
 	}
 	
 	public Boolean checkForErrors(String response) {
-		if(response.contains("HTTP Status 401") || response.contains("Error"))
+		if(response.contains("FAILED") || response.contains("ERROR"))
         {
         	return false;
         }
@@ -301,7 +262,7 @@ public class ServerRequest {
 		@Override
 		protected String doInBackground(String... params) {
 			// TODO Auto-generated method stub
-			String response = getHttpResponse();
+			String response = getHttpResponse(httpGet, null);
 			System.out.println("response: "  +response);
 			Boolean responseOk = checkForErrors(response);
 			System.out.println("responseOk: " +responseOk);
@@ -330,6 +291,42 @@ public class ServerRequest {
 			}
 		}
 		
+	}
+	
+	private class RegisterUser extends AsyncTask<String, String, String>
+	{
+		private String username, pw;
+		
+		@Override
+		protected String doInBackground(String... params) {
+			username = params[0];
+			pw = params[1];
+			System.out.println("register, params" +params[0] + params[1]);
+			String response = getHttpResponse(null, httpPost);
+			System.out.println("Response from HTTP call: " +response);
+			return response;
+		}
+		
+		@Override
+		protected void onPostExecute(String result) {
+			
+			if(result.toLowerCase().contains("success"))
+			{
+				System.out.println("#RegisterUser SUCCESS: onPostExecute, got Result: " +result);
+				editor.setUsername(this.username);
+				editor.setPwd(this.pw);
+				this.pw="";
+				this.username="";
+				listener.onUpdateCompleted(true);
+			}
+			else
+			{
+				System.out.println("#RegisterUser FAILED: ");
+				this.pw="";
+				this.username="";
+				listener.onUpdateCompleted(false);
+			}
+		}
 	}
 
 

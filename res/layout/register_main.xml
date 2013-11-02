@@ -60,13 +60,15 @@
         android:layout_marginLeft="13dp"
         android:ems="10"
         android:hint="mail@mail.com"
-        android:inputType="textPersonName" >
+        android:inputType="textPersonName"
+        android:text="test@test.ch"
+         >
 
         <requestFocus />
     </EditText>
 
     <EditText
-        android:id="@+id/EditText02"
+        android:id="@+id/register_username_txt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/register_mail_txt"
@@ -80,7 +82,7 @@
         android:id="@+id/register_txt_pwd1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/EditText02"
+        android:layout_below="@+id/register_username_txt"
         android:layout_centerHorizontal="true"
         android:ems="10"
         android:hint="******"
