@@ -6,7 +6,9 @@ import java.util.ArrayList;
 
 import ch.mobileking.R;
 import ch.mobileking.utils.Crown;
+import ch.mobileking.utils.Leaderboard;
 import ch.mobileking.utils.Products;
+import ch.mobileking.utils.SharedPrefEditor;
 import ch.mobileking.utils.Utils;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -45,18 +47,21 @@ public class ImageAdapter extends BaseAdapter{
 	
 	private int position;
 	
+	private SharedPrefEditor editor;
+	
 	public ImageAdapter(Context c, ArrayList<Object> items, int layoutId)
 	{
 		System.out.println("Got Crowns: " + items);
 		mContext = c;
 		this.items = new ArrayList<Object>(items);
 		this.layoutId = layoutId;
+		editor = new SharedPrefEditor(c);
 	}
 	
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		
-		System.out.println("Get View from ImageAdapter");
+//		System.out.println("Get View from ImageAdapter");
 		LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 		this.position = position;
@@ -73,7 +78,9 @@ public class ImageAdapter extends BaseAdapter{
 		{
 			gridView = (View)convertView;
 		}
-		
+		/** 
+		 * Layout items for CROWN DETAIL list view items
+		**/
 		if(this.layoutId == R.layout.crown_detail_item)
 		{
 			TextView txtSalesPoint = (TextView) gridView.findViewById(R.id.badges_item_salespoint);
@@ -98,6 +105,9 @@ public class ImageAdapter extends BaseAdapter{
 				prodItemCrown.setImageResource(R.drawable.ic_krone_inactive);
 			}
 		}
+		/** 
+		 * Layout items for RECOMMENDATION ITEM list view items
+		**/
 		else if(this.layoutId == R.layout.recommend_item)
 		{
 //			TextView txtProduct = (TextView) gridView.findViewById(R.id.prod_item_name);
@@ -109,6 +119,9 @@ public class ImageAdapter extends BaseAdapter{
 			if(Utils.imageExists(prod))
 				recommItem.setImageBitmap(Utils.loadImageFromPath(prod));
 		}
+		/** 
+		 * Layout items for STORE HERO list view items
+		**/
 		else if(this.layoutId == R.layout.activity_storehero_item)
 		{
 			TextView storehero_item_pts_txt = (TextView) gridView.findViewById(R.id.storehero_item_pts_txt);
@@ -116,6 +129,54 @@ public class ImageAdapter extends BaseAdapter{
 			
 			TextView storehero_item_location = (TextView) gridView.findViewById(R.id.storehero_item_location);
 			storehero_item_location.setText(""+((Crown) items.get(position)).getSalespoint());
+			
+		}
+		/** 
+		 * Layout items for LEADERBOARD list view items
+		**/
+		else if(this.layoutId == R.layout.activity_leaderboard_item)
+		{
+			TextView leaderboard_item_pts_txt = (TextView) gridView.findViewById(R.id.leaderboard_item_pts_txt);
+			leaderboard_item_pts_txt.setText(((Leaderboard) items.get(position)).getPoints()+" Punkte");
+			
+			TextView leaderboard_item_user = (TextView) gridView.findViewById(R.id.leaderboard_item_user);
+			leaderboard_item_user.setText(""+((Leaderboard) items.get(position)).getUsername());
+
+			TextView leaderboard_item_rank_txt = (TextView) gridView.findViewById(R.id.leaderboard_item_rank_txt);
+			leaderboard_item_rank_txt.setText(""+((Leaderboard) items.get(position)).getRank());
+			
+			ImageView leaderboard_item_user_img = (ImageView) gridView.findViewById(R.id.leaderboard_item_user_img);
+			
+			if (((Leaderboard) items.get(position)).getUsername().toLowerCase().contains(editor.getUsername()))
+			{
+//				leaderboard_item_user.setTextColor(mContext.getResources().getColor(R.color.red_light));
+				
+				gridView.setBackgroundColor(mContext.getResources().getColor(R.color.light_green));
+				
+				leaderboard_item_user_img.setImageResource(R.drawable.ic_launcher);
+				
+				leaderboard_item_rank_txt.setTextColor(mContext.getResources().getColor(R.color.grey_dark));
+			}
+
+			ImageView storehero_item_crown = (ImageView) gridView.findViewById(R.id.storehero_item_crown);
+			
+			if( ((Leaderboard) items.get(position)).getRank() == 1 )
+			{
+				storehero_item_crown.setImageResource(R.drawable.ic_leaderboard_gold);
+			}
+			else if( ((Leaderboard) items.get(position)).getRank() == 2 )
+			{
+				storehero_item_crown.setImageResource(R.drawable.ic_leaderboard_silver);
+			}
+			else if( ((Leaderboard) items.get(position)).getRank() == 3 )
+			{
+				storehero_item_crown.setImageResource(R.drawable.ic_leaderboard_bronce);
+			}
+			else
+			{
+				storehero_item_crown.setImageResource(R.drawable.empty);
+			}
+				
 			
 		}
 		

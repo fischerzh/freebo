@@ -5,4 +5,6 @@
         <color name="grey_dark">#666666</color>
     	<drawable name="focused">#ff5500</drawable>
     	<drawable name="selected">#8b96cf</drawable>
+    	<color name="red_light">#ffed9a9a</color>
+    	<color name="light_green">#ffb4edb2</color>
     </resources>

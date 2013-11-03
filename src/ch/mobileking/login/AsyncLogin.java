@@ -226,7 +226,7 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
 		ProductKing.setStaticProducts(prodKing.getProducts());
 		ProductKing.setRecommenderProducts(prodKing.getRecommendations());
 		ProductKing.setStaticBadges(prodKing.getBadges());
-		
+		ProductKing.setStaticLeaderboard(prodKing.getLeaderboard());
 	}
 	
 	

@@ -32,11 +32,12 @@
         android:orientation="vertical" >
 
         <LinearLayout
+            android:id="@+id/tab_frag_leaderboard_ll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" >
 
             <ImageView
-                android:id="@+id/badges_item_crown"
+                android:id="@+id/badges_item_leaderboard"
                 android:layout_width="75dp"
                 android:layout_height="75dp"
                 android:layout_gravity="center_horizontal|center_vertical"
@@ -61,12 +62,12 @@
             >
 
             <ImageView
-                android:id="@+id/badges_item_crown"
+                android:id="@+id/badges_item_badges"
                 android:layout_width="75dp"
                 android:layout_height="75dp"
                 android:layout_gravity="center_horizontal|center_vertical"
                 android:scaleType="fitCenter"
-                android:src="@drawable/ic_crown_gold"
+                android:src="@drawable/ic_badges"
                 android:visibility="visible" />
 
             <ch.mobileking.classes.override.RobotoTextView
@@ -85,7 +86,7 @@
             android:layout_height="wrap_content" >
 
             <ImageView
-                android:id="@+id/badges_item_crown"
+                android:id="@+id/badges_item_storehero"
                 android:layout_width="75dp"
                 android:layout_height="75dp"
                 android:layout_gravity="center_horizontal|center_vertical"
@@ -103,51 +104,30 @@
                 android:textSize="16dp" />
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+<!--         <LinearLayout -->
+<!--             android:layout_width="match_parent" -->
+<!--             android:layout_height="wrap_content" > -->
 
-            <ImageView
-                android:id="@+id/badges_item_crown"
-                android:layout_width="75dp"
-                android:layout_height="75dp"
-                android:layout_gravity="center_horizontal|center_vertical"
-                android:scaleType="fitCenter"
-                android:src="@drawable/ic_recommendations"
-                android:visibility="visible" />
+<!--             <ImageView -->
+<!--                 android:id="@+id/badges_item_crown" -->
+<!--                 android:layout_width="75dp" -->
+<!--                 android:layout_height="75dp" -->
+<!--                 android:layout_gravity="center_horizontal|center_vertical" -->
+<!--                 android:scaleType="fitCenter" -->
+<!--                 android:src="@drawable/ic_recommendations" -->
+<!--                 android:visibility="visible" /> -->
 
-            <ch.mobileking.classes.override.RobotoTextView
-                android:id="@+id/badges_item_salespoint"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:text="Empfehlungen"
-                android:textColor="@android:color/black"
-                android:textSize="16dp" />
-        </LinearLayout>
+<!--             <ch.mobileking.classes.override.RobotoTextView -->
+<!--                 android:id="@+id/badges_item_salespoint" -->
+<!--                 android:layout_width="match_parent" -->
+<!--                 android:layout_height="wrap_content" -->
+<!--                 android:layout_gravity="center_vertical" -->
+<!--                 android:text="Empfehlungen" -->
+<!--                 android:textColor="@android:color/black" -->
+<!--                 android:textSize="16dp" /> -->
+<!--         </LinearLayout> -->
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
-
-            <ImageView
-                android:id="@+id/frag_badges_recomm_img"
-                android:layout_width="75dp"
-                android:layout_height="75dp"
-                android:layout_gravity="center_horizontal|center_vertical"
-                android:scaleType="fitCenter"
-                android:src="@drawable/ic_menu_info_details"
-                android:visibility="visible" />
-
-            <ch.mobileking.classes.override.RobotoTextView
-                android:id="@+id/badges_item_salespoint"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:text="Notifications"
-                android:textColor="@android:color/black"
-                android:textSize="16dp" />
-        </LinearLayout>
+       
     </LinearLayout>
 
 </LinearLayout>

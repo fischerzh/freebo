@@ -34,7 +34,7 @@ public class SharedPrefEditor {
 	    SharedPreferences settings = cont.getSharedPreferences(PREFS_USERNAME, 0);
 	    SharedPreferences.Editor editor = settings.edit();
 	    editor.putString(PREFS_USERNAME, username);
-	    System.out.println("setSharedPref #USERNAME: " + username);
+	    System.out.println("setSharedPref #USERNAME ");
 	    // Commit the edits!
 	    editor.commit();
 	    
@@ -46,7 +46,7 @@ public class SharedPrefEditor {
 	    // Restore preferences
 	    SharedPreferences settings = cont.getSharedPreferences(PREFS_USERNAME, 0);
 	    username = settings.getString(PREFS_USERNAME, "");
-	    System.out.println("getSharedPref #USERNAME");
+	    System.out.println("getSharedPref #USERNAME" + username);
 		
 		return username;
 	}

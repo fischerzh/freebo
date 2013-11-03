@@ -27,6 +27,9 @@ private static final long serialVersionUID = 1L;
 	@SerializedName("badges")
 	private List<Badge> badges;
 	
+	@SerializedName("leaderboard")
+	private List<Leaderboard> leaderboard;
+	
 	@SerializedName("status")
 	private String status = " ";
 
@@ -40,6 +43,8 @@ private static final long serialVersionUID = 1L;
 	private static List<Badge> staticBadges;
 	
 	private static List<String> notifications;
+	
+	private static List<Leaderboard> staticLeaderboard;
 	
 	private static Boolean isActive = false;
 	
@@ -105,6 +110,20 @@ private static final long serialVersionUID = 1L;
 	}
 
 	/**
+	 * @return the leaderboard
+	 */
+	public List<Leaderboard> getLeaderboard() {
+		return leaderboard;
+	}
+
+	/**
+	 * @param leaderboard the leaderboard to set
+	 */
+	public void setLeaderboard(List<Leaderboard> leaderboard) {
+		this.leaderboard = leaderboard;
+	}
+
+	/**
 	 * @return the username
 	 */
 	public String getUsername() {
@@ -137,6 +156,20 @@ private static final long serialVersionUID = 1L;
 	 */
 	public static void setStaticBadges(List<Badge> staticBadges) {
 		ProductKing.staticBadges = staticBadges;
+	}
+
+	/**
+	 * @return the staticLeaderboard
+	 */
+	public static List<Leaderboard> getStaticLeaderboard() {
+		return staticLeaderboard;
+	}
+
+	/**
+	 * @param staticLeaderboard the staticLeaderboard to set
+	 */
+	public static void setStaticLeaderboard(List<Leaderboard> staticLeaderboard) {
+		ProductKing.staticLeaderboard = staticLeaderboard;
 	}
 
 	/**

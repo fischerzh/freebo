@@ -3,6 +3,7 @@ package ch.mobileking.tabs;
 import java.util.ArrayList;
 
 import ch.mobileking.BadgeActivity;
+import ch.mobileking.LeaderboardActivity;
 import ch.mobileking.MainActivity;
 import ch.mobileking.ProductDetailOverview;
 import ch.mobileking.R;
@@ -40,6 +41,8 @@ public class MainBadgeFragment extends Fragment{
     private LinearLayout tab_frag_badges_ll, tab_frag_storehero_ll;
     
     private SharedPrefEditor editor;
+
+	private LinearLayout tab_frag_leaderboard_ll;
 
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -94,6 +97,16 @@ public class MainBadgeFragment extends Fragment{
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(getActivity(), StoreHeroActivity.class);
+	        	startActivity(intent);				
+			}
+		});
+        
+        tab_frag_leaderboard_ll = (LinearLayout) getActivity().findViewById(R.id.tab_frag_leaderboard_ll);
+        tab_frag_leaderboard_ll.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(getActivity(), LeaderboardActivity.class);
 	        	startActivity(intent);				
 			}
 		});
