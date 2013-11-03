@@ -6,6 +6,7 @@ import ch.mobileking.login.AsyncLogin;
 import ch.mobileking.login.AsyncUpdate;
 import ch.mobileking.tabs.MainProductFragment;
 import ch.mobileking.tabs.TabsPagerAdapter;
+import ch.mobileking.utils.Badge;
 import ch.mobileking.utils.ITaskComplete;
 import ch.mobileking.utils.ProductKing;
 import ch.mobileking.utils.Products;
@@ -53,22 +54,16 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
 		
 		editor = new SharedPrefEditor(this);
 		System.out.println("MainTabActivity called");
-	    String intentResponse = getIntent().getStringExtra("gcmnotification");
-	    System.out.println("Response from GCM: " + intentResponse);
+//	    String intentResponse = getIntent().getStringExtra("gcmnotification");
+//	    System.out.println("Response from GCM: " + intentResponse);
 	    System.out.println("Message in ProductKing: " + ProductKing.getNotifications());
 	    if(ProductKing.getNotifications()!=null)
 	    {
-	    	ProductKing.getNotifications().get(0);
-	    	createAlert(intentResponse, "Neuigkeiten", R.drawable.ic_launcher);
+	    	String msg = ProductKing.getNotifications().get(0);
+	    	createAlert(msg, "Neuigkeiten", R.drawable.ic_launcher);
+	    	ProductKing.getNotifications().clear();
 	    }
 		
-	    if(editor.getFirstRun() || !ProductKing.getIsActive())
-	    {
-	    	createAlert("1. Login: Du hast einen neuen Badge gesammelt! \nSchau nach was du noch für Badges sammeln kannst!", "Glückwunsch!", R.drawable.ic_badge_ach1_blue);
-	    	
-	    	editor.setIsFirstRun(false);
-	    	
-	    }
         // Initilization
         viewPager = (ViewPager) findViewById(R.id.pager);
         actionBar = getSupportActionBar();

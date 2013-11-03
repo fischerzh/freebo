@@ -102,8 +102,6 @@ public class MainActivity extends Activity implements ITaskComplete{
         
         gcmResponseMessage = getIntent().getStringExtra("gcmnotification");
         
-//        googleLogin = (ImageButton) findViewById(R.id.btnGoogleLogin);
-        
         forgotPw.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
@@ -125,13 +123,11 @@ public class MainActivity extends Activity implements ITaskComplete{
         
         if(isNetworkAvailable())
         {
-//        	if(editor.getUsername()!="" && editor.getPwd()!= "")
         	if(editor.getStayLoggedIn() && editor.getUsername()!="" && editor.getPwd()!= "" )
             {
         		setProgressBarDisableContent();
         		
         		loginUserFromSettings(editor.getUsername(), editor.getPwd());
-        		
             }
 
         }
@@ -190,9 +186,7 @@ public class MainActivity extends Activity implements ITaskComplete{
 	{
 		String loginStr, pwdStr;
         loginStr = username.getText().toString();
-        System.out.println("Username: " + loginStr);
         pwdStr = password.getText().toString();
-        System.out.println("Pwd: " + pwdStr);
 
 		new AsyncLogin(getAct(), false, this).execute(loginStr, pwdStr);
 		this.setProgressBarEnableContent();
@@ -233,14 +227,22 @@ public class MainActivity extends Activity implements ITaskComplete{
 	@Override
 	public void onLoginCompleted(boolean completed) {
 		// TODO Auto-generated method stub
+		
+		setProgressBarDisableContent();
+		
 		System.out.println("MainActivity: LoginCompleted: " + completed);
-		if(completed)
+		if(completed && !editor.getFirstRun())
 		{
 			Intent intent = new Intent(getAct(), MainTabActivity.class);
-			if(gcmResponseMessage!=null)
-				intent.putExtra("gcmnotification", gcmResponseMessage);
+//			if(gcmResponseMessage!=null)
+//				intent.putExtra("gcmnotification", gcmResponseMessage);
 			getAct().startActivity(intent);
-			setProgressBarDisableContent();
+		}
+		else if (completed && editor.getFirstRun())
+		{
+			/** FIRST LOGIN **/
+			Intent intent = new Intent(getAct(), LoyaltyCardActivity.class);
+			getAct().startActivity(intent);
 		}
 		else
 		{

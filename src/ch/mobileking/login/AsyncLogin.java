@@ -79,7 +79,7 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
 		HttpClient httpClient = new DefaultHttpClient();
 		
 		String loginUrl = editor.getLoginURL();
-		if(editor.getFirstRun())
+		if(editor.getFirstRun() || editor.getUsername().contentEquals(""))
 		{
 			Utils.registerDevice(act);
 			loginUrl=loginUrl+getAndroidInfo();
@@ -125,7 +125,7 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
 			}
             setJsonResult(convertStreamToString(instream));
             // now you have the string representation of the HTML request
-            if(getJsonResult().contains("HTTP Status 401") || getJsonResult().contains("Error"))
+            if(getJsonResult().toLowerCase().contains("failed") || getJsonResult().toLowerCase().contains("error"))
             {
             	return "FAILED";
             }
@@ -133,9 +133,8 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
             {
     			/**LOGIN WORKED, STORE USERNAME AND PASSWORD IN SHARED PREF **/
             	System.out.println("Login worked, set Username/Password");
-    			editor = new SharedPrefEditor(getAct());
-    			
-    			editor.setUsername(user);
+
+            	editor.setUsername(user);
     			editor.setPwd(pwd);
             }
             
@@ -178,16 +177,18 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
 			
 			if(!update)
 			{
-				if(ProductKing.getIsActive())
-				{
-					listener.onLoginCompleted(true);
-				}
-				else
-				{
-					/** FIRST LOGIN **/
-					Intent intent = new Intent(getAct(), LoyaltyCardActivity.class);
-					getAct().startActivity(intent);
-				}
+				listener.onLoginCompleted(true);
+
+//				if(ProductKing.getIsActive())
+//				{
+//					listener.onLoginCompleted(true);
+//				}
+//				else
+//				{
+//					/** FIRST LOGIN **/
+//					Intent intent = new Intent(getAct(), LoyaltyCardActivity.class);
+//					getAct().startActivity(intent);
+//				}
 				
 			}
 			else

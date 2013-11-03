@@ -50,7 +50,7 @@ public class RegisterActivity extends Activity implements ITaskComplete{
 				if(!isValidEmail(mail.getText().toString()))
 				{	
 					System.out.println("Mail " + mail.getText().toString());
-					mail.setError("Fill out correct mail address!");
+					mail.setError("Bitte korrekte E-Mail Adresse angeben!");
 					return;
 				}
 				
@@ -60,13 +60,13 @@ public class RegisterActivity extends Activity implements ITaskComplete{
 					System.out.println("pwd1: " + pwd1.getText() +  "pwd2: " + pwd2.getText());
 					Animation shake = AnimationUtils.loadAnimation(RegisterActivity.this, R.anim.shake); 
 					pwd2.startAnimation(shake);
-					pwd2.setError("Password's did not match!");
+					pwd2.setError("Passwšrter stimmen nicht Ÿberein!");
 					return;
 				}
 				
 				if(register_username_txt.getText().toString().equalsIgnoreCase(""))
 				{
-					register_username_txt.setError("Please enter username!");
+					register_username_txt.setError("Bitte Benutzernamen angeben!");
 					return;
 				}
 				

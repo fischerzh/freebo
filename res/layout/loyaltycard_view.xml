@@ -1,11 +1,12 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/main_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent" 
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="421dp"
         android:orientation="vertical" >
 
         <TextView
@@ -13,7 +14,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Cumulus Anmeldung"
-            android:textSize="20dp"/>
+            android:textSize="20dp" />
 
         <View
             android:id="@+id/divider"
@@ -27,51 +28,51 @@
             android:layout_height="wrap_content"
             android:text="Verbinden Sie Ihr Cumulus-Konto. Ihre Daten werden vertraulich behandelt. Niemand ausser Ihnen stehen die Daten Ihrer Einkäufe im Detail zur Verfügung. Falls Sie sich jedoch für ein Loyalitätsprogramm bei einem Hersteller entscheiden, können wir auf Wunsch dem Hersteller Ihre Einkäufe ausschliesslich nur über dieses Produkt mitteilen, damit dieser Ihnen spezielle Benefits (Punkte, Eintauschmöglichkeiten) dazu geben kann."
             android:textColor="@color/grey_light"
-            android:textSize="12dp"/>
+            android:textSize="12dp" />
 
         <ImageView
             android:id="@+id/imageView1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/migros_cumulus_image" />
+            android:layout_weight="0.22"
+            android:src="@drawable/cumulus_karte_2011_gross_coated" />
 
         <EditText
-            android:id="@+id/editText1"
+            android:id="@+id/loyalty_card_cumulus_username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:inputType="textPersonName" 
             android:hint="Benutzername von M-connect"
-            >
+            android:inputType="textPersonName" >
 
             <requestFocus />
         </EditText>
 
         <EditText
-            android:id="@+id/editText2"
+            android:id="@+id/loyalty_card_cumulus_pw"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:inputType="textPassword"
-            android:hint="Kennwort" />
+            android:hint="Kennwort"
+            android:inputType="textPassword" />
 
         <EditText
-            android:id="@+id/editText3"
+            android:id="@+id/loyalty_card_cumulus_nr"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:inputType="number" 
             android:hint="Cumulus Nummer"
-            />
-
-        <Button
-            android:id="@+id/loyalty_card_next_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/black"
-            android:text="Weiter"
-            android:textColor="@android:color/white" />
-
+            android:inputType="number" />
     </LinearLayout>
+
+    <Button
+        android:id="@+id/loyalty_card_next_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:background="@android:color/black"
+        android:text="Weiter"
+        android:textColor="@android:color/white" />
     
-</FrameLayout>
+</RelativeLayout>

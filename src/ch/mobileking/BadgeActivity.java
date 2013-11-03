@@ -3,6 +3,8 @@ package ch.mobileking;
 import ch.mobileking.utils.Badge;
 import ch.mobileking.utils.ProductKing;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -49,4 +51,5 @@ public class BadgeActivity extends Activity {
 
 		
 	}
+	
 }

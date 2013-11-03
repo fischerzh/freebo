@@ -21,10 +21,8 @@ public class LoyaltyCardActivity extends Activity implements ITaskComplete{
 	
 	private LinearLayout loyalty_ll_cumulus;
 	
-	private EditText loyalty_edit_card_txt;
+	private EditText loyalty_card_cumulus_nr;
 	
-	private Button loyalty_edit_btnNext;
-
 	private Button loyalty_card_next_btn;
 
 	@Override
@@ -37,11 +35,20 @@ public class LoyaltyCardActivity extends Activity implements ITaskComplete{
 		
 		setContentView(R.layout.loyaltycard_view);
 		
+		loyalty_card_cumulus_nr = (EditText) findViewById(R.id.loyalty_card_cumulus_nr);
+		
+		
 		loyalty_card_next_btn = (Button)findViewById(R.id.loyalty_card_next_btn);
 		loyalty_card_next_btn.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
+				
+				if(loyalty_card_cumulus_nr.getText().toString().equalsIgnoreCase(""))
+				{
+					loyalty_card_cumulus_nr.setError("Bitte Cumulus Karten-Nr. angeben!");
+					return;
+				}
 
 				//TODO: Call Service request and send cumulus info to server
 //				request.startUdateCumulus();
