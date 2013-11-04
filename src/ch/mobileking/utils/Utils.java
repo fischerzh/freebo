@@ -1,9 +1,11 @@
 package ch.mobileking.utils;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -11,6 +13,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 
 import ch.mobileking.DemoActivity;
 
@@ -23,6 +27,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
 import android.util.Log;
+import android.widget.Toast;
 
 public class Utils {
 	
@@ -62,6 +67,56 @@ public class Utils {
 		Utils.setRegId(editor.getRegId());
 	}
 	
+	public static String convertStreamToString(InputStream is) {
+
+	    BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+	    StringBuilder sb = new StringBuilder();
+
+	    String line = null;
+	    try {
+	        while ((line = reader.readLine()) != null) {
+	            sb.append(line + "\n");
+	        }
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	    } finally {
+	        try {
+	            is.close();
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
+	    }
+	    return sb.toString();
+	}
+	
+	public static ProductKing parseJSON(String json)
+	{
+		System.out.println("Json Stream reading..");
+		Gson gson = new Gson();
+		ProductKing prodKing = null;
+		try {
+    		prodKing = gson.fromJson(json, ProductKing.class); //Product.class
+    		if(prodKing.equals(null))
+    			throw new Exception("Parser Error!"+prodKing);
+    		System.out.println("ProductKing loaded: " +prodKing);
+    	}
+    	catch (JsonSyntaxException e) {
+			System.out.println("JSON Syntax Exception" + e.toString());
+			prodKing.setException("JSON Syntax Exception" + e.toString());
+			return prodKing;
+    	}
+    	catch (Exception e)	{
+    		System.out.println("Exception " + e.toString());
+    		prodKing.setException("Exception " + e.toString());
+    		return prodKing;
+    	}
+		ProductKing.setIsActive(prodKing.getIsactiveapp());
+		ProductKing.setStaticProducts(prodKing.getProducts());
+		ProductKing.setRecommenderProducts(prodKing.getRecommendations());
+		ProductKing.setStaticBadges(prodKing.getBadges());
+		ProductKing.setStaticLeaderboard(prodKing.getLeaderboard());
+		return prodKing;
+	}
 	
 	public static Bitmap loadImage(Products prod)
 	{

@@ -18,6 +18,7 @@ import ch.mobileking.utils.ITaskComplete;
 import ch.mobileking.utils.ProductKing;
 import ch.mobileking.utils.Products;
 import ch.mobileking.utils.SharedPrefEditor;
+import ch.mobileking.utils.Utils;
 
 public class AsyncUpdate extends AsyncTask<String, String, String>{
 	
@@ -92,6 +93,7 @@ public class AsyncUpdate extends AsyncTask<String, String, String>{
 		HttpClient httpClient = new DefaultHttpClient();
 		HttpGet httpGet;
 		String response = "";
+		String jsonResult = "";
 		if(ean.isEmpty() || ean.contentEquals(""))
 		{
 			return "FAILED";
@@ -110,7 +112,9 @@ public class AsyncUpdate extends AsyncTask<String, String, String>{
 
 		HttpResponse httpResponse = null;
 		try {
+			
 			httpResponse = httpClient.execute(httpGet);
+			
 		} catch (ClientProtocolException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -122,11 +126,18 @@ public class AsyncUpdate extends AsyncTask<String, String, String>{
 		}
 		HttpEntity responseEntity = null;
 		
+		ProductKing prodKing = null;
+		
 		if(httpResponse != null)
 		{
 			responseEntity = httpResponse.getEntity();
 			try {
-				System.out.println("responseEntity: " + responseEntity.getContent().toString());
+				
+				jsonResult = Utils.convertStreamToString(responseEntity.getContent());
+				System.out.println("jsonResult: " + jsonResult);
+
+				prodKing = Utils.parseJSON(jsonResult);
+				
 			} catch (IllegalStateException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -134,7 +145,7 @@ public class AsyncUpdate extends AsyncTask<String, String, String>{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			response = response + " SUCCESS!";
+			response = response + prodKing.getStatus() + ": "+prodKing.getException();
 		}
 		else
 		{
@@ -148,16 +159,12 @@ public class AsyncUpdate extends AsyncTask<String, String, String>{
 		super.onPostExecute(result);
 		if(result.contains("FAILED"))
 		{
-			Toast toast = Toast.makeText(getAct(), "Failed to Update!", Toast.LENGTH_LONG);
+			Toast toast = Toast.makeText(getAct(), result, Toast.LENGTH_LONG);
 			toast.show();
 			listener.onUpdateCompleted(false);
 		}
 		else
 		{
-//			Intent intent = new Intent(getAct(), ProductOverview.class);
-//			getAct().startActivity(intent);
-//			Toast toast = Toast.makeText(getAct(), result, Toast.LENGTH_LONG);
-//			toast.show();
 			if(this.updateFromRemote)
 			{
 				new AsyncLogin(getAct(), true, listener).execute(editor.getUsername(), editor.getPwd());

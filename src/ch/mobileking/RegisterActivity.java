@@ -85,7 +85,7 @@ public class RegisterActivity extends Activity implements ITaskComplete{
 	}
 
 	@Override
-	public void onLoginCompleted(boolean b) {
+	public void onLoginCompleted(boolean b, String message) {
 		// TODO Auto-generated method stub
 		
 	}

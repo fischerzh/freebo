@@ -225,8 +225,10 @@ public class MainActivity extends Activity implements ITaskComplete{
 	
 
 	@Override
-	public void onLoginCompleted(boolean completed) {
+	public void onLoginCompleted(boolean completed, String message) {
 		// TODO Auto-generated method stub
+		
+		final String msg = message;
 		
 		setProgressBarDisableContent();
 		
@@ -250,7 +252,7 @@ public class MainActivity extends Activity implements ITaskComplete{
 			{
 			   public void run() 
 			   {
-				   Toast.makeText(MainActivity.this,"Timeout: Internet wird benštigt!", Toast.LENGTH_LONG).show(); 
+				   Toast.makeText(MainActivity.this, msg, Toast.LENGTH_LONG).show(); 
 				   finish();
 			   }
 			}); 

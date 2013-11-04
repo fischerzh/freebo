@@ -33,8 +33,7 @@ public class CrownDetailOverview extends Activity {
 			String prodId = getIntent().getStringExtra("product");
 			System.out.println("got Product: " + prodId);
 
-			product = ProductKing.getStaticProducts().get(
-					Integer.parseInt(prodId));
+			product = ProductKing.getStaticProducts().get(Integer.parseInt(prodId));
 
 			System.out.println("CrownDetailOverview: Found Product: " + product.getName());
 			prod_name = (TextView) findViewById(R.id.badges_detail_name);
@@ -48,17 +47,22 @@ public class CrownDetailOverview extends Activity {
 			
 			if(product.getOlduserrank()-product.getUserrank()>0 && product.getOlduserrank()!=0)
 			{
-				prod_rank.setText("RANG "+product.getUserrank() + " (+"+(product.getOlduserrank()-product.getUserrank())+")");
+				prod_rank.setText("MEIN RANG "+product.getUserrank() + " (+"+(product.getOlduserrank()-product.getUserrank())+")");
 				prod_rank.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_up_green, 0);
 			}
 			else if(product.getOlduserrank()-product.getUserrank()<0 && product.getOlduserrank()!=0)
 			{
-				prod_rank.setText("RANG "+product.getUserrank() + " ("+(product.getOlduserrank()-product.getUserrank())+")");
+				prod_rank.setText("MEIN RANG "+product.getUserrank() + " ("+(product.getOlduserrank()-product.getUserrank())+")");
 				prod_rank.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down_red, 0);
+			}
+			else if(product.getOlduserrank()==0 && product.getUserrank()==1)
+			{
+				prod_rank.setText("MEIN RANG "+product.getUserrank() + " (+-0)");
+				prod_rank.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_up_green, 0);
 			}
 			else
 			{
-				prod_rank.setText("RANG "+product.getUserrank() + " (+-0)");
+				prod_rank.setText("MEIN RANG "+product.getUserrank() + " (+-0)");
 				prod_rank.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_nochange, 0);
 			}
 			
@@ -80,11 +84,15 @@ public class CrownDetailOverview extends Activity {
 		//(ArrayList<Crown>) product.getCrowns();
 		System.out.println("Get Crowns: " + product.getCrowns());
 		
-		crowns.addAll(product.getCrowns());
-		
-		ImageAdapter adapter = new ImageAdapter(getApplicationContext(), crowns, R.layout.crown_detail_item); 
+		if(product.getCrowns()!=null)
+		{
+			crowns.addAll(product.getCrowns());
+			
+			ImageAdapter adapter = new ImageAdapter(getApplicationContext(), crowns, R.layout.crown_detail_item); 
 
-		gridView.setAdapter(adapter);
+			gridView.setAdapter(adapter);
+		}
+
 
 	}
 

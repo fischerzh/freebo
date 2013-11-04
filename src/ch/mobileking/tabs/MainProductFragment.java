@@ -15,6 +15,8 @@ import ch.mobileking.utils.ProductKing;
 import ch.mobileking.utils.Products;
 import ch.mobileking.utils.SharedPrefEditor;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -33,6 +35,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 public class MainProductFragment extends Fragment implements ITaskComplete {
 	
@@ -132,7 +135,7 @@ public class MainProductFragment extends Fragment implements ITaskComplete {
     }
     
 	@Override
-	public void onLoginCompleted(boolean completed) {
+	public void onLoginCompleted(boolean completed, String message) {
 		System.out.println("MainProductFragment, LoginCompleted! Restarting Activity...");
 //		restartActivity();
 //		adapter = new ProductBaseAdapter(this, getProdLayoutResourceId(), (ArrayList<Products>) ProductKing.getStaticProducts()); 
@@ -140,8 +143,12 @@ public class MainProductFragment extends Fragment implements ITaskComplete {
 //		adapter.notifyDataSetChanged();
 //		listView.setAdapter(adapter);
         progressLayout.setVisibility(View.INVISIBLE);
-		DialogFragment newFragment = MessageDialog.newInstance(R.layout.loyalty_alerts);
-	    newFragment.show(getFragmentManager(), "dialog");
+//		DialogFragment newFragment = MessageDialog.newInstance(R.layout.loyalty_alerts);
+//	    newFragment.show(getFragmentManager(), "dialog");
+        if(!completed)
+        	createAlert("Aktualisierung fehlgeschlagen!", "Fehler", R.drawable.ic_launcher);
+        else
+        	createAlert("Aktualisierung erfolgreich!", "Erfolg", R.drawable.ic_launcher);
 	}
 
 	@Override
@@ -152,7 +159,7 @@ public class MainProductFragment extends Fragment implements ITaskComplete {
 			reloadUserInfo();
 		}
 
-	        progressLayout.setVisibility(View.INVISIBLE);
+	   progressLayout.setVisibility(View.INVISIBLE);
 
 	}
     
@@ -220,6 +227,25 @@ public class MainProductFragment extends Fragment implements ITaskComplete {
             }
             return super.onOptionsItemSelected(item);
     }
+    
+	private void createAlert(String message, String title, int iconId) {
+		// Build the dialog
+		AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+		alert.setTitle(title);
+		alert.setMessage(message);
+		// Create TextView
+		final TextView input = new TextView (getActivity());
+		alert.setView(input);
+		alert.setIcon(iconId);
+
+		alert.setPositiveButton("Weiter", new DialogInterface.OnClickListener() {
+		public void onClick(DialogInterface dialog, int whichButton) {
+		    // Do something with value!
+		  }
+		});
+
+		alert.show();
+	}
     
 	private void setHelpActive()
 	{

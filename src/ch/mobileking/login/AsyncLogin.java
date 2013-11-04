@@ -99,7 +99,7 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
 		} catch (Exception e) {
 			e.printStackTrace();
 			if(listener!=null)
-				listener.onLoginCompleted(false);
+				listener.onLoginCompleted(false, e.getMessage());
 		}
 		HttpEntity responseEntity = null;
 		
@@ -121,12 +121,13 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-				listener.onLoginCompleted(false);
+				listener.onLoginCompleted(false, e.getMessage());
 			}
             setJsonResult(convertStreamToString(instream));
             // now you have the string representation of the HTML request
             if(getJsonResult().toLowerCase().contains("failed") || getJsonResult().toLowerCase().contains("error"))
             {
+            	System.out.println("JSON Result: " +getJsonResult());
             	return "FAILED";
             }
             else
@@ -164,38 +165,17 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
 	protected void onPostExecute(String result) {
 		super.onPostExecute(result);
 		
-		
 		if(result.contains("FAILED"))
 		{
-			listener.onLoginCompleted(false);
+			listener.onLoginCompleted(false, "Error in Login!");
 		}
 		else
 		{
 			parseJSON();
+
 			System.out.println("update after Sync: " +update);
-//			getAct().setProgressBarVisibility(false);
 			
-			if(!update)
-			{
-				listener.onLoginCompleted(true);
-
-//				if(ProductKing.getIsActive())
-//				{
-//					listener.onLoginCompleted(true);
-//				}
-//				else
-//				{
-//					/** FIRST LOGIN **/
-//					Intent intent = new Intent(getAct(), LoyaltyCardActivity.class);
-//					getAct().startActivity(intent);
-//				}
-				
-			}
-			else
-			{
-				listener.onLoginCompleted(true);
-			}
-
+			listener.onLoginCompleted(true, "Update");
 		}
 	}	
 	
@@ -208,7 +188,7 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
 		try {
     		prodKing = gson.fromJson(getJsonResult(), ProductKing.class); //Product.class
     		if(prodKing.equals(null))
-    			throw new Exception("prodKing null!"+prodKing);
+    			throw new Exception("Parser Error!"+prodKing);
     		System.out.println("ProductKing loaded: " +prodKing);
 //    		ProductKing prodKing = gson.fromJson(reader, ProductKing.class); //Product.class
     	}

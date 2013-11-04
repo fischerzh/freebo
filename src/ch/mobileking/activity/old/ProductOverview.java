@@ -324,7 +324,7 @@ public class ProductOverview extends Activity implements ITaskComplete{
 	}
 	
 	@Override
-	public void onLoginCompleted(boolean completed) {
+	public void onLoginCompleted(boolean completed, String message) {
 		// TODO Auto-generated method stub
 		clearInfoUpdate();
 		System.out.println("LoginCompleted! Restarting Activity...");

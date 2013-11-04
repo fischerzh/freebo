@@ -25,6 +25,9 @@ public class Products {
 	
 	@SerializedName("category")
 	private String category = " ";	
+
+	@SerializedName("size")
+	private String size = " ";
 	
 	@SerializedName("imagelink")
 	private String imagelink = " ";
@@ -138,6 +141,20 @@ public class Products {
 	 */
 	public void setCategory(String category) {
 		this.category = category;
+	}
+
+	/**
+	 * @return the size
+	 */
+	public String getSize() {
+		return size;
+	}
+
+	/**
+	 * @param size the size to set
+	 */
+	public void setSize(String size) {
+		this.size = size;
 	}
 
 	/**

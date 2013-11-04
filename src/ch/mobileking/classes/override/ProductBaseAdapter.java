@@ -127,7 +127,6 @@ public class ProductBaseAdapter extends BaseAdapter{
 			holder.setTxtProducer((TextView)convertView.findViewById(R.id.prod_item_producer));
 			holder.setTxtRank((TextView)convertView.findViewById(R.id.prod_rank));
 			holder.setTxtCollectedCnt((TextView)convertView.findViewById(R.id.prod_collected_cnt));
-			holder.setChkBox((CheckBox)convertView.findViewById(R.id.prod_item_checkbox));
 			holder.setImgView((ImageView)convertView.findViewById(R.id.list_image));
 			holder.setCrown1((ImageView)convertView.findViewById(R.id.prod_item_crown));
 			holder.setCrown2((ImageView)convertView.findViewById(R.id.prod_item_crown_2));
@@ -136,8 +135,8 @@ public class ProductBaseAdapter extends BaseAdapter{
 	        holder.setTxtCrownCnt2((TextView)convertView.findViewById(R.id.prod_crown_cnt_2));
 	        holder.setTxtCrownCnt3((TextView)convertView.findViewById(R.id.prod_crown_cnt_3));
 
-	        holder.setCrownLayout((LinearLayout)convertView.findViewById(R.id.linearLayoutCrown));
-	        
+			holder.setChkBox((CheckBox)convertView.findViewById(R.id.prod_item_checkbox));
+
 	        if(holder.getChkBox() != null)
 			{
 				
@@ -161,6 +160,8 @@ public class ProductBaseAdapter extends BaseAdapter{
 					}
 				});
 			}
+	        
+	        holder.setCrownLayout((LinearLayout)convertView.findViewById(R.id.linearLayoutCrown));
 	        
 	        holder.getCrownLayout().setOnClickListener(new OnClickListener() {
 				
@@ -210,22 +211,22 @@ public class ProductBaseAdapter extends BaseAdapter{
 			holder.getTxtProducer().setText(""+prod.getProducer());
 			if(prod.getOlduserrank()-prod.getUserrank()>0 && prod.getOlduserrank()!=0)
 			{
-				holder.getTxtRank().setText("RANG "+prod.getUserrank() + " (+"+(prod.getOlduserrank()-prod.getUserrank())+")");
+				holder.getTxtRank().setText("MEIN RANG "+prod.getUserrank() + " (+"+(prod.getOlduserrank()-prod.getUserrank())+")");
 				holder.getTxtRank().setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_up_green, 0);
 			}
 			else if(prod.getOlduserrank()-prod.getUserrank()<0 && prod.getOlduserrank()!=0)
 			{
-				holder.getTxtRank().setText("RANG "+prod.getUserrank() + " ("+(prod.getOlduserrank()-prod.getUserrank())+")");
+				holder.getTxtRank().setText("MEIN RANG "+prod.getUserrank() + " ("+(prod.getOlduserrank()-prod.getUserrank())+")");
 				holder.getTxtRank().setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down_red, 0);
 			}
 			else if(prod.getOlduserrank()==0 && prod.getUserrank()==1)
 			{
-				holder.getTxtRank().setText("RANG "+prod.getUserrank() + " (+-0)");
+				holder.getTxtRank().setText("MEIN RANG "+prod.getUserrank() + " (+-0)");
 				holder.getTxtRank().setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_up_green, 0);
 			}
 			else
 			{
-				holder.getTxtRank().setText("RANG "+prod.getUserrank() + " (+-0)");
+				holder.getTxtRank().setText("MEIN RANG "+prod.getUserrank() + " (+-0)");
 				holder.getTxtRank().setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_nochange, 0);
 			}
 			holder.getTxtCollectedCnt().setText(prod.getPoints()+" x Punkte gesammelt!");

@@ -32,13 +32,6 @@ public class ProductDetailOverview extends Activity {
 			String prodId = getIntent().getStringExtra("product");
 			Products product = null;
 			
-			System.out.println("got Product: " +prodId);
-			
-//			for (Products prod : ProductKing.getStaticProducts())
-//			{
-//				if(prod.getId() == Integer.parseInt(prodId));
-//					product = prod;
-//			}
 			product = ProductKing.getStaticProducts().get(Integer.parseInt(prodId));
 			
 			prod_name = (TextView) findViewById(R.id.prod_detail_name);
@@ -52,10 +45,10 @@ public class ProductDetailOverview extends Activity {
 			
 			prod_name.setText(product.getName());
 			prod_manuf.setText(product.getProducer());
-//			prod_cat.setText(product.);
+			prod_cat.setText(product.getCategory());
 			prod_cnt.setText(""+product.getPoints()+" x gesammelt");
 			prod_ean.setText(product.getEan());
-//			prod_package.setText(product.get());
+			prod_package.setText(product.getSize());
 			prod_content.setText(""+product.getIngredients());
 			
 			productImage.setImageBitmap(Utils.loadImageFromPath(product));

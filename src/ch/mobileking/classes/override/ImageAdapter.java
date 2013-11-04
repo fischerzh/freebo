@@ -51,7 +51,7 @@ public class ImageAdapter extends BaseAdapter{
 	
 	public ImageAdapter(Context c, ArrayList<Object> items, int layoutId)
 	{
-		System.out.println("Got Crowns: " + items);
+		System.out.println("Got ArrayList of items: " + items);
 		mContext = c;
 		this.items = new ArrayList<Object>(items);
 		this.layoutId = layoutId;
@@ -147,7 +147,7 @@ public class ImageAdapter extends BaseAdapter{
 			
 			ImageView leaderboard_item_user_img = (ImageView) gridView.findViewById(R.id.leaderboard_item_user_img);
 			
-			if (((Leaderboard) items.get(position)).getUsername().toLowerCase().contains(editor.getUsername()))
+			if (((Leaderboard) items.get(position)).getUsername().toLowerCase().equals(editor.getUsername().toLowerCase()))
 			{
 //				leaderboard_item_user.setTextColor(mContext.getResources().getColor(R.color.red_light));
 				

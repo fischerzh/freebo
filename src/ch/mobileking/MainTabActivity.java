@@ -191,7 +191,7 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
     }
 	
 	@Override
-	public void onLoginCompleted(boolean completed) {
+	public void onLoginCompleted(boolean completed, String message) {
 		System.out.println("MainTabActivity, LoginCompleted! Restarting Activity...");
 	}
 
