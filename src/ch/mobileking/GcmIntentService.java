@@ -16,6 +16,9 @@
 
 package ch.mobileking;
 
+import java.util.Random;
+import java.util.UUID;
+
 import ch.mobileking.utils.ProductKing;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
@@ -93,10 +96,16 @@ public class GcmIntentService extends IntentService {
         mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
         System.out.println("Got Message: " +msg);
         Intent intent = new Intent(this, MainActivity.class);
+        
+        Random rand = new Random();
+        
+        String uuid = String.valueOf(rand.nextInt(999999));
+
         intent.putExtra("gcmnotification", msg);
+        intent.putExtra("messageId", uuid);
         
         ProductKing.initNotifications();
-        ProductKing.getNotifications().add(msg);
+        ProductKing.addNotificationMsg(msg, "", uuid);
         
         /** SET THE ACTIVITY TO OPEN **/
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);

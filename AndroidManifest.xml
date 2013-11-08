@@ -111,9 +111,13 @@
             android:label="@string/app_name" >
         </activity>
         <activity
-            android:name="ch.mobileking.StoreHeroActivity"
+            android:name="ch.mobileking.StoreKingActivity"
             android:label="@string/app_name" >
-        </activity>          
+        </activity>        
+        <activity
+            android:name="ch.mobileking.LeaderboardActivity"
+            android:label="@string/app_name" >
+        </activity>         
      </application>
 
 </manifest>

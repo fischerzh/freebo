@@ -8,7 +8,7 @@ import ch.mobileking.MainActivity;
 import ch.mobileking.ProductDetailOverview;
 import ch.mobileking.R;
 import ch.mobileking.RecommActivity;
-import ch.mobileking.StoreHeroActivity;
+import ch.mobileking.StoreKingActivity;
 import ch.mobileking.classes.override.ImageAdapter;
 import ch.mobileking.classes.override.ProductBaseAdapter;
 import ch.mobileking.classes.override.RecommArrayAdapter;
@@ -96,7 +96,7 @@ public class MainBadgeFragment extends Fragment{
 			
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(getActivity(), StoreHeroActivity.class);
+				Intent intent = new Intent(getActivity(), StoreKingActivity.class);
 	        	startActivity(intent);				
 			}
 		});

@@ -3,10 +3,13 @@ package ch.mobileking.classes.override;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 import ch.mobileking.R;
 import ch.mobileking.utils.Crown;
 import ch.mobileking.utils.Leaderboard;
+import ch.mobileking.utils.Location;
+import ch.mobileking.utils.ProductKing;
 import ch.mobileking.utils.Products;
 import ch.mobileking.utils.SharedPrefEditor;
 import ch.mobileking.utils.Utils;
@@ -124,11 +127,36 @@ public class ImageAdapter extends BaseAdapter{
 		**/
 		else if(this.layoutId == R.layout.activity_storehero_item)
 		{
-			TextView storehero_item_pts_txt = (TextView) gridView.findViewById(R.id.storehero_item_pts_txt);
-			storehero_item_pts_txt.setText(((Crown) items.get(position)).getRank()+" x gesammelt");
+			Location loc = ((Location) items.get(position));
 			
 			TextView storehero_item_location = (TextView) gridView.findViewById(R.id.storehero_item_location);
-			storehero_item_location.setText(""+((Crown) items.get(position)).getSalespoint());
+			storehero_item_location.setText(""+loc.getName());
+			
+			ImageView storehero_item_store_img = (ImageView) gridView.findViewById(R.id.storehero_item_store_img);
+			if(loc.getName().toLowerCase().contains("coop"))
+				storehero_item_store_img.setImageResource(R.drawable.ic_logo_coop);
+			if(loc.getName().toLowerCase().contains("migros"))
+				storehero_item_store_img.setImageResource(R.drawable.ic_logo_migros);
+			
+			List<Crown> crownList = ProductKing.getCrowns(loc.getName());
+			System.out.println("CrownListSize: " + loc.getName() +", size: " + crownList.size());
+
+			int gold = 0, silver = 0, bronce = 0;
+			
+			gold = countCrowns(crownList, 1);
+			silver = countCrowns(crownList, 2);
+			bronce = countCrowns(crownList, 3);
+
+			TextView storehero_item_crown_gold_cnt = (TextView) gridView.findViewById(R.id.storehero_item_crown_gold_cnt);
+			storehero_item_crown_gold_cnt.setText("x "+gold);
+			
+			TextView storehero_item_crown_silver_cnt = (TextView) gridView.findViewById(R.id.storehero_item_crown_silver_cnt);
+			storehero_item_crown_silver_cnt.setText("x "+silver);
+			
+			TextView storehero_item_crown_cronce_cnt = (TextView) gridView.findViewById(R.id.storehero_item_crown_bronce_cnt);
+			storehero_item_crown_cronce_cnt.setText("x "+bronce);
+			
+
 			
 		}
 		/** 
@@ -181,6 +209,46 @@ public class ImageAdapter extends BaseAdapter{
 		}
 		
 		return gridView;
+	}
+	
+	public int countCrowns(List<Crown> crowns, int color)
+	{
+		int gold=0, silver=0, bronze=0;
+		
+		if(crowns!=null)
+		{
+			for (Crown crown : crowns)
+			{
+				switch(crown.getCrownstatus())
+				{
+				case 1:
+					gold+=1;
+					break;
+				case 2:
+					silver+=1;
+					break;
+				case 3:
+					bronze+=1;
+					break;
+				}
+			}
+			switch(color)
+			{
+			case 1:
+				return gold;
+			case 2:
+				return silver;
+			case 3:
+				return bronze;
+			default:
+				return 0;
+			}
+		}
+		else
+		{
+			return 0;
+		}
+		
 	}
 
 

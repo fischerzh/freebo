@@ -99,7 +99,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:text="Store Hero"
+                android:text="Store King"
                 android:textColor="@android:color/black"
                 android:textSize="16dp" />
         </LinearLayout>

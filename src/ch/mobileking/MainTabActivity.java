@@ -7,6 +7,7 @@ import ch.mobileking.login.AsyncUpdate;
 import ch.mobileking.tabs.MainProductFragment;
 import ch.mobileking.tabs.TabsPagerAdapter;
 import ch.mobileking.utils.Badge;
+import ch.mobileking.utils.GcmMessage;
 import ch.mobileking.utils.ITaskComplete;
 import ch.mobileking.utils.ProductKing;
 import ch.mobileking.utils.Products;
@@ -54,14 +55,17 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
 		
 		editor = new SharedPrefEditor(this);
 		System.out.println("MainTabActivity called");
-//	    String intentResponse = getIntent().getStringExtra("gcmnotification");
-//	    System.out.println("Response from GCM: " + intentResponse);
-	    System.out.println("Message in ProductKing: " + ProductKing.getNotifications());
-	    if(ProductKing.getNotifications()!=null)
+	    String intentResponse = getIntent().getStringExtra("gcmnotification");
+	    String gcmUUID = getIntent().getStringExtra("messageId");
+	    System.out.println("Response from GCM: " + intentResponse);
+	    System.out.println("UUID Msg from GCM: " +gcmUUID);
+//	    System.out.println("Message in ProductKing: " + ProductKing.getNotifications());
+//	    if(ProductKing.getNotifications()!=null)
+	    if(gcmUUID!=null && !gcmUUID.isEmpty())
 	    {
-	    	String msg = ProductKing.getNotifications().get(0);
-	    	createAlert(msg, "Neuigkeiten", R.drawable.ic_launcher);
-	    	ProductKing.getNotifications().clear();
+	    	GcmMessage msg = ProductKing.getMessageById(gcmUUID);
+	    	if(msg!=null)
+	    		createAlert(msg.getContent().toString(), "Neuigkeiten", R.drawable.ic_launcher);
 	    }
 		
         // Initilization

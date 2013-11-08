@@ -25,40 +25,117 @@
                 android:paddingLeft="5dp"
                 android:text="Migros Zürich HB"
                 android:textColor="@color/grey_dark"
-                android:textSize="16dp"
+                android:textSize="@dimen/textSizeLarge"
                 android:textStyle="bold" />
 
             <ch.mobileking.classes.override.RobotoTextView
-                android:id="@+id/storehero_item_pts_txt"
+                android:id="@+id/storehero_item_storeKing_txt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="Store King!"
+                android:textColor="@color/blue_light"
+                android:textSize="14dp"
+                android:textStyle="bold" />
+            
+            <ch.mobileking.classes.override.RobotoTextView
+                android:id="@+id/storehero_item_storeKing_pts_txt"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical|center_horizontal"
-                android:text="23 x eingekauft"
-                android:textColor="@color/blue_light"
+                android:text="Du hast am meisten Kronen gesammelt!"
+                android:textColor="@color/grey_light"
                 android:textSize="14dp"
                 android:textStyle="bold" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:id="@+id/linearLayoutCrown"
+            android:layout_width="0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.35"
             android:orientation="vertical" >
 
-            <ImageView
-                android:id="@+id/storehero_item_crown"
-                android:layout_width="wrap_content"
-                android:layout_height="25dp"
-                android:layout_gravity="center_horizontal"
-                android:src="@drawable/ic_crown_gold" />
-
-            <ch.mobileking.classes.override.RobotoTextView
-                android:id="@+id/storehero_item_crown_txt"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Gold #1"
-                android:textSize="14dp" />
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:padding="2dp"
+                android:paddingTop="5dp" >
 
+                <ImageView
+                    android:id="@+id/storehero_item_crown_gold"
+                    android:layout_width="@dimen/prod_crown_width"
+                    android:layout_height="@dimen/prod_crown_width"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_krone_gold"
+                    android:visibility="visible" />
+
+                <ch.mobileking.classes.override.RobotoTextView
+                    android:id="@+id/storehero_item_crown_gold_cnt"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:layout_weight="1"
+                    android:hint="x 0"
+                    android:textColor="#3B63D4"
+                    android:textSize="20dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:padding="2dp"
+                android:paddingTop="5dp" >
+
+                <ImageView
+                    android:id="@+id/storehero_item_crown_silver"
+                    android:layout_width="@dimen/prod_crown_width"
+                    android:layout_height="@dimen/prod_crown_width"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_krone_silber"
+                    android:visibility="visible" />
+
+                <ch.mobileking.classes.override.RobotoTextView
+                    android:id="@+id/storehero_item_crown_silver_cnt"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:layout_weight="1"
+                    android:hint="x 0"
+                    android:textColor="#3B63D4"
+                    android:textSize="20dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:padding="2dp"
+                android:paddingTop="5dp" >
+
+                <ImageView
+                    android:id="@+id/storehero_item_crown_bronce"
+                    android:layout_width="@dimen/prod_crown_width"
+                    android:layout_height="@dimen/prod_crown_width"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_krone_bronze"
+                    android:visibility="visible" />
+
+                <ch.mobileking.classes.override.RobotoTextView
+                    android:id="@+id/storehero_item_crown_bronce_cnt"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:layout_weight="1"
+                    android:hint="x 0"
+                    android:textColor="#3B63D4"
+                    android:textSize="20dp" />
+            </LinearLayout>
         </LinearLayout>
 
     </LinearLayout>

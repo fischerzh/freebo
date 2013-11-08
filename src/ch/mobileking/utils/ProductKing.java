@@ -2,9 +2,12 @@ package ch.mobileking.utils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import android.os.Environment;
+import android.os.Message;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -42,7 +45,7 @@ private static final long serialVersionUID = 1L;
 	
 	private static List<Badge> staticBadges;
 	
-	private static List<String> notifications;
+	private static List<GcmMessage> notifications;
 	
 	private static List<Leaderboard> staticLeaderboard;
 	
@@ -171,7 +174,44 @@ private static final long serialVersionUID = 1L;
 	public static void setStaticLeaderboard(List<Leaderboard> staticLeaderboard) {
 		ProductKing.staticLeaderboard = staticLeaderboard;
 	}
+	
+	public static List<Crown> getCrowns(String locationName)
+	{
+		
+		HashMap<String, Crown> storeCrownList = new HashMap<String, Crown>();
 
+		for(Products prod : ProductKing.staticProducts)
+		{
+			for (Crown cr : prod.getCrowns())
+			{
+				System.out.println("Crown salespoint: " + cr.getSalespoint());
+				System.out.println("Location input name: " + locationName);
+				if(cr.getSalespoint().toLowerCase().equalsIgnoreCase(locationName))
+					storeCrownList.put(cr.getSalespoint(), cr);
+			}
+		}
+		
+		List<Crown> crownList = new ArrayList<Crown>(storeCrownList.values());
+		return crownList;
+
+	}
+	
+	public static List<Location> getLocations()
+	{
+		List<Location> locationList = new ArrayList<Location>();
+		for(Products prod : ProductKing.staticProducts)
+		{
+//			prod.getPoints();
+			for (Crown cr : prod.getCrowns())
+			{
+				Location loc = new Location(cr.getSalespoint());
+				locationList.add(loc);
+			}
+		}
+		
+		return locationList;
+	}
+	
 	/**
 	 * @return the recommenderProducts
 	 */
@@ -205,7 +245,7 @@ private static final long serialVersionUID = 1L;
 	/**
 	 * @return the notifications
 	 */
-	public static List<String> getNotifications() {
+	public static List<GcmMessage> getNotifications() {
 		return notifications;
 	}
 
@@ -213,7 +253,33 @@ private static final long serialVersionUID = 1L;
 	 * @param notifications the notifications to set
 	 */
 	public static void initNotifications() {
-		ProductKing.notifications = new ArrayList<String>();
+		ProductKing.notifications = new ArrayList<GcmMessage>();
+	}
+	
+	public static void addNotificationMsg(String msg, String title, String uuid)
+	{
+		GcmMessage gcmMsg = new GcmMessage(msg, msg, uuid);
+		getNotifications().add(gcmMsg);
+	}
+	
+	public static GcmMessage getMessageById(String uuid)
+	{
+		GcmMessage returnMsg = null;
+		Boolean found = false;
+		for(GcmMessage msg : ProductKing.notifications)
+		{
+			System.out.println("msgId: " + msg.getUuid() +"messageCreateDate:" +msg.getCreateDate()+ "messageReadDate: " +msg.getReadDate());
+			if(msg.getUuid().contentEquals(uuid) && !msg.getRead())
+			{
+				returnMsg = msg;
+				ProductKing.notifications.get(ProductKing.notifications.indexOf(msg)).setRead(true);
+				ProductKing.notifications.get(ProductKing.notifications.indexOf(msg)).setReadDate(new Date());
+				found = true;
+				break;
+			}
+		}
+
+		return returnMsg;
 	}
 	
 	/**

@@ -145,10 +145,13 @@ public class MainProductFragment extends Fragment implements ITaskComplete {
         progressLayout.setVisibility(View.INVISIBLE);
 //		DialogFragment newFragment = MessageDialog.newInstance(R.layout.loyalty_alerts);
 //	    newFragment.show(getFragmentManager(), "dialog");
+        
+        
+        
         if(!completed)
-        	createAlert("Aktualisierung fehlgeschlagen!", "Fehler", R.drawable.ic_launcher);
+        	createAlert("Aktualisierung fehlgeschlagen! "+message, "Fehler", R.drawable.ic_launcher);
         else
-        	createAlert("Aktualisierung erfolgreich!", "Erfolg", R.drawable.ic_launcher);
+        	createAlert("Aktualisierung erfolgreich! "+message, "Erfolg", R.drawable.ic_launcher);
 	}
 
 	@Override
