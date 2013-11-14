@@ -12,6 +12,7 @@ import ch.mobileking.utils.ITaskComplete;
 import ch.mobileking.utils.ProductKing;
 import ch.mobileking.utils.Products;
 import ch.mobileking.utils.SharedPrefEditor;
+import ch.mobileking.utils.Utils;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -54,16 +55,15 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
 		setTitle("ProductKing");
 		
 		editor = new SharedPrefEditor(this);
-		System.out.println("MainTabActivity called");
 	    String intentResponse = getIntent().getStringExtra("gcmnotification");
 	    String gcmUUID = getIntent().getStringExtra("messageId");
 	    System.out.println("Response from GCM: " + intentResponse);
 	    System.out.println("UUID Msg from GCM: " +gcmUUID);
-//	    System.out.println("Message in ProductKing: " + ProductKing.getNotifications());
+
 //	    if(ProductKing.getNotifications()!=null)
 	    if(gcmUUID!=null && !gcmUUID.isEmpty())
 	    {
-	    	GcmMessage msg = ProductKing.getMessageById(gcmUUID);
+	    	GcmMessage msg = ProductKing.getInstance().getMessageById(gcmUUID);
 	    	if(msg!=null)
 	    		createAlert(msg.getContent().toString(), "Neuigkeiten", R.drawable.ic_launcher);
 	    }
@@ -119,8 +119,9 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
 	        	editor.setUsername("");
 	        	startMainActivity();
 	            return true;
-	        case R.id.action_sync:
-	        	return true;
+	        case R.id.action_user_settings:
+	        	Intent i = new Intent(this, UserSettingsActivity.class);
+	        	startActivityForResult(i, 1);
 	        default:
 	            return super.onOptionsItemSelected(item);
 	    }
@@ -156,19 +157,22 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
 	@Override
 	public void onTabReselected(Tab tab, FragmentTransaction ft) {
 		// TODO Auto-generated method stub
-		
+    	ProductKing.getInstance().addLogMsg(tab.getText()+"TabReselected");
+
 	}
 
 	@Override
 	public void onTabSelected(Tab tab, FragmentTransaction ft) {
 		// TODO Auto-generated method stub
+    	ProductKing.getInstance().addLogMsg(tab.getText()+"TabSelcted");
+
 		viewPager.setCurrentItem(tab.getPosition());
 	}
 
 	@Override
 	public void onTabUnselected(Tab tab, FragmentTransaction ft) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	
 	public void setTaskListener(ITaskComplete listener)
@@ -182,11 +186,14 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         // code to handle data from CAMERA_REQUEST
+    	ProductKing.getInstance().addLogMsg("MainTabActivity (onActivityResult)" +resultCode + data + requestCode);
+		
     	System.out.println("MainTabActivity, Barcode request: " + resultCode);
 		if(resultCode == BARCODE_REQUEST)
 		{
         	System.out.println("MainTabActivity, Barcode" + data.getStringExtra("barcode"));
         	String barcode = data.getStringExtra("barcode");
+        	
 			Toast.makeText(this, "Bitte warten, wir aktualisieren....", Toast.LENGTH_LONG).show();
 			this.listener.startUpdate();
 			updateUserInfo(true, true, barcode);
@@ -200,9 +207,11 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
 	}
 
 	@Override
-	public void onUpdateCompleted(boolean completed) {
+	public void onUpdateCompleted(boolean completed, String message) {
 		System.out.println("MainTabActivity, UpdateCompleted! Restarting Activity...");
-		this.listener.onUpdateCompleted(completed);
+//		if(message!=null)
+//    		createAlert(message.toString(), "Aktualisierung!", R.drawable.ic_launcher);
+		this.listener.onUpdateCompleted(completed, "");
 	}
 	
 
@@ -227,6 +236,8 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
     @Override
     public void onBackPressed() {
         if (doubleBackToExitPressedOnce) {
+        	ProductKing.getInstance().addLogMsg("Exit clicked");
+        	
         	Intent intent = new Intent(Intent.ACTION_MAIN);
         	intent.addCategory(Intent.CATEGORY_HOME);
         	intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

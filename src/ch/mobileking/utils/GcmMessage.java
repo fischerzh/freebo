@@ -16,6 +16,8 @@ public class GcmMessage {
 	
 	private Date readDate;
 	
+	private Boolean isSynced = false;
+	
 	public GcmMessage(String content, String title, String uuid)
 	{
 		this.content = content;
@@ -107,6 +109,20 @@ public class GcmMessage {
 	 */
 	public void setReadDate(Date readDate) {
 		this.readDate = readDate;
+	}
+
+	/**
+	 * @return the isSynced
+	 */
+	public Boolean getIsSynced() {
+		return isSynced;
+	}
+
+	/**
+	 * @param isSynced the isSynced to set
+	 */
+	public void setIsSynced(Boolean isSynced) {
+		this.isSynced = isSynced;
 	}
 
 }

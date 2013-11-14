@@ -8,6 +8,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Random;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -319,6 +321,11 @@ public class Utils {
 		}
 		System.out.println("true");
 		return true;
+	}
+	
+	public static String getRandomMsgId()
+	{
+		return UUID.randomUUID().toString();
 	}
 
 	/**

@@ -47,41 +47,28 @@ private static final long serialVersionUID = 1L;
 	
 	private static List<GcmMessage> notifications;
 	
+	private static List<GcmMessage> userLogData;
+	
 	private static List<Leaderboard> staticLeaderboard;
 	
 	private static Boolean isActive = false;
 	
-	public static void initRecommendProducts()
+	private static ProductKing singletonProdKing;
+	
+	private ProductKing()
 	{
-		String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/MobileKingImages/";
 		
-		Products pr1 = new Products();
-		pr1.setName("Zweifel Chips");
-		pr1.setImagepath(path+"1.png");
-		pr1.setId(1);
-
-		Products pr2 = new Products();
-		pr2.setName("Nestea Peach");
-		pr2.setImagepath(path+"2.png");
-		pr2.setId(2);
-		
-		Products pr3 = new Products();
-		pr3.setName("Rivella Blau");
-		pr3.setImagepath(path+"2.png");
-		pr3.setId(3);
-		
-		Products pr4 = new Products();
-		pr4.setName("Studentenfutter");
-		pr4.setImagepath(path+"3.png");
-		pr4.setId(2);
-
-		
-		recommenderProducts = new ArrayList<Products>();
-		
-		recommenderProducts.add(pr1);
-		recommenderProducts.add(pr2);
-		recommenderProducts.add(pr3);
-		recommenderProducts.add(pr4);
+	}
+	
+	public static ProductKing getInstance()
+	{
+		if(singletonProdKing == null)
+		{
+			singletonProdKing = new ProductKing();
+			initNotifications();
+			initUserLogData();
+		}
+		return singletonProdKing;
 	}
 	
 	/**
@@ -217,7 +204,7 @@ private static final long serialVersionUID = 1L;
 	 */
 	public static List<Products> getRecommenderProducts() {
 		if(recommenderProducts==null)
-			initRecommendProducts();
+			recommenderProducts = new ArrayList<Products>();
 		return recommenderProducts;
 	}
 
@@ -258,7 +245,8 @@ private static final long serialVersionUID = 1L;
 	
 	public static void addNotificationMsg(String msg, String title, String uuid)
 	{
-		GcmMessage gcmMsg = new GcmMessage(msg, msg, uuid);
+		System.out.println("Adding GCM-Message " +msg);
+		GcmMessage gcmMsg = new GcmMessage(msg, title, uuid);
 		getNotifications().add(gcmMsg);
 	}
 	
@@ -280,6 +268,25 @@ private static final long serialVersionUID = 1L;
 		}
 
 		return returnMsg;
+	}
+	
+	public static void initUserLogData() {
+		ProductKing.userLogData = new ArrayList<GcmMessage>();
+	}
+	
+	/**
+	 * @return the userLogData
+	 */
+	public static List<GcmMessage> getUserLogData() {
+		return userLogData;
+	}
+
+	public static void addLogMsg(String msg)
+	{
+		GcmMessage gcmMsg = new GcmMessage(msg, "UserActivityLog", "");
+		getUserLogData().add(gcmMsg);
+		System.out.println("Add Log Message: " +msg +  gcmMsg.getCreateDate());
+
 	}
 	
 	/**

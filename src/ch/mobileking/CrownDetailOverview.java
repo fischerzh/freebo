@@ -27,6 +27,7 @@ public class CrownDetailOverview extends Activity {
 		setContentView(R.layout.crown_detail);
 		
 		setTitle("ProductKing");
+		
 
 		if (getCallingActivity() != null && getIntent().getExtras() != null) {
 
@@ -34,6 +35,8 @@ public class CrownDetailOverview extends Activity {
 			System.out.println("got Product: " + prodId);
 
 			product = ProductKing.getStaticProducts().get(Integer.parseInt(prodId));
+			
+	    	ProductKing.getInstance().addNotificationMsg("CrownDetailOverview for Product: " + product.getName(), "UserActivity", "");
 
 			System.out.println("CrownDetailOverview: Found Product: " + product.getName());
 			prod_name = (TextView) findViewById(R.id.badges_detail_name);

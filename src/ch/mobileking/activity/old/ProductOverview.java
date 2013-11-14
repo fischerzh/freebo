@@ -336,8 +336,8 @@ public class ProductOverview extends Activity implements ITaskComplete{
 	}
 
 	@Override
-	public void onUpdateCompleted(boolean completed) {
-		System.out.println("UpdateCompleted! Restarting Activity...");
+	public void onUpdateCompleted(boolean completed, String message) {
+		System.out.println("UpdateCompleted with message: " +message + "... Restarting Activity...");
 		reloadUserInfo();
 	}
 	

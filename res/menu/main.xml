@@ -6,9 +6,9 @@
         />
     
     <item
-        android:id="@+id/action_sync"
-        android:icon="@drawable/ic_menu_refresh"
+        android:id="@+id/action_user_settings"
+        android:icon="@android:drawable/ic_menu_preferences"
         android:orderInCategory="100"
-        android:title="Sync"/>
+        android:title="Settings"/>
 
 </menu>

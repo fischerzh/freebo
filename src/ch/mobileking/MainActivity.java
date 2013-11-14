@@ -5,6 +5,7 @@ import ch.mobileking.login.AsyncLogin;
 import ch.mobileking.userdata.OnTokenAcquired;
 import ch.mobileking.utils.BaseActivity;
 import ch.mobileking.utils.ITaskComplete;
+import ch.mobileking.utils.ProductKing;
 import ch.mobileking.utils.SharedPrefEditor;
 
 import android.net.ConnectivityManager;
@@ -70,6 +71,8 @@ public class MainActivity extends Activity implements ITaskComplete{
 		
 		setContentView(R.layout.activity_main);
 
+    	ProductKing.getInstance().addLogMsg("MainActivity");
+		
 		am = AccountManager.get(this); // "this" references the current Context
 		
         username = (EditText) findViewById(R.id.txtUsername);
@@ -176,6 +179,9 @@ public class MainActivity extends Activity implements ITaskComplete{
 
 	private void loginUserFromSettings(String loginStr, String pwdStr)
 	{
+		
+    	ProductKing.getInstance().addLogMsg("MainActivity: loginUserFromSettings");
+		
 		/** REFACTOR, CALL ASYNC LOGIN TASK, WAIT FOR CALLBACK, OnPostExecute() or similar AND THEN CALL ACCORDING VIEW BASED ON LGOIN SUCCESS, FAILURE OR FIRST LOGIN!! */
 		new AsyncLogin(getAct(), false, this).execute(loginStr, pwdStr);
 		this.setProgressBarEnableContent();
@@ -184,6 +190,9 @@ public class MainActivity extends Activity implements ITaskComplete{
 	
 	private void loginUser()
 	{
+		
+    	ProductKing.getInstance().addLogMsg("MainActivity: loginUser");
+
 		String loginStr, pwdStr;
         loginStr = username.getText().toString();
         pwdStr = password.getText().toString();
@@ -264,9 +273,9 @@ public class MainActivity extends Activity implements ITaskComplete{
 	}
 
 	@Override
-	public void onUpdateCompleted(boolean completed) {
+	public void onUpdateCompleted(boolean completed, String message) {
 		// TODO Auto-generated method stub
-		
+		System.out.println("Message from updateCompleted: "  +message);
 	}
 
 	@Override

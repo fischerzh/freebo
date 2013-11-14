@@ -20,6 +20,7 @@ import java.util.Random;
 import java.util.UUID;
 
 import ch.mobileking.utils.ProductKing;
+import ch.mobileking.utils.Utils;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
@@ -97,9 +98,7 @@ public class GcmIntentService extends IntentService {
         System.out.println("Got Message: " +msg);
         Intent intent = new Intent(this, MainActivity.class);
         
-        Random rand = new Random();
-        
-        String uuid = String.valueOf(rand.nextInt(999999));
+        String uuid = Utils.getRandomMsgId();
 
         intent.putExtra("gcmnotification", msg);
         intent.putExtra("messageId", uuid);

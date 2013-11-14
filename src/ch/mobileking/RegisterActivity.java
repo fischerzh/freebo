@@ -3,6 +3,7 @@ package ch.mobileking;
 import ch.mobileking.login.ServerRequest;
 import ch.mobileking.utils.BaseActivity;
 import ch.mobileking.utils.ITaskComplete;
+import ch.mobileking.utils.ProductKing;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -32,6 +33,9 @@ public class RegisterActivity extends Activity implements ITaskComplete{
 		setTitle("ProductKing");
 		
 		setContentView(R.layout.register_main);
+		
+    	ProductKing.getInstance().addNotificationMsg("RegisterActivity", "UserActivity", "");
+
 		
 		pwd1 = (EditText) findViewById(R.id.register_txt_pwd1);
 		
@@ -91,9 +95,9 @@ public class RegisterActivity extends Activity implements ITaskComplete{
 	}
 
 	@Override
-	public void onUpdateCompleted(boolean b) {
+	public void onUpdateCompleted(boolean b, String message) {
 		// TODO Auto-generated method stub
-		System.out.println("Registration completed successfully!");
+		System.out.println("Registration completed with message: " + message);
 		
 		Intent intent = new Intent(this, MainActivity.class);
     	startActivity(intent);

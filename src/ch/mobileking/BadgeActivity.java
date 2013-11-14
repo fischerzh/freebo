@@ -32,6 +32,8 @@ public class BadgeActivity extends Activity {
 		
 		setContentView(R.layout.activity_badge_main);
 		
+    	ProductKing.getInstance().addNotificationMsg("BadgeActivity", "UserActivity", "");
+		
 		act_badge_login1 = (ImageView) findViewById(R.id.act_badge_login1);
 		act_badge_login2 = (ImageView) findViewById(R.id.act_badge_login2);
 		act_badge_login3 = (ImageView) findViewById(R.id.act_badge_login3);

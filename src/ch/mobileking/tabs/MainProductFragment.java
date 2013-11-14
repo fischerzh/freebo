@@ -137,28 +137,25 @@ public class MainProductFragment extends Fragment implements ITaskComplete {
 	@Override
 	public void onLoginCompleted(boolean completed, String message) {
 		System.out.println("MainProductFragment, LoginCompleted! Restarting Activity...");
-//		restartActivity();
-//		adapter = new ProductBaseAdapter(this, getProdLayoutResourceId(), (ArrayList<Products>) ProductKing.getStaticProducts()); 
+
 		updateAdapterData();
-//		adapter.notifyDataSetChanged();
-//		listView.setAdapter(adapter);
-        progressLayout.setVisibility(View.INVISIBLE);
-//		DialogFragment newFragment = MessageDialog.newInstance(R.layout.loyalty_alerts);
-//	    newFragment.show(getFragmentManager(), "dialog");
-        
+
+		progressLayout.setVisibility(View.INVISIBLE);
         
         
         if(!completed)
-        	createAlert("Aktualisierung fehlgeschlagen! "+message, "Fehler", R.drawable.ic_launcher);
+        	createAlert("Aktualisierung fehlgeschlagen! "+message, "Fehler", R.drawable.ic_empfehlungen);
         else
-        	createAlert("Aktualisierung erfolgreich! "+message, "Erfolg", R.drawable.ic_launcher);
+        	createAlert("Aktualisierung erfolgreich! "+message, "Erfolg", R.drawable.ic_empfehlungen);
 	}
 
 	@Override
-	public void onUpdateCompleted(boolean completed) {
+	public void onUpdateCompleted(boolean completed, String message) {
 		if(completed)
 		{
 			System.out.println("MainProductFragment, UpdateCompleted! Restarting Activity...");
+			System.out.println("Message from updateCompleted: " + message);
+			
 			reloadUserInfo();
 		}
 

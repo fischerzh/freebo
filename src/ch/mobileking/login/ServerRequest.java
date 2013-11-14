@@ -267,7 +267,7 @@ public class ServerRequest {
 			Boolean responseOk = checkForErrors(response);
 			System.out.println("responseOk: " +responseOk);
 			
-			listener.onUpdateCompleted(true);
+			listener.onUpdateCompleted(true, "");
 			return response;
 //			if(responseOk)
 //			{
@@ -287,7 +287,7 @@ public class ServerRequest {
 			
 			if(result!=null)
 			{
-				listener.onUpdateCompleted(true);
+				listener.onUpdateCompleted(true, "");
 			}
 		}
 		
@@ -317,14 +317,14 @@ public class ServerRequest {
 				editor.setPwd(this.pw);
 				this.pw="";
 				this.username="";
-				listener.onUpdateCompleted(true);
+				listener.onUpdateCompleted(true, "User Registrierung erfolgreich!");
 			}
 			else
 			{
 				System.out.println("#RegisterUser FAILED: ");
 				this.pw="";
 				this.username="";
-				listener.onUpdateCompleted(false);
+				listener.onUpdateCompleted(false, "User Registrierung Fehlgeschlagen!");
 			}
 		}
 	}

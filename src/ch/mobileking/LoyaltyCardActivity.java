@@ -82,9 +82,9 @@ public class LoyaltyCardActivity extends Activity implements ITaskComplete{
 	}
 
 	@Override
-	public void onUpdateCompleted(boolean completed) {
+	public void onUpdateCompleted(boolean completed, String message) {
 		// TODO Auto-generated method stub
-		System.out.println("Loyalty Card updated!!!!");
+		System.out.println("Loyalty Card updated with message: " + message);
 		Intent intent = new Intent(LoyaltyCardActivity.this, MainTabActivity.class);
 		startActivity(intent);
 	}

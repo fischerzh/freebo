@@ -2,6 +2,7 @@ package ch.mobileking.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 public class SharedPrefEditor {
 	
@@ -21,22 +22,27 @@ public class SharedPrefEditor {
 	private static final String PREFS_REGID = "Registration";
 	private static final String PREFS_APPV = "Appversion";
 	private static final String PREFS_LOGIN_CNT = "LoginCount";
+	private static final String PREFS_NOTIFICATIONS = "Notifications";
 	
 	private Context cont;
+	
+	SharedPreferences sharedPrefs;
 	
 	public SharedPrefEditor(Context context)
 	{
 		this.cont = context;
+		sharedPrefs = PreferenceManager.getDefaultSharedPreferences(cont);
+		
 	}
 	
 	public void setUsername(String username)
 	{	    
-	    SharedPreferences settings = cont.getSharedPreferences(PREFS_USERNAME, 0);
-	    SharedPreferences.Editor editor = settings.edit();
-	    editor.putString(PREFS_USERNAME, username);
+//	    SharedPreferences settings = cont.getSharedPreferences(PREFS_USERNAME, 0);
+//	    SharedPreferences.Editor editor = settings.edit();
+		sharedPrefs.edit().putString(PREFS_USERNAME, username);
 	    System.out.println("setSharedPref #USERNAME ");
 	    // Commit the edits!
-	    editor.commit();
+	    sharedPrefs.edit().commit();
 	    
 	}
 	
@@ -44,33 +50,35 @@ public class SharedPrefEditor {
 	{
 	    String username;
 	    // Restore preferences
-	    SharedPreferences settings = cont.getSharedPreferences(PREFS_USERNAME, 0);
-	    username = settings.getString(PREFS_USERNAME, "");
-	    System.out.println("getSharedPref #USERNAME" + username);
+//	    SharedPreferences settings = cont.getSharedPreferences(PREFS_USERNAME, 0);
+//	    username = settings.getString(PREFS_USERNAME, "");
+//	    System.out.println("getSharedPref #USERNAME" + username);
 		
-		return username;
+//		return username;
+		return sharedPrefs.getString(PREFS_USERNAME, "");
 	}
 	
 	public void setPwd(String pwd)
 	{	    
-	    SharedPreferences settings = cont.getSharedPreferences(PREFS_PWD, 0);
-	    SharedPreferences.Editor editor = settings.edit();
-	    editor.putString(PREFS_PWD, pwd);
+//	    SharedPreferences settings = cont.getSharedPreferences(PREFS_PWD, 0);
+//	    SharedPreferences.Editor editor = settings.edit();
+		sharedPrefs.edit().putString(PREFS_PWD, pwd);
 	    System.out.println("setSharedPref #PWD");
 	    // Commit the edits!
-	    editor.commit();
+	    sharedPrefs.edit().commit();
 	    
 	}
 	
 	public String getPwd()
 	{
-	    String pwd;
-	    // Restore preferences
-	    SharedPreferences settings = cont.getSharedPreferences(PREFS_PWD, 0);
-	    pwd = settings.getString(PREFS_PWD, "");
-	    System.out.println("getSharedPref #PWD");
+//	    String pwd;
+//	    // Restore preferences
+//	    SharedPreferences settings = cont.getSharedPreferences(PREFS_PWD, 0);
+//	    pwd = settings.getString(PREFS_PWD, "");
+//	    System.out.println("getSharedPref #PWD");
 		
-		return pwd;
+//		return pwd;
+		return sharedPrefs.getString(PREFS_PWD, "");
 	}
 	
 	public void setIsFirstRun(Boolean firstRun)
@@ -185,6 +193,27 @@ public class SharedPrefEditor {
 	    loginCnt = settings.getInt(PREFS_LOGIN_CNT, Integer.MIN_VALUE);
 	    System.out.println("getAppVersion #LOGIN_CNT: " + loginCnt);
 		return loginCnt;
+	}
+	
+	public void setNotifications(Boolean notifications)
+	{	    
+//	    SharedPreferences settings = cont.getSharedPreferences(PREFS_NOTIFICATIONS, 0);
+//	    SharedPreferences.Editor editor = settings.edit();
+//	    editor.putBoolean(PREFS_NOTIFICATIONS, notifications);
+//	    System.out.println("setSharedPref #PREFS_NOTIFICATIONS: " + notifications);
+		sharedPrefs.edit().putBoolean(PREFS_NOTIFICATIONS, notifications);
+	    // Commit the edits!
+		sharedPrefs.edit().commit();
+	    
+	}
+	
+	public Boolean getNotifications()
+	{
+//	    Boolean notifications;
+//	    // Restore preferences
+//	    SharedPreferences settings = cont.getSharedPreferences(PREFS_NOTIFICATIONS, 0);
+//	    notifications = settings.getBoolean(PREFS_NOTIFICATIONS, false);
+	    return sharedPrefs.getBoolean(PREFS_NOTIFICATIONS, false);
 	}
 	
 	/**

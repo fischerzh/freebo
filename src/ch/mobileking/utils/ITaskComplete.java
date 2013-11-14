@@ -4,7 +4,7 @@ public interface ITaskComplete {
 	
 	void onLoginCompleted(boolean b, String string);
 	
-	void onUpdateCompleted(boolean b);
+	void onUpdateCompleted(boolean b, String string);
 	
 	void startUpdate();
 	

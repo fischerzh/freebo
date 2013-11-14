@@ -117,7 +117,12 @@
         <activity
             android:name="ch.mobileking.LeaderboardActivity"
             android:label="@string/app_name" >
-        </activity>         
+        </activity>     
+        <activity
+            android:name="ch.mobileking.UserSettingsActivity"
+            android:label="@string/app_name" >
+        </activity> 
+        
      </application>
 
 </manifest>

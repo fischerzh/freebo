@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+ 
+    <PreferenceCategory android:title="User Settings" >
+        <EditTextPreference
+                android:title="username"
+                android:summary="username"
+                android:key="Username"/>
+        
+    </PreferenceCategory>
+     
+    <PreferenceCategory android:title="Notifications" >
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="Notifications"
+            android:summary="Enable / Disable Notifications"
+            android:title="Notifications" >
+        </CheckBoxPreference>
+ 
+
+    </PreferenceCategory>
+ 
+</PreferenceScreen>

@@ -161,7 +161,7 @@ public class AsyncUpdate extends AsyncTask<String, String, String>{
 		{
 			Toast toast = Toast.makeText(getAct(), result, Toast.LENGTH_LONG);
 			toast.show();
-			listener.onUpdateCompleted(false);
+			listener.onUpdateCompleted(false, result);
 		}
 		else
 		{
@@ -169,7 +169,7 @@ public class AsyncUpdate extends AsyncTask<String, String, String>{
 			{
 				new AsyncLogin(getAct(), true, listener).execute(editor.getUsername(), editor.getPwd());
 			}
-			listener.onUpdateCompleted(true);
+			listener.onUpdateCompleted(true, result);
 
 		}
 		

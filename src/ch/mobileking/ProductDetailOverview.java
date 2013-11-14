@@ -34,6 +34,8 @@ public class ProductDetailOverview extends Activity {
 			
 			product = ProductKing.getStaticProducts().get(Integer.parseInt(prodId));
 			
+	    	ProductKing.getInstance().addLogMsg("ProductDetailOverview for Product: " + product.getName());
+			
 			prod_name = (TextView) findViewById(R.id.prod_detail_name);
 			prod_manuf = (TextView) findViewById(R.id.prod_detail_manufacturer);
 			prod_cat = (TextView) findViewById(R.id.prod_detail_category);
