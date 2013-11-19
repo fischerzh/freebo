@@ -27,7 +27,7 @@ public class LeaderboardActivity extends Activity {
 		
 		ArrayList<Object> storeItems = new ArrayList<Object>();
 		
-		storeItems.addAll(ProductKing.getStaticLeaderboard());
+		storeItems.addAll(ProductKing.getInstance().getStaticLeaderboard());
 		
 		ImageAdapter adapter = new ImageAdapter(getApplicationContext(), storeItems, R.layout.activity_leaderboard_item); 
 		

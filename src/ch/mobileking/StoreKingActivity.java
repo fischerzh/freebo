@@ -35,7 +35,9 @@ public class StoreKingActivity extends Activity {
 //		storeItems.add(cr);
 //		storeItems.add(cr2);
 		
-		storeKingItems.addAll(ProductKing.getLocations());
+		ProductKing.getInstance().addLogMsg("StoreKingActivity");
+		
+		storeKingItems.addAll(ProductKing.getInstance().getLocations());
 
 		ImageAdapter adapter = new ImageAdapter(getApplicationContext(), storeKingItems, R.layout.activity_storehero_item); 
 		

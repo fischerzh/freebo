@@ -4,7 +4,14 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
+import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -20,10 +27,15 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
 
+import com.google.gson.Gson;
+
 import ch.mobileking.R;
 import ch.mobileking.RecommActivity;
 import ch.mobileking.activity.old.ProductOverview;
+import ch.mobileking.utils.GcmMessage;
 import ch.mobileking.utils.ITaskComplete;
+import ch.mobileking.utils.JSONResponse;
+import ch.mobileking.utils.ProductKing;
 import ch.mobileking.utils.SharedPrefEditor;
 import ch.mobileking.utils.Utils;
 
@@ -40,6 +52,8 @@ public class ServerRequest {
 	private Activity activity;
 	
 	private Context context;
+	
+	CountDownLatch latch;
 	
 	private HttpClient httpClient;
 	private HttpGet httpGet;
@@ -62,7 +76,7 @@ public class ServerRequest {
 	public void startUdateCumulus()
 	{
 		setServerURL(editor.getUpdateCumulusURL());
-		setUpHttpClient(editor.getUsername(), editor.getPwd());
+		setUpHttpGet(getServerURL(), editor.getUsername(), editor.getPwd());
 		new UpdateCumulusInfo().execute();
 		
 	}
@@ -71,7 +85,7 @@ public class ServerRequest {
 	{
 		System.out.println("Start registration to Backend...");
 		setServerURL(editor.getRegisterURL()+"?username="+username+"&password="+pwd+"&email="+mail+"&enabled=true"+"&createFromApp=true");
-		setUpHttpPost();
+		setUpHttpPost(getServerURL(), username, pwd);
 		System.out.println("registration URL: " +getServerURL());
 		new RegisterUser().execute(username, pwd);
 	}
@@ -89,31 +103,80 @@ public class ServerRequest {
 		
 	}
 	
+	public void startUpdateLogs()
+	{
+		System.out.println("Start update Logs to Backend...");
+		
+//		latch = new CountDownLatch(ProductKing.getInstance().getUserLogData().size());
+//		ExecutorService taskExecutor = Executors.newFixedThreadPool(4);
+//		while(...) {
+//		  taskExecutor.execute(new UpdateLogs().execute(msg.getUuid(), msg.getContent(), msg.getTitle(), msg.getCreateDate().toString()));
+//		}
+		
+		
+		if(Utils.isNetworkAvailable(getContext()))
+		{
+			System.out.println("userLogData: " + ProductKing.getInstance().getUserLogData());
+			
+//			for(GcmMessage msg : ProductKing.getInstance().getUserLogData())
+//			{
+//				System.out.println("Message: " +msg.getUuid()+msg.getContent());
+//				System.out.println("Is Synced? " + msg.getIsSynced());
+//				if(!msg.getIsSynced())
+//				{
+					UpdateLogs updater = new UpdateLogs();
+					
+//					updater.execute(msg.getUuid(), msg.getContent(), msg.getTitle(), msg.getCreateDate().toString());
+					System.out.println("Calling UpdateLogs().execute()");
+					new UpdateLogs().execute();
+					
+//					taskExecutor.execute((Runnable) new UpdateLogs().execute(msg.getUuid(), msg.getContent(), msg.getTitle(), msg.getCreateDate().toString()));
+//				}
+//			}
+		}
+		else
+		{
+			System.out.println("Can not sync, no Internet!");
+		}
+		
+	}
+	
 	
 	private Boolean isLoggedIn()
 	{
 		return false;
 	}
 	
-	
-	private void setUpHttpClient(String user, String pwd)
+	private void setUpHttpClient()
 	{
 		httpClient = new DefaultHttpClient();
-		httpGet = new HttpGet(getServerURL());
+	}
+	
+	
+	private void setUpHttpGet(String url, String user, String pwd)
+	{
+		
+		httpGet = new HttpGet(url);
 		
 		httpGet.addHeader(BasicScheme.authenticate(new UsernamePasswordCredentials(user, pwd),"UTF-8", false));
 
 	}
 	
-	private void setUpHttpPost()
+	private void setUpHttpPost(String url, String user, String pwd)
 	{
-		httpClient = new DefaultHttpClient();
-		httpPost = new HttpPost(getServerURL());
+
+		httpPost = new HttpPost(url);
+		
+		httpPost.addHeader(BasicScheme.authenticate(new UsernamePasswordCredentials(user, pwd),"UTF-8", false));
+
 	}
 	
 	private String getHttpResponse(HttpGet httpGet, HttpPost httpPost)
 	{
 		HttpResponse httpResponse = null;
+		
+		setUpHttpClient();
+		
 		String response = "";
 		try {
 			if(httpPost!=null)
@@ -326,6 +389,130 @@ public class ServerRequest {
 				this.username="";
 				listener.onUpdateCompleted(false, "User Registrierung Fehlgeschlagen!");
 			}
+		}
+	}
+	
+	private class UpdateLogs extends AsyncTask<String, String, String>
+	{
+		private String uuid; //param0
+		private String content; //param1
+		private String title; //param2
+		private String createDate; //param3
+		
+		private String username, pwd;
+		
+		ArrayList<GcmMessage> failedMsgList = new ArrayList<GcmMessage>();
+		
+		@Override
+		protected String doInBackground(String... params) {
+			
+//			uuid = params[0];
+//			content = params[1];
+//			title = params[2];
+//			createDate = params[3];
+			
+			System.out.println("doInBackground called");
+			
+			Boolean allSynced = true;
+			
+			String errorResponse = "SUCCESS";
+			
+			username = editor.getUsername();
+			pwd = editor.getPwd();
+			
+			ArrayList<GcmMessage> userLogList = new ArrayList<GcmMessage>(ProductKing.getInstance().getUserLogData());
+			
+			for(int i = 0; i < ProductKing.getInstance().getUserLogData().size(); i++)
+			{
+				GcmMessage msg;
+				msg = ProductKing.getInstance().getUserLogData().get(i);
+
+				if(!msg.getIsSynced())
+				{
+					uuid = msg.getUuid();
+					content = getEncodedValueForURL(msg.getContent());
+					title = getEncodedValueForURL(msg.getTitle());
+					createDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(msg.getCreateDate());
+					createDate = getEncodedValueForURL(createDate);
+					System.out.println("UpdateLogs, params" +uuid + content + title + createDate);
+					setServerURL(editor.getUpdateLogURL()+"?logMessageId="+uuid+"&action='"+title+"'&createDate='"+createDate+"'&message='"+content+"'");
+					
+					setUpHttpPost(getServerURL(),username, pwd);
+					
+					System.out.println("getServerURL: " + getServerURL());
+
+					String response = getHttpResponse(null, httpPost);
+					System.out.println("Response from HTTP call: " +response);
+					
+					if(((JSONResponse)getJSONResponse(response)).getStatus().toLowerCase().contains("success"))
+					{
+						System.out.println("Set Synced for Message: " +msg.getUuid());
+						ProductKing.getInstance().getUserLogData().get(i).setIsSynced(true);
+					}
+					else
+					{
+						failedMsgList.add(msg);
+					}
+				}
+				
+			}
+			
+			if(failedMsgList.size()>0)
+			{
+				ProductKing.getInstance().getUserLogData().clear();
+				ProductKing.getInstance().setUserLogData(failedMsgList);
+				errorResponse = "FAILED";
+			}
+			
+			return errorResponse;
+			
+			
+//			HttpEntity responseEntity = null;
+//			responseEntity = httpResponse.getEntity();
+//			instream = responseEntity.getContent();
+//			convertStreamToString(instream);
+			
+			
+		}
+		
+		@Override
+		protected void onPostExecute(String result) {
+			
+			
+			if(result.toLowerCase().contains("failed"))
+			{
+					System.out.println("Update von LogMessages fehlerhaft! " + result);
+					for(GcmMessage msg : failedMsgList)
+					{
+						System.out.println("FAILED MESSAGE: " + msg.getUuid());
+					}
+			}
+			else
+			{
+				System.out.println("Update von LogMessages erfolgreich! " + result);
+
+			}
+		}
+		
+		private String getEncodedValueForURL(String encode)
+		{
+			String encodeUrl = null;
+			try {
+				encodeUrl = URLEncoder.encode(encode, "UTF-8").toString();
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return encodeUrl;
+		}
+		
+		private JSONResponse getJSONResponse(String result)
+		{
+			Gson gson = new Gson();
+			
+    		JSONResponse jsonMessage = gson.fromJson(result, JSONResponse.class); //Product.class
+			System.out.println("jsonMessage: " + jsonMessage);
+			return jsonMessage;
 		}
 	}
 

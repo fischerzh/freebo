@@ -16,13 +16,22 @@ public class GcmMessage {
 	
 	private Date readDate;
 	
+	private Date syncDate;
+	
 	private Boolean isSynced = false;
 	
 	public GcmMessage(String content, String title, String uuid)
 	{
 		this.content = content;
 		this.title = title;
-		this.uuid = uuid;
+		if(uuid.isEmpty() || uuid == null)
+		{
+			this.uuid = Utils.getRandomMsgId();
+		}
+		else
+		{
+			this.uuid = uuid;
+		}
 		this.createDate = new Date();
 		this.read = false;
 	}
@@ -123,6 +132,20 @@ public class GcmMessage {
 	 */
 	public void setIsSynced(Boolean isSynced) {
 		this.isSynced = isSynced;
+	}
+
+	/**
+	 * @return the syncDate
+	 */
+	public Date getSyncDate() {
+		return syncDate;
+	}
+
+	/**
+	 * @param syncDate the syncDate to set
+	 */
+	public void setSyncDate(Date syncDate) {
+		this.syncDate = syncDate;
 	}
 
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import ch.mobileking.login.AsyncLogin;
 import ch.mobileking.login.AsyncUpdate;
+import ch.mobileking.login.ServerRequest;
 import ch.mobileking.tabs.MainProductFragment;
 import ch.mobileking.tabs.TabsPagerAdapter;
 import ch.mobileking.utils.Badge;
@@ -122,6 +123,10 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
 	        case R.id.action_user_settings:
 	        	Intent i = new Intent(this, UserSettingsActivity.class);
 	        	startActivityForResult(i, 1);
+	        	return true;
+	        case R.id.action_sync:
+	        	onSyncRequest();
+	        	return true;
 	        default:
 	            return super.onOptionsItemSelected(item);
 	    }
@@ -186,13 +191,15 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         // code to handle data from CAMERA_REQUEST
-    	ProductKing.getInstance().addLogMsg("MainTabActivity (onActivityResult)" +resultCode + data + requestCode);
+    	ProductKing.getInstance().addLogMsg("MainTabActivity.onActivityResult()" +resultCode + data + requestCode);
 		
     	System.out.println("MainTabActivity, Barcode request: " + resultCode);
 		if(resultCode == BARCODE_REQUEST)
 		{
         	System.out.println("MainTabActivity, Barcode" + data.getStringExtra("barcode"));
         	String barcode = data.getStringExtra("barcode");
+        	
+        	ProductKing.getInstance().addLogMsg("Barcode scanned: " +barcode);
         	
 			Toast.makeText(this, "Bitte warten, wir aktualisieren....", Toast.LENGTH_LONG).show();
 			this.listener.startUpdate();
@@ -233,10 +240,25 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
 		
 	}
 	
+	public void onSyncRequest()
+	{
+		System.out.println("MainTabActivity.onSyncRequest()");
+		ServerRequest request = new ServerRequest(this, this);
+		request.startUpdateLogs();
+	}
+	
+	@Override
+	public void onPause()
+	{
+		super.onPause();
+		onSyncRequest();
+	}
+	
     @Override
     public void onBackPressed() {
         if (doubleBackToExitPressedOnce) {
         	ProductKing.getInstance().addLogMsg("Exit clicked");
+        	onSyncRequest();
         	
         	Intent intent = new Intent(Intent.ACTION_MAIN);
         	intent.addCategory(Intent.CATEGORY_HOME);
@@ -246,6 +268,7 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
         }
         this.doubleBackToExitPressedOnce = true;
         Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+        ProductKing.getInstance().addLogMsg("Back Exit clicked 1");
         new Handler().postDelayed(new Runnable() {
 
             @Override

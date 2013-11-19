@@ -55,11 +55,6 @@ private static final long serialVersionUID = 1L;
 	
 	private static ProductKing singletonProdKing;
 	
-	private ProductKing()
-	{
-		
-	}
-	
 	public static ProductKing getInstance()
 	{
 		if(singletonProdKing == null)
@@ -186,7 +181,7 @@ private static final long serialVersionUID = 1L;
 	public static List<Location> getLocations()
 	{
 		List<Location> locationList = new ArrayList<Location>();
-		for(Products prod : ProductKing.staticProducts)
+		for(Products prod : ProductKing.getInstance().getStaticProducts())
 		{
 //			prod.getPoints();
 			for (Crown cr : prod.getCrowns())
@@ -279,6 +274,13 @@ private static final long serialVersionUID = 1L;
 	 */
 	public static List<GcmMessage> getUserLogData() {
 		return userLogData;
+	}
+	
+	/**
+	 * @param Set the userLogData
+	 */
+	public static void setUserLogData(List<GcmMessage> logData) {
+		ProductKing.userLogData = logData;
 	}
 
 	public static void addLogMsg(String msg)

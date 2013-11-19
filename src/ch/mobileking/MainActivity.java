@@ -2,6 +2,7 @@ package ch.mobileking;
 
 import ch.mobileking.R;
 import ch.mobileking.login.AsyncLogin;
+import ch.mobileking.login.ServerRequest;
 import ch.mobileking.userdata.OnTokenAcquired;
 import ch.mobileking.utils.BaseActivity;
 import ch.mobileking.utils.ITaskComplete;
@@ -231,6 +232,15 @@ public class MainActivity extends Activity implements ITaskComplete{
         password.setText(editor.getPwd());
 	}
 	
+//	@Override
+//	public void onStop()
+//	{
+//		super.onStop();
+//		System.out.println("MainActivity.onStop()");
+//
+//		ServerRequest request = new ServerRequest(this, this);
+//		request.startUpdateLogs();
+//	}
 	
 
 	@Override
@@ -239,7 +249,10 @@ public class MainActivity extends Activity implements ITaskComplete{
 		
 		final String msg = message;
 		
-		setProgressBarDisableContent();
+		System.out.println("msg: " + msg);
+		
+//		if(msg.toLowerCase().contains("))
+		
 		
 		System.out.println("MainActivity: LoginCompleted: " + completed);
 		if(completed && !editor.getFirstRun())
@@ -269,6 +282,16 @@ public class MainActivity extends Activity implements ITaskComplete{
 			}); 
 			
 		}
+		
+		runOnUiThread(new Runnable() 
+		{
+		   public void run() 
+		   {
+			   setProgressBarDisableContent();
+			   finish();
+		   }
+		}); 
+		
 
 	}
 

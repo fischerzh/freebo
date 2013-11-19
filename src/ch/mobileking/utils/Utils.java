@@ -27,6 +27,8 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Environment;
 import android.util.Log;
 import android.widget.Toast;
@@ -99,16 +101,19 @@ public class Utils {
 		try {
     		prodKing = gson.fromJson(json, ProductKing.class); //Product.class
     		if(prodKing.equals(null))
-    			throw new Exception("Parser Error!"+prodKing);
-    		System.out.println("ProductKing loaded: " +prodKing);
+    			throw new Exception("Parser Error!");
+    		else
+    			System.out.println("ProductKing loaded: " +prodKing);
     	}
     	catch (JsonSyntaxException e) {
 			System.out.println("JSON Syntax Exception" + e.toString());
+			prodKing = ProductKing.getInstance();
 			prodKing.setException("JSON Syntax Exception" + e.toString());
 			return prodKing;
     	}
     	catch (Exception e)	{
     		System.out.println("Exception " + e.toString());
+    		prodKing = ProductKing.getInstance();
     		prodKing.setException("Exception " + e.toString());
     		return prodKing;
     	}
@@ -326,6 +331,13 @@ public class Utils {
 	public static String getRandomMsgId()
 	{
 		return UUID.randomUUID().toString();
+	}
+	
+	public static boolean isNetworkAvailable(Context cont) 
+	{
+	    ConnectivityManager connectivityManager = (ConnectivityManager) cont.getSystemService(Context.CONNECTIVITY_SERVICE);
+	    NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+	    return activeNetworkInfo != null;
 	}
 
 	/**

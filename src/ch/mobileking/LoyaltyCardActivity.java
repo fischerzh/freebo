@@ -2,6 +2,7 @@ package ch.mobileking;
 
 import ch.mobileking.login.ServerRequest;
 import ch.mobileking.utils.ITaskComplete;
+import ch.mobileking.utils.ProductKing;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -32,6 +33,8 @@ public class LoyaltyCardActivity extends Activity implements ITaskComplete{
 		this.setAct(this);
 	
 		request = new ServerRequest(this, this);
+		
+    	ProductKing.getInstance().addLogMsg("LoyaltyCardActivity");
 		
 		setContentView(R.layout.loyaltycard_view);
 		

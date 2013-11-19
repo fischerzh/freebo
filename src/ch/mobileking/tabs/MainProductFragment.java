@@ -76,7 +76,7 @@ public class MainProductFragment extends Fragment implements ITaskComplete {
         
         setProdLayoutResourceId(R.layout.product_item);
         
-        adapter = new ProductBaseAdapter(getActivity(), getProdLayoutResourceId(), (ArrayList<Products>) ProductKing.getStaticProducts()); //R.layout.product_item
+        adapter = new ProductBaseAdapter(getActivity(), getProdLayoutResourceId(), (ArrayList<Products>) ProductKing.getInstance().getStaticProducts()); //R.layout.product_item
 		
         listView.setAdapter(adapter);
         

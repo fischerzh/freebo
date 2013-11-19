@@ -99,7 +99,10 @@ public class ProductBaseAdapter extends BaseAdapter{
 	@Override
 	public int getCount() {
 		// TODO Auto-generated method stub
-		return resultList.size();
+		int result = 0;
+		if(resultList!=null)
+			result = resultList.size();
+		return result;
 	}
 
 	@Override

@@ -86,8 +86,8 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
 			System.out.println("New Login URL: " + loginUrl);
 		}
 
-		httpClient.getParams().setParameter(HttpConnectionParams.CONNECTION_TIMEOUT, 10000);
-		httpClient.getParams().setParameter(HttpConnectionParams.SO_TIMEOUT, 10000);
+		httpClient.getParams().setParameter(HttpConnectionParams.CONNECTION_TIMEOUT, 20000);
+		httpClient.getParams().setParameter(HttpConnectionParams.SO_TIMEOUT, 20000);
 
 		
 		HttpGet httpGet = new HttpGet(loginUrl);
@@ -98,8 +98,11 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
 			httpResponse = httpClient.execute(httpGet);
 		} catch (Exception e) {
 			e.printStackTrace();
-			if(listener!=null)
-				listener.onLoginCompleted(false, e.getMessage());
+			return "FAILED: " +e.getMessage();
+//			if(listener!=null)
+//			{
+//				listener.onLoginCompleted(false, e.getMessage());
+//			}
 		}
 		HttpEntity responseEntity = null;
 		
@@ -121,7 +124,8 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-				listener.onLoginCompleted(false, e.getMessage());
+//				listener.onLoginCompleted(false, e.getMessage());
+				return "FAILED: " +e.getMessage();
 			}
             setJsonResult(convertStreamToString(instream));
             // now you have the string representation of the HTML request
@@ -167,7 +171,8 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
 		
 		if(result.contains("FAILED"))
 		{
-			listener.onLoginCompleted(false, "Error in Login!");
+			ProductKing.getInstance().addLogMsg("Login failed: " +result);
+			listener.onLoginCompleted(false, result);
 		}
 		else
 		{

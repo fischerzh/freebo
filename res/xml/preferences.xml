@@ -3,9 +3,14 @@
  
     <PreferenceCategory android:title="User Settings" >
         <EditTextPreference
-                android:title="username"
-                android:summary="username"
+                android:title="Benutzername"
+                android:summary="Ändere dein Benutzername"
                 android:key="Username"/>
+        
+        <EditTextPreference
+                android:title="Passwort"
+                android:summary="Ändere dein Passwort"
+                android:key="Password"/>
         
     </PreferenceCategory>
      
