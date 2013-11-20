@@ -247,12 +247,12 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
 		request.startUpdateLogs();
 	}
 	
-	@Override
-	public void onPause()
-	{
-		super.onPause();
-		onSyncRequest();
-	}
+//	@Override
+//	public void onPause()
+//	{
+//		super.onPause();
+//		onSyncRequest();
+//	}
 	
     @Override
     public void onBackPressed() {

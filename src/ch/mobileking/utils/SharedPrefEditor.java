@@ -9,8 +9,9 @@ public class SharedPrefEditor {
 	private static String testServer = "http://192.168.0.16:8080";
 	private static String liveServer = "http://www.sagax.ch:8080";
 	private static String prefix = liveServer+"/Freebo/";
-	private static String updateURL = prefix+"updateUserInfo"; //192.168.0.16:8080;
+	private static String updateURL = prefix+"updateFavorites"; //192.168.0.16:8080;
 	private static String loginURL = prefix+"loginFromApp"; //192.168.0.16:8080;
+	private static String updateUserInfo = prefix+"updateUserInfo";
 	private static String updateCumulusURL = prefix+"updateCumulusInfo"; //192.168.0.16:8080;
 	private static String updateLogURL = prefix+"updateUserLog";
 	private static String registerURL = prefix+"user/create";

@@ -181,7 +181,7 @@ private static final long serialVersionUID = 1L;
 	public static List<Location> getLocations()
 	{
 		List<Location> locationList = new ArrayList<Location>();
-		for(Products prod : ProductKing.getInstance().getStaticProducts())
+		for(Products prod : staticProducts)
 		{
 //			prod.getPoints();
 			for (Crown cr : prod.getCrowns())
