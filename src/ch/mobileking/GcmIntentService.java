@@ -104,11 +104,10 @@ public class GcmIntentService extends IntentService {
         intent.putExtra("messageId", uuid);
         
         ProductKing.initNotifications();
-        ProductKing.addNotificationMsg(msg, "", uuid);
+        ProductKing.addNotificationMsg( msg, "UserNotificationWrite", uuid);
         
         /** SET THE ACTIVITY TO OPEN **/
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
-        
         long[] pattern = {0, 300, 200, 100, 500};
         
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
@@ -117,7 +116,9 @@ public class GcmIntentService extends IntentService {
         .setStyle(new NotificationCompat.BigTextStyle()
         .bigText(msg))
         .setContentText(msg)
-        .setVibrate(pattern);
+        .setVibrate(pattern)
+        .setAutoCancel(true)
+        ;
 
         mBuilder.setContentIntent(contentIntent);
         mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());

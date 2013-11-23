@@ -59,7 +59,9 @@
 
         <activity
             android:name="ch.mobileking.MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name" 
+            android:screenOrientation="portrait"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -72,18 +74,22 @@
         </activity>
         <activity
             android:name="ch.mobileking.BarCodeScanner"
+            android:screenOrientation="portrait"
             android:label="@string/app_name" >
         </activity>
         <activity
             android:name="ch.mobileking.utils.BaseActivity"
+            android:screenOrientation="portrait"
             android:label="@string/app_name" >
         </activity>
         <activity
             android:name="ch.mobileking.ProductDetailOverview"
+            android:screenOrientation="portrait"
             android:label="@string/app_name" >
         </activity>
         <activity
             android:name="ch.mobileking.CrownDetailOverview"
+            android:screenOrientation="portrait"
             android:label="@string/app_name" >
         </activity>
         <activity
@@ -96,26 +102,32 @@
         </activity>
         <activity
             android:name="ch.mobileking.LoyaltyCardActivity"
+            android:screenOrientation="portrait"
             android:label="@string/app_name" >
         </activity>
         <activity
             android:name="ch.mobileking.MainTabActivity"
+            android:screenOrientation="portrait"
             android:label="@string/app_name" >
         </activity>
         <activity
             android:name="ch.mobileking.RegisterActivity"
+            android:screenOrientation="portrait"
             android:label="@string/app_name" >
         </activity>   
         <activity
             android:name="ch.mobileking.BadgeActivity"
+            android:screenOrientation="portrait"
             android:label="@string/app_name" >
         </activity>
         <activity
             android:name="ch.mobileking.StoreKingActivity"
+            android:screenOrientation="portrait"
             android:label="@string/app_name" >
         </activity>        
         <activity
             android:name="ch.mobileking.LeaderboardActivity"
+            android:screenOrientation="portrait"
             android:label="@string/app_name" >
         </activity>     
         <activity

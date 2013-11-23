@@ -65,6 +65,7 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
 	    if(gcmUUID!=null && !gcmUUID.isEmpty())
 	    {
 	    	GcmMessage msg = ProductKing.getInstance().getMessageById(gcmUUID);
+	        ProductKing.getInstance().addNotificationMsg(msg.getContent(), "UserNotificationRead", "");
 	    	if(msg!=null)
 	    		createAlert(msg.getContent().toString(), "Neuigkeiten", R.drawable.ic_launcher);
 	    }
@@ -104,6 +105,7 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
             }
         });
     }
+    
     
 	@Override
 	  public boolean onCreateOptionsMenu(Menu menu) {
@@ -247,12 +249,12 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
 		request.startUpdateLogs();
 	}
 	
-//	@Override
-//	public void onPause()
-//	{
-//		super.onPause();
-//		onSyncRequest();
-//	}
+	@Override
+	public void onPause()
+	{
+		super.onPause();
+		onSyncRequest();
+	}
 	
     @Override
     public void onBackPressed() {

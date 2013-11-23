@@ -240,7 +240,7 @@ private static final long serialVersionUID = 1L;
 	
 	public static void addNotificationMsg(String msg, String title, String uuid)
 	{
-		System.out.println("Adding GCM-Message " +msg);
+		System.out.println("Adding GCM-Notification-Message " +msg);
 		GcmMessage gcmMsg = new GcmMessage(msg, title, uuid);
 		getNotifications().add(gcmMsg);
 	}

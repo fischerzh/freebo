@@ -420,34 +420,19 @@ public class ServerRequest {
 			username = editor.getUsername();
 			pwd = editor.getPwd();
 			
-			ArrayList<GcmMessage> userLogList = new ArrayList<GcmMessage>(ProductKing.getInstance().getUserLogData());
+			int size = ProductKing.getUserLogData().size();
 			
-			for(int i = 0; i < ProductKing.getInstance().getUserLogData().size(); i++)
+			for(int i = 0; i < size; i++)
 			{
 				GcmMessage msg;
-				msg = ProductKing.getInstance().getUserLogData().get(i);
+				msg = ProductKing.getUserLogData().get(i);
 
 				if(!msg.getIsSynced())
 				{
-					uuid = msg.getUuid();
-					content = getEncodedValueForURL(msg.getContent());
-					title = getEncodedValueForURL(msg.getTitle());
-					createDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(msg.getCreateDate());
-					createDate = getEncodedValueForURL(createDate);
-					System.out.println("UpdateLogs, params" +uuid + content + title + createDate);
-					setServerURL(editor.getUpdateLogURL()+"?logMessageId="+uuid+"&action='"+title+"'&createDate='"+createDate+"'&message='"+content+"'");
-					
-					setUpHttpPost(getServerURL(),username, pwd);
-					
-					System.out.println("getServerURL: " + getServerURL());
-
-					String response = getHttpResponse(null, httpPost);
-					System.out.println("Response from HTTP call: " +response);
-					
-					if(((JSONResponse)getJSONResponse(response)).getStatus().toLowerCase().contains("success"))
+					if(sendMessageToServer(msg))
 					{
 						System.out.println("Set Synced for Message: " +msg.getUuid());
-						ProductKing.getInstance().getUserLogData().get(i).setIsSynced(true);
+						ProductKing.getUserLogData().get(i).setIsSynced(true);
 					}
 					else
 					{
@@ -455,6 +440,30 @@ public class ServerRequest {
 					}
 				}
 				
+			}
+			
+			int sizeNotifications = ProductKing.getNotifications().size();
+
+			for(int i = 0; i < sizeNotifications; i++)
+			{
+				GcmMessage msg;
+				msg = ProductKing.getNotifications().get(i);
+				
+				if(!msg.getIsSynced())
+				{
+					
+					if(sendMessageToServer(msg))
+					{
+						System.out.println("Set Synced for Message: " +msg.getUuid());
+						ProductKing.getNotifications().get(i).setIsSynced(true);
+					}
+					else
+					{
+						failedMsgList.add(msg);
+					}
+					
+				}
+					
 			}
 			
 			if(failedMsgList.size()>0)
@@ -473,6 +482,34 @@ public class ServerRequest {
 //			convertStreamToString(instream);
 			
 			
+		}
+		
+		private boolean sendMessageToServer(GcmMessage msg)
+		{
+			uuid = msg.getUuid();
+			content = getEncodedValueForURL(msg.getContent());
+			title = getEncodedValueForURL(msg.getTitle());
+			createDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(msg.getCreateDate());
+			createDate = getEncodedValueForURL(createDate);
+
+			setServerURL(editor.getUpdateLogURL()+"?logMessageId="+uuid+"&title='"+title+"'&createDate='"+createDate+"'&message='"+content+"'");
+			
+			setUpHttpPost(getServerURL(),username, pwd);
+			
+			System.out.println("Send Message to Server: " + getServerURL());
+
+			String response = getHttpResponse(null, httpPost);
+			
+			System.out.println("Response from Server: " +response);
+			
+			if(((JSONResponse)getJSONResponse(response)).getStatus().toLowerCase().contains("success"))
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
 		}
 		
 		@Override

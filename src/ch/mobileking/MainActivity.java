@@ -261,7 +261,9 @@ public class MainActivity extends Activity implements ITaskComplete{
 			
 			Intent intent = new Intent(getAct(), MainTabActivity.class);
 			if(gcmUUID!=null)
+			{
 				intent.putExtra("messageId", gcmUUID);
+			}
 			getAct().startActivity(intent);
 		}
 		else if (completed && editor.getFirstRun())
