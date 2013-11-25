@@ -1,0 +1,152 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/productDetailLayout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_marginLeft="5dp"
+    android:orientation="vertical"
+     >
+
+    <ch.mobileking.classes.override.RobotoTextView
+        android:id="@+id/prod_detail_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Zweifel Chips"
+        android:textSize="20dp"
+        android:textStyle="italic" />
+
+    <ch.mobileking.classes.override.RobotoTextView
+        android:id="@+id/prod_detail_manufacturer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Zweifel Pomy-Chips AG"
+        android:textColor="@android:color/black"
+        android:textSize="18dp" />
+    
+    <View
+        android:id="@+id/separator"
+        android:layout_width="fill_parent"
+        android:layout_height="1dip"
+        android:layout_marginRight="5dp"
+        android:background="@color/common_action_bar_splitter" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" 
+        android:layout_marginTop="20dp">
+
+        <ImageView
+            android:id="@+id/prod_detail_image"
+            android:layout_width="50dip"
+            android:layout_height="50dip"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:src="@drawable/zweifelpaprika" />
+
+            <ch.mobileking.classes.override.RobotoTextView
+                android:id="@+id/prod_detail_cnt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:text="Total: 55 x gesammelt"
+                android:textColor="@color/blue_light"
+                android:textSize="14dp"
+                android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <ch.mobileking.classes.override.RobotoTextView
+        android:id="@+id/product_detail_header2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Produkt Informationen"
+        android:textColor="@android:color/black"
+        android:textSize="18dp" />
+
+    <View
+        android:id="@+id/separator"
+        android:layout_width="fill_parent"
+        android:layout_height="1dip"
+        android:layout_marginRight="5dp"
+        android:background="@color/common_action_bar_splitter" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="107dp"
+        android:layout_weight="0.23"
+        android:orientation="vertical" >
+
+        <ch.mobileking.classes.override.RobotoTextView
+            android:id="@+id/prod_detail_category"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Kategorie"
+            android:textColor="@android:color/black"
+            android:textSize="12dp" />
+
+        <ch.mobileking.classes.override.RobotoTextView
+            android:id="@+id/prod_detail_category_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Snacks"
+            android:textSize="24dp"
+            android:textStyle="italic" />
+
+        <ch.mobileking.classes.override.RobotoTextView
+            android:id="@+id/prod_detail_ean"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="EAN-Nummer"
+            android:textColor="@android:color/black"
+            android:textSize="12dp" />
+
+        <ch.mobileking.classes.override.RobotoTextView
+            android:id="@+id/prod_detail_ean_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="710002877328"
+            android:textSize="24dp"
+            android:textStyle="italic" />
+
+        <ch.mobileking.classes.override.RobotoTextView
+            android:id="@+id/prod_detail_package"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Menge / Grösse"
+            android:textColor="@android:color/black"
+            android:textSize="12dp" />
+
+        <ch.mobileking.classes.override.RobotoTextView
+            android:id="@+id/prod_detail_package_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="90 g"
+            android:textSize="24dp"
+            android:textStyle="italic" />
+
+        <ch.mobileking.classes.override.RobotoTextView
+            android:id="@+id/prod_detail_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Inhalt"
+            android:textColor="@android:color/black"
+            android:textSize="12dp" />
+
+        <ch.mobileking.classes.override.RobotoTextView
+            android:id="@+id/prod_detail_content_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:maxLines="4"
+            android:scrollbars="vertical"
+            android:text="Kartoffeln, Sonnenblumenöl, Salz, Wasser"
+            android:textSize="24dp"
+            android:textStyle="italic" />
+
+    </LinearLayout>
+
+</LinearLayout>

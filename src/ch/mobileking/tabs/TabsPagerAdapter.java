@@ -23,7 +23,7 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
             return new MainProductFragment();
         case 1:
             // MainBadge fragment activity
-            return new MainBadgeFragment();
+            return new MainCameraScanFragment();
         }
  
         return null;

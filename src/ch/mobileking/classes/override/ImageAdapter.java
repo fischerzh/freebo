@@ -165,7 +165,7 @@ public class ImageAdapter extends BaseAdapter{
 		else if(this.layoutId == R.layout.activity_leaderboard_item)
 		{
 			TextView leaderboard_item_pts_txt = (TextView) gridView.findViewById(R.id.leaderboard_item_pts_txt);
-			leaderboard_item_pts_txt.setText(((Leaderboard) items.get(position)).getPoints()+" Punkte");
+			leaderboard_item_pts_txt.setText(((Leaderboard) items.get(position)).getPoints()*435.5+" Pkt.");
 			
 			TextView leaderboard_item_user = (TextView) gridView.findViewById(R.id.leaderboard_item_user);
 			leaderboard_item_user.setText(""+((Leaderboard) items.get(position)).getUsername());
@@ -173,20 +173,20 @@ public class ImageAdapter extends BaseAdapter{
 			TextView leaderboard_item_rank_txt = (TextView) gridView.findViewById(R.id.leaderboard_item_rank_txt);
 			leaderboard_item_rank_txt.setText(""+((Leaderboard) items.get(position)).getRank());
 			
-			ImageView leaderboard_item_user_img = (ImageView) gridView.findViewById(R.id.leaderboard_item_user_img);
+//			ImageView leaderboard_item_user_img = (ImageView) gridView.findViewById(R.id.leaderboard_item_user_img);
 			
-			if (((Leaderboard) items.get(position)).getUsername().toLowerCase().equals(editor.getUsername().toLowerCase()))
+			if (((Leaderboard) items.get(position)).getUsername().toLowerCase().contentEquals(editor.getUsername().toLowerCase()))
 			{
 //				leaderboard_item_user.setTextColor(mContext.getResources().getColor(R.color.red_light));
 				
-				gridView.setBackgroundColor(mContext.getResources().getColor(R.color.light_green));
+//				gridView.setBackgroundColor(mContext.getResources().getColor(R.color.light_green));
 				
-				leaderboard_item_user_img.setImageResource(R.drawable.ic_launcher);
+//				leaderboard_item_user_img.setImageResource(R.drawable.ic_launcher);
 				
-				leaderboard_item_rank_txt.setTextColor(mContext.getResources().getColor(R.color.grey_dark));
+				leaderboard_item_rank_txt.setTextColor(mContext.getResources().getColor(android.R.color.black));
 			}
 
-			ImageView storehero_item_crown = (ImageView) gridView.findViewById(R.id.storehero_item_crown);
+			ImageView storehero_item_crown = (ImageView) gridView.findViewById(R.id.leaderboard_item_user_img);
 			
 			if( ((Leaderboard) items.get(position)).getRank() == 1 )
 			{

@@ -132,11 +132,6 @@ public class ProductBaseAdapter extends BaseAdapter{
 			holder.setTxtCollectedCnt((TextView)convertView.findViewById(R.id.prod_collected_cnt));
 			holder.setImgView((ImageView)convertView.findViewById(R.id.list_image));
 			holder.setCrown1((ImageView)convertView.findViewById(R.id.prod_item_crown));
-			holder.setCrown2((ImageView)convertView.findViewById(R.id.prod_item_crown_2));
-			holder.setCrown3((ImageView)convertView.findViewById(R.id.prod_item_crown_3));
-	        holder.setTxtCrownCnt1((TextView)convertView.findViewById(R.id.prod_crown_cnt));
-	        holder.setTxtCrownCnt2((TextView)convertView.findViewById(R.id.prod_crown_cnt_2));
-	        holder.setTxtCrownCnt3((TextView)convertView.findViewById(R.id.prod_crown_cnt_3));
 
 			holder.setChkBox((CheckBox)convertView.findViewById(R.id.prod_item_checkbox));
 
@@ -164,25 +159,25 @@ public class ProductBaseAdapter extends BaseAdapter{
 				});
 			}
 	        
-	        holder.setCrownLayout((LinearLayout)convertView.findViewById(R.id.linearLayoutCrown));
+//	        holder.setCrownLayout((LinearLayout)convertView.findViewById(R.id.linearLayoutCrown));
 	        
-	        holder.getCrownLayout().setOnClickListener(new OnClickListener() {
-				
-				@Override
-				public void onClick(View v) {
-					// TODO Auto-generated method stub
-					int getPosition = (Integer) v.getTag();			        
-					Products prod = resultList.get(getPosition);
-
-					System.out.println("Position: " + getPosition + ", Crown clicked for item " + resultList.get(getPosition).getId() + resultList.get(getPosition).getName());
-			        Intent intent = new Intent(getCont(), CrownDetailOverview.class);
-			        intent.putExtra("product", String.valueOf(getPosition));
-
-			        ((Activity)getCont()).setResult(1, intent);
-			        ((Activity)getCont()).startActivityForResult(intent, 1);
-					
-				}
-			});
+//	        holder.getCrownLayout().setOnClickListener(new OnClickListener() {
+//				
+//				@Override
+//				public void onClick(View v) {
+//					// TODO Auto-generated method stub
+//					int getPosition = (Integer) v.getTag();			        
+//					Products prod = resultList.get(getPosition);
+//
+//					System.out.println("Position: " + getPosition + ", Crown clicked for item " + resultList.get(getPosition).getId() + resultList.get(getPosition).getName());
+//			        Intent intent = new Intent(getCont(), CrownDetailOverview.class);
+//			        intent.putExtra("product", String.valueOf(getPosition));
+//
+//			        ((Activity)getCont()).setResult(1, intent);
+//			        ((Activity)getCont()).startActivityForResult(intent, 1);
+//					
+//				}
+//			});
 			
 			convertView.setTag(holder);
 			convertView.setTag(R.id.prod_item_name, holder.txtName);
@@ -233,24 +228,23 @@ public class ProductBaseAdapter extends BaseAdapter{
 				holder.getTxtRank().setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_nochange, 0);
 			}
 			holder.getTxtCollectedCnt().setText(prod.getPoints()+" x Punkte gesammelt!");
-			if(holder.getTxtCrownCnt1()!= null)
+			
+			if(prod.getUserrank() == 1)
 			{
-			int countGold = countCrowns(prod.getCrowns(), 1);
-			int countSilver = countCrowns(prod.getCrowns(), 2);
-			int countBronce = countCrowns(prod.getCrowns(), 3);
-
-				holder.getTxtCrownCnt1().setText("x "+countGold); //holder.getTxtCrownCnt().setText(""+resultList.get(position).getPoints()+" x");
-				holder.getTxtCrownCnt2().setText("x "+countSilver); 
-				holder.getTxtCrownCnt3().setText("x "+countBronce); 
-
 				holder.getCrown1().setImageResource(R.drawable.ic_krone_gold);
-				holder.getCrown2().setImageResource(R.drawable.ic_krone_silber);
-				holder.getCrown3().setImageResource(R.drawable.ic_krone_bronze);
+			}
+			if(prod.getUserrank() == 2)
+			{
+				holder.getCrown1().setImageResource(R.drawable.ic_krone_silber);
+			}
+			if(prod.getUserrank() == 3)
+			{
+				holder.getCrown1().setImageResource(R.drawable.ic_krone_bronze);
 			}
 				
 			/** SET THE POSITION TO REFERENCE FROM LATER **/
 				
-			holder.getCrownLayout().setTag(position);
+//			holder.getCrownLayout().setTag(position);
 		
 //		}
 //		else

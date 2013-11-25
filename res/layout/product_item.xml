@@ -106,75 +106,11 @@
                 <ImageView
                     android:id="@+id/prod_item_crown"
                     android:layout_width="@dimen/prod_crown_width"
-                    android:layout_height="@dimen/prod_crown_width"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_weight="1"
-                    android:src="@drawable/ic_krone_gold"
-                    android:visibility="visible" />
-
-                <ch.mobileking.classes.override.RobotoTextView
-                    android:id="@+id/prod_crown_cnt"
-                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal|center_vertical"
-                    android:layout_weight="1"
-                    android:hint="x 0"
-                    android:textColor="#3B63D4"
-                    android:textSize="20dp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:padding="2dp"
-                android:paddingTop="5dp" >
-
-                <ImageView
-                    android:id="@+id/prod_item_crown_2"
-                    android:layout_width="@dimen/prod_crown_width"
-                    android:layout_height="@dimen/prod_crown_width"
                     android:layout_gravity="center_horizontal"
-                    android:layout_weight="1"
-                    android:src="@drawable/ic_krone_silber"
+                    android:layout_weight="0.94"
+                    android:src="@drawable/ic_krone_inactive"
                     android:visibility="visible" />
-
-                <ch.mobileking.classes.override.RobotoTextView
-                    android:id="@+id/prod_crown_cnt_2"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal|center_vertical"
-                    android:layout_weight="1"
-                    android:hint="x 0"
-                    android:textColor="#3B63D4"
-                    android:textSize="20dp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:padding="2dp"
-                android:paddingTop="5dp" >
-
-                <ImageView
-                    android:id="@+id/prod_item_crown_3"
-                    android:layout_width="@dimen/prod_crown_width"
-                    android:layout_height="@dimen/prod_crown_width"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_weight="1"
-                    android:src="@drawable/ic_krone_bronze"
-                    android:visibility="visible" />
-
-                <ch.mobileking.classes.override.RobotoTextView
-                    android:id="@+id/prod_crown_cnt_3"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal|center_vertical"
-                    android:layout_weight="1"
-                    android:hint="x 0"
-                    android:textColor="#3B63D4"
-                    android:textSize="20dp" />
             </LinearLayout>
         </LinearLayout>
 

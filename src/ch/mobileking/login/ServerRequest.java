@@ -30,8 +30,8 @@ import org.apache.http.util.EntityUtils;
 import com.google.gson.Gson;
 
 import ch.mobileking.R;
-import ch.mobileking.RecommActivity;
 import ch.mobileking.activity.old.ProductOverview;
+import ch.mobileking.activity.old.RecommActivity;
 import ch.mobileking.utils.GcmMessage;
 import ch.mobileking.utils.ITaskComplete;
 import ch.mobileking.utils.JSONResponse;

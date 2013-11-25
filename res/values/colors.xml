@@ -2,6 +2,7 @@
         <color name="blue_light">#33b5e5</color>
         <color name="blue_dark">#0099cc</color>
         <color name="grey_light">#c9c3c3</color>
+                <color name="grey_ultra_light">#ffe1ede1</color>
         <color name="grey_dark">#666666</color>
     	<drawable name="focused">#ff5500</drawable>
     	<drawable name="selected">#8b96cf</drawable>

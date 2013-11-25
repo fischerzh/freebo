@@ -33,54 +33,58 @@ public class SharedPrefEditor {
 	public SharedPrefEditor(Context context)
 	{
 		this.cont = context;
-		sharedPrefs = PreferenceManager.getDefaultSharedPreferences(cont);
+//		sharedPrefs = PreferenceManager.getDefaultSharedPreferences(cont);
 		
 	}
 	
 	public void setUsername(String username)
 	{	    
-//	    SharedPreferences settings = cont.getSharedPreferences(PREFS_USERNAME, 0);
-//	    SharedPreferences.Editor editor = settings.edit();
-		sharedPrefs.edit().putString(PREFS_USERNAME, username);
+	    SharedPreferences settings = cont.getSharedPreferences(PREFS_USERNAME, 0);
+	    SharedPreferences.Editor editor = settings.edit();
+//		sharedPrefs.edit().putString(PREFS_USERNAME, username);
+	    editor.putString(PREFS_USERNAME, username);
 	    System.out.println("setSharedPref #USERNAME ");
 	    // Commit the edits!
-	    sharedPrefs.edit().commit();
-	    
+//	    sharedPrefs.edit().commit();
+	    editor.commit();
+
 	}
 	
 	public String getUsername()
 	{
 	    String username;
 	    // Restore preferences
-//	    SharedPreferences settings = cont.getSharedPreferences(PREFS_USERNAME, 0);
-//	    username = settings.getString(PREFS_USERNAME, "");
-//	    System.out.println("getSharedPref #USERNAME" + username);
+	    SharedPreferences settings = cont.getSharedPreferences(PREFS_USERNAME, 0);
+	    username = settings.getString(PREFS_USERNAME, "");
+	    System.out.println("getSharedPref #USERNAME" + username);
 		
-//		return username;
-		return sharedPrefs.getString(PREFS_USERNAME, "");
+		return username;
+//		return sharedPrefs.getString(PREFS_USERNAME, "");
 	}
 	
 	public void setPwd(String pwd)
 	{	    
-//	    SharedPreferences settings = cont.getSharedPreferences(PREFS_PWD, 0);
-//	    SharedPreferences.Editor editor = settings.edit();
-		sharedPrefs.edit().putString(PREFS_PWD, pwd);
+	    SharedPreferences settings = cont.getSharedPreferences(PREFS_PWD, 0);
+	    SharedPreferences.Editor editor = settings.edit();
+	    editor.putString(PREFS_PWD, pwd);
+//		sharedPrefs.edit().putString(PREFS_PWD, pwd);
 	    System.out.println("setSharedPref #PWD");
 	    // Commit the edits!
-	    sharedPrefs.edit().commit();
-	    
+//	    sharedPrefs.edit().commit();
+	    editor.commit();
+
 	}
 	
 	public String getPwd()
 	{
-//	    String pwd;
-//	    // Restore preferences
-//	    SharedPreferences settings = cont.getSharedPreferences(PREFS_PWD, 0);
-//	    pwd = settings.getString(PREFS_PWD, "");
-//	    System.out.println("getSharedPref #PWD");
+	    String pwd;
+	    // Restore preferences
+	    SharedPreferences settings = cont.getSharedPreferences(PREFS_PWD, 0);
+	    pwd = settings.getString(PREFS_PWD, "");
+	    System.out.println("getSharedPref #PWD");
 		
-//		return pwd;
-		return sharedPrefs.getString(PREFS_PWD, "");
+		return pwd;
+//		return sharedPrefs.getString(PREFS_PWD, "");
 	}
 	
 	public void setIsFirstRun(Boolean firstRun)

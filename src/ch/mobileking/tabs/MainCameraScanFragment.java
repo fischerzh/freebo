@@ -35,14 +35,10 @@ import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
 
-public class MainBadgeFragment extends Fragment{
+public class MainCameraScanFragment extends Fragment{
 	
 	
-    private LinearLayout tab_frag_badges_ll, tab_frag_storehero_ll;
-    
     private SharedPrefEditor editor;
-
-	private LinearLayout tab_frag_leaderboard_ll;
 
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -58,36 +54,9 @@ public class MainBadgeFragment extends Fragment{
     public void onActivityCreated(Bundle savedInstanceState) {  
         super.onActivityCreated(savedInstanceState);  
         
+        
+        
 
-        tab_frag_badges_ll = (LinearLayout) getActivity().findViewById(R.id.tab_frag_badges_ll);
-        tab_frag_badges_ll.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent(getActivity(), BadgeActivity.class);
-	        	startActivity(intent);
-			}
-		});
-        
-        tab_frag_storehero_ll = (LinearLayout) getActivity().findViewById(R.id.tab_frag_storehero_ll);
-        tab_frag_storehero_ll.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent(getActivity(), StoreKingActivity.class);
-	        	startActivity(intent);				
-			}
-		});
-        
-        tab_frag_leaderboard_ll = (LinearLayout) getActivity().findViewById(R.id.tab_frag_leaderboard_ll);
-        tab_frag_leaderboard_ll.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent(getActivity(), LeaderboardActivity.class);
-	        	startActivity(intent);				
-			}
-		});
     }
     
 	private void createAlert(String message, String title, int iconId) {

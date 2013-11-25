@@ -1,4 +1,4 @@
-package ch.mobileking;
+package ch.mobileking.gcm;
 
 import android.content.Context;
 import android.content.Intent;

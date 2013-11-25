@@ -1,59 +1,61 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="fill_parent"
-        android:layout_height="75dp"
-        android:layout_marginTop="20dp"
-        android:orientation="horizontal" >
+    android:layout_width="fill_parent"
+    android:layout_height="75dp"
+    android:orientation="horizontal"
+    android:padding="5dp" >
 
-    <ch.mobileking.classes.override.RobotoTextView
-        android:id="@+id/leaderboard_item_rank_txt"
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:text="1"
-        android:textColor="@color/grey_dark"
-        android:textSize="@dimen/textSizeLarge" />
+        android:layout_height="match_parent"
+        android:background="@drawable/product_ranking_ll_border" 
+        android:layout_margin="2dp"
+        >
 
         <ImageView
             android:id="@+id/leaderboard_item_user_img"
-            android:layout_width="50dip"
-            android:layout_height="50dip"
-            android:layout_marginLeft="5dp"
-            android:layout_gravity="center_vertical|center_horizontal"
-            android:src="@drawable/no_image_icon" />
-
-        <LinearLayout
-            android:layout_width="186dp"
+            android:layout_width="55dp"
             android:layout_height="match_parent"
-            android:orientation="vertical" >
-
-            <ch.mobileking.classes.override.RobotoTextView
-                android:id="@+id/leaderboard_item_user"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:gravity="center_horizontal|center_vertical"
-                android:paddingLeft="5dp"
-                android:text="User 1"
-                android:textColor="@color/grey_dark"
-                android:textSize="@dimen/textSizeLarge"
-                />
-
-            <ch.mobileking.classes.override.RobotoTextView
-                android:id="@+id/leaderboard_item_pts_txt"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical|center_horizontal"
-                android:text="23 Punkte"
-                android:textColor="@color/blue_light"
-                android:textSize="@dimen/textSizeSmall"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-        <ImageView
-            android:id="@+id/storehero_item_crown"
-            android:layout_width="wrap_content"
-            android:layout_height="55dp"
-            android:layout_gravity="center_vertical"
             android:src="@drawable/ic_leaderboard_gold" />
 
+        <ch.mobileking.classes.override.RobotoTextView
+            android:id="@+id/leaderboard_item_rank_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="5dp"
+            android:text="1"
+            android:textColor="@color/grey_dark"
+            android:textSize="@dimen/textSizeLarge" />
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="140dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <ch.mobileking.classes.override.RobotoTextView
+            android:id="@+id/leaderboard_item_user"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1"
+            android:gravity="center_horizontal|center_vertical"
+            android:paddingLeft="5dp"
+            android:text="User 1"
+            android:textColor="@color/grey_dark"
+            android:textSize="@dimen/textSizeLarge" />
+    </LinearLayout>
+
+    <ch.mobileking.classes.override.RobotoTextView
+        android:id="@+id/leaderboard_item_pts_txt"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:padding="0dp"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="123 Pts."
+        android:textColor="@color/blue_light"
+        android:textSize="@dimen/textSizeLarge"
+        android:textStyle="bold" />
+
+</LinearLayout>

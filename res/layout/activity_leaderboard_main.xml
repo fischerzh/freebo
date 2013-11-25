@@ -4,31 +4,12 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <ch.mobileking.classes.override.RobotoTextView
-        android:id="@+id/leaderboard_titel_txt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:text="Leaderboard"
-        android:textColor="@android:color/darker_gray"
-        android:textSize="@dimen/textSizeLarge" 
-        android:textStyle="italic"/>
-
-    <View
-        android:id="@+id/separator"
-        android:layout_width="fill_parent"
-        android:layout_height="1dip"
-        android:layout_marginRight="5dp"
-        android:background="@color/common_action_bar_splitter" />
-
     <ListView
         android:id="@+id/leaderboard_lv"
         android:layout_width="fill_parent"
-        android:layout_height="326dp"
+        android:layout_height="wrap_content"
         android:layout_weight="1.08"
-        android:divider="@color/grey_dark"
-        android:dividerHeight="2px"
-        android:paddingTop="10dp" >
+        >
     </ListView>
 
 </LinearLayout>

@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ch.mobileking;
+package ch.mobileking.gcm;
 
-import static ch.mobileking.CommonUtilities.SERVER_URL;
-import static ch.mobileking.CommonUtilities.TAG;
-import static ch.mobileking.CommonUtilities.displayMessage;
+import static ch.mobileking.gcm.CommonUtilities.SERVER_URL;
+import static ch.mobileking.gcm.CommonUtilities.TAG;
+import static ch.mobileking.gcm.CommonUtilities.displayMessage;
 
 import com.google.android.gcm.GCMRegistrar;
 
