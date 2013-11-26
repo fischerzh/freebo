@@ -19,6 +19,7 @@ public class SharedPrefEditor {
 	
 	private static final String PREFS_PWD = "Password";
 	private static final String PREFS_USERNAME = "Username";
+	private static final String PREFS_MAIL = "Email";
 	private static final String PREFS_FIRST_LOGIN = "Login";
 	private static final String PREFS_STAY_LOGGED_IN = "LoggedIn";
 	private static final String PREFS_REGID = "Registration";
@@ -85,6 +86,26 @@ public class SharedPrefEditor {
 		
 		return pwd;
 //		return sharedPrefs.getString(PREFS_PWD, "");
+	}
+	
+	public void setEmail(String mail)
+	{	    
+	    SharedPreferences settings = cont.getSharedPreferences(PREFS_MAIL, 0);
+	    SharedPreferences.Editor editor = settings.edit();
+	    editor.putString(PREFS_MAIL, mail);
+	    System.out.println("setSharedPref #PREFS_MAIL " + mail);
+	    editor.commit();
+
+	}
+	
+	public String getEmail()
+	{
+	    String mail;
+	    SharedPreferences settings = cont.getSharedPreferences(PREFS_MAIL, 0);
+	    mail = settings.getString(PREFS_MAIL, "");
+	    System.out.println("getSharedPref #PREFS_MAIL " + mail);
+		
+		return mail;
 	}
 	
 	public void setIsFirstRun(Boolean firstRun)
@@ -203,23 +224,25 @@ public class SharedPrefEditor {
 	
 	public void setNotifications(Boolean notifications)
 	{	    
-//	    SharedPreferences settings = cont.getSharedPreferences(PREFS_NOTIFICATIONS, 0);
-//	    SharedPreferences.Editor editor = settings.edit();
-//	    editor.putBoolean(PREFS_NOTIFICATIONS, notifications);
-//	    System.out.println("setSharedPref #PREFS_NOTIFICATIONS: " + notifications);
-		sharedPrefs.edit().putBoolean(PREFS_NOTIFICATIONS, notifications);
+	    SharedPreferences settings = cont.getSharedPreferences(PREFS_NOTIFICATIONS, 0);
+	    SharedPreferences.Editor editor = settings.edit();
+	    editor.putBoolean(PREFS_NOTIFICATIONS, notifications);
+	    System.out.println("setSharedPref #PREFS_NOTIFICATIONS: " + notifications);
+//		sharedPrefs.edit().putBoolean(PREFS_NOTIFICATIONS, notifications);
 	    // Commit the edits!
-		sharedPrefs.edit().commit();
-	    
+//		sharedPrefs.edit().commit();
+	    editor.commit();
+
 	}
 	
 	public Boolean getNotifications()
 	{
-//	    Boolean notifications;
-//	    // Restore preferences
-//	    SharedPreferences settings = cont.getSharedPreferences(PREFS_NOTIFICATIONS, 0);
-//	    notifications = settings.getBoolean(PREFS_NOTIFICATIONS, false);
-	    return sharedPrefs.getBoolean(PREFS_NOTIFICATIONS, false);
+	    Boolean notifications;
+	    // Restore preferences
+	    SharedPreferences settings = cont.getSharedPreferences(PREFS_NOTIFICATIONS, 0);
+	    notifications = settings.getBoolean(PREFS_NOTIFICATIONS, false);
+//	    return sharedPrefs.getBoolean(PREFS_NOTIFICATIONS, false);
+	    return notifications;
 	}
 	
 	/**

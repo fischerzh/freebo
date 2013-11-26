@@ -227,7 +227,7 @@ public class ProductBaseAdapter extends BaseAdapter{
 				holder.getTxtRank().setText("MEIN RANG "+prod.getUserrank() + " (+-0)");
 				holder.getTxtRank().setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_nochange, 0);
 			}
-			holder.getTxtCollectedCnt().setText(prod.getPoints()+" x Punkte gesammelt!");
+			holder.getTxtCollectedCnt().setText(prod.getPoints()+" Pkte.");
 			
 			if(prod.getUserrank() == 1)
 			{

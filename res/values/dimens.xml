@@ -3,7 +3,7 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="prod_list_item_size">140dp</dimen>
+    <dimen name="prod_list_item_size">150dp</dimen>
     <dimen name="prod_crown_height">25dp</dimen>
     <dimen name="prod_crown_width">25dp</dimen>
     <dimen name="badge_detail_image">95dp</dimen>
