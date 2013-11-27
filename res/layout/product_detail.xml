@@ -80,7 +80,7 @@
         android:orientation="horizontal" >
 
         <ImageView
-            android:id="@+id/ImageView01"
+            android:id="@+id/product_detail_avatar"
             android:layout_width="50dip"
             android:layout_height="50dip"
             android:layout_gravity="center"
@@ -100,7 +100,7 @@
                 android:layout_marginTop="10dp"
                 android:text="Username"
                 android:textSize="@dimen/textSizeLarge"
-                android:textStyle="italic" />
+                android:textStyle="bold" />
 
             <ch.mobileking.classes.override.RobotoTextView
                 android:id="@+id/product_detail_userRank"

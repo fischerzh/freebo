@@ -55,6 +55,8 @@ public class Utils {
 	public static final String PROPERTY_REG_ID = "registration_id";
 	private static final String PROPERTY_APP_VERSION = "appVersion";
 	private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+	
+	public static final String USER_AVATAR_PNG ="user_avatar.png";
 
 	/**
 	 * Substitute you own sender ID here. This is the project number you got

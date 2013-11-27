@@ -23,6 +23,7 @@ public class ProductDetailOverview extends Activity {
 	private ImageView productImage;
 	
 	private SharedPrefEditor editor;
+	private ImageView product_detail_avatar;
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -55,6 +56,9 @@ public class ProductDetailOverview extends Activity {
 			
 			product_detail_points = (TextView) findViewById(R.id.product_detail_points);
 			product_detail_points.setText(product.getPoints()*435.5 + " Pkt.");
+			
+			product_detail_avatar = (ImageView) findViewById(R.id.product_detail_avatar);
+			product_detail_avatar.setImageBitmap(Utils.loadImageFromPath(Utils.USER_AVATAR_PNG));
 			
 			prod_name.setText(product.getName());
 			prod_manuf.setText(product.getProducer());

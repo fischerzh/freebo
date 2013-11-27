@@ -46,6 +46,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 @SuppressLint("NewApi")
 public class UserSettingsActivity extends Activity implements ITaskComplete{
@@ -53,8 +54,6 @@ public class UserSettingsActivity extends Activity implements ITaskComplete{
 	private ImageView imageView;
 
 	private final int SELECT_PHOTO = 1;
-	
-	private final String USER_AVATAR_PNG ="user_avatar.png";
 	
 	private SharedPrefEditor editor;
 
@@ -72,12 +71,18 @@ public class UserSettingsActivity extends Activity implements ITaskComplete{
 	private ProgressBar user_settings_avatar_progress;
 	
 	private EditText userEmailInput;
+	private EditText userUsernameInput;
 	
 	private Bitmap selectedImage;
-	
 	private String filePath;
 
 	private CheckBox user_settings_anon_chkbx;
+
+	private LinearLayout user_settings_pwd;
+	private LinearLayout user_settings_username;
+	
+	private String username, pwd, email;
+	private Boolean isNotification, isAnonymous;
 
 	// extends PreferenceActivity implements OnSharedPreferenceChangeListener
 	@Override
@@ -96,8 +101,8 @@ public class UserSettingsActivity extends Activity implements ITaskComplete{
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		
 		imageView = (ImageView) findViewById(R.id.user_settings_avatar);
-		if(Utils.imageExists(USER_AVATAR_PNG))
-			imageView.setImageBitmap(Utils.loadImageFromPath(USER_AVATAR_PNG));
+		if(Utils.imageExists(Utils.USER_AVATAR_PNG))
+			imageView.setImageBitmap(Utils.loadImageFromPath(Utils.USER_AVATAR_PNG));
 		
 		user_settings_avatar_progress = (ProgressBar) findViewById(R.id.user_settings_avatar_progress);
 		user_settings_avatar_progress.setVisibility(View.INVISIBLE);
@@ -120,15 +125,8 @@ public class UserSettingsActivity extends Activity implements ITaskComplete{
 			
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				// TODO Auto-generated method stub
-//				if(isChecked)
-//				{
-//					editor.setNotifications(true);
-//				}
-//				else
-//				{
-//					editor.setNotifications(false);
-//				}
+				
+				isNotification = isChecked;
 			}
 		});
 		
@@ -138,15 +136,8 @@ public class UserSettingsActivity extends Activity implements ITaskComplete{
 			
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				// TODO Auto-generated method stub
-//				if(isChecked)
-//				{
-//					editor.setAnonymous(true);
-//				}
-//				else
-//				{
-//					editor.setAnonymous(false);
-//				}
+
+				isAnonymous = isChecked;
 			}
 		});
 
@@ -171,15 +162,16 @@ public class UserSettingsActivity extends Activity implements ITaskComplete{
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				AlertDialog.Builder alert = new AlertDialog.Builder(UserSettingsActivity.this);
 		        LayoutInflater inflater=UserSettingsActivity.this.getLayoutInflater();
-		        //this is what I did to added the layout to the alert dialog
+
 		        View layout=inflater.inflate(R.layout.user_settings_entry,null);       
 		        
 		        userEmailInput=(EditText)layout.findViewById(R.id.user_settings_entry_editText);
-		        
-		        userEmailInput.setText(editor.getEmail());
+		        if(email!=null)	
+		        	userEmailInput.setText(email);
+		        else
+		        	userEmailInput.setText(editor.getEmail());
 		        
 		        alert.setPositiveButton("Ok", null);
 		        alert.setNegativeButton("Abbrechen",
@@ -189,7 +181,6 @@ public class UserSettingsActivity extends Activity implements ITaskComplete{
                     	}
                 	});
 				alert.setTitle("E-Mail Adresse");
-//				alert.setMessage("Gib deine E-Mail Adresse an");
 		        alert.setView(layout);
 
 				final AlertDialog dialog = alert.create();
@@ -205,14 +196,65 @@ public class UserSettingsActivity extends Activity implements ITaskComplete{
 		    		    }
 						else
 						{
-//							editor.setEmail(userEmailInput.getText().toString());
+							email = userEmailInput.getText().toString();
 							dialog.dismiss();
 						}
 					}
 				});
 			}
 		});
+		
+		user_settings_username = (LinearLayout) findViewById(R.id.user_settings_username);
+		user_settings_username.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				AlertDialog.Builder alert = new AlertDialog.Builder(UserSettingsActivity.this);
+		        LayoutInflater inflater=UserSettingsActivity.this.getLayoutInflater();
 
+		        View layout=inflater.inflate(R.layout.user_settings_entry,null);       
+		        
+		        userUsernameInput=(EditText)layout.findViewById(R.id.user_settings_entry_editText);
+		        
+		        if(username!=null)	
+		        	userUsernameInput.setText(username);
+		        else
+		        	userUsernameInput.setText(editor.getUsername());
+		        
+		        alert.setPositiveButton("Ok", null);
+		        alert.setNegativeButton("Abbrechen",
+	                    new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        return;
+                    	}
+                	});
+				alert.setTitle("Benutzername");
+		        alert.setView(layout);
+
+				final AlertDialog dialog = alert.create();
+		        dialog.show();
+		        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						// TODO Auto-generated method stub
+						if(userUsernameInput.getText().toString().isEmpty())
+		    		    {
+		    		    	userEmailInput.setError("Bitte Benutzername angeben!");
+		    		    }
+						else
+						{
+							dialog.dismiss();
+						}
+					}
+				});
+			}
+		});
+		
+		
+		
+		
 		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
 			// Load the legacy preferences headers
 			// addPreferencesFromResource(R.xml.preferences);
@@ -227,7 +269,16 @@ public class UserSettingsActivity extends Activity implements ITaskComplete{
 		/*
 		 * editor.getUsername(),editor.getPwd() , editor.getEmail(), editor.getNotifications(), editor.getAnonymous()
 		 */
-		request.startUpdateUserSettings(editor.getUsername(),editor.getPwd(), userEmailInput.getText().toString(), user_settings_notification_chkbx.isChecked(), user_settings_anon_chkbx.isChecked());
+		if(email!=null && username!=null)
+		{
+			request.startUpdateUserSettings(username, editor.getPwd(), email , isNotification, isAnonymous);
+		}
+		else
+		{
+			request.startUpdateUserSettings(editor.getUsername(),editor.getPwd(), editor.getEmail(), user_settings_notification_chkbx.isChecked(), user_settings_anon_chkbx.isChecked());
+		}
+		clearVariables();
+
 	}
 	
 	@Override
@@ -235,6 +286,15 @@ public class UserSettingsActivity extends Activity implements ITaskComplete{
 	{
 		onSyncRequest();
 		finish();
+	}
+	
+	private void clearVariables()
+	{
+		this.username = null;
+		this.pwd = null;
+		this.email = null;
+		this.isAnonymous = null;
+		this.isNotification = null;
 	}
 	
 	@Override
@@ -341,14 +401,19 @@ public class UserSettingsActivity extends Activity implements ITaskComplete{
  
 	public Bitmap saveAvatarToSD(Bitmap selectedImage)
 	{	
-		Bitmap image = BitmapFactory.decodeFile(Utils.saveBitmap(selectedImage, USER_AVATAR_PNG));
+		Bitmap image = BitmapFactory.decodeFile(Utils.saveBitmap(selectedImage, Utils.USER_AVATAR_PNG));
 		return image;
 	}
 
 	@Override
 	public void onLoginCompleted(boolean b, String string) {
 		// TODO Auto-generated method stub
-		
+		System.out.println("UserSettingsActivity.onLoginCompleted()");
+		if(b)
+			Toast.makeText(this, "Deine Einstellungen wurden erfolgreich aktualisiert! ", Toast.LENGTH_SHORT).show();
+		else
+	        Toast.makeText(this, string, Toast.LENGTH_SHORT).show();
+
 	}
 
 	@Override
@@ -357,7 +422,7 @@ public class UserSettingsActivity extends Activity implements ITaskComplete{
 		System.out.println("Loaded picture finished!");
 		
 //		selectedImage = saveAvatarToSD(selectedImage);
-		selectedImage = Utils.loadImageFromPath(USER_AVATAR_PNG);
+		selectedImage = Utils.loadImageFromPath(Utils.USER_AVATAR_PNG);
 //		}
 		user_settings_avatar_progress.setVisibility(View.INVISIBLE);
 

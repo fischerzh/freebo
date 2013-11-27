@@ -352,12 +352,12 @@ public class ServerRequest {
 				editor.setNotifications(enableNoti);
 				editor.setAnonymous(enableAnon);
 				
-				listener.onUpdateCompleted(true, response.getException());
+				listener.onLoginCompleted(true, response.getException());
 			}
 			else
 			{
 				System.out.println("FAILED UpdateUserSettings: " + response.getException());
-				listener.onUpdateCompleted(false, response.getException());
+				listener.onLoginCompleted(false, response.getException());
 			}
 		}
 	}
