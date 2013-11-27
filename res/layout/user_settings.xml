@@ -51,16 +51,34 @@
                 android:id="@+id/TextView01"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Wähle dein persönliches Avatar.\n(Clicke hier für ein Random-Avatar!)"
+                android:text="Wähle dein User-Icon\n(Clicke hier für ein Random-Avatar!)"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/user_settings_avatar"
-            android:layout_width="75dp"
-            android:layout_height="66dp"
-            android:layout_gravity="right"
-            android:src="@drawable/no_image_icon" />
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1.41" >
+
+            <ImageView
+                android:id="@+id/user_settings_avatar"
+                android:layout_width="@dimen/user_avatar_width"
+                android:layout_height="@dimen/user_avatar_height"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/abc_spinner_ab_pressed_holo_light" />
+
+            <ProgressBar
+                android:id="@+id/user_settings_avatar_progress"
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="@dimen/user_avatar_width"
+                android:layout_height="@dimen/user_avatar_height"
+                android:layout_alignParentLeft="true"
+                android:visibility="visible"
+                android:layout_centerVertical="true" />
+
+        </RelativeLayout>
 
     </LinearLayout>
 
@@ -183,7 +201,7 @@
         </LinearLayout>
 
         <CheckBox
-            android:id="@+id/checkBox1"
+            android:id="@+id/user_settings_anon_chkbx"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"

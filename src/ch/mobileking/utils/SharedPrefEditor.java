@@ -8,13 +8,14 @@ public class SharedPrefEditor {
 	
 	private static String testServer = "http://192.168.0.16:8080";
 	private static String liveServer = "http://www.sagax.ch:8080";
-	private static String prefix = liveServer+"/Freebo/";
+	private static String prefix = testServer+"/Freebo/";
 	private static String updateURL = prefix+"updateFavorites"; //192.168.0.16:8080;
 	private static String loginURL = prefix+"loginFromApp"; //192.168.0.16:8080;
-	private static String updateUserInfo = prefix+"updateUserInfo";
+//	private static String updateUserInfo = prefix+"updateUserInfo";
 	private static String updateCumulusURL = prefix+"updateCumulusInfo"; //192.168.0.16:8080;
 	private static String updateLogURL = prefix+"updateUserLog";
 	private static String registerURL = prefix+"user/create";
+	private static String updateUserSettingURL = prefix+"updateUserSettings";
 
 	
 	private static final String PREFS_PWD = "Password";
@@ -26,6 +27,7 @@ public class SharedPrefEditor {
 	private static final String PREFS_APPV = "Appversion";
 	private static final String PREFS_LOGIN_CNT = "LoginCount";
 	private static final String PREFS_NOTIFICATIONS = "Notifications";
+	private static final String PREFS_ANON = "Anonymous";
 	
 	private Context cont;
 	
@@ -245,6 +247,25 @@ public class SharedPrefEditor {
 	    return notifications;
 	}
 	
+	public void setAnonymous(Boolean anon)
+	{	    
+	    SharedPreferences settings = cont.getSharedPreferences(PREFS_ANON, 0);
+	    SharedPreferences.Editor editor = settings.edit();
+	    editor.putBoolean(PREFS_ANON, anon);
+	    System.out.println("setSharedPref #PREFS_ANON: " + anon);
+	    // Commit the edits!
+	    editor.commit();
+
+	}
+	
+	public Boolean getAnonymous()
+	{
+	    Boolean anon;
+	    SharedPreferences settings = cont.getSharedPreferences(PREFS_ANON, 0);
+	    anon = settings.getBoolean(PREFS_ANON, false);
+	    return anon;
+	}
+	
 	/**
 	 * @return the activeURL
 	 */
@@ -285,6 +306,20 @@ public class SharedPrefEditor {
 	 */
 	public static void setUpdateLogURL(String updateLogURL) {
 		SharedPrefEditor.updateLogURL = updateLogURL;
+	}
+
+	/**
+	 * @return the updateUserSettingURL
+	 */
+	public static String getUpdateUserSettingURL() {
+		return updateUserSettingURL;
+	}
+
+	/**
+	 * @param updateUserSettingURL the updateUserSettingURL to set
+	 */
+	public static void setUpdateUserSettingURL(String updateUserSettingURL) {
+		SharedPrefEditor.updateUserSettingURL = updateUserSettingURL;
 	}
 
 

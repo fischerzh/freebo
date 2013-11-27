@@ -15,6 +15,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class RegisterActivity extends Activity implements ITaskComplete{
 	
@@ -97,11 +98,20 @@ public class RegisterActivity extends Activity implements ITaskComplete{
 	@Override
 	public void onUpdateCompleted(boolean b, String message) {
 		// TODO Auto-generated method stub
-		System.out.println("Registration completed with message: " + message);
-		
-		Intent intent = new Intent(this, MainActivity.class);
-    	startActivity(intent);
-    	finish();
+		if(b)
+		{
+			System.out.println("Registration successful: " + message);
+			Intent intent = new Intent(this, MainActivity.class);
+	    	startActivity(intent);
+	    	finish();
+		}
+		else
+		{
+			System.out.println("Registration failed: " + message);
+			Toast.makeText(this, "Registrierung fehlgeschlagen: " +message, Toast.LENGTH_LONG).show();
+
+		}
+
 	}
 
 	@Override

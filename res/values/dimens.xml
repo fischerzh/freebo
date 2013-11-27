@@ -7,6 +7,8 @@
     <dimen name="prod_crown_height">25dp</dimen>
     <dimen name="prod_crown_width">25dp</dimen>
     <dimen name="badge_detail_image">95dp</dimen>
+    <dimen name="user_avatar_height">75dp</dimen>
+        <dimen name="user_avatar_width">65dp</dimen>
 	<dimen name="textSizeLarge">20dp</dimen>
 	<dimen name="textSizeMiddle">18dp</dimen>
 	<dimen name="textSizeSmall">16dp</dimen>

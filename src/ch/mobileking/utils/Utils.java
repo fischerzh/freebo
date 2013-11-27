@@ -19,17 +19,22 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
 import ch.mobileking.DemoActivity;
+import ch.mobileking.R;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -62,6 +67,20 @@ public class Utils {
 	 */
 	static final String TAG = "GCM Demo";
 	
+	private static ITaskComplete listener;
+	
+	/**
+	 * @return the listener
+	 */
+	public static ITaskComplete getListener() {
+		return listener;
+	}
+	
+	public static void setListener(ITaskComplete listener)
+	{
+		Utils.listener = listener;
+	}
+
 	public Utils(Context cont)
 	{
 		this.context = cont;
@@ -125,6 +144,17 @@ public class Utils {
 		return prodKing;
 	}
 	
+	public static Bitmap processFileFromSD(String filePath)
+	{
+//        bitmap = BitmapFactory.decodeStream((InputStream)new URL(imgUri).getContent());
+		System.out.println("processFile..." + filePath);
+		
+		LoadImageTask newImageLoader = new LoadImageTask();
+//		new LoadImageTask().execute(filePath);
+		newImageLoader.execute(filePath);
+		return newImageLoader.getImage();
+	}
+	
 	public static Bitmap loadImage(Products prod)
 	{
 		String file_path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/MobileKingImages";
@@ -161,6 +191,21 @@ public class Utils {
 
 	}
 
+	public static Bitmap loadImageFromPath(String fileName) {
+		String file_path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/MobileKingImages";
+		File imgFile = new File(file_path, fileName);
+		Bitmap myBitmap = null;
+		
+		if(imgFile.exists())
+		{
+			System.out.println("Found Image on SD card: " + imgFile.getAbsolutePath());
+			
+			myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+		}
+		return myBitmap;
+
+	}
+	
 	public static boolean imageExists(Products prod)
 	{
 		String file_path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/MobileKingImages";
@@ -175,6 +220,14 @@ public class Utils {
 			file_path = saveBitmap(loadImage(prod), prod);
 		}
 		
+		return imgFile.exists();
+	}
+	
+	public static boolean imageExists(String fileName)
+	{
+		String file_path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/MobileKingImages";
+		File imgFile = new File(file_path, fileName);
+		System.out.println("imgFile.exists(): " + imgFile.exists());
 		return imgFile.exists();
 	}
 	
@@ -203,6 +256,29 @@ public class Utils {
 	    return file.getAbsolutePath();
 	}
 	
+	public static String saveBitmap(Bitmap bmp, String fileName)
+	{
+		String file_path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/MobileKingImages";
+        File dir = new File(file_path);
+        if(!dir.exists())
+           dir.mkdirs();
+        File file = new File(dir, fileName);
+//		Bitmap bmp = BitmapFactory.decodeFile(file.getAbsolutePath());
+        FileOutputStream fOut = null;
+		try {
+			fOut = new FileOutputStream(file);
+			bmp.compress(Bitmap.CompressFormat.PNG, 85, fOut);
+			fOut.flush();
+	        fOut.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	    System.out.println("Saved Image to SD card: " +file.getAbsolutePath());
+	    return file.getAbsolutePath();
+	}	
+
 	public static void registerDevice(Context cont)
 	{
 		System.out.println("Register Device!");
@@ -386,6 +462,71 @@ public class Utils {
 		editor.setRegId(regId);
 	}
 
-
-
 }
+
+  class LoadImageTask extends AsyncTask<String, Void, Bitmap> {
+	
+	private Bitmap image;
+	
+	
+     protected Bitmap doInBackground(String... params) {
+         return loadImage(params[0]);
+     }
+
+     protected void onPostExecute(Bitmap result) {
+         //Do something with bitmap eg:
+    	 System.out.println("Got Image: " +result.toString());
+    	 image = result;
+    	 Utils.saveBitmap(image, "user_avatar.png");
+    	 if(Utils.getListener()!=null)
+    	 {
+    		 Utils.getListener().onUpdateCompleted(true, "image saved!");
+    	 }
+     }
+     
+     
+	 private Bitmap loadImage(String path){
+		 Bitmap bitmap = null;
+		 try {
+			 System.out.println("Downloading Image from Link: " + path);
+				File imgFile = new File(path);
+	          bitmap = resizeBitmap(path);
+	      } catch (Exception e) {
+	          e.printStackTrace();
+	    }
+		 
+		System.out.println("Bitmap resized: " + " height: " + bitmap.getHeight() +  " width: " + bitmap.getWidth());
+		 
+		return bitmap;
+	 }
+	 
+	 public Bitmap resizeBitmap(String fileName) {
+
+		    // First decode with inJustDecodeBounds=true to check dimensions
+		    final BitmapFactory.Options options = new BitmapFactory.Options();
+		    options.inJustDecodeBounds = true;
+		    options.inSampleSize = 2;
+		    BitmapFactory.decodeFile(fileName, options);
+
+		    // Calculate inSampleSize
+		    options.inSampleSize = 2;//calculateInSampleSize(options, R.dimen.user_avatar_width, R.dimen.user_avatar_width);
+
+		    // Decode bitmap with inSampleSize set
+		    options.inJustDecodeBounds = false;
+		    return BitmapFactory.decodeFile(fileName, options);
+		}
+
+	/**
+	 * @return the image
+	 */
+	public Bitmap getImage() {
+		return image;
+	}
+
+	/**
+	 * @param image the image to set
+	 */
+	public void setImage(Bitmap image) {
+		this.image = image;
+	}
+ }

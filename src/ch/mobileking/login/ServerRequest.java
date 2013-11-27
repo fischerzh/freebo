@@ -103,36 +103,30 @@ public class ServerRequest {
 		
 	}
 	
+	public void startUpdateUserSettings(String newUsername, String newPwd, String newMail, Boolean notificationEnabled, Boolean anonymousUser)
+	{
+		
+		setServerURL(editor.getUpdateUserSettingURL()+"?username="+newUsername+"&password="+newPwd+"&email="+newMail+"&isNotificationEnabled="+notificationEnabled+"&isAnonymous="+anonymousUser+"&updateFromApp=true");
+		System.out.println("updateUserSettings: " +getServerURL());
+		setUpHttpPost(getServerURL(), editor.getUsername(), editor.getPwd());
+
+		new UpdateUserSettings(newUsername, newPwd, newMail, notificationEnabled, anonymousUser).execute();
+
+	}
+	
 	public void startUpdateLogs()
 	{
 		System.out.println("Start update Logs to Backend...");
-		
-//		latch = new CountDownLatch(ProductKing.getInstance().getUserLogData().size());
-//		ExecutorService taskExecutor = Executors.newFixedThreadPool(4);
-//		while(...) {
-//		  taskExecutor.execute(new UpdateLogs().execute(msg.getUuid(), msg.getContent(), msg.getTitle(), msg.getCreateDate().toString()));
-//		}
-		
 		
 		if(Utils.isNetworkAvailable(getContext()))
 		{
 			System.out.println("userLogData: " + ProductKing.getInstance().getUserLogData());
 			
-//			for(GcmMessage msg : ProductKing.getInstance().getUserLogData())
-//			{
-//				System.out.println("Message: " +msg.getUuid()+msg.getContent());
-//				System.out.println("Is Synced? " + msg.getIsSynced());
-//				if(!msg.getIsSynced())
-//				{
-					UpdateLogs updater = new UpdateLogs();
+			UpdateLogs updater = new UpdateLogs();
+			
+			System.out.println("Calling UpdateLogs().execute()");
+			new UpdateLogs().execute();
 					
-//					updater.execute(msg.getUuid(), msg.getContent(), msg.getTitle(), msg.getCreateDate().toString());
-					System.out.println("Calling UpdateLogs().execute()");
-					new UpdateLogs().execute();
-					
-//					taskExecutor.execute((Runnable) new UpdateLogs().execute(msg.getUuid(), msg.getContent(), msg.getTitle(), msg.getCreateDate().toString()));
-//				}
-//			}
 		}
 		else
 		{
@@ -317,6 +311,56 @@ public class ServerRequest {
 		
 	}
 	
+	private class UpdateUserSettings extends AsyncTask<String, String, String>
+	{
+		private String username, pwd, mail;
+		private Boolean enableNoti, enableAnon;
+		
+		public UpdateUserSettings(String username, String pwd, String mail, Boolean noti, Boolean anon)
+		{
+			this.username = username;
+			this.pwd = pwd;
+			this.mail = mail;
+			this.enableNoti = noti;
+			this.enableAnon = anon;
+		}
+		
+		@Override
+		protected String doInBackground(String... params) {
+			// TODO Auto-generated method stub
+//			username = params[0];
+//			pwd = params[1];
+//			mail = params[2];
+//			enableNoti = Boolean.valueOf(params[3]);
+//			enableAnon = Boolean.valueOf(params[4]);
+			
+			String response = getHttpResponse(null, httpPost);
+			System.out.println("UpdateUserSettings: " + response);
+			return response;
+		}
+		
+		
+		@Override
+		protected void onPostExecute(String result) 
+		{
+			JSONResponse response = getJSONResponse(result);
+			if(response.getStatus().toLowerCase().contains("success"))
+			{
+				System.out.println("SUCCESS UpdateUserSettings: " + response.getException());
+				
+				editor.setEmail(mail);
+				editor.setNotifications(enableNoti);
+				editor.setAnonymous(enableAnon);
+				
+				listener.onUpdateCompleted(true, response.getException());
+			}
+			else
+			{
+				System.out.println("FAILED UpdateUserSettings: " + response.getException());
+				listener.onUpdateCompleted(false, response.getException());
+			}
+		}
+	}
 	
 	
 	private class UpdateCumulusInfo extends AsyncTask<String, String, String>
@@ -327,30 +371,22 @@ public class ServerRequest {
 			// TODO Auto-generated method stub
 			String response = getHttpResponse(httpGet, null);
 			System.out.println("response: "  +response);
-			Boolean responseOk = checkForErrors(response);
-			System.out.println("responseOk: " +responseOk);
 			
-			listener.onUpdateCompleted(true, "");
 			return response;
-//			if(responseOk)
-//			{
-//				return response;
-//				listener.onUpdateCompleted(true);
-//			}
-//			else
-//			{
-//				return null;
-//			listener.onUpdateCompleted(false);
-//			}
 		}
 		
 		
 		@Override
 		protected void onPostExecute(String result) {
-			
-			if(result!=null)
+			Boolean responseOk = checkForErrors(result);
+
+			if(responseOk)
 			{
-				listener.onUpdateCompleted(true, "");
+				listener.onUpdateCompleted(true, result);
+			}
+			else
+			{
+				listener.onUpdateCompleted(false, result);
 			}
 		}
 		
@@ -358,13 +394,14 @@ public class ServerRequest {
 	
 	private class RegisterUser extends AsyncTask<String, String, String>
 	{
-		private String username, pw;
+		private String username, pw, email;
 		
 		@Override
 		protected String doInBackground(String... params) {
 			username = params[0];
 			pw = params[1];
-			System.out.println("register, params" +params[0] + params[1]);
+			email = params[2];
+			System.out.println("register, params: " +params[0] + params[1] + params[2]);
 			String response = getHttpResponse(null, httpPost);
 			System.out.println("Response from HTTP call: " +response);
 			return response;
@@ -378,16 +415,18 @@ public class ServerRequest {
 				System.out.println("#RegisterUser SUCCESS: onPostExecute, got Result: " +result);
 				editor.setUsername(this.username);
 				editor.setPwd(this.pw);
+				editor.setEmail(this.email);
 				this.pw="";
 				this.username="";
 				listener.onUpdateCompleted(true, "User Registrierung erfolgreich!");
 			}
 			else
 			{
-				System.out.println("#RegisterUser FAILED: ");
+				System.out.println("#RegisterUser FAILED: "+result);
 				this.pw="";
 				this.username="";
-				listener.onUpdateCompleted(false, "User Registrierung Fehlgeschlagen!");
+				this.email="";
+				listener.onUpdateCompleted(false, result);
 			}
 		}
 	}
@@ -531,29 +570,28 @@ public class ServerRequest {
 			}
 		}
 		
-		private String getEncodedValueForURL(String encode)
-		{
-			String encodeUrl = null;
-			try {
-				encodeUrl = URLEncoder.encode(encode, "UTF-8").toString();
-			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			return encodeUrl;
-		}
-		
-		private JSONResponse getJSONResponse(String result)
-		{
-			Gson gson = new Gson();
-			
-    		JSONResponse jsonMessage = gson.fromJson(result, JSONResponse.class); //Product.class
-			System.out.println("jsonMessage: " + jsonMessage);
-			return jsonMessage;
-		}
+
 	}
 
+	private JSONResponse getJSONResponse(String result)
+	{
+		Gson gson = new Gson();
+		
+		JSONResponse jsonMessage = gson.fromJson(result, JSONResponse.class); //Product.class
+		System.out.println("jsonMessage: " + jsonMessage);
+		return jsonMessage;
+	}
 
-
+	private String getEncodedValueForURL(String encode)
+	{
+		String encodeUrl = null;
+		try {
+			encodeUrl = URLEncoder.encode(encode, "UTF-8").toString();
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return encodeUrl;
+	}
 
 }
