@@ -2,10 +2,10 @@ package ch.mobileking.tabs;
 
 import java.util.ArrayList;
 
-import ch.mobileking.BarCodeScanner;
 import ch.mobileking.MainTabActivity;
 import ch.mobileking.ProductDetailOverview;
 import ch.mobileking.R;
+import ch.mobileking.activity.barcode.BarCodeScanner;
 import ch.mobileking.classes.override.MessageDialog;
 import ch.mobileking.classes.override.ProductBaseAdapter;
 import ch.mobileking.login.AsyncLogin;

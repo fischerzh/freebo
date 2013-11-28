@@ -4,7 +4,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import ch.mobileking.R;
-import ch.mobileking.tabs.MainBadgeFragment;
 import ch.mobileking.tabs.MainProductFragment;
 
 public class IntroTabsPagerAdapter extends FragmentPagerAdapter {
@@ -20,7 +19,7 @@ public class IntroTabsPagerAdapter extends FragmentPagerAdapter {
         case 0:
             // MainProduct fragment activity
         	Fragment intro1 = new IntroOneFragment();
-        	((IntroOneFragment) intro1).setLayoutId(R.layout.tab_fragment_badges);
+        	((IntroOneFragment) intro1).setLayoutId(R.layout.tab_fragment_camera_scan);
             return ((IntroOneFragment) intro1);
         case 1:
             // MainBadge fragment activity

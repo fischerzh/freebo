@@ -1,4 +1,4 @@
-package ch.mobileking;
+package ch.mobileking.activity.barcode;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -7,6 +7,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import ch.mobileking.MainTabActivity;
 import ch.mobileking.activity.old.ProductOverview;
 import ch.mobileking.utils.ProductKing;
 

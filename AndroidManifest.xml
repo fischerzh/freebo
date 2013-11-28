@@ -73,7 +73,7 @@
             android:label="@string/app_name" >
         </activity>
         <activity
-            android:name="ch.mobileking.BarCodeScanner"
+            android:name="ch.mobileking.activity.barcode.BarCodeScanner"
             android:screenOrientation="portrait"
             android:label="@string/app_name" >
         </activity>
@@ -132,8 +132,14 @@
         </activity>     
         <activity
             android:name="ch.mobileking.UserSettingsActivity"
+            android:screenOrientation="portrait"
             android:label="@string/app_name" >
         </activity> 
+        <activity
+            android:name="ch.mobileking.CameraActivity"
+            android:label="@string/app_name" >
+        </activity> 
+        
         
      </application>
 

@@ -30,7 +30,7 @@ public class ProductDetailOverview extends Activity {
 		
 		setContentView(R.layout.product_detail);
 		
-		setTitle("Product King");
+		setTitle("ProductKing");
 		
 		editor = new SharedPrefEditor(this);
 		

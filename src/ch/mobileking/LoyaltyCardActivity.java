@@ -34,6 +34,8 @@ public class LoyaltyCardActivity extends Activity implements ITaskComplete{
 	
 		request = new ServerRequest(this, this);
 		
+		setTitle("ProductKing");
+		
     	ProductKing.getInstance().addLogMsg("LoyaltyCardActivity");
 		
 		setContentView(R.layout.loyaltycard_view);

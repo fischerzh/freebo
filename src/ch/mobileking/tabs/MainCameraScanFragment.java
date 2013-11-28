@@ -3,6 +3,7 @@ package ch.mobileking.tabs;
 import java.util.ArrayList;
 
 import ch.mobileking.BadgeActivity;
+import ch.mobileking.CameraActivity;
 import ch.mobileking.LeaderboardActivity;
 import ch.mobileking.MainActivity;
 import ch.mobileking.ProductDetailOverview;
@@ -29,6 +30,7 @@ import android.view.ViewGroup;
 import android.webkit.WebView.FindListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -39,11 +41,12 @@ public class MainCameraScanFragment extends Fragment{
 	
 	
     private SharedPrefEditor editor;
+	private Button camera_new_scan;
 
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
  
-        View rootView = inflater.inflate(R.layout.tab_fragment_badges, container, false);
+        View rootView = inflater.inflate(R.layout.tab_fragment_camera, container, false);
         
         editor = new SharedPrefEditor(getActivity());
         
@@ -54,8 +57,16 @@ public class MainCameraScanFragment extends Fragment{
     public void onActivityCreated(Bundle savedInstanceState) {  
         super.onActivityCreated(savedInstanceState);  
         
-        
-        
+        camera_new_scan = (Button) getActivity().findViewById(R.id.camera_new_scan);
+        camera_new_scan.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent intent = new Intent(getActivity(), CameraActivity.class);
+	        	startActivity(intent);	
+			}
+		});
 
     }
     
