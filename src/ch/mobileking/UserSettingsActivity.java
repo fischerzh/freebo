@@ -269,14 +269,14 @@ public class UserSettingsActivity extends Activity implements ITaskComplete{
 		/*
 		 * editor.getUsername(),editor.getPwd() , editor.getEmail(), editor.getNotifications(), editor.getAnonymous()
 		 */
-		if(email!=null && username!=null)
-		{
+//		if(email!=null && username!=null)
+//		{
 			request.startUpdateUserSettings(username, editor.getPwd(), email , isNotification, isAnonymous);
-		}
-		else
-		{
-			request.startUpdateUserSettings(editor.getUsername(),editor.getPwd(), editor.getEmail(), user_settings_notification_chkbx.isChecked(), user_settings_anon_chkbx.isChecked());
-		}
+//		}
+//		else
+//		{
+//			request.startUpdateUserSettings(editor.getUsername(),editor.getPwd(), editor.getEmail(), user_settings_notification_chkbx.isChecked(), user_settings_anon_chkbx.isChecked());
+//		}
 		clearVariables();
 
 	}
