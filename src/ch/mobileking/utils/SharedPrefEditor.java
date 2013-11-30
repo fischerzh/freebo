@@ -16,6 +16,8 @@ public class SharedPrefEditor {
 	private static String updateLogURL = prefix+"updateUserLog";
 	private static String registerURL = prefix+"user/create";
 	private static String updateUserSettingURL = prefix+"updateUserSettings";
+	private static String updateUserFilesURL = prefix+"updateUserFiles?";
+	private static String updateErrorLogsURL = prefix+"updateErrorLogs?";
 
 	
 	private static final String PREFS_PWD = "Password";
@@ -320,6 +322,34 @@ public class SharedPrefEditor {
 	 */
 	public static void setUpdateUserSettingURL(String updateUserSettingURL) {
 		SharedPrefEditor.updateUserSettingURL = updateUserSettingURL;
+	}
+
+	/**
+	 * @return the updateUserFilesURL
+	 */
+	public static String getUpdateUserFilesURL() {
+		return updateUserFilesURL;
+	}
+
+	/**
+	 * @param updateUserFilesURL the updateUserFilesURL to set
+	 */
+	public static void setUpdateUserFilesURL(String updateUserFilesURL) {
+		SharedPrefEditor.updateUserFilesURL = updateUserFilesURL;
+	}
+
+	/**
+	 * @return the updateErrorLogsURL
+	 */
+	public static String getUpdateErrorLogsURL() {
+		return updateErrorLogsURL;
+	}
+
+	/**
+	 * @param updateErrorLogsURL the updateErrorLogsURL to set
+	 */
+	public static void setUpdateErrorLogsURL(String updateErrorLogsURL) {
+		SharedPrefEditor.updateErrorLogsURL = updateErrorLogsURL;
 	}
 
 

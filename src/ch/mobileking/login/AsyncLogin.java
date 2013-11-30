@@ -1,6 +1,8 @@
 package ch.mobileking.login;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -29,6 +31,7 @@ import ch.mobileking.utils.SharedPrefEditor;
 import ch.mobileking.utils.Utils;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.widget.Toast;
@@ -109,11 +112,13 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
 		if(httpResponse != null)
 		{
 			responseEntity = httpResponse.getEntity();
+			System.out.println("Reason: " +httpResponse.getStatusLine().getReasonPhrase());
+			System.out.println("StatusCode: " + httpResponse.getStatusLine().getStatusCode());
 			System.out.println("responseEntity: " + responseEntity.toString());
 		}
 		else
 		{
-			return "FAILED";
+			return "FAILED: NO RESPONSE";
 		}
 		if (responseEntity != null) {
 			
@@ -127,18 +132,23 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
 //				listener.onLoginCompleted(false, e.getMessage());
 				return "FAILED: " +e.getMessage();
 			}
-            setJsonResult(convertStreamToString(instream));
+			String jsonString = Utils.convertStreamToString(instream);
+            setJsonResult(jsonString);
+            Utils.writeJsonResultLocal(this.act.getApplicationContext(), jsonString);
             // now you have the string representation of the HTML request
-            if(getJsonResult().toLowerCase().contains("failed") || getJsonResult().toLowerCase().contains("error"))
+            
+
+//            if(getJsonResult().toLowerCase().contains("failed") || getJsonResult().toLowerCase().contains("error"))
+            if(httpResponse.getStatusLine().getStatusCode() >= 300)
             {
             	System.out.println("JSON Result: " +getJsonResult());
-            	return "FAILED";
+            	return "FAILED: "+httpResponse.getStatusLine().getReasonPhrase();
             }
             else
             {
     			/**LOGIN WORKED, STORE USERNAME AND PASSWORD IN SHARED PREF **/
             	System.out.println("Login worked, set Username/Password");
-
+            	
             	editor.setUsername(user);
     			editor.setPwd(pwd);
             }
@@ -171,13 +181,13 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
 		
 		if(result.contains("FAILED"))
 		{
-			ProductKing.getInstance().addLogMsg("Login failed: " +result);
+			Utils.addLogMsg(this.getClass().getSimpleName()+": Login failed");
 			listener.onLoginCompleted(false, result);
 		}
 		else
 		{
 			parseJSON();
-
+			Utils.addLogMsg(this.getClass().getSimpleName()+": Login completed");
 			System.out.println("update after Sync: " +update);
 			
 			listener.onLoginCompleted(true, "Update");
@@ -215,32 +225,6 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
 	}
 	
 	
-	private static String convertStreamToString(InputStream is) {
-	    /*
-	     * To convert the InputStream to String we use the BufferedReader.readLine()
-	     * method. We iterate until the BufferedReader return null which means
-	     * there's no more data to read. Each line will appended to a StringBuilder
-	     * and returned as String.
-	     */
-	    BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-	    StringBuilder sb = new StringBuilder();
-
-	    String line = null;
-	    try {
-	        while ((line = reader.readLine()) != null) {
-	            sb.append(line + "\n");
-	        }
-	    } catch (IOException e) {
-	        e.printStackTrace();
-	    } finally {
-	        try {
-	            is.close();
-	        } catch (IOException e) {
-	            e.printStackTrace();
-	        }
-	    }
-	    return sb.toString();
-	}
 
 	/**
 	 * @return the jsonResult

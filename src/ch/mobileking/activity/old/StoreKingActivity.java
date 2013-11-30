@@ -1,12 +1,16 @@
-package ch.mobileking;
+package ch.mobileking.activity.old;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import ch.mobileking.R;
+import ch.mobileking.R.id;
+import ch.mobileking.R.layout;
 import ch.mobileking.classes.override.ImageAdapter;
 import ch.mobileking.utils.Crown;
 import ch.mobileking.utils.ProductKing;
 import ch.mobileking.utils.Products;
+import ch.mobileking.utils.Utils;
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.ListAdapter;
@@ -35,7 +39,7 @@ public class StoreKingActivity extends Activity {
 //		storeItems.add(cr);
 //		storeItems.add(cr2);
 		
-		ProductKing.getInstance().addLogMsg("StoreKingActivity");
+		Utils.addLogMsg(this.getLocalClassName());
 		
 		storeKingItems.addAll(ProductKing.getInstance().getLocations());
 

@@ -1,6 +1,9 @@
 package ch.mobileking.login;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -20,6 +23,8 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
@@ -65,6 +70,11 @@ public class ServerRequest {
 	
 	private String serverURL;
 	
+	public ServerRequest(SharedPrefEditor editor)
+	{
+		this.editor = editor;
+	}
+	
 	public ServerRequest(Activity act, ITaskComplete listener)
 	{
 		this.activity = act;
@@ -103,14 +113,14 @@ public class ServerRequest {
 		
 	}
 	
-	public void startUpdateUserSettings(String newUsername, String newPwd, String newMail, Boolean notificationEnabled, Boolean anonymousUser)
+	public void startUpdateUserSettings( String newPwd, String newMail, Boolean notificationEnabled, Boolean anonymousUser)
 	{
 		
-		setServerURL(editor.getUpdateUserSettingURL()+"?username="+newUsername+"&password="+newPwd+"&email="+newMail+"&isNotificationEnabled="+notificationEnabled+"&isAnonymous="+anonymousUser+"&updateFromApp=true");
+		setServerURL(editor.getUpdateUserSettingURL()+"?password="+newPwd+"&email="+newMail+"&isNotificationEnabled="+notificationEnabled+"&isAnonymous="+anonymousUser+"&updateFromApp=true");
 		System.out.println("updateUserSettings: " +getServerURL());
 		setUpHttpPost(getServerURL(), editor.getUsername(), editor.getPwd());
 
-		new UpdateUserSettings(newUsername, newPwd, newMail, notificationEnabled, anonymousUser).execute();
+		new UpdateUserSettings(newPwd, newMail, notificationEnabled, anonymousUser).execute();
 
 	}
 	
@@ -120,7 +130,7 @@ public class ServerRequest {
 		
 		if(Utils.isNetworkAvailable(getContext()))
 		{
-			System.out.println("userLogData: " + ProductKing.getInstance().getUserLogData());
+			System.out.println("userLogData: " + Utils.getUserLogData());
 			
 			UpdateLogs updater = new UpdateLogs();
 			
@@ -133,6 +143,11 @@ public class ServerRequest {
 			System.out.println("Can not sync, no Internet!");
 		}
 		
+	}
+	
+	public void startUpdateImageToServer(String filePath)
+	{
+		uploadFileToServer(filePath);
 	}
 	
 	
@@ -313,12 +328,12 @@ public class ServerRequest {
 	
 	private class UpdateUserSettings extends AsyncTask<String, String, String>
 	{
-		private String username, pwd, mail;
+		private String  pwd, mail;
 		private Boolean enableNoti, enableAnon;
 		
-		public UpdateUserSettings(String username, String pwd, String mail, Boolean noti, Boolean anon)
+		public UpdateUserSettings(String pwd, String mail, Boolean noti, Boolean anon)
 		{
-			this.username = username;
+//			this.username = username;
 			this.pwd = pwd;
 			this.mail = mail;
 			this.enableNoti = noti;
@@ -328,12 +343,6 @@ public class ServerRequest {
 		@Override
 		protected String doInBackground(String... params) {
 			// TODO Auto-generated method stub
-//			username = params[0];
-//			pwd = params[1];
-//			mail = params[2];
-//			enableNoti = Boolean.valueOf(params[3]);
-//			enableAnon = Boolean.valueOf(params[4]);
-			
 			String response = getHttpResponse(null, httpPost);
 			System.out.println("UpdateUserSettings: " + response);
 			return response;
@@ -459,67 +468,67 @@ public class ServerRequest {
 			username = editor.getUsername();
 			pwd = editor.getPwd();
 			
-			int size = ProductKing.getUserLogData().size();
-			
-			for(int i = 0; i < size; i++)
+			if(Utils.getUserLogData()!=null)
 			{
-				GcmMessage msg;
-				msg = ProductKing.getUserLogData().get(i);
-
-				if(!msg.getIsSynced())
-				{
-					if(sendMessageToServer(msg))
-					{
-						System.out.println("Set Synced for Message: " +msg.getUuid());
-						ProductKing.getUserLogData().get(i).setIsSynced(true);
-					}
-					else
-					{
-						failedMsgList.add(msg);
-					}
-				}
+				int size = Utils.getUserLogData().size();
 				
-			}
-			
-			int sizeNotifications = ProductKing.getNotifications().size();
-
-			for(int i = 0; i < sizeNotifications; i++)
-			{
-				GcmMessage msg;
-				msg = ProductKing.getNotifications().get(i);
-				
-				if(!msg.getIsSynced())
+				for(int i = 0; i < size; i++)
 				{
-					
-					if(sendMessageToServer(msg))
+					GcmMessage msg;
+					msg = Utils.getUserLogData().get(i);
+
+					if(!msg.getIsSynced())
 					{
-						System.out.println("Set Synced for Message: " +msg.getUuid());
-						ProductKing.getNotifications().get(i).setIsSynced(true);
-					}
-					else
-					{
-						failedMsgList.add(msg);
+						if(sendMessageToServer(msg))
+						{
+							System.out.println("Set Synced for Message: " +msg.getUuid());
+							Utils.getUserLogData().get(i).setIsSynced(true);
+						}
+						else
+						{
+							failedMsgList.add(msg);
+						}
 					}
 					
 				}
-					
 			}
+			
+			if(Utils.getNotifications()!=null)
+			{
+				int sizeNotifications = Utils.getNotifications().size();
+
+				for(int i = 0; i < sizeNotifications; i++)
+				{
+					GcmMessage msg;
+					msg = Utils.getNotifications().get(i);
+					
+					if(!msg.getIsSynced())
+					{
+						
+						if(sendMessageToServer(msg))
+						{
+							System.out.println("Set Synced for Message: " +msg.getUuid());
+							Utils.getNotifications().get(i).setIsSynced(true);
+						}
+						else
+						{
+							failedMsgList.add(msg);
+						}
+						
+					}
+						
+				}
+			}
+
 			
 			if(failedMsgList.size()>0)
 			{
-				ProductKing.getInstance().getUserLogData().clear();
-				ProductKing.getInstance().setUserLogData(failedMsgList);
+				Utils.getUserLogData().clear();
+				Utils.setUserLogData(failedMsgList);
 				errorResponse = "FAILED";
 			}
 			
 			return errorResponse;
-			
-			
-//			HttpEntity responseEntity = null;
-//			responseEntity = httpResponse.getEntity();
-//			instream = responseEntity.getContent();
-//			convertStreamToString(instream);
-			
 			
 		}
 		
@@ -571,6 +580,40 @@ public class ServerRequest {
 		}
 		
 
+	}
+	
+	private void uploadFileToServer(String filePath)
+	{
+		HttpClient httpclient = new DefaultHttpClient();
+		
+		File f = new File(filePath);
+		FileInputStream fileInputStream = null;
+		
+		try {
+			setUpHttpPost(editor.getUpdateUserFilesURL(), editor.getUsername(), editor.getPwd());
+//			HttpPost httpost = new HttpPost();
+			MultipartEntity entity = new MultipartEntity();
+			entity.addPart("uploadFile", new FileBody(f));
+			httpPost.setEntity(entity);
+			HttpResponse response = null;
+			response = httpclient.execute(httpPost);
+			System.out.println("FileUploadResponse: " + response.getEntity().toString());
+			
+			
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		   
+
+		   httpclient.getConnectionManager().shutdown();
+		   
 	}
 
 	private JSONResponse getJSONResponse(String result)

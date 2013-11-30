@@ -1,6 +1,7 @@
 package ch.mobileking;
 
 import ch.mobileking.R;
+import ch.mobileking.exception.CustomExceptionHandler;
 import ch.mobileking.login.AsyncLogin;
 import ch.mobileking.login.ServerRequest;
 import ch.mobileking.userdata.OnTokenAcquired;
@@ -8,6 +9,7 @@ import ch.mobileking.utils.BaseActivity;
 import ch.mobileking.utils.ITaskComplete;
 import ch.mobileking.utils.ProductKing;
 import ch.mobileking.utils.SharedPrefEditor;
+import ch.mobileking.utils.Utils;
 
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -61,6 +63,10 @@ public class MainActivity extends Activity implements ITaskComplete{
 		baseActivityMenu = new BaseActivity(this);
 		
         editor = new SharedPrefEditor(this);
+        
+        Utils.initUserLogData();
+        
+        Utils.setContext(getApplicationContext());
 		
 		setElements();
 		
@@ -71,8 +77,12 @@ public class MainActivity extends Activity implements ITaskComplete{
 		setTitle("ProductKing");
 		
 		setContentView(R.layout.activity_main);
+		
+		if(!(Thread.getDefaultUncaughtExceptionHandler() instanceof CustomExceptionHandler)) {
+		    Thread.setDefaultUncaughtExceptionHandler(new CustomExceptionHandler(editor.getUsername()));
+		}
 
-    	ProductKing.getInstance().addLogMsg("MainActivity");
+    	Utils.addLogMsg(this.getLocalClassName());
 		
 		am = AccountManager.get(this); // "this" references the current Context
 		
@@ -180,8 +190,7 @@ public class MainActivity extends Activity implements ITaskComplete{
 
 	private void loginUserFromSettings(String loginStr, String pwdStr)
 	{
-		
-    	ProductKing.getInstance().addLogMsg("MainActivity: loginUserFromSettings");
+    	Utils.addLogMsg(this.getLocalClassName()+": loginUserFromSettings");
 		
 		/** REFACTOR, CALL ASYNC LOGIN TASK, WAIT FOR CALLBACK, OnPostExecute() or similar AND THEN CALL ACCORDING VIEW BASED ON LGOIN SUCCESS, FAILURE OR FIRST LOGIN!! */
 		new AsyncLogin(getAct(), false, this).execute(loginStr, pwdStr);
@@ -192,7 +201,7 @@ public class MainActivity extends Activity implements ITaskComplete{
 	private void loginUser()
 	{
 		
-    	ProductKing.getInstance().addLogMsg("MainActivity: loginUser");
+    	Utils.addLogMsg(this.getLocalClassName()+": loginUser");
 
 		String loginStr, pwdStr;
         loginStr = username.getText().toString();

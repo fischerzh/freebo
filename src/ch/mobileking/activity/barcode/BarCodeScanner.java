@@ -10,6 +10,7 @@ import android.widget.Toast;
 import ch.mobileking.MainTabActivity;
 import ch.mobileking.activity.old.ProductOverview;
 import ch.mobileking.utils.ProductKing;
+import ch.mobileking.utils.Utils;
 
 import com.mirasense.scanditsdk.ScanditSDKAutoAdjustingBarcodePicker;
 import com.mirasense.scanditsdk.interfaces.ScanditSDK;
@@ -91,7 +92,7 @@ public class BarCodeScanner extends Activity implements ScanditSDKListener{
         intent.putExtra("barcode", barcode.trim());
         setResult(BARCODE_RESPONSE, intent);
         
-    	ProductKing.getInstance().addNotificationMsg("BarcodeScanner: " + barcode.trim(), "UserActivity", "");
+        Utils.addNotificationMsg(this.getLocalClassName() + barcode.trim(), "UserActivity", "");
         
 //        startActivityForResult(intent, 1);
         
@@ -121,7 +122,7 @@ public class BarCodeScanner extends Activity implements ScanditSDKListener{
         setResult(1, intent);
         startActivityForResult(intent, 1);
     	
-    	ProductKing.getInstance().addNotificationMsg("BarcodeScanner, manual: " + entry.trim(), "UserActivity", "");
+    	Utils.addNotificationMsg(this.getLocalClassName()+"manual: " + entry.trim(), "UserActivity", "");
 
         
         finish();

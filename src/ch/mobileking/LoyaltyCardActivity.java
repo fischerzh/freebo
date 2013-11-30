@@ -3,6 +3,7 @@ package ch.mobileking;
 import ch.mobileking.login.ServerRequest;
 import ch.mobileking.utils.ITaskComplete;
 import ch.mobileking.utils.ProductKing;
+import ch.mobileking.utils.Utils;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -36,7 +37,7 @@ public class LoyaltyCardActivity extends Activity implements ITaskComplete{
 		
 		setTitle("ProductKing");
 		
-    	ProductKing.getInstance().addLogMsg("LoyaltyCardActivity");
+    	Utils.addLogMsg(this.getLocalClassName());
 		
 		setContentView(R.layout.loyaltycard_view);
 		

@@ -1,7 +1,11 @@
-package ch.mobileking;
+package ch.mobileking.activity.old;
 
 import java.util.ArrayList;
 
+import ch.mobileking.R;
+import ch.mobileking.R.drawable;
+import ch.mobileking.R.id;
+import ch.mobileking.R.layout;
 import ch.mobileking.classes.override.ImageAdapter;
 import ch.mobileking.utils.Crown;
 import ch.mobileking.utils.ProductKing;
@@ -36,7 +40,7 @@ public class CrownDetailOverview extends Activity {
 
 			product = ProductKing.getStaticProducts().get(Integer.parseInt(prodId));
 			
-	    	ProductKing.getInstance().addLogMsg("CrownDetailOverview for Product: " + product.getName());
+	    	Utils.addLogMsg(this.getLocalClassName());
 
 			System.out.println("CrownDetailOverview: Found Product: " + product.getName());
 			prod_name = (TextView) findViewById(R.id.badges_detail_name);

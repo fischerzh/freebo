@@ -1,109 +1,111 @@
-   <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
 
-android:layout_width="fill_parent" android:layout_height="fill_parent"
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
 
-android:orientation="vertical">
+        <SurfaceView
+            android:id="@+id/surface_camera"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1" />
 
-       <FrameLayout
-           android:layout_width="match_parent"
-           android:layout_height="match_parent"
- 			>
+        <ch.mobileking.classes.override.RobotoTextView
+            android:id="@+id/camera_text_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Halte deinen Kassenzettel gerade um einzuscannen..."
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/textSizeLarge" />
 
-           <SurfaceView
-               android:id="@+id/surface_camera"
-               android:layout_width="fill_parent"
-               android:layout_height="fill_parent"
-               android:layout_weight="1" />
+        <LinearLayout
+            android:id="@+id/camera_button_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:visibility="invisible" >
 
-           <ch.mobileking.classes.override.RobotoTextView
-               android:id="@+id/camera_text_hint"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:text="Halte deinen Kassenzettel gerade um einzuscannen..." 
-               android:textSize="@dimen/textSizeLarge"
-               />
+            <Button
+                android:id="@+id/camera_new_scan_retake"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/camera_scan_button_orange"
+                android:text="Wiederholen"
+                android:textColor="@android:color/white" />
 
-           <LinearLayout
-               android:id="@+id/camera_button_layout"
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:layout_gravity="bottom" 
-               android:visibility="invisible"
-               >
+            <Button
+                android:id="@+id/camera_new_scan_addPart"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/camera_scan_button_blue"
+                android:text="Hinzufügen"
+                android:textColor="@android:color/white" />
 
-               <Button
-                   android:id="@+id/camera_new_scan_retake"
-                   android:layout_width="0dp"
-                   android:layout_height="wrap_content"
-                   android:layout_weight="1"
-                   android:background="@drawable/camera_scan_button_orange"
-                   android:text="Wiederholen"
-                   android:textColor="@android:color/white" />
+            <Button
+                android:id="@+id/camera_new_scan_finish"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/camera_scan_button"
+                android:text="Fertig"
+                android:textColor="@android:color/white" />
+        </LinearLayout>
 
-               <Button
-                   android:id="@+id/camera_new_scan_addPart"
-                   android:layout_width="0dp"
-                   android:layout_height="wrap_content"
-                   android:layout_weight="1"
-                   android:background="@drawable/camera_scan_button_blue"
-                   android:text="Hinzufügen"
-                   android:textColor="@android:color/white" />
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/camera_frame_top" />
 
-               <Button
-                   android:id="@+id/camera_new_scan_finish"
-                   android:layout_width="0dp"
-                   android:layout_height="wrap_content"
-                   android:layout_weight="1"
-                   android:background="@drawable/camera_scan_button"
-                   android:text="Fertig"
-                   android:textColor="@android:color/white" />
-           </LinearLayout>
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="50dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/camera_frame_bottom" />
 
-           <ImageView
-               android:id="@+id/imageView1"
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:layout_marginTop="50dp"
-               android:src="@drawable/camera_frame_top" 
-               android:scaleType="fitXY"
-               />
+        <ImageView
+            android:id="@+id/camera_show_preview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/abc_ab_share_pack_holo_dark"
+            android:visibility="invisible" />
 
-           <ImageView
-               android:id="@+id/imageView2"
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:layout_gravity="bottom"
-               android:layout_marginBottom="50dp"
-               android:scaleType="fitXY"
-               android:src="@drawable/camera_frame_bottom" />
+        <ImageView
+            android:id="@+id/camera_show_taken_prev_part"
+            android:layout_width="match_parent"
+            android:layout_height="125dp"
+            android:alpha="0.45"
+            android:scaleX="1"
+            android:src="@drawable/abc_ab_transparent_dark_holo" />
 
-           <ImageView
-               android:id="@+id/camera_show_preview"
-               android:layout_width="match_parent"
-               android:layout_height="match_parent"
-               android:src="@drawable/abc_ab_share_pack_holo_dark" 
-               android:visibility="invisible"
-               />
+        <requestFocus />
 
-           <ImageView
-               android:id="@+id/camera_show_taken_prev_part"
-               android:layout_width="match_parent"
-               android:layout_height="100dp"
-               android:src="@drawable/abc_ab_transparent_dark_holo" 
-               android:scaleType="fitEnd"
-               />
+        <requestFocus />
 
-           <requestFocus />
+        <ImageView
+            android:id="@+id/camera_take_picture"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_gravity="bottom"
+            android:src="@drawable/camera_take_pic" />
 
-           <requestFocus />
+        <ProgressBar
+            android:id="@+id/camera_progress_bar"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="match_parent"
+            android:layout_height="310dp"
+            android:layout_gravity="center_vertical"
+            android:visibility="invisible" />
+    </FrameLayout>
 
-           <ImageView
-               android:id="@+id/camera_take_picture"
-               android:layout_width="match_parent"
-               android:layout_height="52dp"
-               android:layout_gravity="bottom"
-               android:src="@drawable/camera_take_pic" />
-
-       </FrameLayout>
-
-    </RelativeLayout>
+</RelativeLayout>

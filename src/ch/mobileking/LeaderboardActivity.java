@@ -6,6 +6,7 @@ import ch.mobileking.classes.override.ImageAdapter;
 import ch.mobileking.utils.Crown;
 import ch.mobileking.utils.Leaderboard;
 import ch.mobileking.utils.ProductKing;
+import ch.mobileking.utils.Utils;
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.ListAdapter;
@@ -21,7 +22,7 @@ public class LeaderboardActivity extends Activity {
 		
 		setContentView(R.layout.activity_leaderboard_main);
 		
-    	ProductKing.getInstance().addLogMsg("LeaderboardActivity");
+    	Utils.addLogMsg(this.getLocalClassName());
 		
 		ListView storehero_lv = (ListView) findViewById(R.id.leaderboard_lv);
 		

@@ -88,7 +88,7 @@
             android:label="@string/app_name" >
         </activity>
         <activity
-            android:name="ch.mobileking.CrownDetailOverview"
+            android:name="ch.mobileking.activity.old.CrownDetailOverview"
             android:screenOrientation="portrait"
             android:label="@string/app_name" >
         </activity>
@@ -121,7 +121,7 @@
             android:label="@string/app_name" >
         </activity>
         <activity
-            android:name="ch.mobileking.StoreKingActivity"
+            android:name="ch.mobileking.activity.old.StoreKingActivity"
             android:screenOrientation="portrait"
             android:label="@string/app_name" >
         </activity>        
@@ -131,7 +131,7 @@
             android:label="@string/app_name" >
         </activity>     
         <activity
-            android:name="ch.mobileking.UserSettingsActivity"
+            android:name="ch.mobileking.userdata.UserSettingsActivity"
             android:screenOrientation="portrait"
             android:label="@string/app_name" >
         </activity> 

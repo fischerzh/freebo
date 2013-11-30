@@ -2,16 +2,13 @@ package ch.mobileking;
 
 import java.util.ArrayList;
 
-import ch.mobileking.login.AsyncLogin;
+import ch.mobileking.exception.CustomExceptionHandler;
 import ch.mobileking.login.AsyncUpdate;
 import ch.mobileking.login.ServerRequest;
-import ch.mobileking.tabs.MainProductFragment;
 import ch.mobileking.tabs.TabsPagerAdapter;
-import ch.mobileking.utils.Badge;
+import ch.mobileking.userdata.UserSettingsActivity;
 import ch.mobileking.utils.GcmMessage;
 import ch.mobileking.utils.ITaskComplete;
-import ch.mobileking.utils.ProductKing;
-import ch.mobileking.utils.Products;
 import ch.mobileking.utils.SharedPrefEditor;
 import ch.mobileking.utils.Utils;
 import android.app.AlertDialog;
@@ -43,7 +40,7 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
     private ActionBar actionBar;
     private ITaskComplete listener;
     
-    private String[] tabs = { "FAVORITEN", "ERRUNGENSCHAFTEN"};
+    private String[] tabs = { "FAVORITEN", "KASSENZETTEL"};
 	private View topLevelLayout;
 	private SharedPrefEditor editor;
 	private boolean doubleBackToExitPressedOnce;
@@ -56,16 +53,22 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
 		setTitle("ProductKing");
 		
 		editor = new SharedPrefEditor(this);
+		
+		if(!(Thread.getDefaultUncaughtExceptionHandler() instanceof CustomExceptionHandler)) {
+		    Thread.setDefaultUncaughtExceptionHandler(new CustomExceptionHandler(editor.getUsername()));
+		}
+		
+		Utils.addLogMsg(this.getLocalClassName());
+
 	    String intentResponse = getIntent().getStringExtra("gcmnotification");
 	    String gcmUUID = getIntent().getStringExtra("messageId");
 	    System.out.println("Response from GCM: " + intentResponse);
 	    System.out.println("UUID Msg from GCM: " +gcmUUID);
 
-//	    if(ProductKing.getNotifications()!=null)
 	    if(gcmUUID!=null && !gcmUUID.isEmpty())
 	    {
-	    	GcmMessage msg = ProductKing.getInstance().getMessageById(gcmUUID);
-	        ProductKing.getInstance().addNotificationMsg(msg.getContent(), "UserNotificationRead", "");
+	    	GcmMessage msg = Utils.getMessageById(gcmUUID);
+	        Utils.addNotificationMsg(msg.getContent(), "UserNotificationRead", "");
 	    	if(msg!=null)
 	    		createAlert(msg.getContent().toString(), "Neuigkeiten", R.drawable.ic_launcher);
 	    }
@@ -164,14 +167,14 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
 	@Override
 	public void onTabReselected(Tab tab, FragmentTransaction ft) {
 		// TODO Auto-generated method stub
-    	ProductKing.getInstance().addLogMsg(tab.getText()+"TabReselected");
+    	Utils.addLogMsg(tab.getText()+"TabReselected");
 
 	}
 
 	@Override
 	public void onTabSelected(Tab tab, FragmentTransaction ft) {
 		// TODO Auto-generated method stub
-    	ProductKing.getInstance().addLogMsg(tab.getText()+"TabSelcted");
+    	Utils.addLogMsg(tab.getText()+"TabSelcted");
 
 		viewPager.setCurrentItem(tab.getPosition());
 	}
@@ -193,15 +196,15 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         // code to handle data from CAMERA_REQUEST
-    	ProductKing.getInstance().addLogMsg("MainTabActivity.onActivityResult()" +resultCode + data + requestCode);
-		
+		Utils.addLogMsg(this.getLocalClassName()+" onActivityResult: " +resultCode + data + requestCode);
+
     	System.out.println("MainTabActivity, Barcode request: " + resultCode);
 		if(resultCode == BARCODE_REQUEST)
 		{
         	System.out.println("MainTabActivity, Barcode" + data.getStringExtra("barcode"));
         	String barcode = data.getStringExtra("barcode");
         	
-        	ProductKing.getInstance().addLogMsg("Barcode scanned: " +barcode);
+        	Utils.addLogMsg("Barcode scanned: " +barcode);
         	
 			Toast.makeText(this, "Bitte warten, wir aktualisieren....", Toast.LENGTH_LONG).show();
 			this.listener.startUpdate();
@@ -259,7 +262,7 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
     @Override
     public void onBackPressed() {
         if (doubleBackToExitPressedOnce) {
-        	ProductKing.getInstance().addLogMsg("Exit clicked");
+        	Utils.addLogMsg(this.getLocalClassName()+": Exit clicked");
         	onSyncRequest();
         	
         	Intent intent = new Intent(Intent.ACTION_MAIN);
@@ -270,7 +273,7 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
         }
         this.doubleBackToExitPressedOnce = true;
         Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
-        ProductKing.getInstance().addLogMsg("Back Exit clicked 1");
+        Utils.addLogMsg(this.getLocalClassName()+": Back Exit clicked 1");
         new Handler().postDelayed(new Runnable() {
 
             @Override

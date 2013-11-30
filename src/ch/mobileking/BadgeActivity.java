@@ -2,6 +2,7 @@ package ch.mobileking;
 
 import ch.mobileking.utils.Badge;
 import ch.mobileking.utils.ProductKing;
+import ch.mobileking.utils.Utils;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -32,7 +33,7 @@ public class BadgeActivity extends Activity {
 		
 		setContentView(R.layout.activity_badge_main);
 		
-    	ProductKing.getInstance().addLogMsg("BadgeActivity");
+    	Utils.addLogMsg(this.getLocalClassName());
 		
 		act_badge_login1 = (ImageView) findViewById(R.id.act_badge_login1);
 		act_badge_login2 = (ImageView) findViewById(R.id.act_badge_login2);

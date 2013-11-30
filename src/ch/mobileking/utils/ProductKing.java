@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import android.content.Context;
 import android.os.Environment;
 import android.os.Message;
 
@@ -45,27 +46,38 @@ private static final long serialVersionUID = 1L;
 	
 	private static List<Badge> staticBadges;
 	
-	private static List<GcmMessage> notifications;
-	
-	private static List<GcmMessage> userLogData;
-	
 	private static List<Leaderboard> staticLeaderboard;
 	
 	private static Boolean isActive = false;
+	
+	private static Context cont;
 	
 	private static ProductKing singletonProdKing;
 	
 	public static ProductKing getInstance()
 	{
+
 		if(singletonProdKing == null)
 		{
-			singletonProdKing = new ProductKing();
-			initNotifications();
-			initUserLogData();
+			singletonProdKing = Utils.getProductKingFromLocal();
 		}
 		return singletonProdKing;
 	}
 	
+	/**
+	 * @return the cont
+	 */
+	public static Context getContext() {
+		return cont;
+	}
+
+	/**
+	 * @param cont the cont to set
+	 */
+	public static void setContext(Context cont) {
+		ProductKing.cont = cont;
+	}
+
 	/**
 	 * @return the products
 	 */
@@ -224,72 +236,7 @@ private static final long serialVersionUID = 1L;
 		this.recommendations = recommendations;
 	}
 
-	/**
-	 * @return the notifications
-	 */
-	public static List<GcmMessage> getNotifications() {
-		return notifications;
-	}
 
-	/**
-	 * @param notifications the notifications to set
-	 */
-	public static void initNotifications() {
-		ProductKing.notifications = new ArrayList<GcmMessage>();
-	}
-	
-	public static void addNotificationMsg(String msg, String title, String uuid)
-	{
-		System.out.println("Adding GCM-Notification-Message " +msg);
-		GcmMessage gcmMsg = new GcmMessage(msg, title, uuid);
-		getNotifications().add(gcmMsg);
-	}
-	
-	public static GcmMessage getMessageById(String uuid)
-	{
-		GcmMessage returnMsg = null;
-		Boolean found = false;
-		for(GcmMessage msg : ProductKing.notifications)
-		{
-			System.out.println("msgId: " + msg.getUuid() +"messageCreateDate:" +msg.getCreateDate()+ "messageReadDate: " +msg.getReadDate());
-			if(msg.getUuid().contentEquals(uuid) && !msg.getRead())
-			{
-				returnMsg = msg;
-				ProductKing.notifications.get(ProductKing.notifications.indexOf(msg)).setRead(true);
-				ProductKing.notifications.get(ProductKing.notifications.indexOf(msg)).setReadDate(new Date());
-				found = true;
-				break;
-			}
-		}
-
-		return returnMsg;
-	}
-	
-	public static void initUserLogData() {
-		ProductKing.userLogData = new ArrayList<GcmMessage>();
-	}
-	
-	/**
-	 * @return the userLogData
-	 */
-	public static List<GcmMessage> getUserLogData() {
-		return userLogData;
-	}
-	
-	/**
-	 * @param Set the userLogData
-	 */
-	public static void setUserLogData(List<GcmMessage> logData) {
-		ProductKing.userLogData = logData;
-	}
-
-	public static void addLogMsg(String msg)
-	{
-		GcmMessage gcmMsg = new GcmMessage(msg, "UserActivityLog", "");
-		getUserLogData().add(gcmMsg);
-		System.out.println("Add Log Message: " +msg +  gcmMsg.getCreateDate());
-
-	}
 	
 	/**
 	 * @return the isactiveapp

@@ -5,6 +5,9 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Random;
 
+import ch.mobileking.exception.CustomExceptionHandler;
+import ch.mobileking.utils.ProductKing;
+import ch.mobileking.utils.SharedPrefEditor;
 import ch.mobileking.utils.Utils;
 
 import android.app.Activity;
@@ -27,6 +30,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class CameraActivity extends Activity implements SurfaceHolder.Callback {
@@ -44,15 +48,27 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
 	private Button camera_new_scan_addPart;
 	private ImageView camera_show_taken_prev_part;
 	
+	private SharedPrefEditor editor;
+	
+	private Bitmap image;
+	
 	private ArrayList<Bitmap> imageList;
+	private ProgressBar camera_progress_bar;
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.tab_fragment_camera_scan);
+
+		editor = new SharedPrefEditor(this);
 		
+		if(!(Thread.getDefaultUncaughtExceptionHandler() instanceof CustomExceptionHandler)) {
+		    Thread.setDefaultUncaughtExceptionHandler(new CustomExceptionHandler(editor.getUsername()));
+		}
+		
+    	Utils.addLogMsg(this.getLocalClassName());
+
 		imageList = new ArrayList<Bitmap>();
 
 		mSurfaceView = (SurfaceView) findViewById(R.id.surface_camera);
@@ -61,16 +77,29 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
 
 		mSurfaceHolder.addCallback(this);
 
-		mSurfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+//		mSurfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 		
 		camera_text_hint = (TextView) findViewById(R.id.camera_text_hint);
 		
+		camera_progress_bar = (ProgressBar) findViewById(R.id.camera_progress_bar);
+		camera_progress_bar.setVisibility(View.INVISIBLE);
+
 		btn_finish_Picture = (Button) findViewById(R.id.camera_new_scan_finish);
 		btn_finish_Picture.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				camera_progress_bar.setVisibility(View.VISIBLE);
+	            Time now = new Time();
+	            now.setToNow();
+	            Random rand = new Random();
+	            for(int i  = 0; i < imageList.size(); i++)
+	            {
+//		            Utils.saveBitmap(imageList.get(i) , "scan_"+now.year+now.month+now.monthDay+now.hour+now.minute+now.second+rand.nextInt(1000)+".jpg");
+	            	Utils.saveBitmapAsync(imageList.get(i) , "scan_"+now.year+now.month+now.monthDay+now.hour+now.minute+now.second+rand.nextInt(1000)+".jpg", editor);
+	            }
+
 				finish();
 			}
 		});
@@ -82,7 +111,11 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				camera_show_preview.setImageBitmap(null);
-				
+				int size = imageList.size();
+				if(imageList!=null)
+				{
+					imageList.remove(size-1);
+				}
 				camera_button_layout.setVisibility(View.INVISIBLE);
 				camera_take_picture.setVisibility(View.VISIBLE);
 			}
@@ -155,8 +188,6 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
 	
 	Camera.PictureCallback mPictureCallback = new Camera.PictureCallback() 
 	{
-		private Bitmap image;
-
 		public void onPictureTaken(byte[] imageData, Camera c) {
 			
 			System.out.println("Picture called: " + imageData);
@@ -166,12 +197,6 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
             options.inSampleSize = 1;
 
             image = BitmapFactory.decodeByteArray(imageData,0,imageData.length,options);
-            
-            Time now = new Time();
-            now.setToNow();
-            Random rand = new Random();
-            
-            Utils.saveBitmap(image , "scan_"+now.year+now.month+now.monthDay+now.hour+now.minute+now.second+rand.nextInt(1000)+".jpg");
             
             Matrix matrix = new Matrix();
             matrix.setRotate(90);

@@ -25,9 +25,9 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 
-import ch.mobileking.CrownDetailOverview;
 import ch.mobileking.ProductDetailOverview;
 import ch.mobileking.R;
+import ch.mobileking.activity.old.CrownDetailOverview;
 import ch.mobileking.login.AsyncUpdate;
 import ch.mobileking.utils.Crown;
 import ch.mobileking.utils.ProductKing;
@@ -159,26 +159,6 @@ public class ProductBaseAdapter extends BaseAdapter{
 				});
 			}
 	        
-//	        holder.setCrownLayout((LinearLayout)convertView.findViewById(R.id.linearLayoutCrown));
-	        
-//	        holder.getCrownLayout().setOnClickListener(new OnClickListener() {
-//				
-//				@Override
-//				public void onClick(View v) {
-//					// TODO Auto-generated method stub
-//					int getPosition = (Integer) v.getTag();			        
-//					Products prod = resultList.get(getPosition);
-//
-//					System.out.println("Position: " + getPosition + ", Crown clicked for item " + resultList.get(getPosition).getId() + resultList.get(getPosition).getName());
-//			        Intent intent = new Intent(getCont(), CrownDetailOverview.class);
-//			        intent.putExtra("product", String.valueOf(getPosition));
-//
-//			        ((Activity)getCont()).setResult(1, intent);
-//			        ((Activity)getCont()).startActivityForResult(intent, 1);
-//					
-//				}
-//			});
-			
 			convertView.setTag(holder);
 			convertView.setTag(R.id.prod_item_name, holder.txtName);
 			convertView.setTag(R.id.prod_item_checkbox, holder.chkBox);

@@ -4,6 +4,7 @@ import ch.mobileking.login.ServerRequest;
 import ch.mobileking.utils.BaseActivity;
 import ch.mobileking.utils.ITaskComplete;
 import ch.mobileking.utils.ProductKing;
+import ch.mobileking.utils.Utils;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -35,7 +36,7 @@ public class RegisterActivity extends Activity implements ITaskComplete{
 		
 		setContentView(R.layout.register_main);
 		
-    	ProductKing.getInstance().addNotificationMsg("RegisterActivity", "UserActivity", "");
+		Utils.addLogMsg(this.getLocalClassName());
 
 		
 		pwd1 = (EditText) findViewById(R.id.register_txt_pwd1);

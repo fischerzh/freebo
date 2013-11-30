@@ -1,10 +1,15 @@
-package ch.mobileking;
+package ch.mobileking.userdata;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Random;
 
+import ch.mobileking.R;
+import ch.mobileking.R.dimen;
+import ch.mobileking.R.drawable;
+import ch.mobileking.R.id;
+import ch.mobileking.R.layout;
 import ch.mobileking.login.ServerRequest;
 import ch.mobileking.utils.ITaskComplete;
 import ch.mobileking.utils.SharedPrefEditor;
@@ -94,6 +99,8 @@ public class UserSettingsActivity extends Activity implements ITaskComplete{
 		setTitle("Settings");
 		
 		editor = new SharedPrefEditor(this);
+		
+		initVariables();
 
 		final Random rand = new Random();
 
@@ -168,10 +175,7 @@ public class UserSettingsActivity extends Activity implements ITaskComplete{
 		        View layout=inflater.inflate(R.layout.user_settings_entry,null);       
 		        
 		        userEmailInput=(EditText)layout.findViewById(R.id.user_settings_entry_editText);
-		        if(email!=null)	
-		        	userEmailInput.setText(email);
-		        else
-		        	userEmailInput.setText(editor.getEmail());
+	        	userEmailInput.setText(editor.getEmail());
 		        
 		        alert.setPositiveButton("Ok", null);
 		        alert.setNegativeButton("Abbrechen",
@@ -261,6 +265,33 @@ public class UserSettingsActivity extends Activity implements ITaskComplete{
 		}
 	}
 	
+	private void initVariables()
+	{
+		this.email = editor.getEmail();
+		this.pwd = editor.getPwd();
+		this.isAnonymous = editor.getAnonymous();
+		this.isNotification = editor.getNotifications();
+	}
+	
+	private boolean isUpdateNeeded()
+	{
+		boolean isUpdateNeeded = false;
+		if(email != editor.getEmail())
+			isUpdateNeeded = true;
+//		if(!user.getText().toString().isEmpty() && email!=userEmailInput.getText().toString())
+//			isUpdateNeeded = true;
+		if(isNotification!= editor.getNotifications())
+			isUpdateNeeded = true;
+		if(isAnonymous != editor.getAnonymous())
+			isUpdateNeeded = true;
+		return isUpdateNeeded;
+	}
+	
+	private boolean hasChanged(Object a, Object b)
+	{
+		return a!=b;
+	}
+	
 	public void onSyncRequest()
 	{
 		System.out.println("UserSettingsActivity.onSyncRequest()");
@@ -269,9 +300,12 @@ public class UserSettingsActivity extends Activity implements ITaskComplete{
 		/*
 		 * editor.getUsername(),editor.getPwd() , editor.getEmail(), editor.getNotifications(), editor.getAnonymous()
 		 */
-//		if(email!=null && username!=null)
-//		{
-			request.startUpdateUserSettings(username, editor.getPwd(), email , isNotification, isAnonymous);
+//		if(hasChanged(email, editor.getEmail()))
+		if(isUpdateNeeded())
+		{
+			request.startUpdateUserSettings(editor.getPwd(), email , isNotification, isAnonymous);
+		}
+		
 //		}
 //		else
 //		{

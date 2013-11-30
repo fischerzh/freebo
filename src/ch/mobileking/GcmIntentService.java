@@ -103,8 +103,8 @@ public class GcmIntentService extends IntentService {
         intent.putExtra("gcmnotification", msg);
         intent.putExtra("messageId", uuid);
         
-        ProductKing.initNotifications();
-        ProductKing.addNotificationMsg( msg, "UserNotificationWrite", uuid);
+        Utils.initNotifications();
+        Utils.addNotificationMsg( msg, "UserNotificationWrite", uuid);
         
         /** SET THE ACTIVITY TO OPEN **/
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);

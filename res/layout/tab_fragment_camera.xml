@@ -1,68 +1,76 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/productRecommendationLayout"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:gravity="end"
     android:orientation="vertical" >
 
-    <ch.mobileking.classes.override.RobotoTextView
-        android:id="@+id/prod_recomm"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="10dp"
-        android:text="Deine Einkäufe"
-        android:textColor="@android:color/darker_gray"
-        android:textSize="20dp"
-        android:textStyle="italic" />
-
-    <View
-        android:id="@+id/separator"
-        android:layout_width="fill_parent"
-        android:layout_height="1dip"
-        android:layout_marginBottom="5dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:background="@color/common_action_bar_splitter" />
-
     <LinearLayout
+        android:id="@+id/productRecommendationLayout"
         android:layout_width="fill_parent"
-        android:layout_height="74dp"
-        android:layout_marginTop="5dp"
-        android:layout_weight="0.24"
+        android:layout_height="fill_parent"
         android:orientation="vertical" >
 
-        <LinearLayout
-            android:id="@+id/tab_frag_leaderboard_ll"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
-
-            <ImageView
-                android:id="@+id/badges_item_leaderboard"
-                android:layout_width="75dp"
-                android:layout_height="75dp"
-                android:layout_gravity="center_horizontal|center_vertical"
-                android:scaleType="fitCenter"
-                android:src="@drawable/ic_store_hero"
-                android:visibility="visible" />
-
-            <ch.mobileking.classes.override.RobotoTextView
-                android:id="@+id/badges_item_salespoint"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:text="Kassenzettel"
-                android:textColor="@android:color/black"
-                android:textSize="16dp" />
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/camera_new_scan"
-            android:layout_width="match_parent"
+        <ch.mobileking.classes.override.RobotoTextView
+            android:id="@+id/prod_recomm"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@android:color/black"
-            android:text="Neuer Scan"
-            android:textColor="@android:color/white" />
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:text="Deine Einkäufe"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="20dp"
+            android:textStyle="italic" />
 
+        <View
+            android:id="@+id/separator"
+            android:layout_width="fill_parent"
+            android:layout_height="1dip"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@color/common_action_bar_splitter" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="74dp"
+            android:layout_marginTop="5dp"
+            android:layout_weight="0.24"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:id="@+id/tab_frag_leaderboard_ll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <ImageView
+                    android:id="@+id/badges_item_leaderboard"
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_store_hero"
+                    android:visibility="visible" />
+
+                <ch.mobileking.classes.override.RobotoTextView
+                    android:id="@+id/badges_item_salespoint"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="Kassenzettel"
+                    android:textColor="@android:color/black"
+                    android:textSize="16dp" />
+            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
 
-</LinearLayout>
+    <Button
+        android:id="@+id/camera_new_scan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:background="@android:color/black"
+        android:text="Neuer Scan"
+        android:textColor="@android:color/white" />
+
+</RelativeLayout>

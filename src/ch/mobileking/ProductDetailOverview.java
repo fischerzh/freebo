@@ -33,16 +33,15 @@ public class ProductDetailOverview extends Activity {
 		setTitle("ProductKing");
 		
 		editor = new SharedPrefEditor(this);
+
+		Utils.addLogMsg(this.getLocalClassName());
 		
 		if(getCallingActivity() != null && getIntent().getExtras()!= null)
 		{
 			
 			String prodId = getIntent().getStringExtra("product");
 			Products product = null;
-			
 			product = ProductKing.getStaticProducts().get(Integer.parseInt(prodId));
-			
-	    	ProductKing.getInstance().addLogMsg("ProductDetailOverview for Product: " + product.getName());
 			
 			prod_name = (TextView) findViewById(R.id.prod_detail_name);
 			prod_manuf = (TextView) findViewById(R.id.prod_detail_manufacturer);

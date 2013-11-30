@@ -2,15 +2,31 @@ package ch.mobileking.utils;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.InputStreamEntity;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.StringBody;
+import org.apache.http.impl.client.DefaultHttpClient;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -20,6 +36,7 @@ import com.google.gson.JsonSyntaxException;
 
 import ch.mobileking.DemoActivity;
 import ch.mobileking.R;
+import ch.mobileking.login.ServerRequest;
 
 import android.app.Activity;
 import android.content.Context;
@@ -50,6 +67,8 @@ public class Utils {
 	private static String username;
 	private static String regId;
 	
+	private static List<GcmMessage> notifications;
+	private static List<GcmMessage> userLogData;
 	
 	public static final String EXTRA_MESSAGE = "message";
 	public static final String PROPERTY_REG_ID = "registration_id";
@@ -57,19 +76,23 @@ public class Utils {
 	private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 	
 	public static final String USER_AVATAR_PNG ="user_avatar.png";
+	public static final String JSON_FILE_NAME = "productKing.json";
 
-	/**
-	 * Substitute you own sender ID here. This is the project number you got
-	 * from the API Console, as described in "Getting Started."
-	 */
 	private static String SENDER_ID = "73370755379";
 
-	/**
-	 * Tag used on log messages.
-	 */
 	static final String TAG = "GCM Demo";
 	
 	private static ITaskComplete listener;
+	
+	public Utils(Context cont)
+	{
+		this.context = cont;
+		editor = new SharedPrefEditor(cont);
+		Utils.firstRun = editor.getFirstRun();
+		Utils.setUsername(editor.getUsername());
+		Utils.setRegId(editor.getRegId());
+	}
+	
 	
 	/**
 	 * @return the listener
@@ -83,14 +106,37 @@ public class Utils {
 		Utils.listener = listener;
 	}
 
-	public Utils(Context cont)
-	{
-		this.context = cont;
-		editor = new SharedPrefEditor(cont);
-		Utils.firstRun = editor.getFirstRun();
-		Utils.setUsername(editor.getUsername());
-		Utils.setRegId(editor.getRegId());
+	/**
+	 * @return the context
+	 */
+	public static Context getContext() {
+		return context;
 	}
+
+	/**
+	 * @param context the context to set
+	 */
+	public static void setContext(Context context) {
+		Utils.context = context;
+	}
+	
+	public static String getPath(String addFolder)
+	{
+		String file_path = null;
+		String state = Environment.getExternalStorageState();
+		
+		if (Environment.MEDIA_MOUNTED.equals(state)) {
+			if(addFolder!=null)
+				file_path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/MobileKingImages/"+addFolder;
+			else
+				file_path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/MobileKingImages";
+	        File dir = new File(file_path);
+	        if(!dir.exists())
+	           dir.mkdirs();
+		}
+        return file_path;
+	}
+
 	
 	public static String convertStreamToString(InputStream is) {
 
@@ -128,15 +174,11 @@ public class Utils {
     	}
     	catch (JsonSyntaxException e) {
 			System.out.println("JSON Syntax Exception" + e.toString());
-			prodKing = ProductKing.getInstance();
-			prodKing.setException("JSON Syntax Exception" + e.toString());
-			return prodKing;
+			e.printStackTrace();
     	}
     	catch (Exception e)	{
-    		System.out.println("Exception " + e.toString());
-    		prodKing = ProductKing.getInstance();
-    		prodKing.setException("Exception " + e.toString());
-    		return prodKing;
+    		System.out.println("JSON Parse Exception " + e.toString());
+    		e.printStackTrace();
     	}
 		ProductKing.setIsActive(prodKing.getIsactiveapp());
 		ProductKing.setStaticProducts(prodKing.getProducts());
@@ -159,8 +201,8 @@ public class Utils {
 	
 	public static Bitmap loadImage(Products prod)
 	{
-		String file_path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/MobileKingImages";
-		File imgFile = new File(file_path, prod.getId()+".png");
+		
+		File imgFile = new File(getPath(null), prod.getId()+".png");
 		Bitmap myBitmap = null;
 		
 		if(!imgFile.exists())
@@ -179,8 +221,7 @@ public class Utils {
 	}
 	
 	public static Bitmap loadImageFromPath(Products prod) {
-		String file_path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/MobileKingImages";
-		File imgFile = new File(file_path, prod.getId()+".png");
+		File imgFile = new File(getPath(null), prod.getId()+".png");
 		Bitmap myBitmap = null;
 		
 		if(imgFile.exists())
@@ -194,8 +235,7 @@ public class Utils {
 	}
 
 	public static Bitmap loadImageFromPath(String fileName) {
-		String file_path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/MobileKingImages";
-		File imgFile = new File(file_path, fileName);
+		File imgFile = new File(getPath(null), fileName);
 		Bitmap myBitmap = null;
 		
 		if(imgFile.exists())
@@ -210,7 +250,7 @@ public class Utils {
 	
 	public static boolean imageExists(Products prod)
 	{
-		String file_path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/MobileKingImages";
+		String file_path = getPath(null);
 		File imgFile = new File(file_path, prod.getId()+".png");
 		if(imgFile.exists())
 		{
@@ -227,8 +267,7 @@ public class Utils {
 	
 	public static boolean imageExists(String fileName)
 	{
-		String file_path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/MobileKingImages";
-		File imgFile = new File(file_path, fileName);
+		File imgFile = new File(getPath(null), fileName);
 		System.out.println("imgFile.exists(): " + imgFile.exists());
 		return imgFile.exists();
 	}
@@ -237,11 +276,7 @@ public class Utils {
 	public static String saveBitmap(Bitmap bmp, Products prod)
 	{
 		
-	    String file_path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/MobileKingImages";
-        File dir = new File(file_path);
-        if(!dir.exists())
-           dir.mkdirs();
-        File file = new File(dir, prod.getId()+".png");
+        File file = new File(getPath(null), prod.getId()+".png");
 //		Bitmap bmp = BitmapFactory.decodeFile(file.getAbsolutePath());
         FileOutputStream fOut = null;
 		try {
@@ -258,13 +293,16 @@ public class Utils {
 	    return file.getAbsolutePath();
 	}
 	
+	public static void saveBitmapAsync(Bitmap bmp, String filename, SharedPrefEditor editor)
+	{
+		SaveImageTask newImageSaver = new SaveImageTask(bmp, filename, editor);
+//		new LoadImageTask().execute(filePath);
+		newImageSaver.execute();
+	}
+	
 	public static String saveBitmap(Bitmap bmp, String fileName)
 	{
-		String file_path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/MobileKingImages";
-        File dir = new File(file_path);
-        if(!dir.exists())
-           dir.mkdirs();
-        File file = new File(dir, fileName);
+        File file = new File(getPath(null), fileName);
 //		Bitmap bmp = BitmapFactory.decodeFile(file.getAbsolutePath());
         FileOutputStream fOut = null;
 		try {
@@ -280,6 +318,107 @@ public class Utils {
 	    System.out.println("Saved Image to SD card: " +file.getAbsolutePath());
 	    return file.getAbsolutePath();
 	}	
+	
+	public static void writeJsonResultLocal(Context cont, String file)
+	{
+	        FileOutputStream fos;
+			try {
+				fos = cont.openFileOutput(JSON_FILE_NAME, Context.MODE_PRIVATE);
+	            fos.write(file.getBytes());
+	            fos.close();
+	            
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	}
+	
+	public static ProductKing getProductKingFromLocal()
+	{
+		System.out.println("Reading JSON from File..");
+		FileInputStream fis = null;
+		try {
+			if(getContext()!=null)
+				fis = getContext().openFileInput(JSON_FILE_NAME);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		System.out.println("InputStream: " + fis);
+		
+		ProductKing prodKing = parseJSON(convertStreamToString(fis));
+		return prodKing;
+	}
+	
+	/**
+	 * @return the notifications
+	 */
+	public static List<GcmMessage> getNotifications() {
+		return notifications;
+	}
+
+	/**
+	 * @param notifications the notifications to set
+	 */
+	public static void initNotifications() {
+		Utils.notifications = new ArrayList<GcmMessage>();
+	}
+	
+	public static void addNotificationMsg(String msg, String title, String uuid)
+	{
+		System.out.println("Adding GCM-Notification-Message " +msg);
+		GcmMessage gcmMsg = new GcmMessage(msg, title, uuid);
+		getNotifications().add(gcmMsg);
+	}
+	
+	public static GcmMessage getMessageById(String uuid)
+	{
+		GcmMessage returnMsg = null;
+		Boolean found = false;
+		for(GcmMessage msg : Utils.notifications)
+		{
+			System.out.println("msgId: " + msg.getUuid() +"messageCreateDate:" +msg.getCreateDate()+ "messageReadDate: " +msg.getReadDate());
+			if(msg.getUuid().contentEquals(uuid) && !msg.getRead())
+			{
+				returnMsg = msg;
+				Utils.notifications.get(Utils.notifications.indexOf(msg)).setRead(true);
+				Utils.notifications.get(Utils.notifications.indexOf(msg)).setReadDate(new Date());
+				found = true;
+				break;
+			}
+		}
+
+		return returnMsg;
+	}
+	
+	public static void initUserLogData() {
+		Utils.userLogData = new ArrayList<GcmMessage>();
+	}
+	
+	/**
+	 * @return the userLogData
+	 */
+	public static List<GcmMessage> getUserLogData() {
+		return userLogData;
+	}
+	
+	/**
+	 * @param Set the userLogData
+	 */
+	public static void setUserLogData(List<GcmMessage> logData) {
+		Utils.userLogData = logData;
+	}
+
+	public static void addLogMsg(String msg)
+	{
+		GcmMessage gcmMsg = new GcmMessage(msg, "UserActivityLog", "");
+		if(getUserLogData()==null)
+			initUserLogData();
+		getUserLogData().add(gcmMsg);
+
+		System.out.println("Add Log Message: " +msg +  gcmMsg.getCreateDate());
+		
+	}
+	
 
 	public static void registerDevice(Context cont)
 	{
@@ -464,7 +603,38 @@ public class Utils {
 		editor.setRegId(regId);
 	}
 
-}
+}	
+
+   class SaveImageTask extends AsyncTask<String, Void, String> {
+	   
+	   private Bitmap image;
+	   private String filename;
+	   private SharedPrefEditor editor;
+	   public SaveImageTask(Bitmap image, String filename, SharedPrefEditor editor)
+	   {
+		   this.image = image;
+		   this.filename = filename;
+		   this.editor = editor;
+	   }
+	   
+	   protected String doInBackground(String... params) {
+		   
+		   ServerRequest request = new ServerRequest( editor);
+		   
+		   String filePath = Utils.saveBitmap(image, filename);
+		   request.startUpdateImageToServer(filePath);
+		   
+	       return filePath;
+	     }
+	   
+	   protected void onPostExecute(String result) {
+	         //Do something with bitmap eg:
+	    	 System.out.println("Saved Image async finished: " +result.toString());
+	    	 
+	    	 
+	     }
+
+   }
 
   class LoadImageTask extends AsyncTask<String, Void, Bitmap> {
 	
@@ -478,8 +648,7 @@ public class Utils {
      protected void onPostExecute(Bitmap result) {
          //Do something with bitmap eg:
     	 System.out.println("Got Image: " +result.toString());
-    	 image = result;
-    	 Utils.saveBitmap(image, "user_avatar.png");
+    	 this.image = result;
     	 if(Utils.getListener()!=null)
     	 {
     		 Utils.getListener().onUpdateCompleted(true, "image saved!");
@@ -490,7 +659,7 @@ public class Utils {
 	 private Bitmap loadImage(String path){
 		 Bitmap bitmap = null;
 		 try {
-			 System.out.println("Downloading Image from Link: " + path);
+			 System.out.println("Loading Image from Link: " + path);
 				File imgFile = new File(path);
 	          bitmap = resizeBitmap(path);
 	      } catch (Exception e) {
@@ -498,7 +667,9 @@ public class Utils {
 	    }
 		 
 		System.out.println("Bitmap resized: " + " height: " + bitmap.getHeight() +  " width: " + bitmap.getWidth());
-		 
+		
+   	 	Utils.saveBitmap(bitmap, "user_avatar.png");
+		
 		return bitmap;
 	 }
 	 
