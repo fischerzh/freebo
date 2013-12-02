@@ -183,56 +183,62 @@ public class ProductBaseAdapter extends BaseAdapter{
 		 * 
 		 */
 		Products prod = resultList.get(position);
-//		if(resultList.get(position).getOptin())
-//		{
-			holder.getTxtName().setText(""+prod.getName());
-			holder.getTxtProducer().setText(""+prod.getProducer());
+		holder.getTxtName().setText(""+prod.getName());
+		holder.getTxtProducer().setText(""+prod.getProducer());
+		
+		if(prod.getIsactive())
+		{
+
 			if(prod.getOlduserrank()-prod.getUserrank()>0 && prod.getOlduserrank()!=0)
 			{
-				holder.getTxtRank().setText("MEIN RANG "+prod.getUserrank() + " (+"+(prod.getOlduserrank()-prod.getUserrank())+")");
+				holder.getTxtRank().setText("DEIN RANG #"+prod.getUserrank() + " (+"+(prod.getOlduserrank()-prod.getUserrank())+")");
 				holder.getTxtRank().setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_up_green, 0);
 			}
 			else if(prod.getOlduserrank()-prod.getUserrank()<0 && prod.getOlduserrank()!=0)
 			{
-				holder.getTxtRank().setText("MEIN RANG "+prod.getUserrank() + " ("+(prod.getOlduserrank()-prod.getUserrank())+")");
+				holder.getTxtRank().setText("DEIN RANG #"+prod.getUserrank() + " ("+(prod.getOlduserrank()-prod.getUserrank())+")");
 				holder.getTxtRank().setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down_red, 0);
 			}
 			else if(prod.getOlduserrank()==0 && prod.getUserrank()==1)
 			{
-				holder.getTxtRank().setText("MEIN RANG "+prod.getUserrank() + " (+-0)");
+				holder.getTxtRank().setText("DEIN RANG #"+prod.getUserrank() + " (+-0)");
 				holder.getTxtRank().setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_up_green, 0);
 			}
 			else
 			{
-				holder.getTxtRank().setText("MEIN RANG "+prod.getUserrank() + " (+-0)");
+				holder.getTxtRank().setText("DEIN RANG #"+prod.getUserrank() + " (+-0)");
 				holder.getTxtRank().setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_nochange, 0);
 			}
 			holder.getTxtCollectedCnt().setText(prod.getPoints()+" Pkte.");
 			
-			if(prod.getUserrank() == 1)
+			if(getProdLayoutResourceId()==R.layout.product_item)
 			{
-				holder.getCrown1().setImageResource(R.drawable.ic_krone_gold);
+				if(prod.getUserrank() == 1)
+				{
+					holder.getCrown1().setImageResource(R.drawable.ic_krone_gold);
+				}
+				if(prod.getUserrank() == 2)
+				{
+					holder.getCrown1().setImageResource(R.drawable.ic_krone_silber);
+				}
+				if(prod.getUserrank() == 3)
+				{
+					holder.getCrown1().setImageResource(R.drawable.ic_krone_bronze);
+				}
 			}
-			if(prod.getUserrank() == 2)
-			{
-				holder.getCrown1().setImageResource(R.drawable.ic_krone_silber);
-			}
-			if(prod.getUserrank() == 3)
-			{
-				holder.getCrown1().setImageResource(R.drawable.ic_krone_bronze);
-			}
+
 				
 			/** SET THE POSITION TO REFERENCE FROM LATER **/
 				
 //			holder.getCrownLayout().setTag(position);
 		
-//		}
-//		else
-//		{
-//			holder.getTxtName().setText(" ");
-//			holder.getTxtProducer().setText("Scan product to join!");
-//			holder.getTxtRank().setText(" ");
-//		}
+		}
+		else
+		{
+			holder.getTxtRank().setText("DEIN RANG #"+prod.getUserrank() + " (+-0)");
+			holder.getTxtRank().setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_nochange, 0);
+			holder.getTxtCollectedCnt().setText("Keine EinkŠufe!");
+		}
 		
 //		Products prod = resultList.get(position);
 		
@@ -257,7 +263,7 @@ public class ProductBaseAdapter extends BaseAdapter{
 				e.printStackTrace();
 			}
 			
-			imagePath = saveBitmap(image, imageName);
+			imagePath = Utils.saveBitmap(image, imageName);
 			
 		}
 		//Image Stuff
@@ -266,6 +272,10 @@ public class ProductBaseAdapter extends BaseAdapter{
 //		prodItemPict.setImageBitmap(image);
 		
 		holder.getImgView().setImageBitmap(image);
+		if(!prod.getIsactive())
+		{
+			holder.getImgView().setAlpha(125);
+		}
 		
 //		String imageUri = resultList.get(position).getImagelink();
 //		holder.getImgView().setTag(imageUri); //Add this line
@@ -277,27 +287,27 @@ public class ProductBaseAdapter extends BaseAdapter{
 		return convertView;
 	}
 	
-	private String saveBitmap(Bitmap bmp, String imageName)
-	{
-	    String file_path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/MobileKingImages";
-        File dir = new File(file_path);
-        if(!dir.exists())
-           dir.mkdirs();
-        File file = new File(dir, imageName);
-        FileOutputStream fOut = null;
-		try {
-			fOut = new FileOutputStream(file);
-			bmp.compress(Bitmap.CompressFormat.PNG, 85, fOut);
-			fOut.flush();
-	        fOut.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-	    System.out.println("Saved Image to SD card: " +file.getAbsolutePath());
-	    return file.getAbsolutePath();
-	}
+//	private String saveBitmap(Bitmap bmp, String imageName)
+//	{
+//	    String file_path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/MobileKingImages";
+//        File dir = new File(file_path);
+//        if(!dir.exists())
+//           dir.mkdirs();
+//        File file = new File(dir, imageName);
+//        FileOutputStream fOut = null;
+//		try {
+//			fOut = new FileOutputStream(file);
+//			bmp.compress(Bitmap.CompressFormat.PNG, 85, fOut);
+//			fOut.flush();
+//	        fOut.close();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		
+//	    System.out.println("Saved Image to SD card: " +file.getAbsolutePath());
+//	    return file.getAbsolutePath();
+//	}
 	
 
 	public int countCrowns(List<Crown> crowns, int color)

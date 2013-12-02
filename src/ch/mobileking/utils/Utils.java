@@ -353,6 +353,8 @@ public class Utils {
 	 * @return the notifications
 	 */
 	public static List<GcmMessage> getNotifications() {
+		if(notifications==null)
+			initNotifications();
 		return notifications;
 	}
 

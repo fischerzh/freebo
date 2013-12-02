@@ -59,6 +59,7 @@ private static final long serialVersionUID = 1L;
 
 		if(singletonProdKing == null)
 		{
+			System.out.println("Loading JSON from Local!");
 			singletonProdKing = Utils.getProductKingFromLocal();
 		}
 		return singletonProdKing;

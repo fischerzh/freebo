@@ -165,7 +165,7 @@ public class ImageAdapter extends BaseAdapter{
 		else if(this.layoutId == R.layout.activity_leaderboard_item)
 		{
 			TextView leaderboard_item_pts_txt = (TextView) gridView.findViewById(R.id.leaderboard_item_pts_txt);
-			leaderboard_item_pts_txt.setText(((Leaderboard) items.get(position)).getPoints()*435.5+" Pkt.");
+			leaderboard_item_pts_txt.setText(((Leaderboard) items.get(position)).getPoints()+" Pkt.");
 			
 			TextView leaderboard_item_user = (TextView) gridView.findViewById(R.id.leaderboard_item_user);
 			leaderboard_item_user.setText(""+((Leaderboard) items.get(position)).getUsername());

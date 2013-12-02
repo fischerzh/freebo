@@ -37,6 +37,9 @@ public class Products {
 	
 	@SerializedName("optin")
 	private Boolean optin = false;
+
+	@SerializedName("isactive")
+	private Boolean isactive = false;
 	
 	@SerializedName("isdeleted")
 	private Boolean isdeleted = false;
@@ -58,6 +61,9 @@ public class Products {
 	
 	@SerializedName("crowns")
 	private List<Crown> crowns;
+	
+	@SerializedName("leaderboard")
+	private List<Leaderboard> leaderboard;
 	
 	/**
 	 * @return the id
@@ -200,6 +206,20 @@ public class Products {
 	}
 
 	/**
+	 * @return the isactive
+	 */
+	public Boolean getIsactive() {
+		return isactive;
+	}
+
+	/**
+	 * @param isactive the isactive to set
+	 */
+	public void setIsactive(Boolean isactive) {
+		this.isactive = isactive;
+	}
+
+	/**
 	 * @return the isdeleted
 	 */
 	public Boolean getIsdeleted() {
@@ -295,6 +315,20 @@ public class Products {
 	 */
 	public void setCrowns(List<Crown> crowns) {
 		this.crowns = crowns;
+	}
+
+	/**
+	 * @return the leaderboard
+	 */
+	public List<Leaderboard> getLeaderboard() {
+		return leaderboard;
+	}
+
+	/**
+	 * @param leaderboard the leaderboard to set
+	 */
+	public void setLeaderboard(List<Leaderboard> leaderboard) {
+		this.leaderboard = leaderboard;
 	}
 
 }

@@ -92,7 +92,7 @@ public class BarCodeScanner extends Activity implements ScanditSDKListener{
         intent.putExtra("barcode", barcode.trim());
         setResult(BARCODE_RESPONSE, intent);
         
-        Utils.addNotificationMsg(this.getLocalClassName() + barcode.trim(), "UserActivity", "");
+        Utils.addLogMsg(this.getLocalClassName() + ", Barcode: " +barcode.trim());
         
 //        startActivityForResult(intent, 1);
         
@@ -121,9 +121,7 @@ public class BarCodeScanner extends Activity implements ScanditSDKListener{
         intent.putExtra("barcode", entry.trim());
         setResult(1, intent);
         startActivityForResult(intent, 1);
-    	
-    	Utils.addNotificationMsg(this.getLocalClassName()+"manual: " + entry.trim(), "UserActivity", "");
-
+        Utils.addLogMsg(this.getLocalClassName() + ", Barcode (manual): " +entry.trim());
         
         finish();
 	}

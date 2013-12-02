@@ -48,13 +48,13 @@ public class ProductDetailOverview extends Activity {
 			productImage = (ImageView) findViewById(R.id.prod_detail_image);
 			
 			product_detail_userRank = (TextView) findViewById(R.id.product_detail_userRank);
-			product_detail_userRank.setText("MEIN RANG: #" + product.getUserrank());
+			product_detail_userRank.setText("RANG #" + product.getUserrank());
 			
 			product_detail_userName = (TextView) findViewById(R.id.product_detail_userName);
 			product_detail_userName.setText(editor.getUsername());
 			
 			product_detail_points = (TextView) findViewById(R.id.product_detail_points);
-			product_detail_points.setText(product.getPoints()*435.5 + " Pkt.");
+			product_detail_points.setText(product.getPoints() + " Pkt.");
 			
 			product_detail_avatar = (ImageView) findViewById(R.id.product_detail_avatar);
 			product_detail_avatar.setImageBitmap(Utils.loadImageFromPath(Utils.USER_AVATAR_PNG));
@@ -68,7 +68,8 @@ public class ProductDetailOverview extends Activity {
 			
 			ArrayList<Object> storeItems = new ArrayList<Object>();
 			
-			storeItems.addAll(ProductKing.getInstance().getStaticLeaderboard());
+//			storeItems.addAll(ProductKing.getInstance().getStaticLeaderboard());
+			storeItems.addAll(product.getLeaderboard());
 			
 			ImageAdapter adapter = new ImageAdapter(getApplicationContext(), storeItems, R.layout.activity_leaderboard_item); 
 			
