@@ -160,6 +160,29 @@ public class Utils {
 	    return sb.toString();
 	}
 	
+	public static JSONResponse parseJSONSmall(String json)
+	{
+		System.out.println("Json Stream reading..");
+		Gson gson = new Gson();
+		JSONResponse jsonClass = null;
+		try {
+			jsonClass = gson.fromJson(json, JSONResponse.class); //Product.class
+    		if(jsonClass.equals(null))
+    			throw new Exception("Parser Error!");
+    		else
+    			System.out.println("JSONSmall loaded: " +jsonClass);
+    	}
+    	catch (JsonSyntaxException e) {
+			System.out.println("JSON Syntax Exception" + e.toString());
+			e.printStackTrace();
+    	}
+    	catch (Exception e)	{
+    		System.out.println("JSON Parse Exception " + e.toString());
+    		e.printStackTrace();
+    	}
+		return jsonClass;
+	}
+	
 	public static ProductKing parseJSON(String json)
 	{
 		System.out.println("Json Stream reading..");
@@ -281,7 +304,7 @@ public class Utils {
         FileOutputStream fOut = null;
 		try {
 			fOut = new FileOutputStream(file);
-			bmp.compress(Bitmap.CompressFormat.PNG, 85, fOut);
+			bmp.compress(Bitmap.CompressFormat.PNG, 50, fOut);
 			fOut.flush();
 	        fOut.close();
 		} catch (IOException e) {
@@ -300,16 +323,35 @@ public class Utils {
 		newImageSaver.execute();
 	}
 	
+	public static void saveBitmapAsync(Bitmap bmp, String filename)
+	{
+		SaveImageTask newImageSaver = new SaveImageTask(bmp, filename);
+//		new LoadImageTask().execute(filePath);
+		newImageSaver.execute();
+	}
+	
+	public static void loadBitmapFromURL(String url, String filename)
+	{
+		SaveImageTask newImageSaver = new SaveImageTask(url, filename);
+		newImageSaver.execute();
+
+	}
+	
 	public static String saveBitmap(Bitmap bmp, String fileName)
 	{
         File file = new File(getPath(null), fileName);
 //		Bitmap bmp = BitmapFactory.decodeFile(file.getAbsolutePath());
         FileOutputStream fOut = null;
 		try {
-			fOut = new FileOutputStream(file);
-			bmp.compress(Bitmap.CompressFormat.PNG, 85, fOut);
-			fOut.flush();
-	        fOut.close();
+				fOut = new FileOutputStream(file);
+				if(bmp!=null && fOut!=null)
+				{
+					bmp.compress(Bitmap.CompressFormat.PNG, 75, fOut);
+					fOut.flush();
+			        fOut.close();
+				}
+
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -321,6 +363,7 @@ public class Utils {
 	
 	public static void writeJsonResultLocal(Context cont, String file)
 	{
+		System.out.println("Save JSON local: " +file);
 	        FileOutputStream fos;
 			try {
 				fos = cont.openFileOutput(JSON_FILE_NAME, Context.MODE_PRIVATE);
@@ -612,26 +655,66 @@ public class Utils {
 	   private Bitmap image;
 	   private String filename;
 	   private SharedPrefEditor editor;
+	   private Boolean updateToBackend = false;
+	   private Boolean loadFromUrl = false;
+	   private String url;
 	   public SaveImageTask(Bitmap image, String filename, SharedPrefEditor editor)
 	   {
 		   this.image = image;
 		   this.filename = filename;
 		   this.editor = editor;
+		   this.updateToBackend = true;
+	   }
+	   
+	   public SaveImageTask(Bitmap image, String filename)
+	   {
+		   this.image = image;
+		   this.filename = filename;
+		   this.updateToBackend = false;
+	   }
+	   
+	   public SaveImageTask(String url, String filename)
+	   {
+		   this.loadFromUrl = true;
+		   this.updateToBackend = false;
+		   this.url = url;
+		   this.filename = filename;
+
 	   }
 	   
 	   protected String doInBackground(String... params) {
 		   
-		   ServerRequest request = new ServerRequest( editor);
+		   String filePath;
+		   if(loadFromUrl)
+		   {
+				try {
+					image = BitmapFactory.decodeStream((InputStream)new URL(url).getContent());
+				} catch (MalformedURLException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+		   }
+		   if(image!=null)
+			   filePath = Utils.saveBitmap(image, filename);
+		   else
+		   {
+			   Bitmap icon = BitmapFactory.decodeResource(Utils.getContext().getResources(), R.drawable.no_image_icon);
+			   filePath = Utils.saveBitmap(icon, filename);
+		   }
 		   
-		   String filePath = Utils.saveBitmap(image, filename);
-		   request.startUpdateImageToServer(filePath);
-		   
+		   if(updateToBackend)
+		   {
+			   ServerRequest request = new ServerRequest( editor);
+			   request.startUpdateImageToServer(filePath);
+		   }
+
 	       return filePath;
 	     }
 	   
 	   protected void onPostExecute(String result) {
 	         //Do something with bitmap eg:
-	    	 System.out.println("Saved Image async finished: " +result.toString());
+	    	 System.out.println("Saved Image async finished (including server upload: "+ updateToBackend + " " +result.toString());
 	    	 
 	    	 
 	     }

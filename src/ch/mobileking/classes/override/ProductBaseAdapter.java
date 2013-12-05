@@ -49,6 +49,7 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class ProductBaseAdapter extends BaseAdapter{
@@ -117,6 +118,7 @@ public class ProductBaseAdapter extends BaseAdapter{
 		return position;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 				
@@ -132,7 +134,7 @@ public class ProductBaseAdapter extends BaseAdapter{
 			holder.setTxtCollectedCnt((TextView)convertView.findViewById(R.id.prod_collected_cnt));
 			holder.setImgView((ImageView)convertView.findViewById(R.id.list_image));
 			holder.setCrown1((ImageView)convertView.findViewById(R.id.prod_item_crown));
-
+			holder.setImgProgress((ProgressBar)convertView.findViewById(R.id.list_image_progress));
 			holder.setChkBox((CheckBox)convertView.findViewById(R.id.prod_item_checkbox));
 
 	        if(holder.getChkBox() != null)
@@ -236,45 +238,47 @@ public class ProductBaseAdapter extends BaseAdapter{
 		else
 		{
 			holder.getTxtRank().setText("DEIN RANG #"+prod.getUserrank() + " (+-0)");
+			holder.getCrown1().setImageResource(R.drawable.ic_krone_inactive);
 			holder.getTxtRank().setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_nochange, 0);
 			holder.getTxtCollectedCnt().setText("Keine Einkäufe!");
 		}
 		
 //		Products prod = resultList.get(position);
 		
-		String imageName = prod.getId()+".png";
-		String imagePath = "";
+		String imageName = prod.getEan()+".png";
+//		String imagePath = "";
 		Bitmap image = null;
 		
-		if(Utils.imageExists(prod))
+		if(Utils.imageExists(imageName))
 		{
-			image = Utils.loadImageFromPath(prod);
-			imagePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/MobileKingImages/"+imageName;
+			holder.getImgProgress().setVisibility(View.INVISIBLE);
+			image = Utils.loadImageFromPath(imageName);
+//			imagePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/MobileKingImages/"+imageName;
+			holder.getImgView().setImageBitmap(image);
+
 		}
 		else
 		{
-			try {
-				image = BitmapFactory.decodeStream((InputStream)new URL(prod.getImagelink()).getContent());
-			} catch (MalformedURLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			imagePath = Utils.saveBitmap(image, imageName);
+			Utils.loadBitmapFromURL(prod.getImagelink(), imageName);
+			holder.getImgProgress().setVisibility(View.VISIBLE);
+			holder.getImgView().setImageResource(R.drawable.empty);
+
+//			Utils.saveBitmapAsync(image, imageName);
 			
 		}
 		//Image Stuff
-		resultList.get(position).setImagepath(imagePath);
 		
 //		prodItemPict.setImageBitmap(image);
 		
-		holder.getImgView().setImageBitmap(image);
 		if(!prod.getIsactive())
 		{
+			System.out.println("Set image transparent: " +prod.getName());
+			System.out.println("Is active?: " + prod.getIsactive());
 			holder.getImgView().setAlpha(125);
+		}
+		else
+		{
+			holder.getImgView().setAlpha(255);
 		}
 		
 //		String imageUri = resultList.get(position).getImagelink();
@@ -286,28 +290,6 @@ public class ProductBaseAdapter extends BaseAdapter{
 			
 		return convertView;
 	}
-	
-//	private String saveBitmap(Bitmap bmp, String imageName)
-//	{
-//	    String file_path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/MobileKingImages";
-//        File dir = new File(file_path);
-//        if(!dir.exists())
-//           dir.mkdirs();
-//        File file = new File(dir, imageName);
-//        FileOutputStream fOut = null;
-//		try {
-//			fOut = new FileOutputStream(file);
-//			bmp.compress(Bitmap.CompressFormat.PNG, 85, fOut);
-//			fOut.flush();
-//	        fOut.close();
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		
-//	    System.out.println("Saved Image to SD card: " +file.getAbsolutePath());
-//	    return file.getAbsolutePath();
-//	}
 	
 
 	public int countCrowns(List<Crown> crowns, int color)
@@ -411,12 +393,17 @@ public class ProductBaseAdapter extends BaseAdapter{
 		private CheckBox chkBox;
 		private ImageView imgView;
 		private ImageView crown1, crown2, crown3;
+		private ProgressBar imageProgress;
 		private LinearLayout crownLayout;
-		/**
-		 * @return the txtCategory
-		 */
-		public TextView getTxtName() {
-			return txtName;
+
+		public void setImgProgress(ProgressBar imageProgressId) {
+			// TODO Auto-generated method stub
+			imageProgress = imageProgressId;
+		}
+		
+		public ProgressBar getImgProgress()
+		{
+			return imageProgress;
 		}
 
 		public void setCrownLayout(LinearLayout crownLayoutId) {
@@ -427,6 +414,11 @@ public class ProductBaseAdapter extends BaseAdapter{
 		public LinearLayout getCrownLayout()
 		{
 			return this.crownLayout;
+		}
+
+		
+		public TextView getTxtName() {
+			return txtName;
 		}
 
 		/**

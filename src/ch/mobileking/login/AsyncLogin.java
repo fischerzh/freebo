@@ -132,11 +132,6 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
 //				listener.onLoginCompleted(false, e.getMessage());
 				return "FAILED: " +e.getMessage();
 			}
-			String jsonString = Utils.convertStreamToString(instream);
-            setJsonResult(jsonString);
-            Utils.writeJsonResultLocal(this.act.getApplicationContext(), jsonString);
-            // now you have the string representation of the HTML request
-            
 
 //            if(getJsonResult().toLowerCase().contains("failed") || getJsonResult().toLowerCase().contains("error"))
             if(httpResponse.getStatusLine().getStatusCode() >= 300)
@@ -146,6 +141,10 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
             }
             else
             {
+    			String jsonString = Utils.convertStreamToString(instream);
+                setJsonResult(jsonString);
+                Utils.writeJsonResultLocal(this.act.getApplicationContext(), jsonString);            
+
     			/**LOGIN WORKED, STORE USERNAME AND PASSWORD IN SHARED PREF **/
             	System.out.println("Login worked, set Username/Password");
             	
@@ -153,7 +152,7 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
     			editor.setPwd(pwd);
             }
             
-            System.out.println("result: " + getJsonResult());
+//            System.out.println("result: " + getJsonResult());
             try {
 				instream.close();
 			} catch (IOException e) {
@@ -187,6 +186,7 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
 		else
 		{
 			parseJSON();
+			
 			Utils.addLogMsg(this.getClass().getSimpleName()+": Login completed");
 			System.out.println("update after Sync: " +update);
 			
@@ -219,6 +219,8 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
     	}
 		if(prodKing!=null)
 		{
+        	editor.setIsFirstRun(!prodKing.getIsactiveapp());
+
 			ProductKing.setIsActive(prodKing.getIsactiveapp());
 			ProductKing.setStaticProducts(prodKing.getProducts());
 			ProductKing.setRecommenderProducts(prodKing.getRecommendations());

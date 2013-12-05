@@ -62,7 +62,7 @@ public class ProductDetailOverview extends Activity {
 			prod_name.setText(product.getName());
 			prod_manuf.setText(product.getProducer());
 			
-			productImage.setImageBitmap(Utils.loadImageFromPath(product));
+			productImage.setImageBitmap(Utils.loadImageFromPath(product.getEan()+".png"));
 			
 			ListView storehero_lv = (ListView) findViewById(R.id.leaderboard_lv);
 			

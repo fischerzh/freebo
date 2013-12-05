@@ -21,7 +21,7 @@ private static final long serialVersionUID = 1L;
 	
 	@SerializedName("isactiveapp")
 	private Boolean isactiveapp;
-	
+		
 	@SerializedName("recommendations")
 	private List<Products> recommendations;
 	

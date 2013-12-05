@@ -15,6 +15,7 @@ import android.app.Activity;
 import android.os.AsyncTask;
 import android.widget.Toast;
 import ch.mobileking.utils.ITaskComplete;
+import ch.mobileking.utils.JSONResponse;
 import ch.mobileking.utils.ProductKing;
 import ch.mobileking.utils.Products;
 import ch.mobileking.utils.SharedPrefEditor;
@@ -126,7 +127,7 @@ public class AsyncUpdate extends AsyncTask<String, String, String>{
 		}
 		HttpEntity responseEntity = null;
 		
-		ProductKing prodKing = null;
+		JSONResponse parseJSONSmall = null;
 		
 		if(httpResponse != null)
 		{
@@ -135,8 +136,10 @@ public class AsyncUpdate extends AsyncTask<String, String, String>{
 				
 				jsonResult = Utils.convertStreamToString(responseEntity.getContent());
 				System.out.println("jsonResult: " + jsonResult);
-
-				prodKing = Utils.parseJSON(jsonResult);
+	            if(httpResponse.getStatusLine().getStatusCode() >= 300)
+	            	return "FAILED: " + httpResponse.getStatusLine().getStatusCode() + " - " + httpResponse.getStatusLine().getReasonPhrase();
+	            else
+	            	parseJSONSmall = Utils.parseJSONSmall(jsonResult);
 				
 			} catch (IllegalStateException e) {
 				// TODO Auto-generated catch block
@@ -145,7 +148,21 @@ public class AsyncUpdate extends AsyncTask<String, String, String>{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			response = response + prodKing.getStatus() + ": "+prodKing.getException();
+			if(optIn)
+			{
+				if(parseJSONSmall.getStatus().contentEquals("SUCCESS"))
+					response = parseJSONSmall.getException() + "\nViel Spass beim Punkte sammeln!";
+				else
+					response = response + parseJSONSmall.getStatus() + ": "+parseJSONSmall.getException();
+			}
+			else
+			{
+				if(parseJSONSmall.getStatus().contentEquals("SUCCESS"))
+					response = parseJSONSmall.getException();
+				else
+					response = response + parseJSONSmall.getStatus() + ": "+parseJSONSmall.getException();
+			}
+				
 		}
 		else
 		{
@@ -165,10 +182,10 @@ public class AsyncUpdate extends AsyncTask<String, String, String>{
 		}
 		else
 		{
-			if(this.updateFromRemote)
-			{
-				new AsyncLogin(getAct(), true, listener).execute(editor.getUsername(), editor.getPwd());
-			}
+//			if(this.updateFromRemote)
+//			{
+//				new AsyncLogin(getAct(), true, listener).execute(editor.getUsername(), editor.getPwd());
+//			}
 			listener.onUpdateCompleted(true, result);
 
 		}

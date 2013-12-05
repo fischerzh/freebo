@@ -40,7 +40,7 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
     private ActionBar actionBar;
     private ITaskComplete listener;
     
-    private String[] tabs = { "FAVORITEN", "KASSENZETTEL"};
+    private String[] tabs = { "FAVORITEN", "EINKÄUFE"};
 	private View topLevelLayout;
 	private SharedPrefEditor editor;
 	private boolean doubleBackToExitPressedOnce;
@@ -223,7 +223,7 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
 		System.out.println("MainTabActivity, UpdateCompleted! Restarting Activity...");
 //		if(message!=null)
 //    		createAlert(message.toString(), "Aktualisierung!", R.drawable.ic_launcher);
-		this.listener.onUpdateCompleted(completed, "");
+		this.listener.onUpdateCompleted(completed, message);
 	}
 	
 

@@ -143,10 +143,10 @@ public class MainProductFragment extends Fragment implements ITaskComplete {
 		progressLayout.setVisibility(View.INVISIBLE);
         
         
-        if(!completed)
-        	createAlert("Aktualisierung fehlgeschlagen! "+message, "Fehler", R.drawable.ic_empfehlungen);
-        else
-        	createAlert("Aktualisierung erfolgreich! "+message, "Erfolg", R.drawable.ic_empfehlungen);
+//        if(!completed)
+//        	createAlert("Aktualisierung fehlgeschlagen! "+message, "Fehler", R.drawable.ic_empfehlungen);
+//        else
+//        	createAlert("Aktualisierung erfolgreich! "+message, "Erfolg", R.drawable.ic_empfehlungen);
 	}
 
 	@Override
@@ -156,7 +156,7 @@ public class MainProductFragment extends Fragment implements ITaskComplete {
 			System.out.println("MainProductFragment, UpdateCompleted! Restarting Activity...");
 			System.out.println("Message from updateCompleted: " + message);
 			
-			reloadUserInfo();
+			reloadUserInfo(message);
 		}
 
 	   progressLayout.setVisibility(View.INVISIBLE);
@@ -197,9 +197,11 @@ public class MainProductFragment extends Fragment implements ITaskComplete {
         new AsyncUpdate(getActivity(), false, true, this).execute(editor.getUsername(),editor.getPwd()); //http://192.168.0.16:8080
     }
     
-	private void reloadUserInfo()
+	private void reloadUserInfo(String msg)
 	{
 		new AsyncLogin(getActivity(), true, this).execute(editor.getUsername(), editor.getPwd());
+
+    	createAlert(msg, "Aktualisierung", R.drawable.ic_empfehlungen);
 	}
     
     @Override
