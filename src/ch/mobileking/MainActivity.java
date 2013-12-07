@@ -266,6 +266,7 @@ public class MainActivity extends Activity implements ITaskComplete{
 		System.out.println("MainActivity: LoginCompleted: " + completed);
 		if(completed && !editor.getFirstRun())
 		{
+			/** LOGIN FROM USER SETTINGS **/
 		    String gcmUUID = getIntent().getStringExtra("messageId");
 			
 			Intent intent = new Intent(getAct(), MainTabActivity.class);

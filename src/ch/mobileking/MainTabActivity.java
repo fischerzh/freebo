@@ -5,10 +5,13 @@ import java.util.ArrayList;
 import ch.mobileking.exception.CustomExceptionHandler;
 import ch.mobileking.login.AsyncUpdate;
 import ch.mobileking.login.ServerRequest;
+import ch.mobileking.tabs.MainProductFragment;
 import ch.mobileking.tabs.TabsPagerAdapter;
 import ch.mobileking.userdata.UserSettingsActivity;
 import ch.mobileking.utils.GcmMessage;
 import ch.mobileking.utils.ITaskComplete;
+import ch.mobileking.utils.ProductKing;
+import ch.mobileking.utils.Products;
 import ch.mobileking.utils.SharedPrefEditor;
 import ch.mobileking.utils.Utils;
 import android.app.AlertDialog;
@@ -59,7 +62,7 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
 		}
 		
 		Utils.addLogMsg(this.getLocalClassName());
-
+		
 	    String intentResponse = getIntent().getStringExtra("gcmnotification");
 	    String gcmUUID = getIntent().getStringExtra("messageId");
 	    System.out.println("Response from GCM: " + intentResponse);
@@ -252,12 +255,12 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
 		request.startUpdateLogs();
 	}
 	
-//	@Override
-//	public void onPause()
-//	{
-//		super.onPause();
-//		onSyncRequest();
-//	}
+	@Override
+	public void onPause()
+	{
+		super.onPause();
+		onSyncRequest();
+	}
 	
     @Override
     public void onBackPressed() {

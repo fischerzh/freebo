@@ -75,7 +75,7 @@ public class Utils {
 	private static final String PROPERTY_APP_VERSION = "appVersion";
 	private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 	
-	public static final String USER_AVATAR_PNG ="user_avatar.png";
+	public static final String USER_AVATAR_PNG ="user_avatar";
 	public static final String JSON_FILE_NAME = "productKing.json";
 
 	private static String SENDER_ID = "73370755379";
@@ -211,15 +211,20 @@ public class Utils {
 		return prodKing;
 	}
 	
-	public static Bitmap processFileFromSD(String filePath)
+	public static void processFileFromSD(String filePath)
 	{
 //        bitmap = BitmapFactory.decodeStream((InputStream)new URL(imgUri).getContent());
 		System.out.println("processFile..." + filePath);
 		
-		LoadImageTask newImageLoader = new LoadImageTask();
-//		new LoadImageTask().execute(filePath);
-		newImageLoader.execute(filePath);
-		return newImageLoader.getImage();
+		LoadImageTask newImageLoader = new LoadImageTask(filePath, false);
+		newImageLoader.execute();
+	}
+	
+	public static void loadAllImages(ITaskComplete listener) {
+		setListener(listener);
+		
+		LoadImageTask newImageLoader = new LoadImageTask(true);
+		newImageLoader.execute();
 	}
 	
 	public static Bitmap loadImage(Products prod)
@@ -258,39 +263,38 @@ public class Utils {
 	}
 
 	public static Bitmap loadImageFromPath(String fileName) {
-		File imgFile = new File(getPath(null), fileName);
+		File imgFile = new File(getPath(null), fileName+".png");
 		Bitmap myBitmap = null;
 		
 		if(imgFile.exists())
 		{
 			System.out.println("Found Image on SD card: " + imgFile.getAbsolutePath());
-			
 			myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
 		}
 		return myBitmap;
 
 	}
 	
-	public static boolean imageExists(Products prod)
-	{
-		String file_path = getPath(null);
-		File imgFile = new File(file_path, prod.getId()+".png");
-		if(imgFile.exists())
-		{
-			System.out.println("Image exists SD card: " + imgFile.getAbsolutePath());
-		}
-		else
-		{
-			System.out.println("Image does not exist on SD card... loading and saving Image to: " + imgFile.getAbsolutePath());
-			file_path = saveBitmap(loadImage(prod), prod);
-		}
-		
-		return imgFile.exists();
-	}
-	
+//	public static boolean imageExists(Products prod)
+//	{
+//		String file_path = getPath(null);
+//		File imgFile = new File(file_path, prod.getId()+".png");
+//		if(imgFile.exists())
+//		{
+//			System.out.println("Image exists SD card: " + imgFile.getAbsolutePath());
+//		}
+//		else
+//		{
+//			System.out.println("Image does not exist on SD card... loading and saving Image to: " + imgFile.getAbsolutePath());
+//			file_path = saveBitmap(loadImage(prod), prod);
+//		}
+//		
+//		return imgFile.exists();
+//	}
+//	
 	public static boolean imageExists(String fileName)
 	{
-		File imgFile = new File(getPath(null), fileName);
+		File imgFile = new File(getPath(null), fileName+".png");
 		System.out.println("imgFile.exists(): " + imgFile.exists());
 		return imgFile.exists();
 	}
@@ -339,7 +343,7 @@ public class Utils {
 	
 	public static String saveBitmap(Bitmap bmp, String fileName)
 	{
-        File file = new File(getPath(null), fileName);
+        File file = new File(getPath(null), fileName+".png");
 //		Bitmap bmp = BitmapFactory.decodeFile(file.getAbsolutePath());
         FileOutputStream fOut = null;
 		try {
@@ -648,6 +652,8 @@ public class Utils {
 		editor.setRegId(regId);
 	}
 
+
+
 }	
 
    class SaveImageTask extends AsyncTask<String, Void, String> {
@@ -658,6 +664,7 @@ public class Utils {
 	   private Boolean updateToBackend = false;
 	   private Boolean loadFromUrl = false;
 	   private String url;
+	   
 	   public SaveImageTask(Bitmap image, String filename, SharedPrefEditor editor)
 	   {
 		   this.image = image;
@@ -671,6 +678,7 @@ public class Utils {
 		   this.image = image;
 		   this.filename = filename;
 		   this.updateToBackend = false;
+
 	   }
 	   
 	   public SaveImageTask(String url, String filename)
@@ -679,12 +687,20 @@ public class Utils {
 		   this.updateToBackend = false;
 		   this.url = url;
 		   this.filename = filename;
-
 	   }
+	   
 	   
 	   protected String doInBackground(String... params) {
 		   
+		   saveOneImage(this.url);
+
+	       return "SUCCESS";
+	     }
+	   
+	   private void saveOneImage(String url)
+	   {
 		   String filePath;
+
 		   if(loadFromUrl)
 		   {
 				try {
@@ -708,52 +724,112 @@ public class Utils {
 			   ServerRequest request = new ServerRequest( editor);
 			   request.startUpdateImageToServer(filePath);
 		   }
-
-	       return filePath;
-	     }
+	   }
 	   
 	   protected void onPostExecute(String result) {
 	         //Do something with bitmap eg:
 	    	 System.out.println("Saved Image async finished (including server upload: "+ updateToBackend + " " +result.toString());
 	    	 
-	    	 
+//	    	 if(Utils.getListener()!=null && result.contains("SUCCESS"))
+//	    	 {
+//	    		 Utils.getListener().onUpdateCompleted(true, "");
+//	    	 }
 	     }
 
    }
 
-  class LoadImageTask extends AsyncTask<String, Void, Bitmap> {
+  class LoadImageTask extends AsyncTask<String, Void, String> {
 	
 	private Bitmap image;
+	private Boolean loadMultiple = false;
+	private String fileName;
 	
+	public LoadImageTask(String filename, Boolean loadMulti)
+	{
+		this.fileName = filename;
+		this.loadMultiple = loadMulti;
+	}
 	
-     protected Bitmap doInBackground(String... params) {
-         return loadImage(params[0]);
+	public LoadImageTask(Boolean loadMultiple)
+	{
+		this.loadMultiple = true;
+	}
+	
+     protected String doInBackground(String... params) {
+    	 
+    	 if(loadMultiple)
+    		 loadMultipleImages();
+    	 else
+    		 loadImageFromPath(this.fileName);
+    	 return "SUCCESS";
      }
 
-     protected void onPostExecute(Bitmap result) {
+     protected void onPostExecute(String result) {
          //Do something with bitmap eg:
-    	 System.out.println("Got Image: " +result.toString());
-    	 this.image = result;
+    	 System.out.println("Image(s) loaded! " + "LoadedMultiple: " +this.loadMultiple + " Filename: " +this.fileName);
+//    	 this.image = result;
     	 if(Utils.getListener()!=null)
     	 {
-    		 Utils.getListener().onUpdateCompleted(true, "image saved!");
+    		 Utils.getListener().onUpdateCompleted(true,"");
     	 }
      }
      
+     private void loadMultipleImages()
+     {
+  		   for(int i = 0; i < ProductKing.getInstance().getStaticProducts().size(); i++)
+  		   {
+  			   Products prod = ProductKing.getInstance().getStaticProducts().get(i);
+  			   if(!Utils.imageExists(prod.getEan()))
+  			   {
+
+				   Bitmap image = loadImageFromUrl(prod.getImagelink(), prod.getEan());
+				   ProductKing.getInstance().getStaticProducts().get(i).setProductImage(image);
+				   System.out.println("Added image to Product: " +prod.getName() + "  " + prod.getProductImage());
+  			   }
+  			   
+  		   }
+  		   
+     }
      
-	 private Bitmap loadImage(String path){
+     private void loadSingleImage(String path)
+     {
+    	 setImage(loadImageFromPath(path));
+     }
+     
+     private Bitmap loadImageFromUrl(String uri, String filename)
+     {
+  	   {
+			try {
+				image = BitmapFactory.decodeStream((InputStream)new URL(uri).getContent());
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+  		   }
+  		   if(image!=null)
+  			   Utils.saveBitmap(image, filename);
+  		   else
+  		   {
+  			   Bitmap icon = BitmapFactory.decodeResource(Utils.getContext().getResources(), R.drawable.no_image_icon);
+  			   Utils.saveBitmap(icon, filename);
+  		   }
+  		   return image;
+     }
+     
+	 private Bitmap loadImageFromPath(String path){
 		 Bitmap bitmap = null;
 		 try {
 			 System.out.println("Loading Image from Link: " + path);
-				File imgFile = new File(path);
-	          bitmap = resizeBitmap(path);
+			 File imgFile = new File(path);
+	         bitmap = resizeBitmap(path);
 	      } catch (Exception e) {
 	          e.printStackTrace();
 	    }
 		 
 		System.out.println("Bitmap resized: " + " height: " + bitmap.getHeight() +  " width: " + bitmap.getWidth());
 		
-   	 	Utils.saveBitmap(bitmap, "user_avatar.png");
+//   	 	Utils.saveBitmap(bitmap, "user_avatar.png");
 		
 		return bitmap;
 	 }

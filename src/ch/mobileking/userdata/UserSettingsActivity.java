@@ -64,10 +64,10 @@ public class UserSettingsActivity extends Activity implements ITaskComplete{
 
 	private LinearLayout user_settings_avatar_generator;
 
-	private int[] resourceAvatarId = { R.drawable.ic_avatar_01,
-			R.drawable.ic_avatar_03, R.drawable.ic_avatar_05,
-			R.drawable.ic_avatar_06_round, R.drawable.ic_avatar_07,
-			R.drawable.ic_avatar_08 };
+	private int[] resourceAvatarId = { 
+			R.drawable.no_image_icon,
+			R.drawable.ic_avatar_01, R.drawable.ic_avatar_03, R.drawable.ic_avatar_05,
+			R.drawable.ic_avatar_06_round, R.drawable.ic_avatar_07,	R.drawable.ic_avatar_08 };
 
 	private LinearLayout user_settings_email;
 
@@ -76,7 +76,7 @@ public class UserSettingsActivity extends Activity implements ITaskComplete{
 	private ProgressBar user_settings_avatar_progress;
 	
 	private EditText userEmailInput;
-	private EditText userUsernameInput;
+	private EditText userPasswdInput;
 	
 	private Bitmap selectedImage;
 	private String filePath;
@@ -84,10 +84,10 @@ public class UserSettingsActivity extends Activity implements ITaskComplete{
 	private CheckBox user_settings_anon_chkbx;
 
 	private LinearLayout user_settings_pwd;
-	private LinearLayout user_settings_username;
 	
-	private String username, pwd, email;
+	private String pwd, email;
 	private Boolean isNotification, isAnonymous;
+	private Integer avatarId;
 
 	// extends PreferenceActivity implements OnSharedPreferenceChangeListener
 	@Override
@@ -108,21 +108,22 @@ public class UserSettingsActivity extends Activity implements ITaskComplete{
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		
 		imageView = (ImageView) findViewById(R.id.user_settings_avatar);
-		if(Utils.imageExists(Utils.USER_AVATAR_PNG))
-			imageView.setImageBitmap(Utils.loadImageFromPath(Utils.USER_AVATAR_PNG));
+//		if(Utils.imageExists(Utils.USER_AVATAR_PNG))
+//			imageView.setImageBitmap(Utils.loadImageFromPath(Utils.USER_AVATAR_PNG));
+		imageView.setImageResource(resourceAvatarId[editor.getAvatarId()]);
 		
 		user_settings_avatar_progress = (ProgressBar) findViewById(R.id.user_settings_avatar_progress);
 		user_settings_avatar_progress.setVisibility(View.INVISIBLE);
-		imageView.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-				photoPickerIntent.setType("image/*");
-				startActivityForResult(photoPickerIntent, SELECT_PHOTO);
-			}
-		});
+//		imageView.setOnClickListener(new OnClickListener() {
+//
+//			@Override
+//			public void onClick(View v) {
+//				// TODO Auto-generated method stub
+//				Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+//				photoPickerIntent.setType("image/*");
+//				startActivityForResult(photoPickerIntent, SELECT_PHOTO);
+//			}
+//		});
 		
 
 		
@@ -156,10 +157,12 @@ public class UserSettingsActivity extends Activity implements ITaskComplete{
 					public void onClick(View v) {
 						user_settings_avatar_progress.setVisibility(View.VISIBLE);
 						// TODO Auto-generated method stub
-						int num = rand.nextInt(6);
+						int num = rand.nextInt(6)+1;
 						imageView.setImageResource(resourceAvatarId[num]);
-						Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), resourceAvatarId[num]);
-						saveAvatarToSD(largeIcon);
+						avatarId = num;
+						
+//						Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), resourceAvatarId[num]);
+//						saveAvatarToSD(largeIcon);
 						user_settings_avatar_progress.setVisibility(View.INVISIBLE);
 					}
 				});
@@ -208,8 +211,8 @@ public class UserSettingsActivity extends Activity implements ITaskComplete{
 			}
 		});
 		
-		user_settings_username = (LinearLayout) findViewById(R.id.user_settings_username);
-		user_settings_username.setOnClickListener(new OnClickListener() {
+		user_settings_pwd = (LinearLayout) findViewById(R.id.user_settings_pwd);
+		user_settings_pwd.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
@@ -219,12 +222,12 @@ public class UserSettingsActivity extends Activity implements ITaskComplete{
 
 		        View layout=inflater.inflate(R.layout.user_settings_entry,null);       
 		        
-		        userUsernameInput=(EditText)layout.findViewById(R.id.user_settings_entry_editText);
+		        userPasswdInput=(EditText)layout.findViewById(R.id.user_settings_entry_editText);
 		        
-		        if(username!=null)	
-		        	userUsernameInput.setText(username);
+		        if(pwd!=null)	
+		        	userPasswdInput.setText(pwd);
 		        else
-		        	userUsernameInput.setText(editor.getUsername());
+		        	userPasswdInput.setText(editor.getPwd());
 		        
 		        alert.setPositiveButton("Ok", null);
 		        alert.setNegativeButton("Abbrechen",
@@ -233,7 +236,7 @@ public class UserSettingsActivity extends Activity implements ITaskComplete{
                         return;
                     	}
                 	});
-				alert.setTitle("Benutzername");
+				alert.setTitle("Passwort");
 		        alert.setView(layout);
 
 				final AlertDialog dialog = alert.create();
@@ -243,12 +246,13 @@ public class UserSettingsActivity extends Activity implements ITaskComplete{
 					@Override
 					public void onClick(View v) {
 						// TODO Auto-generated method stub
-						if(userUsernameInput.getText().toString().isEmpty())
+						if(userPasswdInput.getText().toString().isEmpty())
 		    		    {
-		    		    	userEmailInput.setError("Bitte Benutzername angeben!");
+							userPasswdInput.setError("Bitte Passwort angeben!");
 		    		    }
 						else
 						{
+							pwd = userPasswdInput.getText().toString();
 							dialog.dismiss();
 						}
 					}
@@ -271,26 +275,15 @@ public class UserSettingsActivity extends Activity implements ITaskComplete{
 		this.pwd = editor.getPwd();
 		this.isAnonymous = editor.getAnonymous();
 		this.isNotification = editor.getNotifications();
+		this.avatarId = editor.getAvatarId();
 	}
 	
-	private boolean isUpdateNeeded()
+	private boolean isUpdateNeeded(String settingValue, String editor)
 	{
-		boolean isUpdateNeeded = false;
-		if(email != editor.getEmail())
-			isUpdateNeeded = true;
-//		if(!user.getText().toString().isEmpty() && email!=userEmailInput.getText().toString())
-//			isUpdateNeeded = true;
-		if(isNotification!= editor.getNotifications())
-			isUpdateNeeded = true;
-		if(isAnonymous != editor.getAnonymous())
-			isUpdateNeeded = true;
-		return isUpdateNeeded;
+		return settingValue != editor;
 	}
 	
-	private boolean hasChanged(Object a, Object b)
-	{
-		return a!=b;
-	}
+
 	
 	public void onSyncRequest()
 	{
@@ -300,17 +293,22 @@ public class UserSettingsActivity extends Activity implements ITaskComplete{
 		/*
 		 * editor.getUsername(),editor.getPwd() , editor.getEmail(), editor.getNotifications(), editor.getAnonymous()
 		 */
-//		if(hasChanged(email, editor.getEmail()))
-		if(isUpdateNeeded())
+		Boolean needsUpdate = false;
+		if(isUpdateNeeded(email, editor.getEmail()))
+			needsUpdate = true;
+		if(isUpdateNeeded(pwd, editor.getPwd()))
+			needsUpdate = true;
+		if(isUpdateNeeded(isNotification.toString(), editor.getNotifications().toString()))
+			needsUpdate = true;
+		if(isUpdateNeeded(isAnonymous.toString(), editor.getAnonymous().toString()))
+			needsUpdate = true;
+		if(isUpdateNeeded(avatarId.toString(), editor.getAvatarId().toString()))
+			needsUpdate = true;
+		if(needsUpdate)
 		{
-			request.startUpdateUserSettings(editor.getPwd(), email , isNotification, isAnonymous);
+			request.startUpdateUserSettings(pwd, email, isNotification, isAnonymous, avatarId);
 		}
 		
-//		}
-//		else
-//		{
-//			request.startUpdateUserSettings(editor.getUsername(),editor.getPwd(), editor.getEmail(), user_settings_notification_chkbx.isChecked(), user_settings_anon_chkbx.isChecked());
-//		}
 		clearVariables();
 
 	}
@@ -324,7 +322,6 @@ public class UserSettingsActivity extends Activity implements ITaskComplete{
 	
 	private void clearVariables()
 	{
-		this.username = null;
 		this.pwd = null;
 		this.email = null;
 		this.isAnonymous = null;
@@ -433,11 +430,11 @@ public class UserSettingsActivity extends Activity implements ITaskComplete{
     return inSampleSize;
 	}
  
-	public Bitmap saveAvatarToSD(Bitmap selectedImage)
-	{	
-		Bitmap image = BitmapFactory.decodeFile(Utils.saveBitmap(selectedImage, Utils.USER_AVATAR_PNG));
-		return image;
-	}
+//	public Bitmap saveAvatarToSD(Bitmap selectedImage)
+//	{	
+//		Bitmap image = BitmapFactory.decodeFile(Utils.saveBitmap(selectedImage, Utils.USER_AVATAR_PNG));
+//		return image;
+//	}
 
 	@Override
 	public void onLoginCompleted(boolean b, String string) {

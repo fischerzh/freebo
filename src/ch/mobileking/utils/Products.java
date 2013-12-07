@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+import android.graphics.Bitmap;
+
 import com.google.gson.annotations.SerializedName;
 
 public class Products {
@@ -64,6 +66,8 @@ public class Products {
 	
 	@SerializedName("leaderboard")
 	private List<Leaderboard> leaderboard;
+	
+	private Bitmap productImage;
 	
 	/**
 	 * @return the id
@@ -329,6 +333,20 @@ public class Products {
 	 */
 	public void setLeaderboard(List<Leaderboard> leaderboard) {
 		this.leaderboard = leaderboard;
+	}
+
+	/**
+	 * @return the productImage
+	 */
+	public Bitmap getProductImage() {
+		return productImage;
+	}
+
+	/**
+	 * @param productImage the productImage to set
+	 */
+	public void setProductImage(Bitmap productImage) {
+		this.productImage = productImage;
 	}
 
 }

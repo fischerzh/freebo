@@ -21,6 +21,9 @@ private static final long serialVersionUID = 1L;
 	
 	@SerializedName("isactiveapp")
 	private Boolean isactiveapp;
+	
+	@SerializedName("avatarid")
+	private Integer avatarId;
 		
 	@SerializedName("recommendations")
 	private List<Products> recommendations;
@@ -253,6 +256,20 @@ private static final long serialVersionUID = 1L;
 		this.isactiveapp = isactiveapp;
 	}
 	
+	/**
+	 * @return the avatarId
+	 */
+	public Integer getAvatarId() {
+		return avatarId;
+	}
+
+	/**
+	 * @param avatarId the avatarId to set
+	 */
+	public void setAvatarId(Integer avatarId) {
+		this.avatarId = avatarId;
+	}
+
 	/**
 	 * @return the isActive
 	 */

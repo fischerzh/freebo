@@ -14,6 +14,7 @@ import ch.mobileking.utils.ITaskComplete;
 import ch.mobileking.utils.ProductKing;
 import ch.mobileking.utils.Products;
 import ch.mobileking.utils.SharedPrefEditor;
+import ch.mobileking.utils.Utils;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -75,6 +76,8 @@ public class MainProductFragment extends Fragment implements ITaskComplete {
         listView = (ListView) getActivity().findViewById(R.id.tab_main_listView);
         
         setProdLayoutResourceId(R.layout.product_item);
+
+		Utils.loadAllImages(this);
         
         adapter = new ProductBaseAdapter(getActivity(), getProdLayoutResourceId(), (ArrayList<Products>) ProductKing.getInstance().getStaticProducts()); //R.layout.product_item
 		
@@ -200,8 +203,8 @@ public class MainProductFragment extends Fragment implements ITaskComplete {
 	private void reloadUserInfo(String msg)
 	{
 		new AsyncLogin(getActivity(), true, this).execute(editor.getUsername(), editor.getPwd());
-
-    	createAlert(msg, "Aktualisierung", R.drawable.ic_empfehlungen);
+		if(msg!="")
+			createAlert(msg, "Aktualisierung", R.drawable.ic_empfehlungen);
 	}
     
     @Override

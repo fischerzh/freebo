@@ -74,7 +74,6 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
 		
 		if(!this.update)
 		{
-			editor.updateLoginCount();
 			System.out.println("Update Login Count..");
 		}
 		

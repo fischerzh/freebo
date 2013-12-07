@@ -30,6 +30,7 @@ public class SharedPrefEditor {
 	private static final String PREFS_LOGIN_CNT = "LoginCount";
 	private static final String PREFS_NOTIFICATIONS = "Notifications";
 	private static final String PREFS_ANON = "Anonymous";
+	private static final String PREFS_AVATAR = "Avatar";
 	
 	private Context cont;
 	
@@ -204,27 +205,27 @@ public class SharedPrefEditor {
 		return appVersion;
 	}
 	
-	public void updateLoginCount()
-	{	    
-		int loginCnt = getLoginCount();
-	    SharedPreferences settings = cont.getSharedPreferences(PREFS_LOGIN_CNT, 0);
-	    SharedPreferences.Editor editor = settings.edit();
-	    editor.putInt(PREFS_LOGIN_CNT, loginCnt+1);
-	    System.out.println("setAppVersion #LOGIN_CNT: " + loginCnt+1);
-	    // Commit the edits!
-	    editor.commit();
-	    
-	}
-	
-	public int getLoginCount()
-	{
-	    int loginCnt;
-	    // Restore preferences
-	    SharedPreferences settings = cont.getSharedPreferences(PREFS_LOGIN_CNT, 0);
-	    loginCnt = settings.getInt(PREFS_LOGIN_CNT, Integer.MIN_VALUE);
-	    System.out.println("getAppVersion #LOGIN_CNT: " + loginCnt);
-		return loginCnt;
-	}
+//	public void updateLoginCount()
+//	{	    
+//		int loginCnt = getLoginCount();
+//	    SharedPreferences settings = cont.getSharedPreferences(PREFS_LOGIN_CNT, 0);
+//	    SharedPreferences.Editor editor = settings.edit();
+//	    editor.putInt(PREFS_LOGIN_CNT, loginCnt+1);
+//	    System.out.println("setAppVersion #LOGIN_CNT: " + loginCnt+1);
+//	    // Commit the edits!
+//	    editor.commit();
+//	    
+//	}
+//	
+//	public int getLoginCount()
+//	{
+//	    int loginCnt;
+//	    // Restore preferences
+//	    SharedPreferences settings = cont.getSharedPreferences(PREFS_LOGIN_CNT, 0);
+//	    loginCnt = settings.getInt(PREFS_LOGIN_CNT, Integer.MIN_VALUE);
+//	    System.out.println("getAppVersion #LOGIN_CNT: " + loginCnt);
+//		return loginCnt;
+//	}
 	
 	public void setNotifications(Boolean notifications)
 	{	    
@@ -266,6 +267,25 @@ public class SharedPrefEditor {
 	    SharedPreferences settings = cont.getSharedPreferences(PREFS_ANON, 0);
 	    anon = settings.getBoolean(PREFS_ANON, false);
 	    return anon;
+	}
+	
+	public void setAvatarId(Integer avatarId)
+	{	    
+	    SharedPreferences settings = cont.getSharedPreferences(PREFS_AVATAR, 0);
+	    SharedPreferences.Editor editor = settings.edit();
+	    editor.putInt(PREFS_AVATAR, avatarId);
+	    System.out.println("setSharedPref #PREFS_AVATAR: " + avatarId);
+	    // Commit the edits!
+	    editor.commit();
+
+	}
+	
+	public Integer getAvatarId()
+	{
+	    Integer avatarId;
+	    SharedPreferences settings = cont.getSharedPreferences(PREFS_AVATAR, 0);
+	    avatarId = settings.getInt(PREFS_AVATAR, 0);
+	    return avatarId;
 	}
 	
 	/**

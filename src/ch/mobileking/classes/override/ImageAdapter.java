@@ -119,7 +119,7 @@ public class ImageAdapter extends BaseAdapter{
 			Products prod = (Products)items.get(position);
 			
 			ImageView recommItem = (ImageView) gridView.findViewById(R.id.recomm_item_pict);
-			if(Utils.imageExists(prod))
+			if(Utils.imageExists(prod.getEan()))
 				recommItem.setImageBitmap(Utils.loadImageFromPath(prod));
 		}
 		/** 

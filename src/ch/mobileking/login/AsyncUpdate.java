@@ -78,15 +78,24 @@ public class AsyncUpdate extends AsyncTask<String, String, String>{
 	private String updateAllProducts()
 	{
 		String response = "";
+		Boolean allUpdated = false;
 		for (Products prod : ProductKing.getStaticProducts())
 		{
+			allUpdated = false;
 			if(prod.getIsdeleted() && prod.getOptin())
 			{
 				System.out.println("Update Server");
-				response = response+updateSingleProduct(prod.getEan(), !prod.getIsdeleted());
+				response = updateSingleProduct(prod.getEan(), !prod.getIsdeleted());
+				if(response.contains("FAILED"))
+					allUpdated = false;
+				else
+					allUpdated = true;
 			}
 		}
-		return response;
+		if(allUpdated)
+			return "Alle Produkte aktualisiert!";
+		else
+			return "Fehler beim aktualisieren!";
 	}
 	
 	private String updateSingleProduct(String ean, Boolean optIn)

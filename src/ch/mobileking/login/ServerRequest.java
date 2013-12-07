@@ -113,14 +113,36 @@ public class ServerRequest {
 		
 	}
 	
-	public void startUpdateUserSettings( String newPwd, String newMail, Boolean notificationEnabled, Boolean anonymousUser)
+	public void startUpdateUserSettings( String newPwd, String newMail, Boolean notificationEnabled, Boolean anonymousUser, Integer avatarId)
 	{
-		
-		setServerURL(editor.getUpdateUserSettingURL()+"?password="+newPwd+"&email="+newMail+"&isNotificationEnabled="+notificationEnabled+"&isAnonymous="+anonymousUser+"&updateFromApp=true");
+		String updateURL=editor.getUpdateUserSettingURL()+"?updateFromApp=true";
+		if(newPwd!="")
+		{
+			updateURL+="&password="+newPwd;
+		}
+		if(newMail!="")
+		{
+				updateURL+="&email="+newMail;
+		}
+		if(notificationEnabled!=null)
+		{
+				updateURL+="&isNotificationEnabled="+notificationEnabled;
+		}
+		if(anonymousUser!=null)
+		{
+				updateURL+="&isAnonymous="+anonymousUser;
+
+		}
+		if(avatarId!=null)
+		{
+				updateURL+="&avatarId="+avatarId;
+		}
+//		setServerURL(editor.getUpdateUserSettingURL()+"?password="+newPwd+"&email="+newMail+"&isNotificationEnabled="+notificationEnabled+"&isAnonymous="+anonymousUser+"&updateFromApp=true");
+		setServerURL(updateURL);
 		System.out.println("updateUserSettings: " +getServerURL());
 		setUpHttpPost(getServerURL(), editor.getUsername(), editor.getPwd());
 
-		new UpdateUserSettings(newPwd, newMail, notificationEnabled, anonymousUser).execute();
+		new UpdateUserSettings(newPwd, newMail, notificationEnabled, anonymousUser, avatarId).execute();
 
 	}
 	
@@ -330,14 +352,16 @@ public class ServerRequest {
 	{
 		private String  pwd, mail;
 		private Boolean enableNoti, enableAnon;
+		private Integer avatarId;
 		
-		public UpdateUserSettings(String pwd, String mail, Boolean noti, Boolean anon)
+		public UpdateUserSettings(String pwd, String mail, Boolean noti, Boolean anon, Integer avatarid)
 		{
 //			this.username = username;
 			this.pwd = pwd;
 			this.mail = mail;
 			this.enableNoti = noti;
 			this.enableAnon = anon;
+			this.avatarId = avatarid;
 		}
 		
 		@Override
@@ -360,7 +384,8 @@ public class ServerRequest {
 				editor.setEmail(mail);
 				editor.setNotifications(enableNoti);
 				editor.setAnonymous(enableAnon);
-				
+				editor.setPwd(pwd);
+				editor.setAvatarId(avatarId);
 				listener.onLoginCompleted(true, response.getException());
 			}
 			else

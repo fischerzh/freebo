@@ -22,6 +22,8 @@ import com.nostra13.universalimageloader.cache.disc.naming.HashCodeFileNameGener
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 
@@ -238,29 +240,32 @@ public class ProductBaseAdapter extends BaseAdapter{
 		else
 		{
 			holder.getTxtRank().setText("DEIN RANG #"+prod.getUserrank() + " (+-0)");
-			holder.getCrown1().setImageResource(R.drawable.ic_krone_inactive);
+			if(getProdLayoutResourceId()==R.layout.product_item)
+				holder.getCrown1().setImageResource(R.drawable.ic_krone_inactive);
 			holder.getTxtRank().setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_nochange, 0);
 			holder.getTxtCollectedCnt().setText("Keine Einkäufe!");
 		}
 		
 //		Products prod = resultList.get(position);
 		
-		String imageName = prod.getEan()+".png";
+		String imageName = prod.getEan();
 //		String imagePath = "";
 		Bitmap image = null;
 		
-		if(Utils.imageExists(imageName))
+		if(Utils.imageExists(prod.getEan()))
 		{
 			holder.getImgProgress().setVisibility(View.INVISIBLE);
 			image = Utils.loadImageFromPath(imageName);
-//			imagePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/MobileKingImages/"+imageName;
+			resultList.get(position).setProductImage(image);
+			System.out.println("ProductImage: " + prod.getProductImage());
+			
 			holder.getImgView().setImageBitmap(image);
-
 		}
 		else
 		{
-			Utils.loadBitmapFromURL(prod.getImagelink(), imageName);
-			holder.getImgProgress().setVisibility(View.VISIBLE);
+//			holder.getImgProgress().setVisibility(View.VISIBLE);
+
+//			Utils.loadBitmapFromURL(prod.getImagelink(), imageName);
 			holder.getImgView().setImageResource(R.drawable.empty);
 
 //			Utils.saveBitmapAsync(image, imageName);
@@ -272,8 +277,6 @@ public class ProductBaseAdapter extends BaseAdapter{
 		
 		if(!prod.getIsactive())
 		{
-			System.out.println("Set image transparent: " +prod.getName());
-			System.out.println("Is active?: " + prod.getIsactive());
 			holder.getImgView().setAlpha(125);
 		}
 		else
@@ -284,6 +287,38 @@ public class ProductBaseAdapter extends BaseAdapter{
 //		String imageUri = resultList.get(position).getImagelink();
 //		holder.getImgView().setTag(imageUri); //Add this line
 //		imageLoader.displayImage(imageUri, holder.getImgView());
+//		imageLoader.displayImage(imageUri, holder.getImgView(), new ImageLoadingListener() {
+//			
+//			@Override
+//			public void onLoadingStarted(String imageUri, View view) {
+//				// TODO Auto-generated method stub
+//				System.out.println("loading of image started: " + imageUri);
+//				holder.getImgProgress().setVisibility(View.INVISIBLE);
+//
+//			}
+//			
+//			@Override
+//			public void onLoadingFailed(String imageUri, View view,
+//					FailReason failReason) {
+//				// TODO Auto-generated method stub
+//				
+//			}
+//			
+//			@Override
+//			public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+//				System.out.println("loading of image finished: " + imageUri);
+//				int getPosition = (Integer) view.getTag();
+//
+//				holder.getImgProgress().setVisibility(View.INVISIBLE);
+//
+//			}
+//			
+//			@Override
+//			public void onLoadingCancelled(String imageUri, View view) {
+//				// TODO Auto-generated method stub
+//				
+//			}
+//		});
 		
 //		holder.getImgView().setImageDrawable(drawable);
 		ProductKing.setStaticProducts(resultList);

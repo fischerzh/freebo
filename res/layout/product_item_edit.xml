@@ -13,16 +13,18 @@
 
     <ch.mobileking.classes.override.RobotoTextView
         android:id="@+id/prod_item_name"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:maxLines="1"
         android:text="Rivella Rot"
         android:textStyle="italic"
         android:textSize="20dp" />
 
     <ch.mobileking.classes.override.RobotoTextView
         android:id="@+id/prod_item_producer"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:maxLines="1"
         android:text="Von Rivella"
         android:textColor="@android:color/black"
         android:textSize="14dp" />
@@ -41,15 +43,31 @@
         android:paddingTop="5dp" 
         >
 
-        <ImageView
-            android:id="@+id/list_image"
-            android:layout_width="50dip"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:scaleType="centerInside"
-            android:layout_marginLeft="5dp"
-            android:layout_weight="0.03"
-            android:src="@drawable/empty" />
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" >
+
+            <ImageView
+                android:id="@+id/list_image"
+                android:layout_width="@dimen/user_avatar_width"
+                android:layout_height="@dimen/user_avatar_height"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:scaleType="fitCenter"
+                android:src="@drawable/empty" />
+
+            <ProgressBar
+                android:id="@+id/list_image_progress"
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="@dimen/user_avatar_width"
+                android:layout_height="@dimen/user_avatar_height"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:visibility="visible" />
+
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="0dip"
