@@ -7,10 +7,10 @@ import ch.mobileking.R.drawable;
 import ch.mobileking.R.id;
 import ch.mobileking.R.layout;
 import ch.mobileking.classes.override.ImageAdapter;
-import ch.mobileking.utils.Crown;
 import ch.mobileking.utils.ProductKing;
-import ch.mobileking.utils.Products;
 import ch.mobileking.utils.Utils;
+import ch.mobileking.utils.classes.Crown;
+import ch.mobileking.utils.classes.Products;
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.GridView;
@@ -74,7 +74,7 @@ public class CrownDetailOverview extends Activity {
 			}
 			
 			prod_cnt.setText(product.getPoints()+" x Punkte gesammelt!");
-			prod_Image.setImageBitmap(Utils.loadImageFromPath(product));
+			prod_Image.setImageBitmap(Utils.loadImageFromPath(product.getEan()));
 
 		}
 

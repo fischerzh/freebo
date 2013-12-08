@@ -1,4 +1,4 @@
-package ch.mobileking.activity.old;
+package ch.mobileking.activity.salesslips;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,7 +16,7 @@ import android.os.Bundle;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
-public class StoreKingActivity extends Activity {
+public class SalesSlipsActivity extends Activity {
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -28,22 +28,13 @@ public class StoreKingActivity extends Activity {
 		
 		ListView storehero_lv = (ListView) findViewById(R.id.salesslip_lv);
 		
-		ArrayList<Object> storeKingItems = new ArrayList<Object>();
-		
-//		HashMap<String, Crown> storeCrownList = new HashMap<String, Crown>();
-		
-//		for (Products prod : ProductKing.getStaticProducts())
-//		{
-//			Location loc = new Location(prod.get)
-//		}
-//		storeItems.add(cr);
-//		storeItems.add(cr2);
+		ArrayList<Object> salesSlipItems = new ArrayList<Object>();
 		
 		Utils.addLogMsg(this.getLocalClassName());
 		
-		storeKingItems.addAll(ProductKing.getInstance().getLocations());
+		salesSlipItems.addAll(ProductKing.getInstance().getStaticSalesSlips());
 
-		ImageAdapter adapter = new ImageAdapter(getApplicationContext(), storeKingItems, R.layout.activity_salesslips_item); 
+		ImageAdapter adapter = new ImageAdapter(getApplicationContext(), salesSlipItems, R.layout.activity_salesslips_item); 
 		
 		storehero_lv.setAdapter(adapter);
 		

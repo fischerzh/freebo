@@ -2,17 +2,22 @@ package ch.mobileking.classes.override;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import ch.mobileking.R;
-import ch.mobileking.utils.Crown;
-import ch.mobileking.utils.Leaderboard;
+import ch.mobileking.login.ServerRequest;
 import ch.mobileking.utils.Location;
 import ch.mobileking.utils.ProductKing;
-import ch.mobileking.utils.Products;
 import ch.mobileking.utils.SharedPrefEditor;
 import ch.mobileking.utils.Utils;
+import ch.mobileking.utils.classes.Crown;
+import ch.mobileking.utils.classes.Leaderboard;
+import ch.mobileking.utils.classes.Products;
+import ch.mobileking.utils.classes.SalesSlip;
+import ch.mobileking.utils.classes.SalesVerified;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -22,6 +27,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 /**
@@ -42,7 +48,7 @@ public class ImageAdapter extends BaseAdapter{
 	
 	private ArrayList<Object> items;
 	
-	private ArrayList<Bitmap> bitmArray; 
+	private ArrayList<SalesSlip> loadingArrayItemList; 
 	
 	private int layoutId;
 	
@@ -120,44 +126,54 @@ public class ImageAdapter extends BaseAdapter{
 			
 			ImageView recommItem = (ImageView) gridView.findViewById(R.id.recomm_item_pict);
 			if(Utils.imageExists(prod.getEan()))
-				recommItem.setImageBitmap(Utils.loadImageFromPath(prod));
+				recommItem.setImageBitmap(Utils.loadImageFromPath(prod.getEan()));
 		}
 		/** 
-		 * Layout items for STORE HERO list view items
+		 * Layout items for SALES SLIP list view items
 		**/
-		else if(this.layoutId == R.layout.activity_storehero_item)
+		else if(this.layoutId == R.layout.activity_salesslips_item)
 		{
-			Location loc = ((Location) items.get(position));
+			SalesSlip salesslip = ((SalesSlip) items.get(position));
+			TextView salesslip_item_location = (TextView) gridView.findViewById(R.id.salesslip_item_location);
+			if(salesslip.getSalespoint()!=null && salesslip.getSalespoint()!="")
+				salesslip_item_location.setText(salesslip.getSalespoint());
 			
-			TextView storehero_item_location = (TextView) gridView.findViewById(R.id.storehero_item_location);
-			storehero_item_location.setText(""+loc.getName());
+			TextView salesslip_item_date = (TextView) gridView.findViewById(R.id.salesslip_item_date);
+			salesslip_item_date.setText(salesslip.getScanDate());
 			
-			ImageView storehero_item_store_img = (ImageView) gridView.findViewById(R.id.storehero_item_store_img);
-			if(loc.getName().toLowerCase().contains("coop"))
-				storehero_item_store_img.setImageResource(R.drawable.ic_logo_coop);
-			if(loc.getName().toLowerCase().contains("migros"))
-				storehero_item_store_img.setImageResource(R.drawable.ic_logo_migros);
-			
-			List<Crown> crownList = ProductKing.getCrowns(loc.getName());
-			System.out.println("CrownListSize: " + loc.getName() +", size: " + crownList.size());
+			ImageView salesslip_item_icon = (ImageView) gridView.findViewById(R.id.salesslip_item_icon);
 
-			int gold = 0, silver = 0, bronce = 0;
-			
-			gold = countCrowns(crownList, 1);
-			silver = countCrowns(crownList, 2);
-			bronce = countCrowns(crownList, 3);
+			ImageView salesslip_image_verified = (ImageView) gridView.findViewById(R.id.salesslip_image_verified);
+			TextView salesslip_item_verified_text = (TextView) gridView.findViewById(R.id.salesslip_item_verified_text);
 
-			TextView storehero_item_crown_gold_cnt = (TextView) gridView.findViewById(R.id.storehero_item_crown_gold_cnt);
-			storehero_item_crown_gold_cnt.setText("x "+gold);
+			if(salesslip.getIsapproved() == 1)
+			{
+				salesslip_image_verified.setImageResource(R.drawable.ic_salesslip_inprogress);
+				salesslip_item_verified_text.setText("IN BEARBEITUNG!");
+			}
+			if(salesslip.getIsapproved() == 0)
+			{
+				salesslip_image_verified.setImageResource(R.drawable.ic_salesslip_notok);
+				salesslip_item_verified_text.setText("UNG†LTIG!");
+			}
+			if(salesslip.getIsapproved() == 2)
+			{
+				salesslip_image_verified.setImageResource(R.drawable.ic_salesslip_ok);
+				salesslip_item_verified_text.setText("VERIFIZIERT!");
+			}
 			
-			TextView storehero_item_crown_silver_cnt = (TextView) gridView.findViewById(R.id.storehero_item_crown_silver_cnt);
-			storehero_item_crown_silver_cnt.setText("x "+silver);
-			
-			TextView storehero_item_crown_cronce_cnt = (TextView) gridView.findViewById(R.id.storehero_item_crown_bronce_cnt);
-			storehero_item_crown_cronce_cnt.setText("x "+bronce);
-			
+			ProgressBar salesslip_progress = (ProgressBar) gridView.findViewById(R.id.salesslip_item_progress);
+			if(salesslip.getIsuploaded())
+			{
+				salesslip_item_icon.setVisibility(View.VISIBLE);
+				salesslip_progress.setVisibility(View.INVISIBLE);
+			}
+			else
+			{
+				salesslip_item_icon.setVisibility(View.INVISIBLE);
+				salesslip_progress.setVisibility(View.VISIBLE);
+			}
 
-			
 		}
 		/** 
 		 * Layout items for LEADERBOARD list view items
@@ -274,28 +290,6 @@ public class ImageAdapter extends BaseAdapter{
 	    
 	}
 
-	private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-	     protected Bitmap doInBackground(String... urls) {
-	         return loadImageFromNetwork(urls[0]);
-	     }
 
-	     protected void onPostExecute(Bitmap result) {
-	         //Do something with bitmap eg:
-	    	 System.out.println("Got Image: " +result.toString());
-	    	 bitmArray.add(position, result);
-//	    	 imageView.setImageBitmap(result);
-	     }
-	 }
-
-	 private Bitmap loadImageFromNetwork(String url){
-		 Bitmap bitmap = null;
-		 try {
-			 System.out.println("Downloading Image from Link: " + url);
-	          bitmap = BitmapFactory.decodeStream((InputStream)new URL(url).getContent());
-	      } catch (Exception e) {
-	          e.printStackTrace();
-	    }
-		return bitmap;
-	 }
 
 }

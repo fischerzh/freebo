@@ -17,9 +17,9 @@ import android.widget.Toast;
 import ch.mobileking.utils.ITaskComplete;
 import ch.mobileking.utils.JSONResponse;
 import ch.mobileking.utils.ProductKing;
-import ch.mobileking.utils.Products;
 import ch.mobileking.utils.SharedPrefEditor;
 import ch.mobileking.utils.Utils;
+import ch.mobileking.utils.classes.Products;
 
 public class AsyncUpdate extends AsyncTask<String, String, String>{
 	
@@ -78,24 +78,25 @@ public class AsyncUpdate extends AsyncTask<String, String, String>{
 	private String updateAllProducts()
 	{
 		String response = "";
+		String responseMessage = "";
 		Boolean allUpdated = false;
 		for (Products prod : ProductKing.getStaticProducts())
 		{
-			allUpdated = false;
+			allUpdated = true;
 			if(prod.getIsdeleted() && prod.getOptin())
 			{
-				System.out.println("Update Server");
 				response = updateSingleProduct(prod.getEan(), !prod.getIsdeleted());
-				if(response.contains("FAILED"))
-					allUpdated = false;
-				else
-					allUpdated = true;
+				System.out.println("Response: " + response);
+				responseMessage += response +prod.getName()+"\n";
+				
 			}
 		}
+		if(response.contains("FAILED"))
+			allUpdated = false;
 		if(allUpdated)
-			return "Alle Produkte aktualisiert!";
+			return responseMessage +"\n\n"+"Schade, Du sammelst jetzt keine Punkte mehr!";
 		else
-			return "Fehler beim aktualisieren!";
+			return "Fehler beim aktualisieren!\n" + responseMessage;
 	}
 	
 	private String updateSingleProduct(String ean, Boolean optIn)

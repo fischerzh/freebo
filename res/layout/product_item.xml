@@ -18,7 +18,7 @@
         android:maxLines="1"
         android:text="Rivella Rot"
         android:textStyle="italic"
-        android:textSize="20dp" />
+        android:textSize="@dimen/textSizeLarge" />
 
     <ch.mobileking.classes.override.RobotoTextView
         android:id="@+id/prod_item_producer"
@@ -27,7 +27,7 @@
         android:maxLines="1"
         android:text="Von Rivella"
         android:textColor="@android:color/black"
-        android:textSize="14dp" />
+        android:textSize="@dimen/textSizeTiny" />
 
     <View
         android:id="@+id/separator"

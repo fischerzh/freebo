@@ -1,0 +1,34 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/salesslip_ll"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <ProgressBar
+        android:id="@+id/salesslip_progress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:progress="25" 
+        android:visibility="invisible"
+        />
+
+    <ListView
+        android:id="@+id/salesslip_lv"
+        android:layout_width="fill_parent"
+        android:layout_height="326dp"
+        android:layout_weight="1.08"
+        android:divider="@color/grey_dark"
+        android:dividerHeight="2px"
+        android:paddingTop="10dp" >
+    </ListView>
+
+    <Button
+        android:id="@+id/salesslip_tab_btn_newscan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/black"
+        android:text="+ Neuer Scan"
+        android:textColor="@android:color/white" />
+
+</LinearLayout>

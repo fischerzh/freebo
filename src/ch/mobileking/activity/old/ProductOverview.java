@@ -34,8 +34,8 @@ import ch.mobileking.login.AsyncUpdate;
 import ch.mobileking.utils.BaseActivity;
 import ch.mobileking.utils.ITaskComplete;
 import ch.mobileking.utils.ProductKing;
-import ch.mobileking.utils.Products;
 import ch.mobileking.utils.SharedPrefEditor;
+import ch.mobileking.utils.classes.Products;
 
 
 public class ProductOverview extends Activity implements ITaskComplete{
@@ -411,6 +411,12 @@ public class ProductOverview extends Activity implements ITaskComplete{
 
 	@Override
 	public void startLogin() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void sendProgressUpdate(int progress) {
 		// TODO Auto-generated method stub
 		
 	}

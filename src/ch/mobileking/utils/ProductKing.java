@@ -2,6 +2,7 @@ package ch.mobileking.utils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -9,6 +10,12 @@ import java.util.List;
 import android.content.Context;
 import android.os.Environment;
 import android.os.Message;
+
+import ch.mobileking.utils.classes.Badge;
+import ch.mobileking.utils.classes.Crown;
+import ch.mobileking.utils.classes.Leaderboard;
+import ch.mobileking.utils.classes.Products;
+import ch.mobileking.utils.classes.SalesSlip;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -37,6 +44,9 @@ private static final long serialVersionUID = 1L;
 	@SerializedName("leaderboard")
 	private List<Leaderboard> leaderboard;
 	
+	@SerializedName("salesslips")
+	private List<SalesSlip> salesslips;
+	
 	@SerializedName("status")
 	private String status = " ";
 
@@ -51,11 +61,15 @@ private static final long serialVersionUID = 1L;
 	
 	private static List<Leaderboard> staticLeaderboard;
 	
+	private static List<SalesSlip> staticSalesSlips;
+	
 	private static Boolean isActive = false;
 	
 	private static Context cont;
 	
 	private static ProductKing singletonProdKing;
+
+	private static List<SalesSlip> staticSalesSlipsParts;
 	
 	public static ProductKing getInstance()
 	{
@@ -64,6 +78,7 @@ private static final long serialVersionUID = 1L;
 		{
 			System.out.println("Loading JSON from Local!");
 			singletonProdKing = Utils.getProductKingFromLocal();
+			
 		}
 		return singletonProdKing;
 	}
@@ -243,6 +258,20 @@ private static final long serialVersionUID = 1L;
 
 	
 	/**
+	 * @return the salesslips
+	 */
+	public List<SalesSlip> getSalesslips() {
+		return salesslips;
+	}
+
+	/**
+	 * @param salesslips the salesslips to set
+	 */
+	public void setSalesslips(List<SalesSlip> salesslips) {
+		this.salesslips = salesslips;
+	}
+
+	/**
 	 * @return the isactiveapp
 	 */
 	public Boolean getIsactiveapp() {
@@ -312,7 +341,23 @@ private static final long serialVersionUID = 1L;
 		this.exception = exception;
 	}
 
+	public static List<SalesSlip> getStaticSalesSlips() {
+		if(staticSalesSlips==null)
+			staticSalesSlips = new ArrayList<SalesSlip>();
+		return staticSalesSlips;
+	}
 
+	public static void setStaticSalesSlips(List<SalesSlip> salesSlipList)
+	{
+		ProductKing.staticSalesSlips = salesSlipList;
+	}
+	
+	public static List<SalesSlip> getSalesSlipsParts()
+	{
+		if(staticSalesSlipsParts==null)
+			staticSalesSlipsParts = new ArrayList<SalesSlip>();
+		return ProductKing.staticSalesSlipsParts;
+	}
 	
 }
 

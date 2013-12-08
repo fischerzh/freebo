@@ -5,9 +5,9 @@ import java.util.ArrayList;
 
 import ch.mobileking.classes.override.ImageAdapter;
 import ch.mobileking.utils.ProductKing;
-import ch.mobileking.utils.Products;
 import ch.mobileking.utils.SharedPrefEditor;
 import ch.mobileking.utils.Utils;
+import ch.mobileking.utils.classes.Products;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

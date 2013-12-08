@@ -1,6 +1,8 @@
-package ch.mobileking.utils;
+package ch.mobileking.utils.classes;
 
 import java.util.Date;
+
+import ch.mobileking.utils.Utils;
 
 public class GcmMessage {
 	
@@ -20,7 +22,9 @@ public class GcmMessage {
 	
 	private Boolean isSynced = false;
 	
-	public GcmMessage(String content, String title, String uuid)
+	private String locationInfo = "";
+	
+	public GcmMessage(String content, String title, String uuid, String location)
 	{
 		this.content = content;
 		this.title = title;
@@ -32,6 +36,7 @@ public class GcmMessage {
 		{
 			this.uuid = uuid;
 		}
+		this.setLocationInfo(location);
 		this.createDate = new Date();
 		this.read = false;
 	}
@@ -146,6 +151,20 @@ public class GcmMessage {
 	 */
 	public void setSyncDate(Date syncDate) {
 		this.syncDate = syncDate;
+	}
+
+	/**
+	 * @return the locationInfo
+	 */
+	public String getLocationInfo() {
+		return locationInfo;
+	}
+
+	/**
+	 * @param locationInfo the locationInfo to set
+	 */
+	public void setLocationInfo(String locationInfo) {
+		this.locationInfo = locationInfo;
 	}
 
 }

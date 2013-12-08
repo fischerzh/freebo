@@ -37,15 +37,22 @@ import com.google.gson.JsonSyntaxException;
 import ch.mobileking.DemoActivity;
 import ch.mobileking.R;
 import ch.mobileking.login.ServerRequest;
+import ch.mobileking.utils.classes.GcmMessage;
+import ch.mobileking.utils.classes.Products;
+import ch.mobileking.utils.classes.SalesSlip;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Criteria;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -53,6 +60,7 @@ import android.os.AsyncTask;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class Utils {
@@ -74,6 +82,9 @@ public class Utils {
 	public static final String PROPERTY_REG_ID = "registration_id";
 	private static final String PROPERTY_APP_VERSION = "appVersion";
 	private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+	
+	private static final int PRODUCT_FAV_REQUEST = 99;
+	private static final int SALES_SLIPS_REQUEST = 88;
 	
 	public static final String USER_AVATAR_PNG ="user_avatar";
 	public static final String JSON_FILE_NAME = "productKing.json";
@@ -211,57 +222,31 @@ public class Utils {
 		return prodKing;
 	}
 	
+	public static void onSyncRequest()
+	{
+		System.out.println("MainTabActivity.onSyncRequest()");
+		ServerRequest request = new ServerRequest(getContext(), editor);
+		request.startUpdateLogs();
+	}
+	
+	
 	public static void processFileFromSD(String filePath)
 	{
 //        bitmap = BitmapFactory.decodeStream((InputStream)new URL(imgUri).getContent());
 		System.out.println("processFile..." + filePath);
 		
-		LoadImageTask newImageLoader = new LoadImageTask(filePath, false);
+		LoadImageTask newImageLoader = new LoadImageTask(null, filePath, false, true, null);
 		newImageLoader.execute();
 	}
 	
-	public static void loadAllImages(ITaskComplete listener) {
+	public static void loadAllImagesFromWeb(ITaskComplete listener) {
 		setListener(listener);
 		
-		LoadImageTask newImageLoader = new LoadImageTask(true);
+		LoadImageTask newImageLoader = new LoadImageTask(null, null, true, false, null);
 		newImageLoader.execute();
 	}
 	
-	public static Bitmap loadImage(Products prod)
-	{
-		
-		File imgFile = new File(getPath(null), prod.getId()+".png");
-		Bitmap myBitmap = null;
-		
-		if(!imgFile.exists())
-		{
-			try {
-				myBitmap = BitmapFactory.decodeStream((InputStream)new URL(prod.getImagelink()).getContent());
-			} catch (MalformedURLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		return myBitmap;
-	}
 	
-	public static Bitmap loadImageFromPath(Products prod) {
-		File imgFile = new File(getPath(null), prod.getId()+".png");
-		Bitmap myBitmap = null;
-		
-		if(imgFile.exists())
-		{
-			System.out.println("Found Image on SD card: " + imgFile.getAbsolutePath());
-			
-			myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-		}
-		return myBitmap;
-
-	}
-
 	public static Bitmap loadImageFromPath(String fileName) {
 		File imgFile = new File(getPath(null), fileName+".png");
 		Bitmap myBitmap = null;
@@ -275,23 +260,15 @@ public class Utils {
 
 	}
 	
-//	public static boolean imageExists(Products prod)
-//	{
-//		String file_path = getPath(null);
-//		File imgFile = new File(file_path, prod.getId()+".png");
-//		if(imgFile.exists())
-//		{
-//			System.out.println("Image exists SD card: " + imgFile.getAbsolutePath());
-//		}
-//		else
-//		{
-//			System.out.println("Image does not exist on SD card... loading and saving Image to: " + imgFile.getAbsolutePath());
-//			file_path = saveBitmap(loadImage(prod), prod);
-//		}
-//		
-//		return imgFile.exists();
-//	}
-//	
+	public static void loadBitmapFromURL(String url, String filename)
+	{
+		LoadImageTask newImageLoader = new LoadImageTask(filename, null, false, false, url);
+		newImageLoader.execute();
+
+	}
+	
+	
+
 	public static boolean imageExists(String fileName)
 	{
 		File imgFile = new File(getPath(null), fileName+".png");
@@ -300,25 +277,6 @@ public class Utils {
 	}
 	
 
-	public static String saveBitmap(Bitmap bmp, Products prod)
-	{
-		
-        File file = new File(getPath(null), prod.getId()+".png");
-//		Bitmap bmp = BitmapFactory.decodeFile(file.getAbsolutePath());
-        FileOutputStream fOut = null;
-		try {
-			fOut = new FileOutputStream(file);
-			bmp.compress(Bitmap.CompressFormat.PNG, 50, fOut);
-			fOut.flush();
-	        fOut.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-	    System.out.println("Saved Image to SD card: " +file.getAbsolutePath());
-	    return file.getAbsolutePath();
-	}
 	
 	public static void saveBitmapAsync(Bitmap bmp, String filename, SharedPrefEditor editor)
 	{
@@ -334,11 +292,10 @@ public class Utils {
 		newImageSaver.execute();
 	}
 	
-	public static void loadBitmapFromURL(String url, String filename)
+	public static void saveAllBitmapAsync(SharedPrefEditor editor)
 	{
-		SaveImageTask newImageSaver = new SaveImageTask(url, filename);
+		SaveImageTask newImageSaver = new SaveImageTask(true, true, editor);
 		newImageSaver.execute();
-
 	}
 	
 	public static String saveBitmap(Bitmap bmp, String fileName)
@@ -415,7 +372,7 @@ public class Utils {
 	public static void addNotificationMsg(String msg, String title, String uuid)
 	{
 		System.out.println("Adding GCM-Notification-Message " +msg);
-		GcmMessage gcmMsg = new GcmMessage(msg, title, uuid);
+		GcmMessage gcmMsg = new GcmMessage(msg, title, uuid, getLocationInformation());
 		getNotifications().add(gcmMsg);
 	}
 	
@@ -459,7 +416,8 @@ public class Utils {
 
 	public static void addLogMsg(String msg)
 	{
-		GcmMessage gcmMsg = new GcmMessage(msg, "UserActivityLog", "");
+
+		GcmMessage gcmMsg = new GcmMessage(msg, "UserActivityLog", "", getLocationInformation());
 		if(getUserLogData()==null)
 			initUserLogData();
 		getUserLogData().add(gcmMsg);
@@ -468,6 +426,30 @@ public class Utils {
 		
 	}
 	
+   private static String getLocationInformation()
+   {
+	    String locationResponse = "";
+
+		// Get the location manager
+	   if(getContext()!=null)
+	   {
+			LocationManager locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
+		    // Define the criteria how to select the locatioin provider -> use
+		    // default
+		    Criteria criteria = new Criteria();
+		    String provider = locationManager.getBestProvider(criteria, true);
+		    android.location.Location location = locationManager.getLastKnownLocation(provider);
+	        System.out.println("Location " + provider + " has been selected.");
+	        
+		    if (location != null)
+		    {
+			    locationResponse += provider + "; lat: " +  location.getLatitude()+ "; long: " +  location.getLongitude();
+		    }
+	        System.out.println("Location: " +locationResponse);
+	   }
+
+	    return locationResponse;
+   }
 
 	public static void registerDevice(Context cont)
 	{
@@ -656,14 +638,23 @@ public class Utils {
 
 }	
 
-   class SaveImageTask extends AsyncTask<String, Void, String> {
+   class SaveImageTask extends AsyncTask<String, Integer, String> {
 	   
 	   private Bitmap image;
 	   private String filename;
 	   private SharedPrefEditor editor;
 	   private Boolean updateToBackend = false;
 	   private Boolean loadFromUrl = false;
+	   private Boolean saveMultiple = false;
 	   private String url;
+	   
+	   public SaveImageTask(Boolean updateToBackend, Boolean saveMultipleImages, SharedPrefEditor editor)
+	   {
+		   this.updateToBackend = updateToBackend;
+		   this.saveMultiple = saveMultipleImages;
+		   this.editor = editor;
+
+	   }
 	   
 	   public SaveImageTask(Bitmap image, String filename, SharedPrefEditor editor)
 	   {
@@ -692,15 +683,33 @@ public class Utils {
 	   
 	   protected String doInBackground(String... params) {
 		   
-		   saveOneImage(this.url);
+		   if(saveMultiple)
+			   saveMultipleSalesSlips();
+		   else
+			   saveOneImage(this.url);
 
 	       return "SUCCESS";
 	     }
 	   
-	   private void saveOneImage(String url)
+	   protected void onPostExecute(String result) {
+	         //Do something with bitmap eg:
+	    	 System.out.println("Saved Image async finished (including server upload: "+ updateToBackend + " " +result.toString());
+	    	 
+	    	 if(Utils.getListener()!=null && result.contains("SUCCESS"))
+	    	 {
+	    		 Utils.getListener().onUpdateCompleted(true, "");
+	    	 }
+	     }
+	   protected void onProgressUpdate(Integer... progress) {        
+		   System.out.println("Send progress update to listener: " +progress[0]);
+		    Utils.getListener().sendProgressUpdate(progress[0]);
+	   
+	   }
+	   
+	   private String saveOneImage(String url)
 	   {
-		   String filePath;
-
+		   String filePath = null;
+		   String response = null;
 		   if(loadFromUrl)
 		   {
 				try {
@@ -717,24 +726,44 @@ public class Utils {
 		   {
 			   Bitmap icon = BitmapFactory.decodeResource(Utils.getContext().getResources(), R.drawable.no_image_icon);
 			   filePath = Utils.saveBitmap(icon, filename);
+			   response = "SUCCESS";
 		   }
 		   
 		   if(updateToBackend)
 		   {
 			   ServerRequest request = new ServerRequest( editor);
-			   request.startUpdateImageToServer(filePath);
+			   response = request.startUpdateImageToServer(filePath);
 		   }
+		   return response;
 	   }
 	   
-	   protected void onPostExecute(String result) {
-	         //Do something with bitmap eg:
-	    	 System.out.println("Saved Image async finished (including server upload: "+ updateToBackend + " " +result.toString());
-	    	 
-//	    	 if(Utils.getListener()!=null && result.contains("SUCCESS"))
-//	    	 {
-//	    		 Utils.getListener().onUpdateCompleted(true, "");
-//	    	 }
-	     }
+	   private void saveMultipleSalesSlips()
+	   {
+		   File path = new File(Utils.getPath(null));
+		   Integer partsToUpload;
+		   ServerRequest request = new ServerRequest( editor);
+		   
+		   publishProgress(5);
+		   int size = ProductKing.getInstance().getSalesSlipsParts().size();
+		   int count = 0;
+		   for(int i = 0; i < size; i ++)
+		   {
+			   SalesSlip slip = ProductKing.getInstance().getSalesSlipsParts().get(i);
+			   count+=1;
+			   int currentProgress = (int) Math.round(count * 100.0/size);
+			   
+			   publishProgress(currentProgress);
+			   
+			   if(!slip.getIsuploaded())
+			   {
+	    		String uploadResponse = request.startUpdateSalesSlipToServer(slip);
+				if(uploadResponse.contains("SUCCESS"))
+				{
+					ProductKing.getInstance().getSalesSlipsParts().get(i).setIsuploaded(true);
+				}   
+			 }
+		   }
+	   }
 
    }
 
@@ -742,25 +771,28 @@ public class Utils {
 	
 	private Bitmap image;
 	private Boolean loadMultiple = false;
+	private Boolean loadFromPath = false;
 	private String fileName;
+	private String filePath;
+	private String url;
 	
-	public LoadImageTask(String filename, Boolean loadMulti)
+	public LoadImageTask(String filename, String filePath, Boolean loadMultiFromWeb, Boolean loadFromPath, String url)
 	{
 		this.fileName = filename;
-		this.loadMultiple = loadMulti;
-	}
-	
-	public LoadImageTask(Boolean loadMultiple)
-	{
-		this.loadMultiple = true;
+		this.filePath = filePath;
+		this.loadMultiple = loadMultiFromWeb;
+		this.loadFromPath = loadFromPath;
+		this.url = url;
 	}
 	
      protected String doInBackground(String... params) {
     	 
-    	 if(loadMultiple)
-    		 loadMultipleImages();
-    	 else
-    		 loadImageFromPath(this.fileName);
+    	 if(loadMultiple && !loadFromPath)
+    		 loadMultipleImagesFromWeb();
+    	 if(!loadMultiple && !loadFromPath)
+    		 loadSingleImageFromWeb(url, fileName);
+    	 if(loadFromPath)
+    		 loadImageFromExternalPath(fileName);
     	 return "SUCCESS";
      }
 
@@ -774,7 +806,7 @@ public class Utils {
     	 }
      }
      
-     private void loadMultipleImages()
+     private void loadMultipleImagesFromWeb()
      {
   		   for(int i = 0; i < ProductKing.getInstance().getStaticProducts().size(); i++)
   		   {
@@ -791,10 +823,16 @@ public class Utils {
   		   
      }
      
-     private void loadSingleImage(String path)
+     private void loadSingleImageFromPath(String path)
      {
-    	 setImage(loadImageFromPath(path));
+    	 setImage(loadImageFromExternalPath(path));
      }
+     
+     private void loadSingleImageFromWeb(String url, String filename)
+     {
+    	 setImage(loadImageFromUrl(url, filename));
+     }
+     
      
      private Bitmap loadImageFromUrl(String uri, String filename)
      {
@@ -817,10 +855,10 @@ public class Utils {
   		   return image;
      }
      
-	 private Bitmap loadImageFromPath(String path){
+	 private Bitmap loadImageFromExternalPath(String path){
 		 Bitmap bitmap = null;
 		 try {
-			 System.out.println("Loading Image from Link: " + path);
+			 System.out.println("Loading Image from external Path: " + path);
 			 File imgFile = new File(path);
 	         bitmap = resizeBitmap(path);
 	      } catch (Exception e) {

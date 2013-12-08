@@ -1,4 +1,4 @@
-package ch.mobileking.utils;
+package ch.mobileking.utils.classes;
 
 import java.util.ArrayList;
 import java.util.List;

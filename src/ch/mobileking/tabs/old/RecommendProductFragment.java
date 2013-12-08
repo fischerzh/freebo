@@ -8,7 +8,7 @@ import ch.mobileking.classes.override.ImageAdapter;
 import ch.mobileking.classes.override.ProductBaseAdapter;
 import ch.mobileking.classes.override.RecommArrayAdapter;
 import ch.mobileking.utils.ProductKing;
-import ch.mobileking.utils.Products;
+import ch.mobileking.utils.classes.Products;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;

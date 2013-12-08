@@ -8,12 +8,12 @@ import ch.mobileking.login.ServerRequest;
 import ch.mobileking.tabs.MainProductFragment;
 import ch.mobileking.tabs.TabsPagerAdapter;
 import ch.mobileking.userdata.UserSettingsActivity;
-import ch.mobileking.utils.GcmMessage;
 import ch.mobileking.utils.ITaskComplete;
 import ch.mobileking.utils.ProductKing;
-import ch.mobileking.utils.Products;
 import ch.mobileking.utils.SharedPrefEditor;
 import ch.mobileking.utils.Utils;
+import ch.mobileking.utils.classes.GcmMessage;
+import ch.mobileking.utils.classes.Products;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -37,7 +37,8 @@ import android.widget.Toast;
 
 public class MainTabActivity extends ActionBarActivity implements ActionBar.TabListener, ITaskComplete{
 
-	private static final int BARCODE_REQUEST = 11;
+	public static final int BARCODE_REQUEST = 11;
+	public static final int CAMERA_REQUEST = 22;
 	private ViewPager viewPager;
     private TabsPagerAdapter mAdapter;
     private ActionBar actionBar;
@@ -124,8 +125,6 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
 	    // Handle item selection
 	    switch (item.getItemId()) {
 	        case R.id.action_logout:
-	        	editor.setPwd("");
-	        	editor.setUsername("");
 	        	startMainActivity();
 	            return true;
 	        case R.id.action_user_settings:
@@ -133,7 +132,7 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
 	        	startActivityForResult(i, 1);
 	        	return true;
 	        case R.id.action_sync:
-	        	onSyncRequest();
+	        	Utils.onSyncRequest();
 	        	return true;
 	        default:
 	            return super.onOptionsItemSelected(item);
@@ -144,6 +143,8 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
 	{
 		Intent intent = new Intent(this, MainActivity.class);
     	startActivity(intent);
+    	editor.setPwd("");
+    	editor.setUsername("");
     	finish();
 	}
 	
@@ -209,9 +210,22 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
         	
         	Utils.addLogMsg("Barcode scanned: " +barcode);
         	
-			Toast.makeText(this, "Bitte warten, wir aktualisieren....", Toast.LENGTH_LONG).show();
+//			Toast.makeText(this, "Bitte warten, wir aktualisieren....", Toast.LENGTH_LONG).show();
 			this.listener.startUpdate();
 			updateUserInfo(true, true, barcode);
+		}
+		
+		if(resultCode == CAMERA_REQUEST)
+		{
+        	String fileName = data.getStringExtra("salesslip");
+
+        	System.out.println("MainCameraScanFragment, SalesSlips scanned: " +fileName);
+        	if(editor.getFirstRun())
+        		createAlert("Besten Dank, Dein Einkauf wird uns übermittelt. Wir werden diesen in kürze prüfen!\n(Beachte: Der Einkaufszettel muss spätestens innert 10 Min. nach Einkauf hochgeladen werden!)", "Einkauf registriert!", R.drawable.ic_store_hero );
+		
+			this.listener.startUpdate();
+			updateSalesSlipInfo();
+
 		}
 
     }
@@ -235,6 +249,12 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
 	{
         new AsyncUpdate(this, optIn, update, productID, this).execute(editor.getUsername(),editor.getPwd()); //http://192.168.0.16:8080
 	}
+	
+	private void updateSalesSlipInfo()
+	{
+		Utils.setListener(this.listener);
+		Utils.saveAllBitmapAsync(editor);
+	}
 
 	@Override
 	public void startUpdate() {
@@ -248,32 +268,31 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
 		
 	}
 	
-	public void onSyncRequest()
-	{
-		System.out.println("MainTabActivity.onSyncRequest()");
-		ServerRequest request = new ServerRequest(this, this);
-		request.startUpdateLogs();
-	}
+//	public void onSyncRequest()
+//	{
+//		System.out.println("MainTabActivity.onSyncRequest()");
+//		ServerRequest request = new ServerRequest(this, this);
+//		request.startUpdateLogs();
+//	}
 	
-	@Override
-	public void onPause()
-	{
-		super.onPause();
-		onSyncRequest();
-	}
+//	@Override
+//	public void onPause()
+//	{
+//		super.onPause();
+//		onSyncRequest();
+//	}
 	
     @Override
     public void onBackPressed() {
         if (doubleBackToExitPressedOnce) {
         	Utils.addLogMsg(this.getLocalClassName()+": Exit clicked");
-        	onSyncRequest();
-        	
         	Intent intent = new Intent(Intent.ACTION_MAIN);
         	intent.addCategory(Intent.CATEGORY_HOME);
         	intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         	startActivity(intent);
         	return;
         }
+    	Utils.onSyncRequest();
         this.doubleBackToExitPressedOnce = true;
         Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
         Utils.addLogMsg(this.getLocalClassName()+": Back Exit clicked 1");
@@ -286,5 +305,12 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
             }
         }, 2000);
     }
+
+
+	@Override
+	public void sendProgressUpdate(int progress) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

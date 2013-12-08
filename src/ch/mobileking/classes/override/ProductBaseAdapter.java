@@ -1,58 +1,30 @@
 package ch.mobileking.classes.override;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Typeface;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
-import com.nostra13.universalimageloader.cache.disc.naming.HashCodeFileNameGenerator;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
-import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
-import com.nostra13.universalimageloader.utils.StorageUtils;
-
-import ch.mobileking.ProductDetailOverview;
-import ch.mobileking.R;
-import ch.mobileking.activity.old.CrownDetailOverview;
-import ch.mobileking.login.AsyncUpdate;
-import ch.mobileking.utils.Crown;
-import ch.mobileking.utils.ProductKing;
-import ch.mobileking.utils.Products;
-import ch.mobileking.utils.SharedPrefEditor;
-import ch.mobileking.utils.Utils;
-
-import android.os.Environment;
+import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.Filter;
-import android.widget.Filterable;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import ch.mobileking.R;
+import ch.mobileking.utils.ProductKing;
+import ch.mobileking.utils.SharedPrefEditor;
+import ch.mobileking.utils.Utils;
+import ch.mobileking.utils.classes.Crown;
+import ch.mobileking.utils.classes.Products;
+
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class ProductBaseAdapter extends BaseAdapter{
 	
@@ -77,26 +49,6 @@ public class ProductBaseAdapter extends BaseAdapter{
 		setCont(context);
 		mInflater = LayoutInflater.from(context);
 
-		/** IMAGE LOADER */
-		File cacheDir = StorageUtils.getOwnCacheDirectory(context,"/cache");
-
-		// Get singletone instance of ImageLoader
-		imageLoader = ImageLoader.getInstance();
-		// Create configuration for ImageLoader (all options are optional)
-		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(context)
-				// You can pass your own memory cache implementation
-				.discCache(new UnlimitedDiscCache(cacheDir))
-				// You can pass your own disc cache implementation
-				.discCacheFileNameGenerator(new HashCodeFileNameGenerator())
-				.build();
-		// Initialize ImageLoader with created configuration. Do it once.
-		imageLoader.init(config);
-
-		options = new DisplayImageOptions.Builder()
-//				.showStubImage(R.drawable.empty)// display stub image
-				.cacheInMemory(true)
-		        .cacheOnDisc(true)
-				.displayer(new RoundedBitmapDisplayer(20)).build();
 	}
 
 	@Override
@@ -188,6 +140,8 @@ public class ProductBaseAdapter extends BaseAdapter{
 		 */
 		Products prod = resultList.get(position);
 		holder.getTxtName().setText(""+prod.getName());
+		if(prod.getProducer().toLowerCase().contains("null") || prod.getProducer().trim()=="")
+			prod.setProducer("Hersteller unbekannt");
 		holder.getTxtProducer().setText(""+prod.getProducer());
 		
 		if(prod.getIsactive())
@@ -255,9 +209,10 @@ public class ProductBaseAdapter extends BaseAdapter{
 		if(Utils.imageExists(prod.getEan()))
 		{
 			holder.getImgProgress().setVisibility(View.INVISIBLE);
+			
 			image = Utils.loadImageFromPath(imageName);
+			
 			resultList.get(position).setProductImage(image);
-			System.out.println("ProductImage: " + prod.getProductImage());
 			
 			holder.getImgView().setImageBitmap(image);
 		}
@@ -265,7 +220,7 @@ public class ProductBaseAdapter extends BaseAdapter{
 		{
 //			holder.getImgProgress().setVisibility(View.VISIBLE);
 
-//			Utils.loadBitmapFromURL(prod.getImagelink(), imageName);
+			Utils.loadBitmapFromURL(prod.getImagelink(), imageName);
 			holder.getImgView().setImageResource(R.drawable.empty);
 
 //			Utils.saveBitmapAsync(image, imageName);

@@ -3,10 +3,10 @@ package ch.mobileking;
 import java.util.ArrayList;
 
 import ch.mobileking.classes.override.ImageAdapter;
-import ch.mobileking.utils.Crown;
-import ch.mobileking.utils.Leaderboard;
 import ch.mobileking.utils.ProductKing;
 import ch.mobileking.utils.Utils;
+import ch.mobileking.utils.classes.Crown;
+import ch.mobileking.utils.classes.Leaderboard;
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.ListAdapter;

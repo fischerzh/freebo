@@ -1,4 +1,4 @@
-package ch.mobileking.utils;
+package ch.mobileking.utils.classes;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -17,7 +17,7 @@ public class Badge {
 	private Boolean newachieved;
 
 	@SerializedName("achievementdate")
-	private Boolean achievementdate;
+	private String achievementdate;
 	
 	/**
 	 * @return the name
@@ -79,14 +79,14 @@ public class Badge {
 	/**
 	 * @return the achievementdate
 	 */
-	public Boolean getAchievementdate() {
+	public String getAchievementdate() {
 		return achievementdate;
 	}
 
 	/**
 	 * @param achievementdate the achievementdate to set
 	 */
-	public void setAchievementdate(Boolean achievementdate) {
+	public void setAchievementdate(String achievementdate) {
 		this.achievementdate = achievementdate;
 	}
 

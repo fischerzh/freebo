@@ -1,0 +1,95 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="75dp"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal" >
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent" >
+
+        <ImageView
+            android:id="@+id/salesslip_item_icon"
+            android:layout_width="@dimen/sales_slip_item_width"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_digital_receipt_none" />
+
+        <ProgressBar
+            android:id="@+id/salesslip_item_progress"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="@dimen/sales_slip_item_width"
+            android:layout_height="@dimen/sales_slip_item_height"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:visibility="invisible" />
+    </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="186dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <ch.mobileking.classes.override.RobotoTextView
+                    android:id="@+id/salesslip_item_location"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:maxLines="1"
+                    android:text="Einkaufsort"
+                    android:textColor="@color/grey_dark"
+                    android:textSize="@dimen/textSizeLarge"
+                    android:textStyle="italic" />
+
+                <ch.mobileking.classes.override.RobotoTextView
+                    android:id="@+id/salesslip_item_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:text="20. Dez 2013 - 15:14"
+                    android:textColor="@color/blue_light"
+                    android:textSize="@dimen/textSizeSmall"
+                    android:textStyle="italic" />
+
+            </FrameLayout>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/salesslip_linearlayout_verified"
+            android:layout_width="0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.35"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:id="@+id/salesslip_image_verified"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:layout_marginTop="5dp"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/ic_salesslip_inprogress" />
+
+            <ch.mobileking.classes.override.RobotoTextView
+                android:id="@+id/salesslip_item_verified_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="IN BEARBEITUNG"
+                android:textColor="@color/grey_light"
+                android:textSize="@dimen/textSizeTiny" />
+
+        </LinearLayout>
+
+    </LinearLayout>

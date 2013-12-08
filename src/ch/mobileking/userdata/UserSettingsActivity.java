@@ -472,6 +472,12 @@ public class UserSettingsActivity extends Activity implements ITaskComplete{
 		
 	}
 
+	@Override
+	public void sendProgressUpdate(int progress) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	// public void onSharedPreferenceChanged(SharedPreferences
 	// sharedPreferences, String key) {
 	// if (key.equals(KEY_PREF_SYNC_CONN)) {

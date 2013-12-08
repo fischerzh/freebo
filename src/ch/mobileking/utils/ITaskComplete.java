@@ -9,6 +9,8 @@ public interface ITaskComplete {
 	void startUpdate();
 	
 	void startLogin();
+	
+	void sendProgressUpdate(int progress);
 
 
 }

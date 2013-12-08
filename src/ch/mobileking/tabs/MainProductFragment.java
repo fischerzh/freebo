@@ -8,13 +8,14 @@ import ch.mobileking.R;
 import ch.mobileking.activity.barcode.BarCodeScanner;
 import ch.mobileking.classes.override.MessageDialog;
 import ch.mobileking.classes.override.ProductBaseAdapter;
+import ch.mobileking.exception.CustomExceptionHandler;
 import ch.mobileking.login.AsyncLogin;
 import ch.mobileking.login.AsyncUpdate;
 import ch.mobileking.utils.ITaskComplete;
 import ch.mobileking.utils.ProductKing;
-import ch.mobileking.utils.Products;
 import ch.mobileking.utils.SharedPrefEditor;
 import ch.mobileking.utils.Utils;
+import ch.mobileking.utils.classes.Products;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -68,16 +69,20 @@ public class MainProductFragment extends Fragment implements ITaskComplete {
     @Override 
     public void onActivityCreated(Bundle savedInstanceState) {  
         super.onActivityCreated(savedInstanceState);  
-           
-        setHasOptionsMenu(true);
         
         editor = new SharedPrefEditor(getActivity());
+
+		if (!(Thread.getDefaultUncaughtExceptionHandler() instanceof CustomExceptionHandler)) {
+			Thread.setDefaultUncaughtExceptionHandler(new CustomExceptionHandler(editor.getUsername()));
+		}
+           
+        setHasOptionsMenu(true);
         
         listView = (ListView) getActivity().findViewById(R.id.tab_main_listView);
         
         setProdLayoutResourceId(R.layout.product_item);
 
-		Utils.loadAllImages(this);
+		Utils.loadAllImagesFromWeb(this);
         
         adapter = new ProductBaseAdapter(getActivity(), getProdLayoutResourceId(), (ArrayList<Products>) ProductKing.getInstance().getStaticProducts()); //R.layout.product_item
 		
@@ -87,7 +92,8 @@ public class MainProductFragment extends Fragment implements ITaskComplete {
 
 			@Override
 			public void onItemClick(AdapterView<?> adapter, View view, int position, long id) {
-				
+	        	Utils.onSyncRequest();
+	        	
 				System.out.println("Position clicked: " + position + " " + ((Products)listView.getItemAtPosition(position)).getName());
 		        Intent intent = new Intent(getActivity(), ProductDetailOverview.class);
 //		        Products prod = (Products) listView.getItemAtPosition(position);
@@ -106,7 +112,8 @@ public class MainProductFragment extends Fragment implements ITaskComplete {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 //				showInfoUpdated(false);
-				
+				Utils.addLogMsg("MainProductFragment: Opt-Out clicked!");
+
 				updateAllUserInfo();
 			}
 		});
@@ -145,11 +152,6 @@ public class MainProductFragment extends Fragment implements ITaskComplete {
 
 		progressLayout.setVisibility(View.INVISIBLE);
         
-        
-//        if(!completed)
-//        	createAlert("Aktualisierung fehlgeschlagen! "+message, "Fehler", R.drawable.ic_empfehlungen);
-//        else
-//        	createAlert("Aktualisierung erfolgreich! "+message, "Erfolg", R.drawable.ic_empfehlungen);
 	}
 
 	@Override
@@ -185,6 +187,7 @@ public class MainProductFragment extends Fragment implements ITaskComplete {
     	
     	if(isAdded())
     	{
+
 //    		setProdLayoutResourceId(R.layout.product_item);
     		System.out.println("Fragment is ready... refresh Adapter!");
         	adapter = new ProductBaseAdapter(getActivity() ,getProdLayoutResourceId(), (ArrayList<Products>) ProductKing.getStaticProducts()); 
@@ -216,7 +219,7 @@ public class MainProductFragment extends Fragment implements ITaskComplete {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
             super.onOptionsItemSelected(item);
-            System.out.println("Options Menu Selected: " + item.getItemId());
+			Utils.addLogMsg("MainProductFragment: Options Menu Selected "+ item.getTitle());
             switch (item.getItemId()) {
             case R.id.action_edit:
                 setEditStyle();
@@ -233,7 +236,7 @@ public class MainProductFragment extends Fragment implements ITaskComplete {
             return super.onOptionsItemSelected(item);
     }
     
-	private void createAlert(String message, String title, int iconId) {
+	public void createAlert(String message, String title, int iconId) {
 		// Build the dialog
 		AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
 		alert.setTitle(title);
@@ -251,6 +254,7 @@ public class MainProductFragment extends Fragment implements ITaskComplete {
 
 		alert.show();
 	}
+
     
 	private void setHelpActive()
 	{
@@ -263,7 +267,7 @@ public class MainProductFragment extends Fragment implements ITaskComplete {
 		// Set this Fragment as a listener through its Parent activity which will get the Result of the Barcode Scanner
 		((MainTabActivity)getActivity()).setTaskListener(this);
 		Intent intent = new Intent(getActivity(), BarCodeScanner.class);
-		startActivityForResult(intent, 1);
+		startActivityForResult(intent, MainTabActivity.BARCODE_REQUEST);
 	}
 	
 	private boolean isFirstTime()
@@ -324,6 +328,13 @@ public class MainProductFragment extends Fragment implements ITaskComplete {
 	 */
 	public void setEditVisible(boolean editVisible) {
 		this.editVisible = editVisible;
+	}
+
+
+	@Override
+	public void sendProgressUpdate(int progress) {
+		// TODO Auto-generated method stub
+		
 	}
 
 

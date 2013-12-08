@@ -1,9 +1,11 @@
 package ch.mobileking.exception;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -12,8 +14,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.FileBody;
@@ -22,9 +26,12 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 
 import ch.mobileking.login.ServerRequest;
+import ch.mobileking.utils.ProductKing;
 import ch.mobileking.utils.SharedPrefEditor;
 import ch.mobileking.utils.Utils;
 
+import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Environment;
 
 public class CustomExceptionHandler implements UncaughtExceptionHandler {
@@ -37,7 +44,6 @@ public class CustomExceptionHandler implements UncaughtExceptionHandler {
 
     private String url;
     
-    private ServerRequest request;
 
     /* 
      * if any of the parameters is null, the respective functionality 
@@ -49,7 +55,6 @@ public class CustomExceptionHandler implements UncaughtExceptionHandler {
         this.url = SharedPrefEditor.getUpdateErrorLogsURL();
         this.username = username;
         this.defaultUEH = Thread.getDefaultUncaughtExceptionHandler();
-        
     }
 
     public void uncaughtException(Thread t, Throwable e) {
@@ -61,12 +66,14 @@ public class CustomExceptionHandler implements UncaughtExceptionHandler {
         String stacktrace = result.toString();
         printWriter.close();
         String filename = username+" - "+timestamp + ".stacktrace";
-
+                
         if (localPath != null) {
             writeToFile(stacktrace, filename);
         }
         if (url != null) {
-            sendToServer(stacktrace, filename);
+//            sendToServer(stacktrace, filename);
+        	UploadErrorLog logUploader = new UploadErrorLog();
+        	logUploader.execute(stacktrace, filename);
         }
 
         defaultUEH.uncaughtException(t, e);
@@ -98,4 +105,20 @@ public class CustomExceptionHandler implements UncaughtExceptionHandler {
             e.printStackTrace();
         }
     }
+    
+    private class UploadErrorLog extends AsyncTask<String, Void, String> {
+    	
+        @Override
+        protected String doInBackground(String... params) {
+          String response = "";
+          sendToServer(params[0], params[1]);
+          
+          return response;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+        }
+      }
 }
+

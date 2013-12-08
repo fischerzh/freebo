@@ -1,7 +1,7 @@
 package ch.mobileking;
 
 import java.io.IOException;
-import java.sql.Date;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -10,10 +10,12 @@ import ch.mobileking.exception.CustomExceptionHandler;
 import ch.mobileking.utils.ProductKing;
 import ch.mobileking.utils.SharedPrefEditor;
 import ch.mobileking.utils.Utils;
+import ch.mobileking.utils.classes.SalesSlip;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -78,8 +80,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
 		editor = new SharedPrefEditor(this);
 
 		if (!(Thread.getDefaultUncaughtExceptionHandler() instanceof CustomExceptionHandler)) {
-			Thread.setDefaultUncaughtExceptionHandler(new CustomExceptionHandler(
-					editor.getUsername()));
+			Thread.setDefaultUncaughtExceptionHandler(new CustomExceptionHandler(editor.getUsername()));
 		}
 
 		Utils.addLogMsg(this.getLocalClassName());
@@ -106,17 +107,31 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+	        	Utils.addLogMsg(CameraActivity.this.getLocalClassName()+": save Picture");
+
 				camera_progress_bar.setVisibility(View.VISIBLE);
 				Time now = new Time();
+				String fileName = null, simpleFileName = null;
 				now.setToNow();
 				Random rand = new Random();
+				String scanDateFile = "";
+				Date d = new Date();
+
 				for (int i = 0; i < imageList.size(); i++) {
-					// Utils.saveBitmap(imageList.get(i) ,
-					// "scan_"+now.year+now.month+now.monthDay+now.hour+now.minute+now.second+rand.nextInt(1000)+".jpg");
-					Utils.saveBitmapAsync(imageList.get(i), "scan_" + now.year
-							+ now.month + now.monthDay + now.hour + now.minute
-							+ now.second + rand.nextInt(1000) + ".jpg", editor);
+					scanDateFile = ""+now.year
+							+ (now.month+1) + now.monthDay + now.hour + now.minute
+							+ now.second;
+					fileName = "scan_" + scanDateFile + "_part" + i;
+					simpleFileName = "scan_"+scanDateFile;
+					Utils.saveBitmap(imageList.get(i), fileName);
+					ProductKing.getInstance().getSalesSlipsParts().add(new SalesSlip(fileName, d.toGMTString(), simpleFileName, i));
+
 				}
+				ProductKing.getInstance().getStaticSalesSlips().add(new SalesSlip(fileName, d.toGMTString(), simpleFileName, 0));
+				
+		        Intent intent = new Intent(CameraActivity.this, MainTabActivity.class);
+		        intent.putExtra("salesslip", simpleFileName);
+		        setResult(MainTabActivity.CAMERA_REQUEST, intent);
 
 				finish();
 			}
@@ -127,6 +142,8 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
 
 			@Override
 			public void onClick(View v) {
+	        	Utils.addLogMsg(CameraActivity.this.getLocalClassName()+": retake Picture");
+
 				// TODO Auto-generated method stub
 				camera_show_preview.setImageBitmap(null);
 				int size = imageList.size();
@@ -145,7 +162,8 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
+	        	Utils.addLogMsg(CameraActivity.this.getLocalClassName()+": add Picture");
+
 				camera_show_preview.setImageBitmap(null);
 				if (imageList != null) {
 					int size = imageList.size();

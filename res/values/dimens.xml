@@ -9,10 +9,14 @@
     <dimen name="badge_detail_image">95dp</dimen>
     <dimen name="user_avatar_height">75dp</dimen>
         <dimen name="user_avatar_width">65dp</dimen>
+            <dimen name="sales_slip_item_height">50dp</dimen>
+            <dimen name="sales_slip_item_width">40dp</dimen>
+            
                 <dimen name="user_setting_item">65dp</dimen>
 	<dimen name="textSizeLarge">20dp</dimen>
 	<dimen name="textSizeMiddle">18dp</dimen>
 	<dimen name="textSizeSmall">16dp</dimen>
+		<dimen name="textSizeTiny">14dp</dimen>
 	
     
 </resources>

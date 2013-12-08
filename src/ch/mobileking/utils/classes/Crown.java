@@ -1,4 +1,4 @@
-package ch.mobileking.utils;
+package ch.mobileking.utils.classes;
 
 import com.google.gson.annotations.SerializedName;
 

@@ -314,7 +314,7 @@ public class MainActivity extends Activity implements ITaskComplete{
 	}
 
 	@Override
-	public void startUpdate() {
+	public void startUpdate( ) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -322,6 +322,11 @@ public class MainActivity extends Activity implements ITaskComplete{
 	@Override
 	public void startLogin() {
 		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void sendProgressUpdate(int progress) {
 		
 	}
 

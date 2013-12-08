@@ -1,5 +1,6 @@
 package ch.mobileking;
 
+import ch.mobileking.exception.CustomExceptionHandler;
 import ch.mobileking.login.ServerRequest;
 import ch.mobileking.utils.BaseActivity;
 import ch.mobileking.utils.ITaskComplete;
@@ -38,7 +39,6 @@ public class RegisterActivity extends Activity implements ITaskComplete{
 		
 		Utils.addLogMsg(this.getLocalClassName());
 
-		
 		pwd1 = (EditText) findViewById(R.id.register_txt_pwd1);
 		
 		pwd2 = (EditText) findViewById(R.id.register_txt_pwd2);
@@ -139,6 +139,12 @@ public class RegisterActivity extends Activity implements ITaskComplete{
 	 */
 	public void setAct(Activity act) {
 		this.act = act;
+	}
+
+	@Override
+	public void sendProgressUpdate(int progress) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

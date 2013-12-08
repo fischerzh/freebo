@@ -106,4 +106,10 @@ public class LoyaltyCardActivity extends Activity implements ITaskComplete{
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void sendProgressUpdate(int progress) {
+		// TODO Auto-generated method stub
+		
+	}
 }

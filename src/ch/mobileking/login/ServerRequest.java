@@ -25,6 +25,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
@@ -37,12 +38,13 @@ import com.google.gson.Gson;
 import ch.mobileking.R;
 import ch.mobileking.activity.old.ProductOverview;
 import ch.mobileking.activity.old.RecommActivity;
-import ch.mobileking.utils.GcmMessage;
 import ch.mobileking.utils.ITaskComplete;
 import ch.mobileking.utils.JSONResponse;
 import ch.mobileking.utils.ProductKing;
 import ch.mobileking.utils.SharedPrefEditor;
 import ch.mobileking.utils.Utils;
+import ch.mobileking.utils.classes.GcmMessage;
+import ch.mobileking.utils.classes.SalesSlip;
 
 import android.app.Activity;
 import android.content.Context;
@@ -56,7 +58,7 @@ public class ServerRequest {
 	
 	private Activity activity;
 	
-	private Context context;
+	private static Context context;
 	
 	CountDownLatch latch;
 	
@@ -75,10 +77,16 @@ public class ServerRequest {
 		this.editor = editor;
 	}
 	
+	public ServerRequest(Context ctx, SharedPrefEditor editor)
+	{
+		setContext(ctx);
+		this.editor = editor;
+	}
+	
 	public ServerRequest(Activity act, ITaskComplete listener)
 	{
 		this.activity = act;
-		setContext(act);
+		setContext(act.getApplicationContext());
 		this.editor = new SharedPrefEditor(act);
 		this.listener = listener;
 	}
@@ -97,7 +105,7 @@ public class ServerRequest {
 		setServerURL(editor.getRegisterURL()+"?username="+username+"&password="+pwd+"&email="+mail+"&enabled=true"+"&createFromApp=true");
 		setUpHttpPost(getServerURL(), username, pwd);
 		System.out.println("registration URL: " +getServerURL());
-		new RegisterUser().execute(username, pwd);
+		new RegisterUser(username, pwd, mail).execute();
 	}
 	
 	public void startUpdateOptIn()
@@ -167,9 +175,16 @@ public class ServerRequest {
 		
 	}
 	
-	public void startUpdateImageToServer(String filePath)
+	public String startUpdateImageToServer(String filePath)
 	{
-		uploadFileToServer(filePath);
+		return uploadFileToServer(filePath, null, null, null);
+	}
+	
+	public String startUpdateSalesSlipToServer(SalesSlip slip)
+	{
+		File filePath = new File(Utils.getPath(null), slip.getFilename()+".png");
+		return uploadFileToServer(filePath.toString(), slip.getSimpleFileName(), slip.getScanDate(), slip.getPart());
+		
 	}
 	
 	
@@ -325,7 +340,7 @@ public class ServerRequest {
 	/**
 	 * @return the context
 	 */
-	public Context getContext() {
+	public static Context getContext() {
 		return context;
 	}
 
@@ -430,12 +445,18 @@ public class ServerRequest {
 	{
 		private String username, pw, email;
 		
+		public RegisterUser(String username, String pw, String email)
+		{
+			this.username = username;
+			this.pw = pw;
+			this.email = email;
+		}
 		@Override
 		protected String doInBackground(String... params) {
-			username = params[0];
-			pw = params[1];
-			email = params[2];
-			System.out.println("register, params: " +params[0] + params[1] + params[2]);
+//			username = params[0];
+//			pw = params[1];
+//			email = params[2];
+//			System.out.println("register, params: " +params[0] + params[1] + params[2]);
 			String response = getHttpResponse(null, httpPost);
 			System.out.println("Response from HTTP call: " +response);
 			return response;
@@ -471,18 +492,13 @@ public class ServerRequest {
 		private String content; //param1
 		private String title; //param2
 		private String createDate; //param3
-		
+		private String location;
 		private String username, pwd;
 		
 		ArrayList<GcmMessage> failedMsgList = new ArrayList<GcmMessage>();
 		
 		@Override
 		protected String doInBackground(String... params) {
-			
-//			uuid = params[0];
-//			content = params[1];
-//			title = params[2];
-//			createDate = params[3];
 			
 			System.out.println("doInBackground called");
 			
@@ -506,7 +522,7 @@ public class ServerRequest {
 					{
 						if(sendMessageToServer(msg))
 						{
-							System.out.println("Set Synced for Message: " +msg.getUuid());
+//							System.out.println("Set Synced for Message: " +msg.getUuid());
 							Utils.getUserLogData().get(i).setIsSynced(true);
 						}
 						else
@@ -532,7 +548,7 @@ public class ServerRequest {
 						
 						if(sendMessageToServer(msg))
 						{
-							System.out.println("Set Synced for Message: " +msg.getUuid());
+//							System.out.println("Set Synced for Message: " +msg.getUuid());
 							Utils.getNotifications().get(i).setIsSynced(true);
 						}
 						else
@@ -564,12 +580,13 @@ public class ServerRequest {
 			title = getEncodedValueForURL(msg.getTitle());
 			createDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(msg.getCreateDate());
 			createDate = getEncodedValueForURL(createDate);
-
-			setServerURL(editor.getUpdateLogURL()+"?logMessageId="+uuid+"&title='"+title+"'&createDate='"+createDate+"'&message='"+content+"'");
+			location = getEncodedValueForURL(msg.getLocationInfo());
+			
+			setServerURL(editor.getUpdateLogURL()+"?logMessageId="+uuid+"&title='"+title+"'&createDate='"+createDate+"'&message='"+content+"'"+"&location='"+location+"'");
 			
 			setUpHttpPost(getServerURL(),username, pwd);
 			
-			System.out.println("Send Message to Server: " + getServerURL());
+//			System.out.println("Send Message to Server: " + getServerURL());
 
 			String response = getHttpResponse(null, httpPost);
 			
@@ -607,38 +624,59 @@ public class ServerRequest {
 
 	}
 	
-	private void uploadFileToServer(String filePath)
+	private String uploadFileToServer(String filePath, String simpleFileName, String scanDate, Integer filePart)
 	{
 		HttpClient httpclient = new DefaultHttpClient();
 		
 		File f = new File(filePath);
 		FileInputStream fileInputStream = null;
-		
-		try {
-			setUpHttpPost(editor.getUpdateUserFilesURL(), editor.getUsername(), editor.getPwd());
-//			HttpPost httpost = new HttpPost();
-			MultipartEntity entity = new MultipartEntity();
-			entity.addPart("uploadFile", new FileBody(f));
-			httpPost.setEntity(entity);
-			HttpResponse response = null;
-			response = httpclient.execute(httpPost);
-			System.out.println("FileUploadResponse: " + response.getEntity().toString());
-			
-			
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		   
+		HttpResponse response = null;
+		String responseMessage = null;
+		if(f.exists())
+		{
+			System.out.println("File exists: " +f.getName());
+			try {
+				setUpHttpPost(editor.getUpdateUserFilesURL(), editor.getUsername(), editor.getPwd());
+	//			HttpPost httpost = new HttpPost();
+				MultipartEntity entity = new MultipartEntity();
+				entity.addPart("uploadFile", new FileBody(f));
+				StringBody paramfileName = new StringBody(simpleFileName);
+				StringBody paramScanDate = new StringBody(scanDate);
+				StringBody paramFilePart = new StringBody(filePart.toString());
 
-		   httpclient.getConnectionManager().shutdown();
-		   
+				entity.addPart("filename", paramfileName);
+				entity.addPart("scandate", paramScanDate);
+				entity.addPart("part", paramFilePart);
+				
+				httpPost.setEntity(entity);
+				response = httpclient.execute(httpPost);
+				System.out.println("FileUploadResponse: " + response.getEntity().toString());
+
+				if(response.getStatusLine().getStatusCode() >= 300)
+	            	responseMessage = "FAILED" + response.getStatusLine().getReasonPhrase();
+	            else
+	            	responseMessage = "SUCCESS";
+
+				
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ClientProtocolException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			httpclient.getConnectionManager().shutdown();
+
+		}
+		else
+		{
+			System.out.println("File NOT FOUND!: " +f.getName());
+		}
+		System.out.println("responseMessage " + responseMessage);
+		return responseMessage;
 	}
 
 	private JSONResponse getJSONResponse(String result)
