@@ -148,6 +148,11 @@
             android:screenOrientation="portrait"
             android:label="@string/app_name" >
         </activity>        
+        <activity
+            android:name="ch.mobileking.activity.salesslips.SalesSlipImageViewer"
+            android:screenOrientation="portrait"
+            android:label="@string/app_name" >
+        </activity>           
         
      </application>
 

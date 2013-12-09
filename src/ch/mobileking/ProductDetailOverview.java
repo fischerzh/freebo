@@ -28,7 +28,7 @@ public class ProductDetailOverview extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		setContentView(R.layout.product_detail);
+		setContentView(R.layout.product_detail_leaderboard);
 		
 		setTitle("ProductKing");
 		

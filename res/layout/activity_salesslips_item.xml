@@ -1,4 +1,5 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/salesslip_item_top_linearLayout"
         android:layout_width="fill_parent"
         android:layout_height="75dp"
         android:layout_marginTop="20dp"

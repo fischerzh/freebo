@@ -21,18 +21,21 @@ public class SalesSlip {
 	@SerializedName("isuploaded")
 	private Boolean isuploaded = false;
 	
+	@SerializedName("totalparts")
+	private Integer totalparts = 0;
+	
 	private Integer part;
 	
 	private String simpleFileName;
 	
-	public SalesSlip(String filename, String scandate, String simpleFileName, Integer part)
+	public SalesSlip(String filename, String scandate, String simpleFileName, Integer part, Integer totalParts)
 	{
 		this.setFilename(filename);
 		this.setScanDate(scandate);
 		
 		this.setSimpleFileName(simpleFileName);
 		this.setPart(part);
-		
+		this.setTotalparts(totalParts);
 		this.setIsapproved(1);
 		this.setIsuploaded(false);
 	}
@@ -105,6 +108,20 @@ public class SalesSlip {
 	 */
 	public void setIsuploaded(Boolean isuploaded) {
 		this.isuploaded = isuploaded;
+	}
+
+	/**
+	 * @return the totalparts
+	 */
+	public Integer getTotalparts() {
+		return totalparts;
+	}
+
+	/**
+	 * @param totalparts the totalparts to set
+	 */
+	public void setTotalparts(Integer totalparts) {
+		this.totalparts = totalparts;
 	}
 
 	/**
