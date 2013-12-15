@@ -104,7 +104,7 @@ public class MainProductFragment extends Fragment implements ITaskComplete {
         });
         
         btn_delete = (Button) getActivity().findViewById(R.id.tab_main_btn_delete);
-        btn_delete.setVisibility(View.INVISIBLE);
+        btn_delete.setVisibility(View.GONE);
         
         btn_delete.setOnClickListener(new OnClickListener() {
 			
@@ -161,6 +161,9 @@ public class MainProductFragment extends Fragment implements ITaskComplete {
 			System.out.println("MainProductFragment, UpdateCompleted! Restarting Activity...");
 			System.out.println("Message from updateCompleted: " + message);
 			
+			if(isEditVisible())
+				setEditStyle();
+			
 			reloadUserInfo(message);
 		}
 
@@ -208,6 +211,7 @@ public class MainProductFragment extends Fragment implements ITaskComplete {
 		new AsyncLogin(getActivity(), true, this).execute(editor.getUsername(), editor.getPwd());
 		if(msg!="")
 			createAlert(msg, "Aktualisierung", R.drawable.ic_empfehlungen);
+		
 	}
     
     @Override
@@ -291,7 +295,7 @@ public class MainProductFragment extends Fragment implements ITaskComplete {
 		else
 		{
 			setEditVisible(false);
-	        btn_delete.setVisibility(View.INVISIBLE);
+	        btn_delete.setVisibility(View.GONE);
 			setProdLayoutResourceId(R.layout.product_item);
 		}
 		updateAdapterData();

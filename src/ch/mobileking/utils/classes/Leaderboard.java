@@ -14,7 +14,7 @@ public class Leaderboard {
 	private String username;
 	
 	@SerializedName("avatarid")
-	private String avatarId;
+	private Integer avatarId;
 
 	/**
 	 * @return the rank
@@ -61,14 +61,14 @@ public class Leaderboard {
 	/**
 	 * @return the avatarId
 	 */
-	public String getAvatarId() {
+	public Integer getAvatarId() {
 		return avatarId;
 	}
 
 	/**
 	 * @param avatarId the avatarId to set
 	 */
-	public void setAvatarId(String avatarId) {
+	public void setAvatarId(Integer avatarId) {
 		this.avatarId = avatarId;
 	}
 

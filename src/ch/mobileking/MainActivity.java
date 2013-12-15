@@ -147,9 +147,23 @@ public class MainActivity extends Activity implements ITaskComplete{
         }
         else
         {
-        	Toast.makeText(this,"Internet wird benötigt!", Toast.LENGTH_LONG).show();	
-	        finish();
-	        return;
+        	
+        	if(ProductKing.getInstance()!=null)
+        	{
+            	Utils.addLogMsg(this.getLocalClassName()+": loginUser OFFLINE!");
+    			Intent intent = new Intent(getAct(), MainTabActivity.class);
+    			String uuid = Utils.getRandomMsgId();
+    			Utils.addNotificationMsg("Achtung: Du bist Offline!\n\nDie App ist nur beschränkt verfügbar!", "Offline", uuid);
+    			intent.putExtra("messageId", uuid);
+    			getAct().startActivity(intent);
+        	}
+        	else
+        	{
+            	Toast.makeText(this,"Internet wird benötigt!", Toast.LENGTH_LONG).show();	
+    	        finish();
+    	        return;
+        	}
+
         }
         
         login.setOnClickListener(new Button.OnClickListener() {
@@ -254,13 +268,10 @@ public class MainActivity extends Activity implements ITaskComplete{
 
 	@Override
 	public void onLoginCompleted(boolean completed, String message) {
-		// TODO Auto-generated method stub
 		
 		final String msg = message;
 		
 		System.out.println("msg: " + msg);
-		
-//		if(msg.toLowerCase().contains("))
 		
 		
 		System.out.println("MainActivity: LoginCompleted: " + completed);

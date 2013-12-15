@@ -1,6 +1,9 @@
 package ch.mobileking.utils.classes;
 
 import java.util.Date;
+import java.util.List;
+
+import android.graphics.Bitmap;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -23,12 +26,20 @@ public class SalesSlip {
 	
 	@SerializedName("totalparts")
 	private Integer totalparts = 0;
+
+	@SerializedName("imagelink")
+	private String imagelink;
+	
+	@SerializedName("salesslipitems")
+	private List<SalesSlipItem> salesslipitems;
 	
 	private Integer part;
 	
+	private Bitmap bitmapFile;
+	
 	private String simpleFileName;
 	
-	public SalesSlip(String filename, String scandate, String simpleFileName, Integer part, Integer totalParts)
+	public SalesSlip(String filename, Bitmap imageBitmap, String scandate, String simpleFileName, Integer part, Integer totalParts)
 	{
 		this.setFilename(filename);
 		this.setScanDate(scandate);
@@ -38,6 +49,7 @@ public class SalesSlip {
 		this.setTotalparts(totalParts);
 		this.setIsapproved(1);
 		this.setIsuploaded(false);
+		this.setBitmapFile(imageBitmap);
 	}
 
 	/**
@@ -125,6 +137,34 @@ public class SalesSlip {
 	}
 
 	/**
+	 * @return the imageLink
+	 */
+	public String getImageLink() {
+		return imagelink;
+	}
+
+	/**
+	 * @param imageLink the imageLink to set
+	 */
+	public void setImageLink(String imageLink) {
+		this.imagelink = imageLink;
+	}
+
+	/**
+	 * @return the salesslipitems
+	 */
+	public List<SalesSlipItem> getSalesslipitems() {
+		return salesslipitems;
+	}
+
+	/**
+	 * @param salesslipitems the salesslipitems to set
+	 */
+	public void setSalesslipitems(List<SalesSlipItem> salesslipitems) {
+		this.salesslipitems = salesslipitems;
+	}
+
+	/**
 	 * @return the part
 	 */
 	public Integer getPart() {
@@ -150,6 +190,20 @@ public class SalesSlip {
 	 */
 	public void setSimpleFileName(String simpleFileName) {
 		this.simpleFileName = simpleFileName;
+	}
+
+	/**
+	 * @return the bitmapFile
+	 */
+	public Bitmap getBitmapFile() {
+		return bitmapFile;
+	}
+
+	/**
+	 * @param bitmapFile the bitmapFile to set
+	 */
+	public void setBitmapFile(Bitmap bitmapFile) {
+		this.bitmapFile = bitmapFile;
 	}
 
 

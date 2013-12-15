@@ -64,11 +64,6 @@ public class UserSettingsActivity extends Activity implements ITaskComplete{
 
 	private LinearLayout user_settings_avatar_generator;
 
-	private int[] resourceAvatarId = { 
-			R.drawable.no_image_icon,
-			R.drawable.ic_avatar_01, R.drawable.ic_avatar_03, R.drawable.ic_avatar_05,
-			R.drawable.ic_avatar_06_round, R.drawable.ic_avatar_07,	R.drawable.ic_avatar_08 };
-
 	private LinearLayout user_settings_email;
 
 	private CheckBox user_settings_notification_chkbx;
@@ -110,7 +105,7 @@ public class UserSettingsActivity extends Activity implements ITaskComplete{
 		imageView = (ImageView) findViewById(R.id.user_settings_avatar);
 //		if(Utils.imageExists(Utils.USER_AVATAR_PNG))
 //			imageView.setImageBitmap(Utils.loadImageFromPath(Utils.USER_AVATAR_PNG));
-		imageView.setImageResource(resourceAvatarId[editor.getAvatarId()]);
+		imageView.setImageResource(Utils.resourceAvatarId[editor.getAvatarId()]);
 		
 		user_settings_avatar_progress = (ProgressBar) findViewById(R.id.user_settings_avatar_progress);
 		user_settings_avatar_progress.setVisibility(View.INVISIBLE);
@@ -158,9 +153,8 @@ public class UserSettingsActivity extends Activity implements ITaskComplete{
 						user_settings_avatar_progress.setVisibility(View.VISIBLE);
 						// TODO Auto-generated method stub
 						int num = rand.nextInt(6)+1;
-						imageView.setImageResource(resourceAvatarId[num]);
+						imageView.setImageResource(Utils.resourceAvatarId[num]);
 						avatarId = num;
-						
 //						Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), resourceAvatarId[num]);
 //						saveAvatarToSD(largeIcon);
 						user_settings_avatar_progress.setVisibility(View.INVISIBLE);

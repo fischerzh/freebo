@@ -53,6 +53,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 public class ServerRequest {
 	
@@ -101,11 +102,14 @@ public class ServerRequest {
 	
 	public void startRegisterUser(String username, String pwd, String mail)
 	{
-		System.out.println("Start registration to Backend...");
-		setServerURL(editor.getRegisterURL()+"?username="+username+"&password="+pwd+"&email="+mail+"&enabled=true"+"&createFromApp=true");
-		setUpHttpPost(getServerURL(), username, pwd);
-		System.out.println("registration URL: " +getServerURL());
-		new RegisterUser(username, pwd, mail).execute();
+		if(Utils.isNetworkAvailable(getContext()))
+		{
+			System.out.println("Start registration to Backend...");
+			setServerURL(editor.getRegisterURL()+"?username="+username+"&password="+pwd+"&email="+mail+"&enabled=true"+"&isNotificationEnabled=true&isAnonymous=false"+"&createFromApp=true");
+			setUpHttpPost(getServerURL(),null, null, false);
+			System.out.println("registration URL: " +getServerURL());
+			new RegisterUser(username, pwd, mail).execute();
+		}
 	}
 	
 	public void startUpdateOptIn()
@@ -123,34 +127,43 @@ public class ServerRequest {
 	
 	public void startUpdateUserSettings( String newPwd, String newMail, Boolean notificationEnabled, Boolean anonymousUser, Integer avatarId)
 	{
-		String updateURL=editor.getUpdateUserSettingURL()+"?updateFromApp=true";
-		if(newPwd!="")
+		
+		if(Utils.isNetworkAvailable(getContext()))
 		{
-			updateURL+="&password="+newPwd;
+			String updateURL=editor.getUpdateUserSettingURL()+"?updateFromApp=true";
+			if(newPwd!="")
+			{
+				updateURL+="&password="+newPwd;
+			}
+			if(newMail!="")
+			{
+					updateURL+="&email="+newMail;
+			}
+			if(notificationEnabled!=null)
+			{
+					updateURL+="&isNotificationEnabled="+notificationEnabled;
+			}
+			if(anonymousUser!=null)
+			{
+					updateURL+="&isAnonymous="+anonymousUser;
+	
+			}
+			if(avatarId!=null)
+			{
+					updateURL+="&avatarId="+avatarId;
+			}
+	//		setServerURL(editor.getUpdateUserSettingURL()+"?password="+newPwd+"&email="+newMail+"&isNotificationEnabled="+notificationEnabled+"&isAnonymous="+anonymousUser+"&updateFromApp=true");
+			setServerURL(updateURL);
+			System.out.println("updateUserSettings: " +getServerURL());
+			setUpHttpPost(getServerURL(), editor.getUsername(), editor.getPwd(), true);
+	
+			new UpdateUserSettings(newPwd, newMail, notificationEnabled, anonymousUser, avatarId).execute();
 		}
-		if(newMail!="")
+		else
 		{
-				updateURL+="&email="+newMail;
-		}
-		if(notificationEnabled!=null)
-		{
-				updateURL+="&isNotificationEnabled="+notificationEnabled;
-		}
-		if(anonymousUser!=null)
-		{
-				updateURL+="&isAnonymous="+anonymousUser;
+			Toast.makeText(getContext(), "Internet wird benštigt!", Toast.LENGTH_LONG).show();
 
 		}
-		if(avatarId!=null)
-		{
-				updateURL+="&avatarId="+avatarId;
-		}
-//		setServerURL(editor.getUpdateUserSettingURL()+"?password="+newPwd+"&email="+newMail+"&isNotificationEnabled="+notificationEnabled+"&isAnonymous="+anonymousUser+"&updateFromApp=true");
-		setServerURL(updateURL);
-		System.out.println("updateUserSettings: " +getServerURL());
-		setUpHttpPost(getServerURL(), editor.getUsername(), editor.getPwd());
-
-		new UpdateUserSettings(newPwd, newMail, notificationEnabled, anonymousUser, avatarId).execute();
 
 	}
 	
@@ -177,14 +190,14 @@ public class ServerRequest {
 	
 	public String startUpdateImageToServer(String filePath)
 	{
-		return uploadFileToServer(filePath, null, null, null);
+
+			return uploadFileToServer(filePath, null, null, null);
 	}
 	
 	public String startUpdateSalesSlipToServer(SalesSlip slip)
 	{
-		File filePath = new File(Utils.getPath(null), slip.getFilename()+".png");
-		return uploadFileToServer(filePath.toString(), slip.getSimpleFileName(), slip.getScanDate(), slip.getPart());
-		
+			File filePath = new File(Utils.getPath(null), slip.getFilename()+".png");
+			return uploadFileToServer(filePath.toString(), slip.getSimpleFileName(), slip.getScanDate(), slip.getPart());
 	}
 	
 	
@@ -208,12 +221,13 @@ public class ServerRequest {
 
 	}
 	
-	private void setUpHttpPost(String url, String user, String pwd)
+	private void setUpHttpPost(String url, String user, String pwd, boolean forceLogin)
 	{
 
 		httpPost = new HttpPost(url);
 		
-		httpPost.addHeader(BasicScheme.authenticate(new UsernamePasswordCredentials(user, pwd),"UTF-8", false));
+		if(forceLogin)
+			httpPost.addHeader(BasicScheme.authenticate(new UsernamePasswordCredentials(user, pwd),"UTF-8", false));
 
 	}
 	
@@ -584,7 +598,7 @@ public class ServerRequest {
 			
 			setServerURL(editor.getUpdateLogURL()+"?logMessageId="+uuid+"&title='"+title+"'&createDate='"+createDate+"'&message='"+content+"'"+"&location='"+location+"'");
 			
-			setUpHttpPost(getServerURL(),username, pwd);
+			setUpHttpPost(getServerURL(),username, pwd, true);
 			
 //			System.out.println("Send Message to Server: " + getServerURL());
 
@@ -636,7 +650,7 @@ public class ServerRequest {
 		{
 			System.out.println("File exists: " +f.getName());
 			try {
-				setUpHttpPost(editor.getUpdateUserFilesURL(), editor.getUsername(), editor.getPwd());
+				setUpHttpPost(editor.getUpdateUserFilesURL(), editor.getUsername(), editor.getPwd(), true);
 	//			HttpPost httpost = new HttpPost();
 				MultipartEntity entity = new MultipartEntity();
 				entity.addPart("uploadFile", new FileBody(f));

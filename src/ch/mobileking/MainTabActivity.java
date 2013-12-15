@@ -74,7 +74,7 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
 	    	GcmMessage msg = Utils.getMessageById(gcmUUID);
 	        Utils.addNotificationMsg(msg.getContent(), "UserNotificationRead", "");
 	    	if(msg!=null)
-	    		createAlert(msg.getContent().toString(), "Neuigkeiten", R.drawable.ic_launcher);
+	    		createAlert(msg.getContent().toString(), msg.getTitle(), R.drawable.ic_launcher);
 	    }
 		
         // Initilization
@@ -220,11 +220,18 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
         	String fileName = data.getStringExtra("salesslip");
 
         	System.out.println("MainCameraScanFragment, SalesSlips scanned: " +fileName);
-        	if(editor.getFirstRun())
+
+			if(Utils.isNetworkAvailable(this)){
+	        	this.listener.startUpdate();
         		createAlert("Besten Dank, Dein Einkauf wird uns übermittelt. Wir werden diesen in kürze prüfen!\n(Beachte: Der Einkaufszettel muss spätestens innert 10 Min. nach Einkauf hochgeladen werden!)", "Einkauf registriert!", R.drawable.ic_store_hero );
-		
-			this.listener.startUpdate();
-			updateSalesSlipInfo();
+				updateSalesSlipInfo();
+
+			}
+			else
+			{
+        		createAlert("Kein Internet vorhanden!", "Offline!", R.drawable.ic_empfehlungen );
+        		updateSalesSlipInfoOffline();
+			}
 
 		}
 
@@ -254,6 +261,11 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
 	{
 		Utils.setListener(this.listener);
 		Utils.saveAllBitmapAsync(editor);
+	}
+	
+	private void updateSalesSlipInfoOffline()
+	{
+		Utils.saveAllBitmapAsyncOffline(editor);
 	}
 
 	@Override

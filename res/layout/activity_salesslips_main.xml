@@ -4,14 +4,29 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <ProgressBar
-        android:id="@+id/salesslip_progress"
-        style="?android:attr/progressBarStyleHorizontal"
+    <LinearLayout
+        android:id="@+id/salesslip_main_progress_layout"
         android:layout_width="match_parent"
-        android:layout_height="10dp"
-        android:progress="25" 
-        android:visibility="invisible"
-        />
+        android:layout_height="wrap_content" 
+        android:orientation="vertical"
+        android:visibility="gone"
+        >
+
+        <ch.mobileking.classes.override.RobotoTextView
+            android:id="@+id/robotoTextView1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Einkaufszettel wird hochgeladen..." />
+
+        <ProgressBar
+            android:id="@+id/salesslip_progress"
+            style="?android:attr/progressBarStyleSmall"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            />
+
+    </LinearLayout>
 
     <ListView
         android:id="@+id/salesslip_lv"

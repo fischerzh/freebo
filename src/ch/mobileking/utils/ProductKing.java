@@ -21,7 +21,11 @@ import com.google.gson.annotations.SerializedName;
 
 public class ProductKing implements Serializable{
 	
-private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
+
+
+	private static ProductKing singletonProdKing;
+
 	
 	@SerializedName("username")
 	private String username = " ";
@@ -31,6 +35,9 @@ private static final long serialVersionUID = 1L;
 	
 	@SerializedName("avatarid")
 	private Integer avatarId;
+	
+	@SerializedName("email")
+	private String email = " ";
 		
 	@SerializedName("recommendations")
 	private List<Products> recommendations;
@@ -65,36 +72,18 @@ private static final long serialVersionUID = 1L;
 	
 	private static Boolean isActive = false;
 	
-	private static Context cont;
-	
-	private static ProductKing singletonProdKing;
-
 	private static List<SalesSlip> staticSalesSlipsParts;
 	
 	public static ProductKing getInstance()
-	{
+	{	
 
 		if(singletonProdKing == null)
 		{
 			System.out.println("Loading JSON from Local!");
-			singletonProdKing = Utils.getProductKingFromLocal();
+			singletonProdKing = Utils.getJsonResultLocal();
 			
 		}
 		return singletonProdKing;
-	}
-	
-	/**
-	 * @return the cont
-	 */
-	public static Context getContext() {
-		return cont;
-	}
-
-	/**
-	 * @param cont the cont to set
-	 */
-	public static void setContext(Context cont) {
-		ProductKing.cont = cont;
 	}
 
 	/**
@@ -297,6 +286,20 @@ private static final long serialVersionUID = 1L;
 	 */
 	public void setAvatarId(Integer avatarId) {
 		this.avatarId = avatarId;
+	}
+
+	/**
+	 * @return the email
+	 */
+	public String getEmail() {
+		return email;
+	}
+
+	/**
+	 * @param email the email to set
+	 */
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	/**

@@ -142,13 +142,14 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
             {
     			String jsonString = Utils.convertStreamToString(instream);
                 setJsonResult(jsonString);
-                Utils.writeJsonResultLocal(this.act.getApplicationContext(), jsonString);            
+                Utils.writeJsonResultLocal(jsonString);            
 
     			/**LOGIN WORKED, STORE USERNAME AND PASSWORD IN SHARED PREF **/
             	System.out.println("Login worked, set Username/Password");
             	
             	editor.setUsername(user);
     			editor.setPwd(pwd);
+    			editor.setEmail(ProductKing.getInstance().getEmail());
             }
             
 //            System.out.println("result: " + getJsonResult());

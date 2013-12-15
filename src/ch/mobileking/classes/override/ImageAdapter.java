@@ -17,16 +17,19 @@ import ch.mobileking.utils.classes.Crown;
 import ch.mobileking.utils.classes.Leaderboard;
 import ch.mobileking.utils.classes.Products;
 import ch.mobileking.utils.classes.SalesSlip;
+import ch.mobileking.utils.classes.SalesSlipItem;
 import ch.mobileking.utils.classes.SalesVerified;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -115,18 +118,20 @@ public class ImageAdapter extends BaseAdapter{
 			}
 		}
 		/** 
-		 * Layout items for RECOMMENDATION ITEM list view items
+		 * Layout items for SALES SLIP ITEM DETAIL list view items
 		**/
-		else if(this.layoutId == R.layout.recommend_item)
+		else if(this.layoutId == R.layout.activity_salesslips_detail_item)
 		{
 //			TextView txtProduct = (TextView) gridView.findViewById(R.id.prod_item_name);
 //			txtProduct.setText(""+((Products) items.get(position)).getName());
 			
-			Products prod = (Products)items.get(position);
+			SalesSlipItem salesItem = (SalesSlipItem)items.get(position);
+			TextView salesslip_item_detail_product = (TextView) gridView.findViewById(R.id.salesslip_item_detail_product);
+			salesslip_item_detail_product.setText(salesItem.getQuantity() + " x " + salesItem.getName());
 			
-			ImageView recommItem = (ImageView) gridView.findViewById(R.id.recomm_item_pict);
-			if(Utils.imageExists(prod.getEan()))
-				recommItem.setImageBitmap(Utils.loadImageFromPath(prod.getEan()));
+			TextView salesslip_item_detail_price = (TextView) gridView.findViewById(R.id.salesslip_item_detail_price);
+			salesslip_item_detail_price.setText(salesItem.getPrice());
+			
 		}
 		/** 
 		 * Layout items for SALES SLIP list view items
@@ -163,6 +168,7 @@ public class ImageAdapter extends BaseAdapter{
 			}
 			
 			ProgressBar salesslip_progress = (ProgressBar) gridView.findViewById(R.id.salesslip_item_progress);
+			LinearLayout salesslip_item_top_linearLayout = (LinearLayout) gridView.findViewById(R.id.salesslip_item_top_linearLayout);
 			if(salesslip.getIsuploaded())
 			{
 				salesslip_item_icon.setVisibility(View.VISIBLE);
@@ -170,8 +176,11 @@ public class ImageAdapter extends BaseAdapter{
 			}
 			else
 			{
+				
+				salesslip_item_top_linearLayout.setBackgroundColor(mContext.getResources().getColor(R.color.red_light));
+				salesslip_item_icon.setImageResource(R.drawable.ic_digital_receipt_uploadfail);
 				salesslip_item_icon.setVisibility(View.INVISIBLE);
-				salesslip_progress.setVisibility(View.VISIBLE);
+//				salesslip_progress.setVisibility(View.VISIBLE);
 			}
 
 		}
@@ -180,46 +189,57 @@ public class ImageAdapter extends BaseAdapter{
 		**/
 		else if(this.layoutId == R.layout.activity_leaderboard_item)
 		{
+			Leaderboard item = (Leaderboard) items.get(position);
 			TextView leaderboard_item_pts_txt = (TextView) gridView.findViewById(R.id.leaderboard_item_pts_txt);
-			leaderboard_item_pts_txt.setText(((Leaderboard) items.get(position)).getPoints()+" Pkt.");
+			leaderboard_item_pts_txt.setText(item.getPoints()+" Pkt.");
 			
 			TextView leaderboard_item_user = (TextView) gridView.findViewById(R.id.leaderboard_item_user);
-			leaderboard_item_user.setText(""+((Leaderboard) items.get(position)).getUsername());
+			leaderboard_item_user.setText(""+item.getUsername());
+
 
 			TextView leaderboard_item_rank_txt = (TextView) gridView.findViewById(R.id.leaderboard_item_rank_txt);
-			leaderboard_item_rank_txt.setText(""+((Leaderboard) items.get(position)).getRank());
+			leaderboard_item_rank_txt.setText(""+item.getRank());
 			
 //			ImageView leaderboard_item_user_img = (ImageView) gridView.findViewById(R.id.leaderboard_item_user_img);
 			
-			if (((Leaderboard) items.get(position)).getUsername().toLowerCase().contentEquals(editor.getUsername().toLowerCase()))
+			if (item.getUsername().toLowerCase().contentEquals(editor.getUsername().toLowerCase()))
 			{
 //				leaderboard_item_user.setTextColor(mContext.getResources().getColor(R.color.red_light));
 				
 //				gridView.setBackgroundColor(mContext.getResources().getColor(R.color.light_green));
 				
 //				leaderboard_item_user_img.setImageResource(R.drawable.ic_launcher);
-				
-				leaderboard_item_rank_txt.setTextColor(mContext.getResources().getColor(android.R.color.black));
+				if(editor.getAnonymous())
+				{
+					leaderboard_item_user.setText("Anonym");
+					leaderboard_item_user.setTextColor(mContext.getResources().getColor(android.R.color.darker_gray));
+					leaderboard_item_user.setTypeface(null, Typeface.ITALIC);
+				}
+				else
+				{
+					leaderboard_item_user.setTextColor(mContext.getResources().getColor(android.R.color.black));
+					leaderboard_item_user.setTypeface(null, Typeface.BOLD);
+				}
 			}
 
 			ImageView storehero_item_crown = (ImageView) gridView.findViewById(R.id.leaderboard_item_user_img);
-			
-			if( ((Leaderboard) items.get(position)).getRank() == 1 )
-			{
-				storehero_item_crown.setImageResource(R.drawable.ic_leaderboard_gold);
-			}
-			else if( ((Leaderboard) items.get(position)).getRank() == 2 )
-			{
-				storehero_item_crown.setImageResource(R.drawable.ic_leaderboard_silver);
-			}
-			else if( ((Leaderboard) items.get(position)).getRank() == 3 )
-			{
-				storehero_item_crown.setImageResource(R.drawable.ic_leaderboard_bronce);
-			}
-			else
-			{
-				storehero_item_crown.setImageResource(R.drawable.empty);
-			}
+			storehero_item_crown.setImageResource(Utils.resourceAvatarId[item.getAvatarId()]);
+//			if( ((Leaderboard) items.get(position)).getRank() == 1 )
+//			{
+//				storehero_item_crown.setImageResource(R.drawable.ic_leaderboard_gold);
+//			}
+//			else if( ((Leaderboard) items.get(position)).getRank() == 2 )
+//			{
+//				storehero_item_crown.setImageResource(R.drawable.ic_leaderboard_silver);
+//			}
+//			else if( ((Leaderboard) items.get(position)).getRank() == 3 )
+//			{
+//				storehero_item_crown.setImageResource(R.drawable.ic_leaderboard_bronce);
+//			}
+//			else
+//			{
+//				storehero_item_crown.setImageResource(R.drawable.empty);
+//			}
 				
 			
 		}

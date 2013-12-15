@@ -183,6 +183,7 @@ public class ProductBaseAdapter extends BaseAdapter{
 				{
 					holder.getCrown1().setImageResource(R.drawable.ic_krone_bronze);
 				}
+				holder.getCrown1().setAlpha(255);
 			}
 
 				
@@ -195,7 +196,11 @@ public class ProductBaseAdapter extends BaseAdapter{
 		{
 			holder.getTxtRank().setText("DEIN RANG #"+prod.getUserrank() + " (+-0)");
 			if(getProdLayoutResourceId()==R.layout.product_item)
+			{
 				holder.getCrown1().setImageResource(R.drawable.ic_krone_inactive);
+				holder.getCrown1().setAlpha(75);
+
+			}
 			holder.getTxtRank().setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_nochange, 0);
 			holder.getTxtCollectedCnt().setText("Keine Einkäufe!");
 		}

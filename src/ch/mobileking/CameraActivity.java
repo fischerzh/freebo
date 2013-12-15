@@ -123,11 +123,11 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
 							+ now.second;
 					fileName = "scan_" + scanDateFile + "_part" + i;
 					simpleFileName = "scan_"+scanDateFile;
-					Utils.saveBitmap(imageList.get(i), fileName);
-					ProductKing.getInstance().getSalesSlipsParts().add(new SalesSlip(fileName, d.toGMTString(), simpleFileName, i, i));
+//					Utils.saveBitmap(imageList.get(i), fileName);
+					ProductKing.getInstance().getSalesSlipsParts().add(new SalesSlip(fileName, imageList.get(i), d.toGMTString(), simpleFileName, i, imageList.size()));
 
 				}
-				ProductKing.getInstance().getStaticSalesSlips().add(new SalesSlip(fileName, d.toGMTString(), simpleFileName, 0, imageList.size()));
+				ProductKing.getInstance().getStaticSalesSlips().add(new SalesSlip(fileName, null, d.toGMTString(), simpleFileName, 0, imageList.size()));
 				
 		        Intent intent = new Intent(CameraActivity.this, MainTabActivity.class);
 		        intent.putExtra("salesslip", simpleFileName);

@@ -57,7 +57,8 @@ public class ProductDetailOverview extends Activity {
 			product_detail_points.setText(product.getPoints() + " Pkt.");
 			
 			product_detail_avatar = (ImageView) findViewById(R.id.product_detail_avatar);
-			product_detail_avatar.setImageBitmap(Utils.loadImageFromPath(Utils.USER_AVATAR_PNG));
+//			product_detail_avatar.setImageBitmap(Utils.loadImageFromPath(Utils.USER_AVATAR_PNG));
+			product_detail_avatar.setImageResource(Utils.resourceAvatarId[editor.getAvatarId()]);
 			
 			prod_name.setText(product.getName());
 			prod_manuf.setText(product.getProducer());
@@ -66,12 +67,12 @@ public class ProductDetailOverview extends Activity {
 			
 			ListView storehero_lv = (ListView) findViewById(R.id.leaderboard_lv);
 			
-			ArrayList<Object> storeItems = new ArrayList<Object>();
+			ArrayList<Object> leaderBoardItems = new ArrayList<Object>();
 			
 //			storeItems.addAll(ProductKing.getInstance().getStaticLeaderboard());
-			storeItems.addAll(product.getLeaderboard());
+			leaderBoardItems.addAll(product.getLeaderboard());
 			
-			ImageAdapter adapter = new ImageAdapter(getApplicationContext(), storeItems, R.layout.activity_leaderboard_item); 
+			ImageAdapter adapter = new ImageAdapter(getApplicationContext(), leaderBoardItems, R.layout.activity_leaderboard_item); 
 			
 			storehero_lv.setAdapter(adapter);
 			

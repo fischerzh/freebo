@@ -13,6 +13,7 @@ import ch.mobileking.R;
 import ch.mobileking.activity.barcode.BarCodeScanner;
 import ch.mobileking.activity.old.RecommActivity;
 import ch.mobileking.activity.old.StoreKingActivity;
+import ch.mobileking.activity.salesslips.SalesSlipDetail;
 import ch.mobileking.activity.salesslips.SalesSlipImageViewer;
 import ch.mobileking.activity.salesslips.SalesSlipsActivity;
 import ch.mobileking.classes.override.ImageAdapter;
@@ -61,6 +62,7 @@ public class MainCameraScanFragment extends Fragment implements ITaskComplete{
 	
 	ListView salesslips_listView;
 	private ProgressBar salesslip_progress;
+	private LinearLayout salesslip_main_progress_layout;
 
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -89,28 +91,26 @@ public class MainCameraScanFragment extends Fragment implements ITaskComplete{
 				SalesSlip test = ((SalesSlip)salesslips_listView.getItemAtPosition(position));
 				System.out.println("SalesSlip: " + test.getFilename());
 				String.valueOf(position);
-//		        Intent intent = new Intent();
-//		        intent.setAction(Intent.ACTION_VIEW);
-//		        intent.setDataAndType(Uri.fromFile(new File(Utils.getPath(null))), MimeTypeMap.getSingleton().getMimeTypeFromExtension("png"));
-////		        ArrayList<Uri> files = new ArrayList<Uri>(); 
-////		        files.add(Uri.fromFile(new File(Utils.getPath(null), test.getFilename()+"_part0"+".png")));
-////		        files.add(Uri.fromFile(new File(Utils.getPath(null), test.getFilename()+"_part1"+".png")));
-////		        files.add(Uri.fromFile(new File(Utils.getPath(null), test.getFilename()+"_part2"+".png")));
-////		        intent.setDataAndType(Uri.fromFile(new File(Utils.getPath(null), test.getFilename()+"_part0"+".png")), "image/png");
-////		        intent.setDataAndType(Uri.fromFile(new File(Utils.getPath(null), test.getFilename()+"_part1"+".png")), "image/png");
-////		        intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(Utils.getPath(null), test.getFilename()+"_part1"+".png")));
-////		        intent.putParcelableArrayListExtra(Intent.ACTION_VIEW, files);
+		        
+				if(test.getIsapproved()==2)
+				{
+			        Intent intent = new Intent(getActivity(), SalesSlipDetail.class);
+			        intent.putExtra("itemId", position);
+			        startActivityForResult(intent, 66);
+				}
+				else
+				{
+			        Intent intent = new Intent(getActivity(), SalesSlipImageViewer.class);
+			        intent.putExtra("filename", test.getFilename());
+			        intent.putExtra("totalparts", test.getTotalparts());
+			        startActivityForResult(intent, 77);
+				}
 
-		        
-//		        intent.setType("image/*");
-		        
-		        Intent intent = new Intent(getActivity(), SalesSlipImageViewer.class);
-		        intent.putExtra("filename", test.getFilename());
-		        intent.putExtra("totalparts", test.getTotalparts());
-		        startActivityForResult(intent, 77);
 				
 			}
 		});
+        
+        salesslip_main_progress_layout = (LinearLayout) getActivity().findViewById(R.id.salesslip_main_progress_layout);
         
         reloadAdapterInfo();
         
@@ -119,9 +119,17 @@ public class MainCameraScanFragment extends Fragment implements ITaskComplete{
 			
 			@Override
 			public void onClick(View v) {
-				((MainTabActivity)getActivity()).setTaskListener(MainCameraScanFragment.this);
-				Intent intent = new Intent(getActivity(), CameraActivity.class);
-	    		startActivityForResult(intent, MainTabActivity.CAMERA_REQUEST);
+				
+				if(Utils.isNetworkAvailable(getActivity().getApplicationContext()))
+				{
+					((MainTabActivity)getActivity()).setTaskListener(MainCameraScanFragment.this);
+					Intent intent = new Intent(getActivity(), CameraActivity.class);
+		    		startActivityForResult(intent, MainTabActivity.CAMERA_REQUEST);
+				}
+				else
+				{
+					Toast.makeText(getActivity().getApplicationContext(), "Internet wird benötigt!", Toast.LENGTH_LONG).show();
+				}
 
 			}
 		});
@@ -154,6 +162,8 @@ public class MainCameraScanFragment extends Fragment implements ITaskComplete{
 		salesslip_progress.setVisibility(View.INVISIBLE);
 		System.out.println("MainCameraScanFramgent.onUpdateCompleted: " +string);
 
+        salesslip_main_progress_layout.setVisibility(View.GONE);
+
 //		createAlert("Besten Dank, Dein Einkauf wurde uns übermittelt. Wir werden diesen in kürze prüfen!", "Einkauf registriert!", R.drawable.ic_store_hero);
 
 		new AsyncLogin(getActivity(), true, this).execute(editor.getUsername(), editor.getPwd());
@@ -164,8 +174,9 @@ public class MainCameraScanFragment extends Fragment implements ITaskComplete{
 	@Override
 	public void startUpdate() {
 //		reloadAdapterInfo();
-		salesslip_progress.setVisibility(View.VISIBLE);
-		
+//		salesslip_progress.setVisibility(View.VISIBLE);
+        salesslip_main_progress_layout.setVisibility(View.VISIBLE);
+
 	}
 
 	@Override
