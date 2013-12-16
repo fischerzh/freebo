@@ -97,10 +97,10 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
  
             @Override
             public void onPageSelected(int position) {
-                // on changing the page
-                // make respected tab selected
+                // on changing the page make respected tab selected
                 actionBar.setSelectedNavigationItem(position);
-                
+	        	Utils.onSyncRequest();
+
             }
  
             @Override
@@ -223,7 +223,7 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
 
 			if(Utils.isNetworkAvailable(this)){
 	        	this.listener.startUpdate();
-        		createAlert("Besten Dank, Dein Einkauf wird uns übermittelt. Wir werden diesen in kürze prüfen!\n(Beachte: Der Einkaufszettel muss spätestens innert 10 Min. nach Einkauf hochgeladen werden!)", "Einkauf registriert!", R.drawable.ic_store_hero );
+        		createAlert("Besten Dank, Dein Einkauf wird uns übermittelt. Wir werden diesen in kürze prüfen!\n(Beachte: Der Einkaufszettel muss spätestens innert 1 Stunde nach Einkauf hochgeladen werden!)", "Einkauf registriert!", R.drawable.ic_store_hero );
 				updateSalesSlipInfo();
 
 			}

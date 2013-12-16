@@ -258,8 +258,7 @@ public class Utils {
 	}
 
 	public static void loadBitmapFromURL(String url, String filename) {
-		LoadImageTask newImageLoader = new LoadImageTask(filename, null, false,
-				false, url);
+		LoadImageTask newImageLoader = new LoadImageTask(filename, null, false, false, url);
 		newImageLoader.execute();
 
 	}

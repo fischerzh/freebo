@@ -130,7 +130,10 @@ public class ImageAdapter extends BaseAdapter{
 			salesslip_item_detail_product.setText(salesItem.getQuantity() + " x " + salesItem.getName());
 			
 			TextView salesslip_item_detail_price = (TextView) gridView.findViewById(R.id.salesslip_item_detail_price);
-			salesslip_item_detail_price.setText(salesItem.getPrice());
+			salesslip_item_detail_price.setText(salesItem.getPrice() + " CHF");
+			
+			ImageView salesslip_item_detail_image = (ImageView) gridView.findViewById(R.id.salesslip_item_detail_image);
+			salesslip_item_detail_image.setImageBitmap(Utils.loadImageFromPath(salesItem.getEan()));
 			
 		}
 		/** 
@@ -177,10 +180,9 @@ public class ImageAdapter extends BaseAdapter{
 			else
 			{
 				
-				salesslip_item_top_linearLayout.setBackgroundColor(mContext.getResources().getColor(R.color.red_light));
 				salesslip_item_icon.setImageResource(R.drawable.ic_digital_receipt_uploadfail);
 				salesslip_item_icon.setVisibility(View.INVISIBLE);
-//				salesslip_progress.setVisibility(View.VISIBLE);
+				salesslip_progress.setVisibility(View.VISIBLE);
 			}
 
 		}
@@ -200,15 +202,14 @@ public class ImageAdapter extends BaseAdapter{
 			TextView leaderboard_item_rank_txt = (TextView) gridView.findViewById(R.id.leaderboard_item_rank_txt);
 			leaderboard_item_rank_txt.setText(""+item.getRank());
 			
-//			ImageView leaderboard_item_user_img = (ImageView) gridView.findViewById(R.id.leaderboard_item_user_img);
+			ImageView storehero_item_crown = (ImageView) gridView.findViewById(R.id.leaderboard_item_user_img);
 			
 			if (item.getUsername().toLowerCase().contentEquals(editor.getUsername().toLowerCase()))
 			{
 //				leaderboard_item_user.setTextColor(mContext.getResources().getColor(R.color.red_light));
 				
-//				gridView.setBackgroundColor(mContext.getResources().getColor(R.color.light_green));
+				storehero_item_crown.setImageResource(Utils.resourceAvatarId[editor.getAvatarId()]);
 				
-//				leaderboard_item_user_img.setImageResource(R.drawable.ic_launcher);
 				if(editor.getAnonymous())
 				{
 					leaderboard_item_user.setText("Anonym");
@@ -221,9 +222,12 @@ public class ImageAdapter extends BaseAdapter{
 					leaderboard_item_user.setTypeface(null, Typeface.BOLD);
 				}
 			}
+			else
+			{
+				storehero_item_crown.setImageResource(Utils.resourceAvatarId[item.getAvatarId()]);
+			}
 
-			ImageView storehero_item_crown = (ImageView) gridView.findViewById(R.id.leaderboard_item_user_img);
-			storehero_item_crown.setImageResource(Utils.resourceAvatarId[item.getAvatarId()]);
+			
 //			if( ((Leaderboard) items.get(position)).getRank() == 1 )
 //			{
 //				storehero_item_crown.setImageResource(R.drawable.ic_leaderboard_gold);

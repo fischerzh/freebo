@@ -11,6 +11,9 @@ public class SalesSlipItem {
 	@SerializedName("name")
 	private String name;
 	
+	@SerializedName("ean")
+	private String ean;
+	
 	@SerializedName("producer")
 	private String producer;
 
@@ -18,7 +21,7 @@ public class SalesSlipItem {
 	private String price;
 
 	@SerializedName("quantity")
-	private Integer quantity = 0;
+	private double quantity;
 
 	/**
 	 * @return the name
@@ -32,6 +35,20 @@ public class SalesSlipItem {
 	 */
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	/**
+	 * @return the ean
+	 */
+	public String getEan() {
+		return ean;
+	}
+
+	/**
+	 * @param ean the ean to set
+	 */
+	public void setEan(String ean) {
+		this.ean = ean;
 	}
 
 	/**
@@ -65,14 +82,14 @@ public class SalesSlipItem {
 	/**
 	 * @return the quantity
 	 */
-	public Integer getQuantity() {
+	public double getQuantity() {
 		return quantity;
 	}
 
 	/**
 	 * @param quantity the quantity to set
 	 */
-	public void setQuantity(Integer quantity) {
+	public void setQuantity(double quantity) {
 		this.quantity = quantity;
 	}
 	

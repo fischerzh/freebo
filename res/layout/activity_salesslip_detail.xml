@@ -82,7 +82,6 @@
         android:layout_height="wrap_content"
         android:clipToPadding="true"
         android:fitsSystemWindows="true"
-        android:gravity="center"
         android:horizontalSpacing="1dp"
         android:paddingLeft="1dp"
         android:paddingTop="1dp"

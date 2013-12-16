@@ -11,6 +11,7 @@ import ch.mobileking.utils.classes.SalesSlipItem;
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -36,22 +37,28 @@ public class SalesSlipDetail extends Activity {
 		TextView salesslip_detail_pos = (TextView) findViewById(R.id.salesslip_detail_pos);
 		salesslip_detail_pos.setText(slip.getSalespoint());
 		
+		ImageView salesslip_detail_pos_image = (ImageView) findViewById(R.id.salesslip_detail_pos_image);
+		
+		if(Utils.imageExists(slip.getSalespoint()))
+			salesslip_detail_pos_image.setImageBitmap(Utils.loadImageFromPath(slip.getSalespoint()));
+		else
+			Utils.loadBitmapFromURL(slip.getImageLink(), slip.getSalespoint());
 		salesslip_detail_pos_time = (TextView) findViewById(R.id.salesslip_detail_pos_time);
-		salesslip_detail_pos_time.setText(slip.getScanDate());
+		salesslip_detail_pos_time.setText(slip.getPurchasedate());
 		
 		ArrayList<Object> salesItemList = new ArrayList<Object>();
-		
-		SalesSlipItem item = new SalesSlipItem();
-		item.setName("Zweifel Chips");
-		item.setPrice("2.50 CHF");
-		item.setProducer("Zweifel Inc.");
-		item.setQuantity(4);
-		
-		salesItemList.add(item);
-		int count = 0;
+		salesItemList.addAll(slip.getSalesslipitems());
+//		SalesSlipItem item = new SalesSlipItem();
+//		item.setName("Zweifel Chips");
+//		item.setPrice("2.50 CHF");
+//		item.setProducer("Zweifel Inc.");
+//		item.setQuantity(4);
+//		
+//		salesItemList.add(item);
+		double count = 0.0;
 		for(Object slipItem : salesItemList)
 		{
-			count+=((SalesSlipItem)slipItem).getQuantity();
+			count=count+((SalesSlipItem)slipItem).getQuantity();
 		}
 		salesslip_detail_points_cnt = (TextView) findViewById(R.id.salesslip_detail_points_cnt);
 		salesslip_detail_points_cnt.setText(count+" x Pkt.");

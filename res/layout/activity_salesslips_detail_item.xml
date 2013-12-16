@@ -23,9 +23,9 @@
 
     <ch.mobileking.classes.override.RobotoTextView
         android:id="@+id/salesslip_item_detail_price"
-        android:layout_width="50dp"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center_vertical"
+        android:layout_gravity="right"
         android:gravity="center_vertical|center_horizontal"
         android:text="CHF 12.50"
         android:textColor="@color/grey_light"

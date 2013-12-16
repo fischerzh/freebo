@@ -81,6 +81,11 @@ public class MainCameraScanFragment extends Fragment implements ITaskComplete{
 		if (!(Thread.getDefaultUncaughtExceptionHandler() instanceof CustomExceptionHandler)) {
 			Thread.setDefaultUncaughtExceptionHandler(new CustomExceptionHandler(editor.getUsername()));
 		}
+		
+		for(SalesSlip slip : ProductKing.getInstance().getStaticSalesSlips()){
+			if(!Utils.imageExists(slip.getSalespoint()))
+				Utils.loadBitmapFromURL(slip.getImageLink(), slip.getSalespoint());
+		}
         
         salesslips_listView = (ListView) getActivity().findViewById(R.id.salesslip_lv);
         salesslips_listView.setOnItemClickListener(new OnItemClickListener() {

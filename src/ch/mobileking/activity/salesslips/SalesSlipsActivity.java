@@ -11,6 +11,7 @@ import ch.mobileking.utils.ProductKing;
 import ch.mobileking.utils.Utils;
 import ch.mobileking.utils.classes.Crown;
 import ch.mobileking.utils.classes.Products;
+import ch.mobileking.utils.classes.SalesSlip;
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.ListAdapter;
@@ -33,7 +34,7 @@ public class SalesSlipsActivity extends Activity {
 		Utils.addLogMsg(this.getLocalClassName());
 		
 		salesSlipItems.addAll(ProductKing.getInstance().getStaticSalesSlips());
-
+		
 		ImageAdapter adapter = new ImageAdapter(getApplicationContext(), salesSlipItems, R.layout.activity_salesslips_item); 
 		
 		storehero_lv.setAdapter(adapter);

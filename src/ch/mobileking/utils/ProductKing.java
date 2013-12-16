@@ -38,7 +38,7 @@ public class ProductKing implements Serializable{
 	
 	@SerializedName("email")
 	private String email = " ";
-		
+	
 	@SerializedName("recommendations")
 	private List<Products> recommendations;
 	

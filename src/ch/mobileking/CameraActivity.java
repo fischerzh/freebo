@@ -119,8 +119,8 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
 
 				for (int i = 0; i < imageList.size(); i++) {
 					scanDateFile = ""+now.year
-							+ (now.month+1) + now.monthDay + now.hour + now.minute
-							+ now.second;
+							+ (now.month+1) + String.format("%02d", now.monthDay) + now.hour + now.minute
+							+ String.format("%02d", now.second);
 					fileName = "scan_" + scanDateFile + "_part" + i;
 					simpleFileName = "scan_"+scanDateFile;
 //					Utils.saveBitmap(imageList.get(i), fileName);

@@ -14,6 +14,9 @@ public class SalesSlip {
 
 	@SerializedName("scandate")
 	private String scandate;
+	
+	@SerializedName("purchasedate")
+	private String purchasedate;
 
 	@SerializedName("isapproved")
 	private Integer isapproved = 0;
@@ -78,6 +81,20 @@ public class SalesSlip {
 	 */
 	public void setScanDate(String scanDate) {
 		this.scandate = scanDate;
+	}
+
+	/**
+	 * @return the purchasedate
+	 */
+	public String getPurchasedate() {
+		return purchasedate;
+	}
+
+	/**
+	 * @param purchasedate the purchasedate to set
+	 */
+	public void setPurchasedate(String purchasedate) {
+		this.purchasedate = purchasedate;
 	}
 
 	/**
