@@ -41,9 +41,11 @@
     <Button
         android:id="@+id/salesslip_tab_btn_newscan"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/btn_delete_scan_height"
         android:background="@android:color/black"
         android:text="+ Neuer Scan"
-        android:textColor="@android:color/white" />
+        android:textColor="@android:color/white" 
+        android:visibility="gone"
+        />
 
 </LinearLayout>

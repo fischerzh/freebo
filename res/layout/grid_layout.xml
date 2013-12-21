@@ -12,13 +12,6 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
 
-        <ImageButton
-            android:id="@+id/product_btn_scan"
-            android:layout_width="fill_parent"
-            android:layout_height="75dp"
-            android:layout_gravity="center_vertical"
-            android:background="@null"
-            android:src="@drawable/scan_btn" />
 
     </LinearLayout>
 

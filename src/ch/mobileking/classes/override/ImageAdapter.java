@@ -206,7 +206,6 @@ public class ImageAdapter extends BaseAdapter{
 			
 			if (item.getUsername().toLowerCase().contentEquals(editor.getUsername().toLowerCase()))
 			{
-//				leaderboard_item_user.setTextColor(mContext.getResources().getColor(R.color.red_light));
 				
 				storehero_item_crown.setImageResource(Utils.resourceAvatarId[editor.getAvatarId()]);
 				
@@ -215,15 +214,21 @@ public class ImageAdapter extends BaseAdapter{
 					leaderboard_item_user.setText("Anonym");
 					leaderboard_item_user.setTextColor(mContext.getResources().getColor(android.R.color.darker_gray));
 					leaderboard_item_user.setTypeface(null, Typeface.ITALIC);
+
 				}
 				else
 				{
 					leaderboard_item_user.setTextColor(mContext.getResources().getColor(android.R.color.black));
 					leaderboard_item_user.setTypeface(null, Typeface.BOLD);
+
 				}
+//				leaderboard_item_user.setTextColor(mContext.getResources().getColor(R.color.red_light));
+
 			}
 			else
 			{
+				leaderboard_item_user.setTextColor(mContext.getResources().getColor(android.R.color.black));
+				leaderboard_item_user.setTypeface(null, Typeface.NORMAL);
 				storehero_item_crown.setImageResource(Utils.resourceAvatarId[item.getAvatarId()]);
 			}
 

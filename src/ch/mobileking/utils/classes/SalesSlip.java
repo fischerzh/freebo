@@ -21,6 +21,9 @@ public class SalesSlip {
 	@SerializedName("isapproved")
 	private Integer isapproved = 0;
 	
+	@SerializedName("rejectmessage")
+	private String rejectmessage;
+	
 	@SerializedName("filename")
 	private String filename;
 	
@@ -109,6 +112,20 @@ public class SalesSlip {
 	 */
 	public void setIsapproved(Integer isapproved) {
 		this.isapproved = isapproved;
+	}
+
+	/**
+	 * @return the rejectmessage
+	 */
+	public String getRejectmessage() {
+		return rejectmessage;
+	}
+
+	/**
+	 * @param rejectmessage the rejectmessage to set
+	 */
+	public void setRejectmessage(String rejectmessage) {
+		this.rejectmessage = rejectmessage;
 	}
 
 	/**

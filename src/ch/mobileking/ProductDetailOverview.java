@@ -8,16 +8,19 @@ import ch.mobileking.utils.ProductKing;
 import ch.mobileking.utils.SharedPrefEditor;
 import ch.mobileking.utils.Utils;
 import ch.mobileking.utils.classes.Products;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v7.app.ActionBarActivity;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class ProductDetailOverview extends Activity {
+public class ProductDetailOverview extends ActionBarActivity {
 	
 	private TextView prod_name, prod_manuf, product_detail_userRank, product_detail_userName, product_detail_points;
 	private ImageView productImage;
@@ -25,6 +28,7 @@ public class ProductDetailOverview extends Activity {
 	private SharedPrefEditor editor;
 	private ImageView product_detail_avatar;
 	
+	@SuppressLint("NewApi")
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
@@ -35,6 +39,18 @@ public class ProductDetailOverview extends Activity {
 		editor = new SharedPrefEditor(this);
 
 		Utils.addLogMsg(this.getLocalClassName());
+		
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) 
+		{
+			// Load the legacy preferences headers
+			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		}
+		else
+		{
+			getActionBar().setHomeButtonEnabled(true);
+			getActionBar().setDisplayHomeAsUpEnabled(true);
+			
+		}
 		
 		if(getCallingActivity() != null && getIntent().getExtras()!= null)
 		{

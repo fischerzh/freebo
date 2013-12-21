@@ -11,6 +11,8 @@ import ch.mobileking.classes.override.ProductBaseAdapter;
 import ch.mobileking.exception.CustomExceptionHandler;
 import ch.mobileking.login.AsyncLogin;
 import ch.mobileking.login.AsyncUpdate;
+import ch.mobileking.tabs.intro.BaseSampleActivity;
+import ch.mobileking.tabs.intro.IntroSequenceActivity;
 import ch.mobileking.utils.ITaskComplete;
 import ch.mobileking.utils.ProductKing;
 import ch.mobileking.utils.SharedPrefEditor;
@@ -20,6 +22,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -56,6 +59,8 @@ public class MainProductFragment extends Fragment implements ITaskComplete {
 	private boolean editVisible = false;
 
 	private SharedPrefEditor editor;
+
+	private Button tab_main_btn_start_optin;
 
 
     @Override
@@ -102,6 +107,24 @@ public class MainProductFragment extends Fragment implements ITaskComplete {
 		        getActivity().startActivityForResult(intent, 1);
 			}
         });
+        
+        tab_main_btn_start_optin = (Button) getActivity().findViewById(R.id.tab_main_btn_start_optin);
+
+ 		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) 
+ 		{
+ 			tab_main_btn_start_optin.setVisibility(View.VISIBLE);
+ 		}	
+ 		else
+ 		{
+ 			tab_main_btn_start_optin.setVisibility(View.GONE);
+ 		}
+ 		tab_main_btn_start_optin.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				startBarcodeScanner();
+			}
+		});
         
         btn_delete = (Button) getActivity().findViewById(R.id.tab_main_btn_delete);
         btn_delete.setVisibility(View.GONE);
@@ -217,7 +240,15 @@ public class MainProductFragment extends Fragment implements ITaskComplete {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
              super.onCreateOptionsMenu(menu, inflater);
-               inflater.inflate(R.menu.action_bar, menu);
+     		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+    			// addPreferencesFromResource(R.xml.preferences);
+     			inflater.inflate(R.menu.action_bar_small, menu);
+    		}
+     		else
+     		{
+     			inflater.inflate(R.menu.action_bar, menu);
+     		}
+             
     }
     
     @Override
@@ -230,7 +261,8 @@ public class MainProductFragment extends Fragment implements ITaskComplete {
                 break;
             case R.id.action_show_help:
 	        	System.out.println("Show Help!!");
-	        	setHelpActive();
+//	        	setHelpActive();
+	        	startIntroSequence();
 	            return true;
 	        case R.id.action_scan:
 	        	startBarcodeScanner();
@@ -264,6 +296,14 @@ public class MainProductFragment extends Fragment implements ITaskComplete {
 	{
 		DialogFragment newFragment = MessageDialog.newInstance(R.layout.loyalty_instructions);
 	    newFragment.show(getFragmentManager(), "dialog");
+	    
+	}
+	
+	private void startIntroSequence()
+	{
+		Intent intent = new Intent(getActivity(), IntroSequenceActivity.class);
+		startActivity(intent);
+		getActivity().finish();
 	}
 	
 	private void startBarcodeScanner()
@@ -290,12 +330,15 @@ public class MainProductFragment extends Fragment implements ITaskComplete {
 		{
 			setEditVisible(true);
 	        btn_delete.setVisibility(View.VISIBLE);
+ 			tab_main_btn_start_optin.setVisibility(View.GONE);
 			setProdLayoutResourceId(R.layout.product_item_edit);
 		}
 		else
 		{
 			setEditVisible(false);
 	        btn_delete.setVisibility(View.GONE);
+	        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) 
+	 			tab_main_btn_start_optin.setVisibility(View.VISIBLE);
 			setProdLayoutResourceId(R.layout.product_item);
 		}
 		updateAdapterData();

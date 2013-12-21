@@ -3,7 +3,6 @@ package ch.mobileking.tabs;
 import java.io.File;
 import java.util.ArrayList;
 
-import ch.mobileking.BadgeActivity;
 import ch.mobileking.CameraActivity;
 import ch.mobileking.LeaderboardActivity;
 import ch.mobileking.MainActivity;
@@ -11,6 +10,7 @@ import ch.mobileking.MainTabActivity;
 import ch.mobileking.ProductDetailOverview;
 import ch.mobileking.R;
 import ch.mobileking.activity.barcode.BarCodeScanner;
+import ch.mobileking.activity.old.BadgeActivity;
 import ch.mobileking.activity.old.RecommActivity;
 import ch.mobileking.activity.old.StoreKingActivity;
 import ch.mobileking.activity.salesslips.SalesSlipDetail;
@@ -34,9 +34,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -82,6 +86,8 @@ public class MainCameraScanFragment extends Fragment implements ITaskComplete{
 			Thread.setDefaultUncaughtExceptionHandler(new CustomExceptionHandler(editor.getUsername()));
 		}
 		
+        setHasOptionsMenu(true);
+		
 		for(SalesSlip slip : ProductKing.getInstance().getStaticSalesSlips()){
 			if(!Utils.imageExists(slip.getSalespoint()))
 				Utils.loadBitmapFromURL(slip.getImageLink(), slip.getSalespoint());
@@ -103,45 +109,81 @@ public class MainCameraScanFragment extends Fragment implements ITaskComplete{
 			        intent.putExtra("itemId", position);
 			        startActivityForResult(intent, 66);
 				}
-				else
+				else if(test.getIsapproved()==1)
 				{
 			        Intent intent = new Intent(getActivity(), SalesSlipImageViewer.class);
 			        intent.putExtra("filename", test.getFilename());
 			        intent.putExtra("totalparts", test.getTotalparts());
 			        startActivityForResult(intent, 77);
 				}
+				else if(test.getIsapproved()==0)
+				{
+					createAlert("Einkauf konnte nicht verifiziert werden: "+ test.getRejectmessage(), "Einkauf nicht verifiziert!", R.drawable.ic_store_hero);
 
+				}
 				
 			}
 		});
+        
         
         salesslip_main_progress_layout = (LinearLayout) getActivity().findViewById(R.id.salesslip_main_progress_layout);
         
         reloadAdapterInfo();
         
         salesslip_tab_btn_newscan = (Button) getActivity().findViewById(R.id.salesslip_tab_btn_newscan);
+		System.out.println("SDK: " + Build.VERSION.SDK_INT +  " " + Build.VERSION.CODENAME);
+ 		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+ 			salesslip_tab_btn_newscan.setVisibility(View.VISIBLE);
+ 		}
         salesslip_tab_btn_newscan.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 				
-				if(Utils.isNetworkAvailable(getActivity().getApplicationContext()))
-				{
-					((MainTabActivity)getActivity()).setTaskListener(MainCameraScanFragment.this);
-					Intent intent = new Intent(getActivity(), CameraActivity.class);
-		    		startActivityForResult(intent, MainTabActivity.CAMERA_REQUEST);
-				}
-				else
-				{
-					Toast.makeText(getActivity().getApplicationContext(), "Internet wird benštigt!", Toast.LENGTH_LONG).show();
-				}
-
+				startCameraIntent();
 			}
 		});
         
         salesslip_progress =(ProgressBar) getActivity().findViewById(R.id.salesslip_progress);
         
         
+    }
+    
+    private void startCameraIntent()
+    {
+    	if(Utils.isNetworkAvailable(getActivity().getApplicationContext()))
+		{
+			((MainTabActivity)getActivity()).setTaskListener(MainCameraScanFragment.this);
+			Intent intent = new Intent(getActivity(), CameraActivity.class);
+    		startActivityForResult(intent, MainTabActivity.CAMERA_REQUEST);
+		}
+		else
+		{
+			Toast.makeText(getActivity().getApplicationContext(), "Internet wird benštigt!", Toast.LENGTH_LONG).show();
+		}
+
+    }
+    
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+            super.onCreateOptionsMenu(menu, inflater);
+     		if (Build.VERSION_CODES.HONEYCOMB <= Build.VERSION.SDK_INT)
+     		{
+     			inflater.inflate(R.menu.action_bar_scan, menu);
+     		}
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+            super.onOptionsItemSelected(item);
+			Utils.addLogMsg("MainProductFragment: Options Menu Selected "+ item.getTitle());
+            switch (item.getItemId()) {
+	        case R.id.action_start_camera:
+	        	startCameraIntent();
+	            return true;
+
+            }
+            return super.onOptionsItemSelected(item);
     }
     
     

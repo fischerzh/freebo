@@ -485,6 +485,7 @@ public class ServerRequest {
 				editor.setUsername(this.username);
 				editor.setPwd(this.pw);
 				editor.setEmail(this.email);
+				editor.setAvatarId(0);
 				this.pw="";
 				this.username="";
 				listener.onUpdateCompleted(true, "User Registrierung erfolgreich!");

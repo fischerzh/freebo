@@ -149,6 +149,13 @@ public class Utils {
 			if (!dir.exists())
 				dir.mkdirs();
 		}
+		else
+		{
+			file_path = context.getDir("MobileKingImages", Context.MODE_PRIVATE).getAbsolutePath();
+			if (addFolder != null)
+				file_path = file_path+"/"+addFolder;
+
+		}
 		return file_path;
 	}
 
@@ -175,7 +182,7 @@ public class Utils {
 	}
 
 	public static JSONResponse parseJSONSmall(String json) {
-		System.out.println("Json Stream reading..");
+		System.out.println("parseJSONsmall: " + json);
 		Gson gson = new Gson();
 		JSONResponse jsonClass = null;
 		try {
@@ -195,7 +202,7 @@ public class Utils {
 	}
 
 	public static ProductKing parseJSON(String json) {
-		System.out.println("Json Stream reading..");
+		System.out.println("parseJSON: " + json);
 		Gson gson = new Gson();
 		ProductKing prodKing = null;
 		try {
@@ -249,8 +256,8 @@ public class Utils {
 		Bitmap myBitmap = null;
 
 		if (imgFile.exists()) {
-			System.out.println("Found Image on SD card: "
-					+ imgFile.getAbsolutePath());
+//			System.out.println("Found Image on SD card: "
+//					+ imgFile.getAbsolutePath());
 			myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
 		}
 		return myBitmap;
@@ -422,7 +429,7 @@ public class Utils {
 			initUserLogData();
 		getUserLogData().add(gcmMsg);
 
-		System.out.println("Add Log Message: " + msg + gcmMsg.getCreateDate());
+//		System.out.println("Add Log Message: " + msg + gcmMsg.getCreateDate());
 
 	}
 
@@ -439,14 +446,14 @@ public class Utils {
 			String provider = locationManager.getBestProvider(criteria, true);
 			android.location.Location location = locationManager
 					.getLastKnownLocation(provider);
-			System.out.println("Location " + provider + " has been selected.");
+//			System.out.println("Location " + provider + " has been selected.");
 
 			if (location != null) {
 				locationResponse += provider + "; lat: "
 						+ location.getLatitude() + "; long: "
 						+ location.getLongitude();
 			}
-			System.out.println("Location: " + locationResponse);
+//			System.out.println("Location: " + locationResponse);
 		}
 
 		return locationResponse;
@@ -563,10 +570,10 @@ public class Utils {
 				.isGooglePlayServicesAvailable(cont);
 		System.out.println("Check play services");
 		if (resultCode != ConnectionResult.SUCCESS) {
+			System.out.println("Check play services resultCode: " + resultCode);
 			if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
 				GooglePlayServicesUtil.getErrorDialog(resultCode,
-						(Activity) cont, PLAY_SERVICES_RESOLUTION_REQUEST)
-						.show();
+						(Activity) cont, PLAY_SERVICES_RESOLUTION_REQUEST).show();
 			} else {
 				System.out
 						.println("checkPlayServices: This device is not supported");

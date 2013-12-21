@@ -33,7 +33,10 @@ import ch.mobileking.utils.Utils;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Point;
 import android.os.AsyncTask;
+import android.util.DisplayMetrics;
+import android.view.Display;
 import android.widget.Toast;
 
 public class AsyncLogin extends AsyncTask<String, String, String>{
@@ -81,7 +84,7 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
 		HttpClient httpClient = new DefaultHttpClient();
 		
 		String loginUrl = editor.getLoginURL();
-		if(editor.getFirstRun() || editor.getUsername().contentEquals(""))
+		if(editor.getFirstRun() || editor.getUsername().contentEquals("") || editor.getRegId().contentEquals(""))
 		{
 			Utils.registerDevice(act);
 			loginUrl=loginUrl+getAndroidInfo();
@@ -149,8 +152,7 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
             	
             	editor.setUsername(user);
     			editor.setPwd(pwd);
-    			editor.setEmail(ProductKing.getInstance().getEmail());
-    			editor.setAvatarId(ProductKing.getInstance().getAvatarId());
+
             }
             
 //            System.out.println("result: " + getJsonResult());
@@ -169,10 +171,12 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
 		String osVersion = android.os.Build.VERSION.RELEASE;
 		String manufacturer = android.os.Build.MANUFACTURER;
 		String model = android.os.Build.MODEL;
-		
+		Point size = new Point();
+		@SuppressWarnings("deprecation")
+		String screenSize = getAct().getWindowManager().getDefaultDisplay().getWidth() +"x" + getAct().getWindowManager().getDefaultDisplay().getHeight();
 		String regId = Utils.getRegistrationId(getAct());
 		
-		return "?regId="+regId+"&deviceType='"+manufacturer+"'&deviceOs="+osVersion;
+		return "?regId="+regId+"&deviceType='"+manufacturer+":"+model+"'&deviceOs="+osVersion+"&deviceScreen='"+screenSize+"'";
 	}
 
 	@Override
@@ -221,7 +225,8 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
 		if(prodKing!=null)
 		{
         	editor.setIsFirstRun(!prodKing.getIsactiveapp());
-
+        	editor.setEmail(prodKing.getEmail());
+        	editor.setAvatarId(prodKing.getAvatarId());
 			ProductKing.setIsActive(prodKing.getIsactiveapp());
 			ProductKing.setStaticProducts(prodKing.getProducts());
 			ProductKing.setRecommenderProducts(prodKing.getRecommendations());

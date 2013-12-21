@@ -4,6 +4,7 @@ import ch.mobileking.R;
 import ch.mobileking.exception.CustomExceptionHandler;
 import ch.mobileking.login.AsyncLogin;
 import ch.mobileking.login.ServerRequest;
+import ch.mobileking.tabs.intro.IntroSequenceActivity;
 import ch.mobileking.userdata.OnTokenAcquired;
 import ch.mobileking.utils.BaseActivity;
 import ch.mobileking.utils.ITaskComplete;
@@ -19,7 +20,9 @@ import android.os.Message;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -92,8 +95,6 @@ public class MainActivity extends Activity implements ITaskComplete{
         password = (EditText) findViewById(R.id.txtPassword);
         password.setText(editor.getPwd());
         
-        forgotPw = (TextView) findViewById(R.id.main_forgot_pw_txt);
-        
         registerTxt = (TextView) findViewById(R.id.main_register_txt);
         
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
@@ -116,15 +117,15 @@ public class MainActivity extends Activity implements ITaskComplete{
         
         gcmResponseMessage = getIntent().getStringExtra("gcmnotification");
         
-        forgotPw.setOnClickListener(new View.OnClickListener() {
+//        forgotPw.setOnClickListener(new View.OnClickListener() {
 			
-			@Override
-			public void onClick(View v) {
+//			@Override
+//			public void onClick(View v) {
 				// TODO Auto-generated method stub
 //				Intent intent = new Intent(MainActivity.this, LoyaltyCardActivity.class);
 //				startActivity(intent);
-			}
-		});
+//			}
+//		});
         
         registerTxt.setOnClickListener(new View.OnClickListener() {
 			
@@ -170,21 +171,42 @@ public class MainActivity extends Activity implements ITaskComplete{
 			@Override
 			public void onClick(View v) {
 				
-				if(isNetworkAvailable())
+				if(isDataFilledOut())
 				{
-	        		setProgressBarEnableContent();
-	        		
-					loginUser();
-				}
-				else
-				{
-					Toast.makeText(MainActivity.this,"Internet wird benötigt!", Toast.LENGTH_LONG).show();	
+					if(isNetworkAvailable())
+					{
+		        		setProgressBarEnableContent();
+						loginUser();
+					}
+					else
+					{
+						Toast.makeText(MainActivity.this,"Internet wird benötigt!", Toast.LENGTH_LONG).show();	
+					}
 				}
 			}
         }
         );
 	}
 	
+	private boolean isDataFilledOut(){
+		boolean isUserNameFilled = false;
+		boolean isPwFilled = false;
+		
+		username.setError(null);
+		password.setError(null);
+		if (username.getText().toString().contentEquals(""))
+			username.setError("Bitte Benutzername ausfüllen!");
+		else
+			isUserNameFilled = true;
+		
+		if(password.getText().toString().contentEquals(""))
+			password.setError("Bitte Passwort angeben!");
+		else
+			isPwFilled = true;
+		
+		return (isUserNameFilled && isPwFilled);
+		
+	}
 	public void setProgressBarDisableContent() {
 		progressBar.setVisibility(View.INVISIBLE);
 		main_rel_layout.setVisibility(View.INVISIBLE);
@@ -270,10 +292,9 @@ public class MainActivity extends Activity implements ITaskComplete{
 	public void onLoginCompleted(boolean completed, String message) {
 		
 		final String msg = message;
+		final boolean successful = completed;
 		
-		System.out.println("msg: " + msg);
-		
-		
+		System.out.println("onLoginCompleted: " + msg);
 		System.out.println("MainActivity: LoginCompleted: " + completed);
 		if(completed && !editor.getFirstRun())
 		{
@@ -286,12 +307,15 @@ public class MainActivity extends Activity implements ITaskComplete{
 				intent.putExtra("messageId", gcmUUID);
 			}
 			getAct().startActivity(intent);
+			finish();
 		}
 		else if (completed && editor.getFirstRun())
 		{
 			/** FIRST LOGIN **/
-			Intent intent = new Intent(getAct(), LoyaltyCardActivity.class);
+//			Intent intent = new Intent(getAct(), LoyaltyCardActivity.class);
+			Intent intent = new Intent(getAct(), IntroSequenceActivity.class);
 			getAct().startActivity(intent);
+			finish();
 		}
 		else
 		{
@@ -299,8 +323,10 @@ public class MainActivity extends Activity implements ITaskComplete{
 			{
 			   public void run() 
 			   {
-				   Toast.makeText(MainActivity.this, msg, Toast.LENGTH_LONG).show(); 
-				   finish();
+//				   Toast.makeText(MainActivity.this, msg, Toast.LENGTH_LONG).show(); 
+				  setProgressBarDisableContent();
+
+					createAlert("Login fehlerhaft: " + msg, "Login fehlgeschlagen!", R.drawable.ic_launcher);
 			   }
 			}); 
 			
@@ -310,12 +336,34 @@ public class MainActivity extends Activity implements ITaskComplete{
 		{
 		   public void run() 
 		   {
-			   setProgressBarDisableContent();
-			   finish();
+			   if(successful)
+			   {
+				   setProgressBarDisableContent();
+				   finish();
+			   }
 		   }
 		}); 
 		
 
+	}
+	
+	private void createAlert(String message, String title, int iconId) {
+		// Build the dialog
+		AlertDialog.Builder alert = new AlertDialog.Builder(this);
+		alert.setTitle(title);
+		alert.setMessage(message);
+		// Create TextView
+		final TextView input = new TextView (this);
+		alert.setView(input);
+		alert.setIcon(iconId);
+
+		alert.setPositiveButton("Weiter", new DialogInterface.OnClickListener() {
+		public void onClick(DialogInterface dialog, int whichButton) {
+		    // Do something with value!
+		  }
+		});
+
+		alert.show();
 	}
 
 	@Override

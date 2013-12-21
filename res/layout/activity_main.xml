@@ -2,19 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    
+    android:gravity="center_horizontal"
     tools:context=".MainActivity" >
-
-    <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="wrap_content"
-        android:layout_height="275dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:adjustViewBounds="true"
-        android:scaleType="fitXY"
-        android:src="@drawable/scart_screen" />
 
     <Button
         android:id="@+id/btnLogin"
@@ -23,8 +12,8 @@
         android:layout_alignLeft="@+id/txtPassword"
         android:layout_alignRight="@+id/txtPassword"
         android:layout_below="@+id/txtPassword"
-        android:text="Login"
-        android:gravity="center_horizontal|center_vertical" />
+        android:gravity="center_horizontal|center_vertical"
+        android:text="Login" />
 
     <EditText
         android:id="@+id/txtPassword"
@@ -35,18 +24,19 @@
         android:ems="10"
         android:hint="******"
         android:inputType="textPassword"
-        android:text="test" />
+        android:text="" />
 
     <EditText
         android:id="@+id/txtUsername"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="45dp"
         android:layout_alignRight="@+id/txtPassword"
-        android:layout_below="@+id/imageView1"
+        android:layout_below="@+id/main_txt_prodKing"
         android:ems="10"
         android:hint="username"
         android:inputType="textPersonName"
-        android:text="test" >
+        android:text="" >
 
         <requestFocus />
     </EditText>
@@ -60,47 +50,52 @@
         android:layout_centerHorizontal="true"
         android:visibility="invisible" />
 
-        <CheckBox
-            android:id="@+id/main_stay_loggedIn_chkB"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/btnLogin"
-            android:layout_below="@+id/btnLogin"
-            android:textSize="@dimen/textSizeSmall"
-            android:text="Angemeldet bleiben " />
+    <CheckBox
+        android:id="@+id/main_stay_loggedIn_chkB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/btnLogin"
+        android:layout_below="@+id/btnLogin"
+        android:text="Angemeldet bleiben "
+        android:textSize="@dimen/textSizeSmall" />
 
-        <ch.mobileking.classes.override.RobotoTextView
-            android:id="@+id/main_forgot_pw_txt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/main_stay_loggedIn_chkB"
-            android:layout_toLeftOf="@+id/main_register_txt"
-            android:textSize="@dimen/textSizeSmall"
-            android:text="Passwort vergessen|"
-            android:textColor="@color/blue_light" />
+    <ch.mobileking.classes.override.RobotoTextView
+        android:id="@+id/main_register_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/main_stay_loggedIn_chkB"
+        android:layout_centerHorizontal="true"
+        android:text="Neu Registrieren"
+        android:textColor="@color/blue_light"
+        android:textSize="@dimen/textSizeSmall" />
 
-        <ch.mobileking.classes.override.RobotoTextView
-            android:id="@+id/main_register_txt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignRight="@+id/btnLogin"
-            android:layout_below="@+id/main_stay_loggedIn_chkB"
-            android:text="Registrieren"
-            android:textSize="@dimen/textSizeSmall"
-            android:textColor="@color/blue_light" />
+    <FrameLayout
+        android:id="@+id/main_rel_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:background="#F2FFFFFF"
+        android:visibility="invisible" >
+    </FrameLayout>
 
-        <FrameLayout
-            android:id="@+id/main_rel_layout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:visibility="invisible"
-            android:background="#F2FFFFFF"
-            
-            >
-        </FrameLayout>
+    <ImageView
+        android:id="@+id/main_img_prodKing"
+        android:layout_marginTop="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/ic_launcher_new" />
+
+    <ImageView
+        android:id="@+id/main_txt_prodKing"
+        android:layout_width="125dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/main_img_prodKing"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_schrift_blau" />
 
 </RelativeLayout>

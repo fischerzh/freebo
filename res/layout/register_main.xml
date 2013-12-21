@@ -62,7 +62,6 @@
         android:ems="10"
         android:hint="mail@mail.com"
         android:inputType="textPersonName"
-        android:text="test@test.ch"
          >
 
         <requestFocus />
@@ -77,7 +76,7 @@
         android:ems="10"
         android:hint="username"
         android:inputType="textPersonName"
-        android:text="username" />
+        />
 
     <EditText
         android:id="@+id/register_txt_pwd1"
@@ -88,6 +87,28 @@
         android:ems="10"
         android:hint="******"
         android:inputType="textPassword"
-        android:text="test" />
+         />
+
+    <RelativeLayout
+        android:id="@+id/register_progressLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_weight="1.08"
+        android:background="#88666666"
+        android:gravity="center_vertical"
+        android:visibility="invisible" >
+
+        <ProgressBar
+            android:id="@+id/register_progressBar"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="177dp"
+            android:visibility="visible" />
+    </RelativeLayout>
 
 </RelativeLayout>

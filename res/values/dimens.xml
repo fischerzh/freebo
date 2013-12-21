@@ -3,20 +3,26 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+    
+    <dimen name="btn_delete_scan_height">50dp</dimen>
+    
     <dimen name="prod_list_item_size">150dp</dimen>
     <dimen name="prod_crown_height">25dp</dimen>
     <dimen name="prod_crown_width">25dp</dimen>
-    <dimen name="badge_detail_image">95dp</dimen>
-    <dimen name="user_avatar_height">75dp</dimen>
-        <dimen name="user_avatar_width">65dp</dimen>
-            <dimen name="sales_slip_item_height">50dp</dimen>
-            <dimen name="sales_slip_item_width">40dp</dimen>
-            
-                <dimen name="user_setting_item">65dp</dimen>
-	<dimen name="textSizeLarge">20dp</dimen>
-	<dimen name="textSizeMiddle">18dp</dimen>
-	<dimen name="textSizeSmall">16dp</dimen>
-		<dimen name="textSizeTiny">14dp</dimen>
-	
     
+    <dimen name="badge_detail_image">95dp</dimen>
+    
+    <dimen name="user_avatar_height">75dp</dimen>
+    <dimen name="user_avatar_width">65dp</dimen>
+    
+    <dimen name="sales_slip_item_height">50dp</dimen>
+    <dimen name="sales_slip_item_width">40dp</dimen>
+    
+    <dimen name="user_setting_item">65dp</dimen>
+    
+    <dimen name="textSizeLarge">20dp</dimen>
+    <dimen name="textSizeMiddle">18dp</dimen>
+    <dimen name="textSizeSmall">16dp</dimen>
+    <dimen name="textSizeTiny">14dp</dimen>
+
 </resources>

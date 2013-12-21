@@ -1,5 +1,9 @@
-package ch.mobileking;
+package ch.mobileking.activity.old;
 
+import ch.mobileking.R;
+import ch.mobileking.R.drawable;
+import ch.mobileking.R.id;
+import ch.mobileking.R.layout;
 import ch.mobileking.utils.ProductKing;
 import ch.mobileking.utils.Utils;
 import ch.mobileking.utils.classes.Badge;
@@ -10,8 +14,12 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+
+
 public class BadgeActivity extends Activity {
 
+/*
+	
 	private ImageView act_badge_login1;
 	private ImageView act_badge_login2;
 	private ImageView act_badge_login3;
@@ -94,5 +102,6 @@ public class BadgeActivity extends Activity {
 
 		
 	}
+*/
 	
 }

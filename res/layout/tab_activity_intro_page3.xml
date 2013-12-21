@@ -1,0 +1,23 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <ch.mobileking.classes.override.RobotoTextView
+        android:id="@+id/tab_intro3_seq_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:minLines="5"
+        android:text="3. ....."
+        android:textSize="@dimen/textSizeMiddle" />
+
+    <ImageView
+        android:id="@+id/tab_intro3_seq_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="25dp"
+        android:src="@drawable/scart_screen" />
+
+</LinearLayout>

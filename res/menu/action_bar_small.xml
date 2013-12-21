@@ -5,18 +5,11 @@
         android:id="@+id/action_show_help"
         android:icon="@android:drawable/ic_menu_help"
         android:title="Hilfe"
-        yourapp:showAsAction="always"/>
+        />
     <item
         android:id="@+id/action_edit"
         android:icon="@drawable/ic_pen"
         android:orderInCategory="50"
         android:title="Loyalitätsprogramm verlassen"
-        yourapp:showAsAction="always"/>
-    <item
-        android:id="@+id/action_scan"
-        android:icon="@drawable/ic_scan"
-        android:orderInCategory="100"
-        android:title="Loyalitätsprogramm starten"
-        yourapp:showAsAction="always"/>
-
+	/>
 </menu>

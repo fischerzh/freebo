@@ -279,20 +279,7 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
 		// TODO Auto-generated method stub
 		
 	}
-	
-//	public void onSyncRequest()
-//	{
-//		System.out.println("MainTabActivity.onSyncRequest()");
-//		ServerRequest request = new ServerRequest(this, this);
-//		request.startUpdateLogs();
-//	}
-	
-//	@Override
-//	public void onPause()
-//	{
-//		super.onPause();
-//		onSyncRequest();
-//	}
+
 	
     @Override
     public void onBackPressed() {

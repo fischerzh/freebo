@@ -15,6 +15,10 @@ import ch.mobileking.utils.ITaskComplete;
 import ch.mobileking.utils.SharedPrefEditor;
 import ch.mobileking.utils.Utils;
 
+import android.support.v7.app.ActionBarActivity;  
+import android.support.v7.app.ActionBar;
+
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -53,8 +57,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-@SuppressLint("NewApi")
-public class UserSettingsActivity extends Activity implements ITaskComplete{
+public class UserSettingsActivity extends ActionBarActivity implements ITaskComplete{
 
 	private ImageView imageView;
 
@@ -85,6 +88,7 @@ public class UserSettingsActivity extends Activity implements ITaskComplete{
 	private Integer avatarId;
 
 	// extends PreferenceActivity implements OnSharedPreferenceChangeListener
+	@SuppressLint("NewApi")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -99,8 +103,18 @@ public class UserSettingsActivity extends Activity implements ITaskComplete{
 
 		final Random rand = new Random();
 
-		getActionBar().setHomeButtonEnabled(true);
-		getActionBar().setDisplayHomeAsUpEnabled(true);
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) 
+		{
+			// Load the legacy preferences headers
+			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		}
+		else
+		{
+			getActionBar().setHomeButtonEnabled(true);
+			getActionBar().setDisplayHomeAsUpEnabled(true);
+			
+		}
+
 		
 		imageView = (ImageView) findViewById(R.id.user_settings_avatar);
 //		if(Utils.imageExists(Utils.USER_AVATAR_PNG))
