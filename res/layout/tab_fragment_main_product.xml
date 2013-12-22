@@ -5,6 +5,31 @@
     android:gravity="center_horizontal"
     >
 
+	<LinearLayout
+	    android:id="@+id/tab_main_first_help_layout"
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:layout_centerHorizontal="true"
+	    android:orientation="vertical" >
+
+	    <ImageView
+	        android:id="@+id/tab_main_scan_first"
+	        android:layout_width="150dp"
+	        android:layout_height="wrap_content"
+	        android:layout_centerHorizontal="true"
+	        android:layout_gravity="center_horizontal"
+	        android:layout_marginBottom="10dp"
+	        android:layout_marginTop="5dp"
+	        android:src="@drawable/ic_loyal_arrow" />
+
+	    <ch.mobileking.classes.override.RobotoTextView
+	        android:id="@+id/robotoTextView1"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="center_horizontal"
+	        android:text="Scanne ein erstes Produkt ein!" />
+	</LinearLayout>
+
     <LinearLayout
         android:id="@+id/tab_main_linearLayout"
         android:layout_width="fill_parent"
@@ -53,6 +78,7 @@
         android:id="@+id/tab_main_progressLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
         android:layout_weight="1.08"
         android:background="#88666666"
         android:gravity="center_vertical"
@@ -67,6 +93,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="177dp"
             android:visibility="visible" />
+
     </RelativeLayout>
  
 </RelativeLayout>

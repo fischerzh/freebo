@@ -1,11 +1,21 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+    android:layout_height="fill_parent" 
+    android:orientation="vertical">
+
+    <ch.mobileking.classes.override.RobotoTextView
+        android:id="@+id/salesslip_image_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"
+        android:text="Kassenzettel 1 von 4" />
 
     <ImageSwitcher
         android:id="@+id/salesslip_image_imageSwitcher"
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
+
     </ImageSwitcher>
 
-</FrameLayout>
+</LinearLayout>

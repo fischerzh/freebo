@@ -1,12 +1,13 @@
 package ch.mobileking.utils.classes;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import android.graphics.Bitmap;
 
 import com.google.gson.annotations.SerializedName;
 
-public class SalesSlipItem {
+public class SalesSlipItem implements Serializable{
 
 	@SerializedName("name")
 	private String name;

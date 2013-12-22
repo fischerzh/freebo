@@ -87,6 +87,8 @@ public class UserSettingsActivity extends ActionBarActivity implements ITaskComp
 	private Boolean isNotification, isAnonymous;
 	private Integer avatarId;
 
+	private ProgressBar user_setting_progress_bar_top;
+
 	// extends PreferenceActivity implements OnSharedPreferenceChangeListener
 	@SuppressLint("NewApi")
 	@Override
@@ -114,7 +116,9 @@ public class UserSettingsActivity extends ActionBarActivity implements ITaskComp
 			getActionBar().setDisplayHomeAsUpEnabled(true);
 			
 		}
-
+		
+		user_setting_progress_bar_top = (ProgressBar) findViewById(R.id.user_setting_progress_bar_top);
+		user_setting_progress_bar_top.setVisibility(View.INVISIBLE);
 		
 		imageView = (ImageView) findViewById(R.id.user_settings_avatar);
 //		if(Utils.imageExists(Utils.USER_AVATAR_PNG))
@@ -296,6 +300,8 @@ public class UserSettingsActivity extends ActionBarActivity implements ITaskComp
 	public void onSyncRequest()
 	{
 		System.out.println("UserSettingsActivity.onSyncRequest()");
+		user_setting_progress_bar_top.setVisibility(View.VISIBLE);
+
 		ServerRequest request = new ServerRequest(this, this);
 		/** first sync to Server, then if OK Update SharedPreferences!! */
 		/*
@@ -316,6 +322,11 @@ public class UserSettingsActivity extends ActionBarActivity implements ITaskComp
 		{
 			request.startUpdateUserSettings(pwd, email, isNotification, isAnonymous, avatarId);
 		}
+		else
+		{
+			user_setting_progress_bar_top.setVisibility(View.INVISIBLE);
+			finish();
+		}
 		
 		clearVariables();
 
@@ -325,7 +336,7 @@ public class UserSettingsActivity extends ActionBarActivity implements ITaskComp
     public void onBackPressed() 
 	{
 		onSyncRequest();
-		finish();
+//		finish();
 	}
 	
 	private void clearVariables()
@@ -344,7 +355,7 @@ public class UserSettingsActivity extends ActionBarActivity implements ITaskComp
 //	      homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 //	      startActivity(homeIntent);
 			onSyncRequest();
-	    	finish();
+//	    	finish();
 	    }
 	  return (super.onOptionsItemSelected(menuItem));
 	}
@@ -445,14 +456,23 @@ public class UserSettingsActivity extends ActionBarActivity implements ITaskComp
 //	}
 
 	@Override
-	public void onLoginCompleted(boolean b, String string) {
+	public void onLoginCompleted(boolean updateCompleted, String string) {
 		// TODO Auto-generated method stub
 		System.out.println("UserSettingsActivity.onLoginCompleted()");
-		if(b)
-			Toast.makeText(this, "Deine Einstellungen wurden erfolgreich aktualisiert! ", Toast.LENGTH_SHORT).show();
-		else
-	        Toast.makeText(this, string, Toast.LENGTH_SHORT).show();
+//		if(b)
+//			Toast.makeText(this, "Deine Einstellungen wurden erfolgreich aktualisiert! ", Toast.LENGTH_SHORT).show();
+//		else
+//	        Toast.makeText(this, string, Toast.LENGTH_SHORT).show();
+		user_setting_progress_bar_top.setVisibility(View.INVISIBLE);
 
+		if(updateCompleted)
+		{
+			createAlert("Einstellungen wurden gespeichert!", "Einstellungen", R.drawable.ic_empfehlungen );
+		}
+		else
+		{
+			createAlert("Fehler beim speichern: " +string, "Fehlgeschlagen!", R.drawable.ic_empfehlungen );
+		}
 	}
 
 	@Override
@@ -486,13 +506,24 @@ public class UserSettingsActivity extends ActionBarActivity implements ITaskComp
 		
 	}
 
-	// public void onSharedPreferenceChanged(SharedPreferences
-	// sharedPreferences, String key) {
-	// if (key.equals(KEY_PREF_SYNC_CONN)) {
-	// Preference connectionPref = findPreference(key);
-	// // Set summary to be the user-description for the selected value
-	// connectionPref.setSummary(sharedPreferences.getString(key, ""));
-	// }
-	// }
+
+	private void createAlert(String message, String title, int iconId) {
+		// Build the dialog
+		AlertDialog.Builder alert = new AlertDialog.Builder(this);
+		alert.setTitle(title);
+		alert.setMessage(message);
+		// Create TextView
+		final TextView input = new TextView (this);
+		alert.setView(input);
+		alert.setIcon(iconId);
+
+		alert.setPositiveButton("Weiter", new DialogInterface.OnClickListener() {
+		public void onClick(DialogInterface dialog, int whichButton) {
+		    finish();
+		  }
+		});
+
+		alert.show();
+	}
 
 }

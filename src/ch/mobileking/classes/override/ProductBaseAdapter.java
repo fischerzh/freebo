@@ -139,7 +139,10 @@ public class ProductBaseAdapter extends BaseAdapter{
 		 * 
 		 */
 		Products prod = resultList.get(position);
-		holder.getTxtName().setText(""+prod.getName());
+		if(prod.getSize().toLowerCase().contains("null") || prod.getSize().trim()=="")
+			holder.getTxtName().setText(""+prod.getName());
+		else
+			holder.getTxtName().setText(""+prod.getName()+" (" +prod.getSize()+")");
 		if(prod.getProducer().toLowerCase().contains("null") || prod.getProducer().trim()=="")
 			prod.setProducer("Hersteller unbekannt");
 		holder.getTxtProducer().setText(""+prod.getProducer());

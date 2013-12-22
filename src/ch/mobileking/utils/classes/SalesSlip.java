@@ -1,5 +1,6 @@
 package ch.mobileking.utils.classes;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -7,7 +8,9 @@ import android.graphics.Bitmap;
 
 import com.google.gson.annotations.SerializedName;
 
-public class SalesSlip {
+public class SalesSlip implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	@SerializedName("salespoint")
 	private String salespoint;
@@ -39,11 +42,14 @@ public class SalesSlip {
 	@SerializedName("salesslipitems")
 	private List<SalesSlipItem> salesslipitems;
 	
+	@SerializedName("part")
 	private Integer part;
 	
-	private Bitmap bitmapFile;
+	@SerializedName("bitmapFile")
+	private transient Bitmap bitmapFile;
 	
-	private String simpleFileName;
+	@SerializedName("simplefilename")
+	private String simplefilename;
 	
 	public SalesSlip(String filename, Bitmap imageBitmap, String scandate, String simpleFileName, Integer part, Integer totalParts)
 	{
@@ -216,14 +222,14 @@ public class SalesSlip {
 	 * @return the simpleFileName
 	 */
 	public String getSimpleFileName() {
-		return simpleFileName;
+		return simplefilename;
 	}
 
 	/**
 	 * @param simpleFileName the simpleFileName to set
 	 */
 	public void setSimpleFileName(String simpleFileName) {
-		this.simpleFileName = simpleFileName;
+		this.simplefilename = simpleFileName;
 	}
 
 	/**

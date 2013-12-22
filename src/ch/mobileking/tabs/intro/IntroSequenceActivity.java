@@ -1,9 +1,12 @@
 package ch.mobileking.tabs.intro;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.Animation;
@@ -13,6 +16,7 @@ import ch.mobileking.MainActivity;
 import ch.mobileking.MainTabActivity;
 import ch.mobileking.R;
 import ch.mobileking.RegisterActivity;
+import ch.mobileking.utils.Utils;
 
 import com.viewpagerindicator.CirclePageIndicator;
 
@@ -20,10 +24,13 @@ public class IntroSequenceActivity extends BaseSampleActivity {
 	
 	private boolean isButtonVisible = false;
 
+	@SuppressLint("NewApi")
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.simple_circles);
+        
+		Utils.addLogMsg(getLocalClassName());
 
         mAdapter = new IntroFragmentAdapter(getSupportFragmentManager());
 
@@ -42,6 +49,18 @@ public class IntroSequenceActivity extends BaseSampleActivity {
         
         intro_button_finish = (Button) findViewById(R.id.loyalty_card_next_btn);
 		intro_button_finish.setVisibility(View.GONE);
+		
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) 
+		{
+			// Load the legacy preferences headers
+			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		}
+		else
+		{
+			getActionBar().setHomeButtonEnabled(true);
+			getActionBar().setDisplayHomeAsUpEnabled(true);
+			
+		}
 
         mIndicator.setOnPageChangeListener(new OnPageChangeListener() {
 			@Override
@@ -50,7 +69,6 @@ public class IntroSequenceActivity extends BaseSampleActivity {
 		        {
 
 					intro_button_finish.setVisibility(View.VISIBLE);
-					isButtonVisible = true;
 					Animation slideUpIn = AnimationUtils.loadAnimation(IntroSequenceActivity.this, R.anim.bottom_up);
 					intro_button_finish.startAnimation(slideUpIn);
 
@@ -75,7 +93,7 @@ public class IntroSequenceActivity extends BaseSampleActivity {
 			
 			@Override
 			public void onPageScrolled(int position, float offset, int offsetPixels) {
-				if(position != 3)
+				if(position != 3 && offset < 0.5 && intro_button_finish.getVisibility()==View.VISIBLE)
 				{
 					if(intro_button_finish.getAnimation()!=null)
 					{

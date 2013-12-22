@@ -591,11 +591,11 @@ public class ServerRequest {
 		private boolean sendMessageToServer(GcmMessage msg)
 		{
 			uuid = msg.getUuid();
-			content = getEncodedValueForURL(msg.getContent());
-			title = getEncodedValueForURL(msg.getTitle());
+			content = Utils.getEncodedValueForURL(msg.getContent());
+			title = Utils.getEncodedValueForURL(msg.getTitle());
 			createDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(msg.getCreateDate());
-			createDate = getEncodedValueForURL(createDate);
-			location = getEncodedValueForURL(msg.getLocationInfo());
+			createDate = Utils.getEncodedValueForURL(createDate);
+			location = Utils.getEncodedValueForURL(msg.getLocationInfo());
 			
 			setServerURL(editor.getUpdateLogURL()+"?logMessageId="+uuid+"&title='"+title+"'&createDate='"+createDate+"'&message='"+content+"'"+"&location='"+location+"'");
 			
@@ -703,16 +703,5 @@ public class ServerRequest {
 		return jsonMessage;
 	}
 
-	private String getEncodedValueForURL(String encode)
-	{
-		String encodeUrl = null;
-		try {
-			encodeUrl = URLEncoder.encode(encode, "UTF-8").toString();
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return encodeUrl;
-	}
 
 }

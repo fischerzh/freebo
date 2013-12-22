@@ -37,6 +37,7 @@ import android.view.ViewGroup;
 import android.webkit.WebView.FindListener;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -61,6 +62,8 @@ public class MainProductFragment extends Fragment implements ITaskComplete {
 	private SharedPrefEditor editor;
 
 	private Button tab_main_btn_start_optin;
+
+	private LinearLayout tab_main_first_help_layout;
 
 
     @Override
@@ -144,10 +147,22 @@ public class MainProductFragment extends Fragment implements ITaskComplete {
         progressLayout = (RelativeLayout) getActivity().findViewById(R.id.tab_main_progressLayout);
         progressLayout.setVisibility(View.INVISIBLE);
         
-		if(isFirstTime())
-		{
-			setHelpActive();
-		}
+        tab_main_first_help_layout = (LinearLayout) getActivity().findViewById(R.id.tab_main_first_help_layout);
+        
+//		if(isFirstTime())
+//		{
+//			setHelpActive();
+//		}
+        
+        if(ProductKing.getInstance().getStaticProducts().size()==0 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+        {
+            tab_main_first_help_layout.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            tab_main_first_help_layout.setVisibility(View.INVISIBLE);
+        }
+        	
     }
     
     @Override
@@ -303,7 +318,7 @@ public class MainProductFragment extends Fragment implements ITaskComplete {
 	{
 		Intent intent = new Intent(getActivity(), IntroSequenceActivity.class);
 		startActivity(intent);
-		getActivity().finish();
+//		getActivity().finish();
 	}
 	
 	private void startBarcodeScanner()

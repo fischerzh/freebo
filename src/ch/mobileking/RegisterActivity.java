@@ -8,6 +8,8 @@ import ch.mobileking.utils.ProductKing;
 import ch.mobileking.utils.Utils;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,6 +23,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class RegisterActivity extends ActionBarActivity implements ITaskComplete{
@@ -130,7 +133,8 @@ public class RegisterActivity extends ActionBarActivity implements ITaskComplete
 		else
 		{
 			System.out.println("Registration failed: " + message);
-			Toast.makeText(this, "Registrierung fehlgeschlagen: " +message, Toast.LENGTH_LONG).show();
+//			Toast.makeText(this, "Registrierung fehlgeschlagen: " +message, Toast.LENGTH_LONG).show();
+			createAlert("Registrierung fehlgeschlagen: " +message, "Fehlgeschlagen!", R.drawable.ic_empfehlungen );
 
 		}
 
@@ -166,6 +170,25 @@ public class RegisterActivity extends ActionBarActivity implements ITaskComplete
 	public void sendProgressUpdate(int progress) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	private void createAlert(String message, String title, int iconId) {
+		// Build the dialog
+		AlertDialog.Builder alert = new AlertDialog.Builder(this);
+		alert.setTitle(title);
+		alert.setMessage(message);
+		// Create TextView
+		final TextView input = new TextView (this);
+		alert.setView(input);
+		alert.setIcon(iconId);
+
+		alert.setPositiveButton("Weiter", new DialogInterface.OnClickListener() {
+		public void onClick(DialogInterface dialog, int whichButton) {
+		    finish();
+		  }
+		});
+
+		alert.show();
 	}
 
 }

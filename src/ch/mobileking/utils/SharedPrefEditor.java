@@ -1,5 +1,11 @@
 package ch.mobileking.utils;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+
+import ch.mobileking.utils.classes.SalesSlip;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -31,6 +37,7 @@ public class SharedPrefEditor {
 	private static final String PREFS_NOTIFICATIONS = "Notifications";
 	private static final String PREFS_ANON = "Anonymous";
 	private static final String PREFS_AVATAR = "Avatar";
+	private static final String PREFS_SALES_ITEM = "SalesSlip";
 	
 	private Context cont;
 	
@@ -287,6 +294,33 @@ public class SharedPrefEditor {
 	    avatarId = settings.getInt(PREFS_AVATAR, 0);
 	    return avatarId;
 	}
+	
+	public void setSalesSlips(ArrayList<SalesSlip> list) {
+		System.out.println("setSharedPref #PREF_SALES_ITEM: " +list);
+        SharedPreferences settings = cont.getSharedPreferences(PREFS_SALES_ITEM, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.remove(PREFS_SALES_ITEM);
+        editor.commit();
+        try {
+            editor.putString(PREFS_SALES_ITEM, ObjectSerializer.serialize(list));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        editor.commit();
+    }
+	
+	public ArrayList<SalesSlip> getSalesSlips() {
+        //      load tasks from preference
+		ArrayList<SalesSlip> salesSlipList = null;
+        SharedPreferences settings = cont.getSharedPreferences(PREFS_SALES_ITEM, Context.MODE_PRIVATE);
+
+        try {
+				salesSlipList = (ArrayList<SalesSlip>) ObjectSerializer.deserialize(settings.getString(PREFS_SALES_ITEM, ObjectSerializer.serialize(new ArrayList<SalesSlip>())));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return salesSlipList;
+    }
 	
 	/**
 	 * @return the activeURL

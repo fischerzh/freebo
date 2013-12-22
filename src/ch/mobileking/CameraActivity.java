@@ -116,7 +116,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
 				Random rand = new Random();
 				String scanDateFile = "";
 				Date d = new Date();
-
+				d.setHours(d.getHours()+1);
 				for (int i = 0; i < imageList.size(); i++) {
 					scanDateFile = ""+now.year
 							+ (now.month+1) + String.format("%02d", now.monthDay) + now.hour + now.minute
@@ -124,10 +124,12 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
 					fileName = "scan_" + scanDateFile + "_part" + i;
 					simpleFileName = "scan_"+scanDateFile;
 //					Utils.saveBitmap(imageList.get(i), fileName);
-					ProductKing.getInstance().getSalesSlipsParts().add(new SalesSlip(fileName, imageList.get(i), d.toGMTString(), simpleFileName, i, imageList.size()));
+					ProductKing.getInstance().getSalesSlipsParts().add(new SalesSlip(fileName, imageList.get(i), d.toGMTString().replace("GMT", ""), simpleFileName, i, imageList.size()));
 
 				}
-				ProductKing.getInstance().getStaticSalesSlips().add(new SalesSlip(fileName, null, d.toGMTString(), simpleFileName, 0, imageList.size()));
+				ProductKing.getInstance().getStaticSalesSlips().add(new SalesSlip(fileName, null, d.toGMTString().replace("GMT", ""), simpleFileName, 0, imageList.size()));
+				
+				editor.setSalesSlips((ArrayList)ProductKing.getInstance().getStaticSalesSlips());
 				
 		        Intent intent = new Intent(CameraActivity.this, MainTabActivity.class);
 		        intent.putExtra("salesslip", simpleFileName);

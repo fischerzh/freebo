@@ -13,13 +13,20 @@
         android:layout_height="wrap_content" >
 
         <ch.mobileking.classes.override.RobotoTextView
-            android:id="@+id/product_detail_header2"
+            android:id="@+id/user_setting_header2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:text="USER SETTINGS"
             android:textColor="@android:color/black"
             android:textSize="@dimen/textSizeMiddle" />
+
+        <ProgressBar
+            android:id="@+id/user_setting_progress_bar_top"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right" />
+
     </LinearLayout>
 
     <View

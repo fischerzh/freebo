@@ -92,6 +92,28 @@ public class MainCameraScanFragment extends Fragment implements ITaskComplete{
 			if(!Utils.imageExists(slip.getSalespoint()))
 				Utils.loadBitmapFromURL(slip.getImageLink(), slip.getSalespoint());
 		}
+		
+		if(editor.getSalesSlips().size()>0)
+		{
+			for(int i = 0; i < editor.getSalesSlips().size(); i++)
+			{
+				System.out.println("Slip not uploaded: " +editor.getSalesSlips().get(i));
+				if(editor.getSalesSlips().get(i).getSimpleFileName()=="" || editor.getSalesSlips().get(i).getSimpleFileName()==null)
+				{
+					String filename = editor.getSalesSlips().get(i).getFilename();
+					filename = filename.substring(0,  filename.indexOf("_part"));
+					System.out.println("simpleFileName reconstructed: " + filename);
+					editor.getSalesSlips().get(i).setSimpleFileName(filename);
+				}
+				ProductKing.getInstance().getSalesSlipsParts().add(editor.getSalesSlips().get(i));
+			}
+			
+		}
+		
+		System.out.println("SalesSlip count: " + editor.getSalesSlips().size());
+		
+        salesslip_progress =(ProgressBar) getActivity().findViewById(R.id.salesslip_progress);
+        salesslip_main_progress_layout = (LinearLayout) getActivity().findViewById(R.id.salesslip_main_progress_layout);
         
         salesslips_listView = (ListView) getActivity().findViewById(R.id.salesslip_lv);
         salesslips_listView.setOnItemClickListener(new OnItemClickListener() {
@@ -111,10 +133,22 @@ public class MainCameraScanFragment extends Fragment implements ITaskComplete{
 				}
 				else if(test.getIsapproved()==1)
 				{
-			        Intent intent = new Intent(getActivity(), SalesSlipImageViewer.class);
-			        intent.putExtra("filename", test.getFilename());
-			        intent.putExtra("totalparts", test.getTotalparts());
-			        startActivityForResult(intent, 77);
+					if(test.getIsuploaded())
+					{
+				        Intent intent = new Intent(getActivity(), SalesSlipImageViewer.class);
+				        intent.putExtra("filename", test.getFilename());
+				        intent.putExtra("totalparts", test.getTotalparts());
+				        startActivityForResult(intent, 77);
+					}
+			        else
+			        {
+			            salesslip_main_progress_layout.setVisibility(View.VISIBLE);
+
+						System.out.println("Slip "+ test.getFilename() +" uploaded: " + test.getIsuploaded());
+						((MainTabActivity)getActivity()).setTaskListener(MainCameraScanFragment.this);
+						Utils.setListener(((MainTabActivity)getActivity()));
+						Utils.saveAllBitmapAsync(editor);
+			        }
 				}
 				else if(test.getIsapproved()==0)
 				{
@@ -124,9 +158,6 @@ public class MainCameraScanFragment extends Fragment implements ITaskComplete{
 				
 			}
 		});
-        
-        
-        salesslip_main_progress_layout = (LinearLayout) getActivity().findViewById(R.id.salesslip_main_progress_layout);
         
         reloadAdapterInfo();
         
@@ -144,7 +175,6 @@ public class MainCameraScanFragment extends Fragment implements ITaskComplete{
 			}
 		});
         
-        salesslip_progress =(ProgressBar) getActivity().findViewById(R.id.salesslip_progress);
         
         
     }
@@ -191,22 +221,46 @@ public class MainCameraScanFragment extends Fragment implements ITaskComplete{
     {
     	
 		ArrayList<Object> salesSlipItems = new ArrayList<Object>();
+		for(int i = 0; i < ProductKing.getInstance().getStaticSalesSlips().size(); i++)
+		{
+			if(isInList(ProductKing.getInstance().getStaticSalesSlips().get(i)))
+			{
+				ProductKing.getInstance().getStaticSalesSlips().get(i).setIsuploaded(false);
+			}
+		}
 		salesSlipItems.addAll(ProductKing.getInstance().getStaticSalesSlips());
+
+//			salesSlipItems.addAll(editor.getSalesSlips());
 		ImageAdapter adapter = new ImageAdapter(getActivity().getApplicationContext(), salesSlipItems, R.layout.activity_salesslips_item); 
 		salesslips_listView.setAdapter(adapter);
+		
+    }
+    
+    private boolean isInList(SalesSlip item)
+    {
+    	if(item!=null)
+    	{
+        	System.out.println("check item if not uploaded: " + item.getFilename());
+        	for(SalesSlip slip : editor.getSalesSlips())
+        	{
+        		System.out.println("item not uploaded: " + slip.getFilename());
+        		if(slip.getFilename().contains(item.getFilename()))
+        			return true;
+        	}
+    	}
+    	return false;
     }
 
 	@Override
-	public void onLoginCompleted(boolean b, String string) {
+	public void onLoginCompleted(boolean completed, String string) {
 		System.out.println("MainCameraScanFramgent.onLoginCompleted: " +string);
-		if(b)
+		if(completed)
 			reloadAdapterInfo();
 	}
 
 	@Override
 	public void onUpdateCompleted(boolean b, String string) {
 		// TODO Auto-generated method stub
-		salesslip_progress.setVisibility(View.INVISIBLE);
 		System.out.println("MainCameraScanFramgent.onUpdateCompleted: " +string);
 
         salesslip_main_progress_layout.setVisibility(View.GONE);

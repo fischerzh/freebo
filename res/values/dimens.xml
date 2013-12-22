@@ -18,6 +18,9 @@
     <dimen name="sales_slip_item_height">50dp</dimen>
     <dimen name="sales_slip_item_width">40dp</dimen>
     
+        <dimen name="sales_slip_item_size">75dp</dimen>
+    
+    
     <dimen name="user_setting_item">65dp</dimen>
     
     <dimen name="textSizeLarge">20dp</dimen>

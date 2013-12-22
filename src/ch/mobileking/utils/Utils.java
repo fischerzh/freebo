@@ -9,8 +9,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -218,13 +220,31 @@ public class Utils {
 			System.out.println("JSON Parse Exception " + e.toString());
 			e.printStackTrace();
 		}
-		ProductKing.setIsActive(prodKing.getIsactiveapp());
+//    	editor.setIsFirstRun(!prodKing.getIsactiveapp());
+//    	editor.setEmail(prodKing.getEmail());
+//    	editor.setAvatarId(prodKing.getAvatarId());
+//    	editor.setAnonymous(prodKing.getIsanonymous());
+//    	editor.setNotifications(prodKing.getIsnotification());
+    	
+//		ProductKing.setIsActive(prodKing.getIsactiveapp());
 		ProductKing.setStaticProducts(prodKing.getProducts());
 		ProductKing.setRecommenderProducts(prodKing.getRecommendations());
 		ProductKing.setStaticBadges(prodKing.getBadges());
 		ProductKing.setStaticLeaderboard(prodKing.getLeaderboard());
 		ProductKing.setStaticSalesSlips(prodKing.getSalesslips());
 		return prodKing;
+	}
+	
+	public static String getEncodedValueForURL(String encode)
+	{
+		String encodeUrl = null;
+		try {
+			encodeUrl = URLEncoder.encode(encode, "UTF-8").toString();
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return encodeUrl;
 	}
 
 	public static void onSyncRequest() {
@@ -753,22 +773,38 @@ class SaveImageTask extends AsyncTask<String, Integer, String> {
 
 		publishProgress(5);
 		int size = ProductKing.getInstance().getSalesSlipsParts().size();
+		addNotUploadedSlipsToSharedPref((ArrayList<SalesSlip>) ProductKing.getInstance().getSalesSlipsParts());
 
 		int count = 0;
 		for (int i = 0; i < size; i++) {
 			SalesSlip slip = ProductKing.getInstance().getSalesSlipsParts().get(i);
-			Utils.saveBitmap(slip.getBitmapFile(), slip.getFilename());
-
-			count += 1;
-			int currentProgress = (int) Math.round(count * 100.0 / size);
-			publishProgress(currentProgress);
+			System.out.println("Check if saved: " + slip.getFilename());
+			if(!Utils.imageExists(slip.getFilename()))
+				Utils.saveBitmap(slip.getBitmapFile(), slip.getFilename());
+		}
+		
+		for (int i = 0; i < size; i++) {
+			SalesSlip slip = ProductKing.getInstance().getSalesSlipsParts().get(i);
+//			Utils.saveBitmap(slip.getBitmapFile(), slip.getFilename());
 			if (!slip.getIsuploaded()) {
 				String uploadResponse = request.startUpdateSalesSlipToServer(slip);
 				if (uploadResponse.contains("SUCCESS")) {
 					ProductKing.getInstance().getSalesSlipsParts().get(i).setIsuploaded(true);
 				}
+				addNotUploadedSlipsToSharedPref((ArrayList<SalesSlip>) ProductKing.getInstance().getSalesSlipsParts());
 			}
 		}
+	}
+	
+	private void addNotUploadedSlipsToSharedPref(ArrayList<SalesSlip> slipItems)
+	{
+		ArrayList<SalesSlip> tempSlipItems = new ArrayList<SalesSlip>();
+		for(SalesSlip slip : slipItems)
+		{
+			if(!slip.getIsuploaded())
+				tempSlipItems.add(slip);
+		}
+		editor.setSalesSlips(tempSlipItems);
 	}
 	
 	private void saveMultipleOffline() {

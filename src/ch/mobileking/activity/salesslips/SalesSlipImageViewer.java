@@ -8,9 +8,12 @@ import ch.mobileking.R.drawable;
 import ch.mobileking.R.id;
 import ch.mobileking.utils.Utils;
 import ch.mobileking.utils.classes.SalesSlip;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -18,12 +21,15 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageSwitcher;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.ViewSwitcher.ViewFactory;
 
-public class SalesSlipImageViewer extends Activity implements ViewFactory {
+public class SalesSlipImageViewer extends ActionBarActivity implements ViewFactory {
 
 	private ImageSwitcher imageSwitcher1;
+	private TextView salesslip_image_text;
 
+	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -40,9 +46,19 @@ public class SalesSlipImageViewer extends Activity implements ViewFactory {
 			imageList.add(Uri.fromFile(new File(Utils.getPath(null), filename+"_part"+ i +".png")));
 
 		}
-//		imageList.add(Uri.fromFile(new File(Utils.getPath(null), filename+"_part1"+".png")));
-//		imageList.add(Uri.fromFile(new File(Utils.getPath(null), filename+"_part2"+".png")));
 
+		
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) 
+		{
+			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		}
+		else
+		{
+			getActionBar().setHomeButtonEnabled(true);
+			getActionBar().setDisplayHomeAsUpEnabled(true);
+		}
+		
+		salesslip_image_text = (TextView) findViewById(R.id.salesslip_image_text);
 		
 		imageSwitcher1 = (ImageSwitcher) findViewById(R.id.salesslip_image_imageSwitcher);
 		imageSwitcher1.setFactory(this);
@@ -52,6 +68,8 @@ public class SalesSlipImageViewer extends Activity implements ViewFactory {
 		imageSwitcher1.setImageURI(imageList.get(0));
 		
 		final int maxSize = imageList.size()-1;
+		
+		salesslip_image_text.setText("Kassenzettel " + 1 + " von " + (maxSize+1));
 		
 		imageSwitcher1.setOnTouchListener(new OnTouchListener() {
 			private int downX;
@@ -82,6 +100,8 @@ public class SalesSlipImageViewer extends Activity implements ViewFactory {
                         }
 						imageSwitcher1.setImageURI(imageList.get(curIndex));
 					}
+					salesslip_image_text.setText("Kassenzettel " + (curIndex+1) + " von " + (maxSize+1));
+
 					return true;
 				}
 				return false;

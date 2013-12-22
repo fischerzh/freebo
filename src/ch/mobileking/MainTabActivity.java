@@ -62,7 +62,7 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
 		    Thread.setDefaultUncaughtExceptionHandler(new CustomExceptionHandler(editor.getUsername()));
 		}
 		
-		Utils.addLogMsg(this.getLocalClassName());
+		Utils.addLogMsg(getLocalClassName());
 		
 	    String intentResponse = getIntent().getStringExtra("gcmnotification");
 	    String gcmUUID = getIntent().getStringExtra("messageId");
@@ -147,7 +147,7 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
     	editor.setUsername("");
     	finish();
 	}
-	
+
 	private void createAlert(String message, String title, int iconId) {
 		// Build the dialog
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
@@ -210,7 +210,8 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
         	
         	Utils.addLogMsg("Barcode scanned: " +barcode);
         	
-//			Toast.makeText(this, "Bitte warten, wir aktualisieren....", Toast.LENGTH_LONG).show();
+        	
+
 			this.listener.startUpdate();
 			updateUserInfo(true, true, barcode);
 		}

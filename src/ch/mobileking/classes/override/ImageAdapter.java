@@ -26,6 +26,7 @@ import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -141,7 +142,7 @@ public class ImageAdapter extends BaseAdapter{
 		**/
 		else if(this.layoutId == R.layout.activity_salesslips_item)
 		{
-			SalesSlip salesslip = ((SalesSlip) items.get(position));
+			final SalesSlip salesslip = ((SalesSlip) items.get(position));
 			TextView salesslip_item_location = (TextView) gridView.findViewById(R.id.salesslip_item_location);
 			if(salesslip.getSalespoint()!=null && salesslip.getSalespoint()!="")
 				salesslip_item_location.setText(salesslip.getSalespoint());
@@ -175,15 +176,16 @@ public class ImageAdapter extends BaseAdapter{
 			if(salesslip.getIsuploaded())
 			{
 				salesslip_item_icon.setVisibility(View.VISIBLE);
-				salesslip_progress.setVisibility(View.INVISIBLE);
+//				salesslip_progress.setVisibility(View.INVISIBLE);
 			}
 			else
 			{
 				
 				salesslip_item_icon.setImageResource(R.drawable.ic_digital_receipt_uploadfail);
-				salesslip_item_icon.setVisibility(View.INVISIBLE);
-				salesslip_progress.setVisibility(View.VISIBLE);
+				salesslip_item_icon.setVisibility(View.VISIBLE);
+//				salesslip_progress.setVisibility(View.VISIBLE);
 			}
+			
 
 		}
 		/** 

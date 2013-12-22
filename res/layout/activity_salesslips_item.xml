@@ -2,6 +2,7 @@
     android:id="@+id/salesslip_item_top_linearLayout"
         android:layout_width="fill_parent"
         android:layout_height="75dp"
+            android:minHeight="@dimen/sales_slip_item_size"
         android:layout_marginTop="20dp"
         android:orientation="horizontal" >
 

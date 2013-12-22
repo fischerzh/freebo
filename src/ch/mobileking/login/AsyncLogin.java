@@ -168,15 +168,15 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
 	}
 	
 	private String getAndroidInfo() {
+		String returnURL = "";
 		String osVersion = android.os.Build.VERSION.RELEASE;
 		String manufacturer = android.os.Build.MANUFACTURER;
 		String model = android.os.Build.MODEL;
-		Point size = new Point();
 		@SuppressWarnings("deprecation")
 		String screenSize = getAct().getWindowManager().getDefaultDisplay().getWidth() +"x" + getAct().getWindowManager().getDefaultDisplay().getHeight();
 		String regId = Utils.getRegistrationId(getAct());
-		
-		return "?regId="+regId+"&deviceType='"+manufacturer+":"+model+"'&deviceOs="+osVersion+"&deviceScreen='"+screenSize+"'";
+		returnURL = "?regId="+regId+"&deviceType="+Utils.getEncodedValueForURL(manufacturer+":"+model)+"&deviceOs="+Utils.getEncodedValueForURL(osVersion)+"&deviceScreen="+Utils.getEncodedValueForURL(screenSize);
+		return returnURL;
 	}
 
 	@Override
@@ -201,7 +201,7 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
 	
 	private void parseJSON()
 	{
-		System.out.println("Json Stream reading..");
+		System.out.println("AsyncLogin.parseJSON: " +getJsonResult());
 		Gson gson = new Gson();
 //		JsonReader reader = new JsonReader(new BufferedReader(new InputStreamReader(getJSONDataFromFile(), "UTF-8")));
 		ProductKing prodKing = null;
@@ -227,6 +227,9 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
         	editor.setIsFirstRun(!prodKing.getIsactiveapp());
         	editor.setEmail(prodKing.getEmail());
         	editor.setAvatarId(prodKing.getAvatarId());
+        	editor.setAnonymous(prodKing.getIsanonymous());
+        	editor.setNotifications(prodKing.getIsnotification());
+        	
 			ProductKing.setIsActive(prodKing.getIsactiveapp());
 			ProductKing.setStaticProducts(prodKing.getProducts());
 			ProductKing.setRecommenderProducts(prodKing.getRecommendations());

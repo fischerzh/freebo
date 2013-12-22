@@ -9,15 +9,17 @@ import com.viewpagerindicator.PageIndicator;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.os.Build;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public abstract class BaseSampleActivity extends FragmentActivity {
+public abstract class BaseSampleActivity extends ActionBarActivity {
     private static final Random RANDOM = new Random();
 
     IntroFragmentAdapter mAdapter;

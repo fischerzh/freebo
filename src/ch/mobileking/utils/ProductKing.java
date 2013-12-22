@@ -33,6 +33,12 @@ public class ProductKing implements Serializable{
 	@SerializedName("isactiveapp")
 	private Boolean isactiveapp;
 	
+	@SerializedName("isanonymous")
+	private Boolean isanonymous;
+	
+	@SerializedName("isnotification")
+	private Boolean isnotification;
+	
 	@SerializedName("avatarid")
 	private Integer avatarId;
 	
@@ -274,6 +280,34 @@ public class ProductKing implements Serializable{
 		this.isactiveapp = isactiveapp;
 	}
 	
+	/**
+	 * @return the isanonymous
+	 */
+	public Boolean getIsanonymous() {
+		return isanonymous;
+	}
+
+	/**
+	 * @param isanonymous the isanonymous to set
+	 */
+	public void setIsanonymous(Boolean isanonymous) {
+		this.isanonymous = isanonymous;
+	}
+
+	/**
+	 * @return the isnotification
+	 */
+	public Boolean getIsnotification() {
+		return isnotification;
+	}
+
+	/**
+	 * @param isnotification the isnotification to set
+	 */
+	public void setIsnotification(Boolean isnotification) {
+		this.isnotification = isnotification;
+	}
+
 	/**
 	 * @return the avatarId
 	 */
