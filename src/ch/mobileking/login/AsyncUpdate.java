@@ -94,7 +94,7 @@ public class AsyncUpdate extends AsyncTask<String, String, String>{
 		if(response.contains("FAILED"))
 			allUpdated = false;
 		if(allUpdated)
-			return responseMessage +"\n\n"+"Schade, Du sammelst jetzt keine Punkte mehr!";
+			return responseMessage +"\n"+"Schade, Du sammelst jetzt keine Punkte mehr!";
 		else
 			return "Fehler beim aktualisieren!\n" + responseMessage;
 	}
@@ -103,6 +103,7 @@ public class AsyncUpdate extends AsyncTask<String, String, String>{
 	{
 		HttpClient httpClient = new DefaultHttpClient();
 		HttpGet httpGet;
+		
 		String response = "";
 		String jsonResult = "";
 		if(ean.isEmpty() || ean.contentEquals(""))

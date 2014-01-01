@@ -215,15 +215,16 @@ public class ImageAdapter extends BaseAdapter{
 				{
 					leaderboard_item_user.setText("Anonym");
 					leaderboard_item_user.setTextColor(mContext.getResources().getColor(android.R.color.darker_gray));
-					leaderboard_item_user.setTypeface(null, Typeface.ITALIC);
 
 				}
 				else
 				{
 					leaderboard_item_user.setTextColor(mContext.getResources().getColor(android.R.color.black));
-					leaderboard_item_user.setTypeface(null, Typeface.BOLD);
 
 				}
+				leaderboard_item_user.setTypeface(null, Typeface.BOLD);
+				leaderboard_item_rank_txt.setTypeface(null, Typeface.BOLD);
+				leaderboard_item_pts_txt.setTypeface(null, Typeface.BOLD);
 //				leaderboard_item_user.setTextColor(mContext.getResources().getColor(R.color.red_light));
 
 			}

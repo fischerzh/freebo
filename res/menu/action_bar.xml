@@ -8,7 +8,7 @@
         yourapp:showAsAction="always"/>
     <item
         android:id="@+id/action_edit"
-        android:icon="@drawable/ic_pen"
+        android:icon="@android:drawable/ic_menu_edit"
         android:orderInCategory="50"
         android:title="Loyalitätsprogramm verlassen"
         yourapp:showAsAction="always"/>
