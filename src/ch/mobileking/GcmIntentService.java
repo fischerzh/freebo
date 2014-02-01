@@ -74,14 +74,15 @@ public class GcmIntentService extends IntentService {
             // If it's a regular GCM message, do some work.
             } else if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(messageType)) {
                 // This loop represents the service doing some work.
-            	if(extras.containsKey("MESSAGE"))
-                	sendNotification("Neue Message: " +extras.getString("MESSAGE"));
-            	if(extras.containsKey("STATUS"))
-                	sendNotification("Neuer Status: " +extras.getString("STATUS"));
-            	if(extras.containsKey("BADGE"))
-                	sendNotification("Neuer Badge: " +extras.getString("BADGE"));
-            	if(extras.containsKey("RANG"))
-                	sendNotification("Neuer Rang: " +extras.getString("RANG"));
+//            	if(extras.containsKey("MESSAGE"))
+//                	sendNotification("Neue Message: " +extras.getString("MESSAGE"));
+//            	if(extras.containsKey("STATUS"))
+//                	sendNotification("Neuer Status: " +extras.getString("STATUS"));
+//            	if(extras.containsKey("BADGE"))
+//                	sendNotification("Neuer Badge: " +extras.getString("BADGE"));
+//            	if(extras.containsKey("RANG"))
+//                	sendNotification("Neuer Rang: " +extras.getString("RANG"));
+            	sendNotification(extras.getString("MESSAGE"));
 
                 Log.i(TAG, "Received: " + extras.toString());
             }

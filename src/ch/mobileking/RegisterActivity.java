@@ -65,7 +65,7 @@ public class RegisterActivity extends ActionBarActivity implements ITaskComplete
 		
 		pwd2 = (EditText) findViewById(R.id.register_txt_pwd2);
 		
-		mail = (EditText) findViewById(R.id.register_mail_txt);
+//		mail = (EditText) findViewById(R.id.register_mail_txt);
 		
 		register_username_txt = (EditText) findViewById(R.id.register_username_txt);
 		
@@ -76,12 +76,12 @@ public class RegisterActivity extends ActionBarActivity implements ITaskComplete
 			
 			@Override
 			public void onClick(View v) {
-				if(!isValidEmail(mail.getText().toString()))
-				{	
-					System.out.println("Mail " + mail.getText().toString());
-					mail.setError("Bitte korrekte E-Mail Adresse angeben!");
-					return;
-				}
+//				if(!isValidEmail(mail.getText().toString()))
+//				{	
+//					System.out.println("Mail " + mail.getText().toString());
+//					mail.setError("Bitte korrekte E-Mail Adresse angeben!");
+//					return;
+//				}
 				
 				// TODO Auto-generated method stub
 				if(!pwd1.getText().toString().equalsIgnoreCase(pwd2.getText().toString()) )
@@ -100,7 +100,7 @@ public class RegisterActivity extends ActionBarActivity implements ITaskComplete
 				}
 				register_progressLayout.setVisibility(View.VISIBLE);
 				ServerRequest httpRequester = new ServerRequest(getAct(), RegisterActivity.this);
-				httpRequester.startRegisterUser(register_username_txt.getText().toString(), pwd1.getText().toString(), mail.getText().toString());
+				httpRequester.startRegisterUser(register_username_txt.getText().toString(), pwd1.getText().toString());
 			}
 		});
 	}

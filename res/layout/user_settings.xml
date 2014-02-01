@@ -104,6 +104,43 @@
         android:layout_marginTop="10dp" >
 
         <LinearLayout
+            android:id="@+id/LinearLayout01"
+            android:layout_width="228dp"
+            android:layout_height="@dimen/user_setting_item"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="0.25"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/TextView06"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="TOTAL PUNKTE"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <TextView
+                android:id="@+id/user_settings_pts_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:id="@+id/View06"
+        android:layout_width="fill_parent"
+        android:layout_height="1dip"
+        android:layout_marginRight="5dp"
+        android:background="@color/common_action_bar_splitter" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp" >
+
+        <LinearLayout
             android:id="@+id/user_settings_email"
             android:layout_width="228dp"
             android:layout_height="@dimen/user_setting_item"
@@ -112,18 +149,18 @@
             android:orientation="vertical" >
 
             <TextView
-                android:id="@+id/TextView05"
+                android:id="@+id/user_settings_username_txt_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:text="E-MAIL"
+                android:text="USERNAME"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
-                android:id="@+id/TextView06"
+                android:id="@+id/user_settings_username_txt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Ändere deine E-Mail Adresse"
+                android:text=""
                 android:textAppearance="?android:attr/textAppearanceSmall" />
         </LinearLayout>
     </LinearLayout>
@@ -160,7 +197,7 @@
                 android:id="@+id/TextView07"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Ändere dein Passwort\n(Erfordert Log-Out!)"
+                android:text="Ändere dein Passwort"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
         </LinearLayout>
     </LinearLayout>

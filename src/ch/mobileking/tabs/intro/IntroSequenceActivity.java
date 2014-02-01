@@ -38,17 +38,18 @@ public class IntroSequenceActivity extends BaseSampleActivity {
         mPager.setAdapter(mAdapter);
         
         mIndicator = (CirclePageIndicator)findViewById(R.id.indicator);
-        mIndicator.setStrokeColor(getResources().getColor(R.color.blue_light));
+        mIndicator.setStrokeColor(getResources().getColor(R.color.blue_dark));
         final float density = getResources().getDisplayMetrics().density;
-        mIndicator.setRadius(10 * density);
+        mIndicator.setRadius(5 * density);
 //        mIndicator.setExtraSpacing(5.0f);
-        mIndicator.setExtraSpacing(5 * density);
+        mIndicator.setFillColor(getResources().getColor(R.color.blue_dark));
+        mIndicator.setExtraSpacing(2 * density);
         mIndicator.setStrokeWidth(2 * density);
 
         mIndicator.setViewPager(mPager);
         
         intro_button_finish = (Button) findViewById(R.id.loyalty_card_next_btn);
-		intro_button_finish.setVisibility(View.GONE);
+		intro_button_finish.setVisibility(View.INVISIBLE);
 		
 		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) 
 		{

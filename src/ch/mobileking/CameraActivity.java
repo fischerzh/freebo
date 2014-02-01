@@ -119,7 +119,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
 				d.setHours(d.getHours()+1);
 				for (int i = 0; i < imageList.size(); i++) {
 					scanDateFile = ""+now.year
-							+ (now.month+1) + String.format("%02d", now.monthDay) + now.hour + now.minute
+							+ String.format("%02d", now.month+1) + String.format("%02d", now.monthDay) + String.format("%02d", now.hour) + String.format("%02d", now.minute)
 							+ String.format("%02d", now.second);
 					fileName = "scan_" + scanDateFile + "_part" + i;
 					simpleFileName = "scan_"+scanDateFile;

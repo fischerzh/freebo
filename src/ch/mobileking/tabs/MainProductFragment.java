@@ -204,6 +204,11 @@ public class MainProductFragment extends Fragment implements ITaskComplete {
 			
 			reloadUserInfo(message);
 		}
+		else
+		{
+			if(message!="")
+				createAlert(message, "Aktualisierung", R.drawable.ic_empfehlungen);
+		}
 
 	   progressLayout.setVisibility(View.INVISIBLE);
 
@@ -228,7 +233,6 @@ public class MainProductFragment extends Fragment implements ITaskComplete {
     	
     	if(isAdded())
     	{
-
 //    		setProdLayoutResourceId(R.layout.product_item);
     		System.out.println("Fragment is ready... refresh Adapter!");
         	adapter = new ProductBaseAdapter(getActivity() ,getProdLayoutResourceId(), (ArrayList<Products>) ProductKing.getStaticProducts()); 
@@ -282,7 +286,12 @@ public class MainProductFragment extends Fragment implements ITaskComplete {
 	        case R.id.action_scan:
 	        	startBarcodeScanner();
 	            return true;
-
+	        case R.id.action_sync:
+	        	System.out.println("Reload user info");
+	    		progressLayout.setVisibility(View.VISIBLE);
+	        	reloadUserInfo("");
+	        	Utils.onSyncRequest();
+	        	return true;
             }
             return super.onOptionsItemSelected(item);
     }

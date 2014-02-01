@@ -10,6 +10,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.HttpConnectionParams;
 
 import android.app.Activity;
 import android.os.AsyncTask;
@@ -113,13 +114,15 @@ public class AsyncUpdate extends AsyncTask<String, String, String>{
 		if(optIn)
 		{
 			httpGet = new HttpGet(editor.getUpdateURL()+"?ean="+ean+"&optin=true"); //"username=test&productid=3&optin="true""
-			response = "OPT-IN!";
 		}
 		else
 		{
 			httpGet = new HttpGet(editor.getUpdateURL()+"?ean="+ean+"&optout=true"); //"username=test&productid=3&optin="true""
-			response = "OPT-OUT!";
 		}
+		
+		httpClient.getParams().setParameter(HttpConnectionParams.CONNECTION_TIMEOUT, 25000);
+		httpClient.getParams().setParameter(HttpConnectionParams.SO_TIMEOUT, 25000);
+		
 		httpGet.addHeader(BasicScheme.authenticate(new UsernamePasswordCredentials(editor.getUsername(), editor.getPwd()),"UTF-8", false));
 
 		HttpResponse httpResponse = null;
@@ -187,8 +190,8 @@ public class AsyncUpdate extends AsyncTask<String, String, String>{
 		super.onPostExecute(result);
 		if(result.contains("FAILED"))
 		{
-			Toast toast = Toast.makeText(getAct(), result, Toast.LENGTH_LONG);
-			toast.show();
+//			Toast toast = Toast.makeText(getAct(), result, Toast.LENGTH_LONG);
+//			toast.show();
 			listener.onUpdateCompleted(false, result);
 		}
 		else

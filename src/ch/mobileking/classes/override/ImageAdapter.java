@@ -62,6 +62,8 @@ public class ImageAdapter extends BaseAdapter{
 	
 	private SharedPrefEditor editor;
 	
+	private static String username = "";
+	
 	public ImageAdapter(Context c, ArrayList<Object> items, int layoutId)
 	{
 		System.out.println("Got ArrayList of items: " + items);
@@ -206,7 +208,10 @@ public class ImageAdapter extends BaseAdapter{
 			
 			ImageView storehero_item_crown = (ImageView) gridView.findViewById(R.id.leaderboard_item_user_img);
 			
-			if (item.getUsername().toLowerCase().contentEquals(editor.getUsername().toLowerCase()))
+			if(username.isEmpty() || username==null)
+				username = editor.getUsername().toLowerCase();
+			
+			if (item.getUsername().toLowerCase().contentEquals(username))
 			{
 				
 				storehero_item_crown.setImageResource(Utils.resourceAvatarId[editor.getAvatarId()]);
@@ -214,23 +219,18 @@ public class ImageAdapter extends BaseAdapter{
 				if(editor.getAnonymous())
 				{
 					leaderboard_item_user.setText("Anonym");
-					leaderboard_item_user.setTextColor(mContext.getResources().getColor(android.R.color.darker_gray));
+//					leaderboard_item_user.setTextColor(mContext.getResources().getColor(android.R.color.darker_gray));
 
 				}
-				else
-				{
-					leaderboard_item_user.setTextColor(mContext.getResources().getColor(android.R.color.black));
 
-				}
+				leaderboard_item_user.setTextColor(mContext.getResources().getColor(android.R.color.black));
 				leaderboard_item_user.setTypeface(null, Typeface.BOLD);
-				leaderboard_item_rank_txt.setTypeface(null, Typeface.BOLD);
-				leaderboard_item_pts_txt.setTypeface(null, Typeface.BOLD);
 //				leaderboard_item_user.setTextColor(mContext.getResources().getColor(R.color.red_light));
 
 			}
 			else
 			{
-				leaderboard_item_user.setTextColor(mContext.getResources().getColor(android.R.color.black));
+				leaderboard_item_user.setTextColor(mContext.getResources().getColor(android.R.color.darker_gray));
 				leaderboard_item_user.setTypeface(null, Typeface.NORMAL);
 				storehero_item_crown.setImageResource(Utils.resourceAvatarId[item.getAvatarId()]);
 			}

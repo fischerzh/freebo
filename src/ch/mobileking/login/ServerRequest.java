@@ -100,15 +100,15 @@ public class ServerRequest {
 		
 	}
 	
-	public void startRegisterUser(String username, String pwd, String mail)
+	public void startRegisterUser(String username, String pwd)
 	{
 		if(Utils.isNetworkAvailable(getContext()))
 		{
 			System.out.println("Start registration to Backend...");
-			setServerURL(editor.getRegisterURL()+"?username="+username+"&password="+pwd+"&email="+mail+"&enabled=true"+"&isNotificationEnabled=true&isAnonymous=false"+"&createFromApp=true");
+			setServerURL(editor.getRegisterURL()+"?username="+username+"&password="+pwd+"&enabled=true"+"&isNotificationEnabled=true&isAnonymous=false"+"&createFromApp=true");
 			setUpHttpPost(getServerURL(),null, null, false);
 			System.out.println("registration URL: " +getServerURL());
-			new RegisterUser(username, pwd, mail).execute();
+			new RegisterUser(username, pwd).execute();
 		}
 	}
 	
@@ -125,7 +125,7 @@ public class ServerRequest {
 		
 	}
 	
-	public void startUpdateUserSettings( String newPwd, String newMail, Boolean notificationEnabled, Boolean anonymousUser, Integer avatarId)
+	public void startUpdateUserSettings( String newPwd, Boolean notificationEnabled, Boolean anonymousUser, Integer avatarId)
 	{
 		
 		if(Utils.isNetworkAvailable(getContext()))
@@ -135,10 +135,10 @@ public class ServerRequest {
 			{
 				updateURL+="&password="+newPwd;
 			}
-			if(newMail!="")
-			{
-					updateURL+="&email="+newMail;
-			}
+//			if(newMail!="")
+//			{
+//					updateURL+="&email="+newMail;
+//			}
 			if(notificationEnabled!=null)
 			{
 					updateURL+="&isNotificationEnabled="+notificationEnabled;
@@ -157,7 +157,7 @@ public class ServerRequest {
 			System.out.println("updateUserSettings: " +getServerURL());
 			setUpHttpPost(getServerURL(), editor.getUsername(), editor.getPwd(), true);
 	
-			new UpdateUserSettings(newPwd, newMail, notificationEnabled, anonymousUser, avatarId).execute();
+			new UpdateUserSettings(newPwd, notificationEnabled, anonymousUser, avatarId).execute();
 		}
 		else
 		{
@@ -383,11 +383,11 @@ public class ServerRequest {
 		private Boolean enableNoti, enableAnon;
 		private Integer avatarId;
 		
-		public UpdateUserSettings(String pwd, String mail, Boolean noti, Boolean anon, Integer avatarid)
+		public UpdateUserSettings(String pwd, Boolean noti, Boolean anon, Integer avatarid)
 		{
 //			this.username = username;
 			this.pwd = pwd;
-			this.mail = mail;
+//			this.mail = mail;
 			this.enableNoti = noti;
 			this.enableAnon = anon;
 			this.avatarId = avatarid;
@@ -410,7 +410,7 @@ public class ServerRequest {
 			{
 				System.out.println("SUCCESS UpdateUserSettings: " + response.getException());
 				
-				editor.setEmail(mail);
+//				editor.setEmail(mail);
 				editor.setNotifications(enableNoti);
 				editor.setAnonymous(enableAnon);
 				editor.setPwd(pwd);
@@ -457,20 +457,15 @@ public class ServerRequest {
 	
 	private class RegisterUser extends AsyncTask<String, String, String>
 	{
-		private String username, pw, email;
+		private String username, pw;
 		
-		public RegisterUser(String username, String pw, String email)
+		public RegisterUser(String username, String pw)
 		{
 			this.username = username;
 			this.pw = pw;
-			this.email = email;
 		}
 		@Override
 		protected String doInBackground(String... params) {
-//			username = params[0];
-//			pw = params[1];
-//			email = params[2];
-//			System.out.println("register, params: " +params[0] + params[1] + params[2]);
 			String response = getHttpResponse(null, httpPost);
 			System.out.println("Response from HTTP call: " +response);
 			return response;
@@ -484,7 +479,7 @@ public class ServerRequest {
 				System.out.println("#RegisterUser SUCCESS: onPostExecute, got Result: " +result);
 				editor.setUsername(this.username);
 				editor.setPwd(this.pw);
-				editor.setEmail(this.email);
+//				editor.setEmail(this.email);
 				editor.setAvatarId(0);
 				this.pw="";
 				this.username="";
@@ -495,7 +490,7 @@ public class ServerRequest {
 				System.out.println("#RegisterUser FAILED: "+result);
 				this.pw="";
 				this.username="";
-				this.email="";
+//				this.email="";
 				listener.onUpdateCompleted(false, result);
 			}
 		}

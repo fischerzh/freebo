@@ -92,9 +92,15 @@ public class Utils {
 	public static final String JSON_FILE_NAME = "productKing.json";
 
 	public static int[] resourceAvatarId = { R.drawable.no_image_icon,
-			R.drawable.ic_avatar_01, R.drawable.ic_avatar_03,
-			R.drawable.ic_avatar_05, R.drawable.ic_avatar_06_round,
-			R.drawable.ic_avatar_07, R.drawable.ic_avatar_08 };
+			R.drawable.ic_avatar_01, R.drawable.ic_avatar_02, R.drawable.ic_avatar_03, R.drawable.ic_avatar_04,
+			R.drawable.ic_avatar_05, R.drawable.ic_avatar_06, R.drawable.ic_avatar_07, R.drawable.ic_avatar_08,
+			R.drawable.ic_avatar_09, R.drawable.ic_avatar_10, R.drawable.ic_avatar_11, R.drawable.ic_avatar_12,
+			R.drawable.ic_avatar_13, R.drawable.ic_avatar_14, R.drawable.ic_avatar_15, R.drawable.ic_avatar_16,
+			R.drawable.ic_avatar_17, R.drawable.ic_avatar_18, R.drawable.ic_avatar_19, R.drawable.ic_avatar_20,
+			R.drawable.ic_avatar_21, R.drawable.ic_avatar_22, R.drawable.ic_avatar_23, R.drawable.ic_avatar_24,
+			R.drawable.ic_avatar_25, R.drawable.ic_avatar_26, R.drawable.ic_avatar_27, R.drawable.ic_avatar_28,
+			R.drawable.ic_avatar_29, R.drawable.ic_avatar_30, R.drawable.ic_avatar_31, R.drawable.ic_avatar_32,
+			 };
 
 	private static String SENDER_ID = "73370755379";
 

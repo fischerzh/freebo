@@ -114,13 +114,14 @@ public class BarCodeScanner extends Activity implements ScanditSDKListener{
 
 	@Override
 	public void didManualSearch(String entry) {
-    	Toast.makeText(this, "User entered: " + entry, Toast.LENGTH_LONG).show();
+//    	Toast.makeText(this, "User entered: " + entry, Toast.LENGTH_LONG).show();
     	mBarcodePicker.stopScanning();
     	
-        Intent intent = new Intent(this, ProductOverview.class);
+        Intent intent = new Intent(this, MainTabActivity.class);
         intent.putExtra("barcode", entry.trim());
-        setResult(1, intent);
-        startActivityForResult(intent, 1);
+        setResult(BARCODE_RESPONSE, intent);
+
+//        startActivityForResult(intent, 1);
         Utils.addLogMsg(this.getLocalClassName() + ", Barcode (manual): " +entry.trim());
         
         finish();

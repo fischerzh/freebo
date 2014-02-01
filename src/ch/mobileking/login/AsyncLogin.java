@@ -29,6 +29,7 @@ import ch.mobileking.utils.ITaskComplete;
 import ch.mobileking.utils.ProductKing;
 import ch.mobileking.utils.SharedPrefEditor;
 import ch.mobileking.utils.Utils;
+import ch.mobileking.utils.classes.Products;
 
 import android.app.Activity;
 import android.content.Context;
@@ -91,8 +92,8 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
 			System.out.println("New Login URL: " + loginUrl);
 		}
 
-		httpClient.getParams().setParameter(HttpConnectionParams.CONNECTION_TIMEOUT, 20000);
-		httpClient.getParams().setParameter(HttpConnectionParams.SO_TIMEOUT, 20000);
+		httpClient.getParams().setParameter(HttpConnectionParams.CONNECTION_TIMEOUT, 25000);
+		httpClient.getParams().setParameter(HttpConnectionParams.SO_TIMEOUT, 25000);
 
 		
 		HttpGet httpGet = new HttpGet(loginUrl);
@@ -229,6 +230,16 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
         	editor.setAvatarId(prodKing.getAvatarId());
         	editor.setAnonymous(prodKing.getIsanonymous());
         	editor.setNotifications(prodKing.getIsnotification());
+        	
+        	if(prodKing.getProducts()!=null)
+        	{
+        		int totalPoints = 0;
+        		for(Products prod : prodKing.getProducts())
+        		{
+        			totalPoints+=prod.getPoints();
+        		}
+        		editor.setTotalPoints(totalPoints);
+        	}
         	
 			ProductKing.setIsActive(prodKing.getIsactiveapp());
 			ProductKing.setStaticProducts(prodKing.getProducts());

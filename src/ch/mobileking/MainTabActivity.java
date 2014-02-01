@@ -78,7 +78,7 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
 	    }
 		
         // Initilization
-        viewPager = (ViewPager) findViewById(R.id.pager);
+        viewPager = (ViewPager) findViewById(R.id.pager_main);
         actionBar = getSupportActionBar();
         mAdapter = new TabsPagerAdapter(getSupportFragmentManager());
  
@@ -125,15 +125,17 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
 	    // Handle item selection
 	    switch (item.getItemId()) {
 	        case R.id.action_logout:
+	        	Utils.addLogMsg(this.getLocalClassName()+ " onOptionsItemSelected: action_logout");
 	        	startMainActivity();
 	            return true;
 	        case R.id.action_user_settings:
+	        	Utils.addLogMsg(this.getLocalClassName()+ " onOptionsItemSelected: action_user_settings");
 	        	Intent i = new Intent(this, UserSettingsActivity.class);
 	        	startActivityForResult(i, 1);
 	        	return true;
-	        case R.id.action_sync:
-	        	Utils.onSyncRequest();
-	        	return true;
+//	        case R.id.action_sync:
+//	        	Utils.onSyncRequest();
+//	        	return true;
 	        default:
 	            return super.onOptionsItemSelected(item);
 	    }
@@ -200,7 +202,6 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         // code to handle data from CAMERA_REQUEST
-		Utils.addLogMsg(this.getLocalClassName()+" onActivityResult: " +resultCode + data + requestCode);
 
     	System.out.println("MainTabActivity, Barcode request: " + resultCode);
 		if(resultCode == BARCODE_REQUEST)
@@ -208,10 +209,8 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
         	System.out.println("MainTabActivity, Barcode" + data.getStringExtra("barcode"));
         	String barcode = data.getStringExtra("barcode");
         	
-        	Utils.addLogMsg("Barcode scanned: " +barcode);
+        	Utils.addLogMsg(this.getLocalClassName()+ " BARCODE_REQUEST: " +barcode);
         	
-        	
-
 			this.listener.startUpdate();
 			updateUserInfo(true, true, barcode);
 		}
@@ -221,6 +220,8 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
         	String fileName = data.getStringExtra("salesslip");
 
         	System.out.println("MainCameraScanFragment, SalesSlips scanned: " +fileName);
+        	
+        	Utils.addLogMsg(this.getLocalClassName()+ " CAMERA_REQUEST: " +fileName);
 
 			if(Utils.isNetworkAvailable(this)){
 	        	this.listener.startUpdate();

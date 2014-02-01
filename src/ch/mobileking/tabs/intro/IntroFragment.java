@@ -29,7 +29,7 @@ public final class IntroFragment extends Fragment {
         return fragment;
     }
 
-    private String mContent = "???";
+    private String mContent = "";
     private int mIconResource = 0;
 
     @Override
@@ -48,7 +48,7 @@ public final class IntroFragment extends Fragment {
         text.setText(mContent);
         text.setTextSize(10 * getResources().getDisplayMetrics().density);
         text.setTextColor(getResources().getColor(R.color.grey_light));
-        text.setPadding(20, 20, 20, 20);
+        text.setPadding(10, 10, 10, 10);
         
         ImageView image = new ImageView(getActivity());
         image.setImageResource(mIconResource);

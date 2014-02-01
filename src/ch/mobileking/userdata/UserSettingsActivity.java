@@ -89,6 +89,10 @@ public class UserSettingsActivity extends ActionBarActivity implements ITaskComp
 
 	private ProgressBar user_setting_progress_bar_top;
 
+	private TextView user_settings_username;
+	private TextView user_settings_pts_text;
+
+
 	// extends PreferenceActivity implements OnSharedPreferenceChangeListener
 	@SuppressLint("NewApi")
 	@Override
@@ -138,8 +142,6 @@ public class UserSettingsActivity extends ActionBarActivity implements ITaskComp
 //			}
 //		});
 		
-
-		
 		user_settings_notification_chkbx = (CheckBox) findViewById(R.id.user_settings_notification_chkbx);
 		user_settings_notification_chkbx.setChecked(editor.getNotifications());
 		user_settings_notification_chkbx.setOnCheckedChangeListener(new OnCheckedChangeListener() {
@@ -163,14 +165,13 @@ public class UserSettingsActivity extends ActionBarActivity implements ITaskComp
 		});
 
 		user_settings_avatar_generator = (LinearLayout) findViewById(R.id.user_settings_avatar_generator);
-		user_settings_avatar_generator
-				.setOnClickListener(new OnClickListener() {
+		user_settings_avatar_generator.setOnClickListener(new OnClickListener() {
 
 					@Override
 					public void onClick(View v) {
 						user_settings_avatar_progress.setVisibility(View.VISIBLE);
 						// TODO Auto-generated method stub
-						int num = rand.nextInt(6)+1;
+						int num = rand.nextInt(31)+1;
 						imageView.setImageResource(Utils.resourceAvatarId[num]);
 						avatarId = num;
 //						Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), resourceAvatarId[num]);
@@ -178,50 +179,58 @@ public class UserSettingsActivity extends ActionBarActivity implements ITaskComp
 						user_settings_avatar_progress.setVisibility(View.INVISIBLE);
 					}
 				});
+		
+		user_settings_pts_text = (TextView) findViewById(R.id.user_settings_pts_text);
+		user_settings_pts_text.setText(""+editor.getTotalPoints()+" Pkte.");
+		
+		user_settings_username = (TextView) findViewById(R.id.user_settings_username_txt);
+		user_settings_username.setText(editor.getUsername());
+		
+		
 
-		user_settings_email = (LinearLayout) findViewById(R.id.user_settings_email);
-		user_settings_email.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				AlertDialog.Builder alert = new AlertDialog.Builder(UserSettingsActivity.this);
-		        LayoutInflater inflater=UserSettingsActivity.this.getLayoutInflater();
-
-		        View layout=inflater.inflate(R.layout.user_settings_entry,null);       
-		        
-		        userEmailInput=(EditText)layout.findViewById(R.id.user_settings_entry_editText);
-	        	userEmailInput.setText(editor.getEmail());
-		        
-		        alert.setPositiveButton("Ok", null);
-		        alert.setNegativeButton("Abbrechen",
-	                    new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        return;
-                    	}
-                	});
-				alert.setTitle("E-Mail Adresse");
-		        alert.setView(layout);
-
-				final AlertDialog dialog = alert.create();
-		        dialog.show();
-		        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-					
-					@Override
-					public void onClick(View v) {
-						// TODO Auto-generated method stub
-						if(!isValidEmail(userEmailInput.getText()))
-		    		    {
-		    		    	userEmailInput.setError("Bitte korrekte E-Mail Adresse angeben!");
-		    		    }
-						else
-						{
-							email = userEmailInput.getText().toString();
-							dialog.dismiss();
-						}
-					}
-				});
-			}
-		});
+//		user_settings_email = (LinearLayout) findViewById(R.id.user_settings_email);
+//		user_settings_email.setOnClickListener(new OnClickListener() {
+//
+//			@Override
+//			public void onClick(View v) {
+//				AlertDialog.Builder alert = new AlertDialog.Builder(UserSettingsActivity.this);
+//		        LayoutInflater inflater=UserSettingsActivity.this.getLayoutInflater();
+//
+//		        View layout=inflater.inflate(R.layout.user_settings_entry,null);       
+//		        
+//		        userEmailInput=(EditText)layout.findViewById(R.id.user_settings_entry_editText);
+//	        	userEmailInput.setText(editor.getEmail());
+//		        
+//		        alert.setPositiveButton("Ok", null);
+//		        alert.setNegativeButton("Abbrechen",
+//	                    new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int whichButton) {
+//                        return;
+//                    	}
+//                	});
+//				alert.setTitle("E-Mail Adresse");
+//		        alert.setView(layout);
+//
+//				final AlertDialog dialog = alert.create();
+//		        dialog.show();
+//		        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+//					
+//					@Override
+//					public void onClick(View v) {
+//						// TODO Auto-generated method stub
+//						if(!isValidEmail(userEmailInput.getText()))
+//		    		    {
+//		    		    	userEmailInput.setError("Bitte korrekte E-Mail Adresse angeben!");
+//		    		    }
+//						else
+//						{
+//							email = userEmailInput.getText().toString();
+//							dialog.dismiss();
+//						}
+//					}
+//				});
+//			}
+//		});
 		
 		user_settings_pwd = (LinearLayout) findViewById(R.id.user_settings_pwd);
 		user_settings_pwd.setOnClickListener(new OnClickListener() {
@@ -283,7 +292,7 @@ public class UserSettingsActivity extends ActionBarActivity implements ITaskComp
 	
 	private void initVariables()
 	{
-		this.email = editor.getEmail();
+//		this.email = editor.getEmail();
 		this.pwd = editor.getPwd();
 		this.isAnonymous = editor.getAnonymous();
 		this.isNotification = editor.getNotifications();
@@ -295,21 +304,20 @@ public class UserSettingsActivity extends ActionBarActivity implements ITaskComp
 		return settingValue != editor;
 	}
 	
-
 	
 	public void onSyncRequest()
 	{
 		System.out.println("UserSettingsActivity.onSyncRequest()");
 		user_setting_progress_bar_top.setVisibility(View.VISIBLE);
-
+		
 		ServerRequest request = new ServerRequest(this, this);
 		/** first sync to Server, then if OK Update SharedPreferences!! */
 		/*
 		 * editor.getUsername(),editor.getPwd() , editor.getEmail(), editor.getNotifications(), editor.getAnonymous()
 		 */
 		Boolean needsUpdate = false;
-		if(isUpdateNeeded(email, editor.getEmail()))
-			needsUpdate = true;
+//		if(isUpdateNeeded(email, editor.getEmail()))
+//			needsUpdate = true;
 		if(isUpdateNeeded(pwd, editor.getPwd()))
 			needsUpdate = true;
 		if(isUpdateNeeded(isNotification.toString(), editor.getNotifications().toString()))
@@ -320,15 +328,15 @@ public class UserSettingsActivity extends ActionBarActivity implements ITaskComp
 			needsUpdate = true;
 		if(needsUpdate)
 		{
-			request.startUpdateUserSettings(pwd, email, isNotification, isAnonymous, avatarId);
+			request.startUpdateUserSettings(pwd, isNotification, isAnonymous, avatarId);
 		}
 		else
 		{
 			user_setting_progress_bar_top.setVisibility(View.INVISIBLE);
+			clearVariables();
 			finish();
 		}
 		
-		clearVariables();
 
 	}
 	
@@ -341,8 +349,8 @@ public class UserSettingsActivity extends ActionBarActivity implements ITaskComp
 	
 	private void clearVariables()
 	{
-		this.pwd = null;
-		this.email = null;
+		this.pwd = "";
+		this.email = "";
 		this.isAnonymous = null;
 		this.isNotification = null;
 	}
@@ -467,11 +475,15 @@ public class UserSettingsActivity extends ActionBarActivity implements ITaskComp
 
 		if(updateCompleted)
 		{
-			createAlert("Einstellungen wurden gespeichert!", "Einstellungen", R.drawable.ic_empfehlungen );
+//			createAlert("Einstellungen wurden gespeichert!", "Einstellungen", R.drawable.ic_empfehlungen );
+			Toast.makeText(this, "Deine Einstellungen wurden erfolgreich aktualisiert! ", Toast.LENGTH_LONG).show();
+			clearVariables();
+			finish();
 		}
 		else
 		{
-			createAlert("Fehler beim speichern: " +string, "Fehlgeschlagen!", R.drawable.ic_empfehlungen );
+//			createAlert("Fehler beim speichern: " +string, "Fehlgeschlagen!", R.drawable.ic_empfehlungen );
+			Toast.makeText(this, "Fehler beim speichern: " +string, Toast.LENGTH_LONG).show();
 		}
 	}
 

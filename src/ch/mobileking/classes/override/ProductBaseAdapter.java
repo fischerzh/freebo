@@ -174,34 +174,38 @@ public class ProductBaseAdapter extends BaseAdapter{
 			
 			if(getProdLayoutResourceId()==R.layout.product_item)
 			{
+				holder.getCrown1().setAlpha(255);
 				if(prod.getUserrank() == 1)
 				{
 					holder.getCrown1().setImageResource(R.drawable.ic_krone_gold);
 				}
-				if(prod.getUserrank() == 2)
+				else if(prod.getUserrank() == 2)
 				{
 					holder.getCrown1().setImageResource(R.drawable.ic_krone_silber);
 				}
-				if(prod.getUserrank() == 3)
+				else if(prod.getUserrank() == 3)
 				{
 					holder.getCrown1().setImageResource(R.drawable.ic_krone_bronze);
 				}
-				holder.getCrown1().setAlpha(255);
-			}
+				else
+				{
+					holder.getCrown1().setImageResource(R.drawable.ic_krone_inactive);
+					holder.getCrown1().setAlpha(100);
 
+				}
+			}
 				
 			/** SET THE POSITION TO REFERENCE FROM LATER **/
-				
 //			holder.getCrownLayout().setTag(position);
-		
 		}
 		else
 		{
 			holder.getTxtRank().setText("DEIN RANG #"+prod.getUserrank() + " (+-0)");
+			holder.getTxtRank().setTextColor(cont.getResources().getColor(R.color.grey_light));
 			if(getProdLayoutResourceId()==R.layout.product_item)
 			{
 				holder.getCrown1().setImageResource(R.drawable.ic_krone_inactive);
-				holder.getCrown1().setAlpha(75);
+				holder.getCrown1().setAlpha(100);
 
 			}
 			holder.getTxtRank().setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_nochange, 0);
