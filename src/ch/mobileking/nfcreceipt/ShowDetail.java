@@ -19,6 +19,7 @@ import org.apache.http.message.AbstractHttpMessage;
 import org.apache.http.params.HttpConnectionParams;
 
 import ch.mobileking.R;
+import ch.mobileking.utils.SharedPrefEditor;
 import ch.mobileking.utils.Utils;
 
 import android.app.Activity;
@@ -33,6 +34,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class ShowDetail extends Activity {
+	
+	SharedPrefEditor editor;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +50,7 @@ public class ShowDetail extends Activity {
 		Bundle b = this.getIntent().getExtras();
 //		String jsonstr = b.getString("jsonstr");
 		
-		
+		editor = new SharedPrefEditor(this.getApplicationContext());
 		
 		sendServerRequest();
 
@@ -142,27 +145,17 @@ public class ShowDetail extends Activity {
 	
 	private String getNameFromEAN(String productName)
 	{
-		nameToEan = new HashMap<String, String>();
-
-		nameToEan.put("Coca-Cola Zero", "5449000131836");
-		nameToEan.put("Rivella Rot","7610097111072" );
-		
 		return nameToEan.get(productName);
 	}
 	
-	private String addElementToURL(String element, boolean first)
+	private String addElementToURL(String element, String type)
 	{
-		String responseElement = "";
-		if(!first)
-			responseElement +=",";
-
-		return responseElement += element;
+		return "&"+type+"="+element;
 	}
 	
 	private Vector getElements()
 	{        
 		Vector details = new Vector();
-
 		for (HashMap.Entry<String, String> entry : nameToEan.entrySet()) {
 			String key = entry.getKey();
 		    String [] str = new String[7];
@@ -171,9 +164,11 @@ public class ShowDetail extends Activity {
 	        str[2] = "0.5L";//("Unit");
 	        str[3] = "1.25";//("unitPrice");
 	        str[4] = "5";//("amount");
+			System.out.println("getElements: " + str);
+
 	        details.add(str);
 		}
-		
+
 //		for(int i = 0; i < 3; i++)
 //		{
 //	        String [] str = new String[7];
@@ -195,6 +190,8 @@ public class ShowDetail extends Activity {
 	{
 		
 		nameToEan = new HashMap<String, String>();
+		nameToEan.put("Coca-Cola Zero", "5449000131836");
+		nameToEan.put("Rivella Rot","7610097111072" );
 		
 		HttpClient httpClient = new DefaultHttpClient();
 
@@ -203,11 +200,23 @@ public class ShowDetail extends Activity {
 		
 		//http://localhost:8080/Freebo/controlPanel/createShopping?user=2&retailer=2&product=2&anzahl=2&preis=5.5
 		
-		String updateURL = "http://192.168.0.16:8080/Freebo/controlPanel/createShopping?user=2&salesVerified='Verified'&retailer=3";
+		//localhost:8080/Freebo/controlPanel/createShopping?user=2&product=[5449000131836,7610097111072]&anzahl=[1,3]&preis=[2.5,3.5]&retailer=2
+		
+		/**
+		 * shoppingDate_year:2014, anzahl:[2, 3], salesVerified:Verify, product:[11, 1], 
+		 * rejectMessage:, shoppingDate_minute:22, shoppingDate:Sun Feb 02 21:22:00 CET 2014, 
+		 * selectedScannedReceipt:30, shoppingDate_day:2, preis:[2.5, 3.5], shoppingDate_hour:21, 
+		 * retailerList.name:1, retailerList:[name:1], user:test, shoppingDate_month:2, action:create, controller:controlPanel]
+		 * 
+		 * 
+		 * http://localhost:8080/Freebo/controlPanel/createShopping?user=2&retailer=2&product=5449000131836&product=7610097111072&anzahl=2&anzahl=3&preis=2&preis=3
+		 */
+		
+		String updateURL = "http://192.168.0.16:8080/Freebo/controlPanel/createShopping?user=2&retailer=3";
 //		int size = ((C0401Operation) io).details.size();
-        
+		
 		int size = getElements().size();
-		String name = null, qty = null, price = null, amount;
+		String name = "", qty = "", price = "", amount;
 		boolean first = true;
 		for (int i = 0; i < size; i++) {
 //			String[] str = (String[]) ((C0401Operation) io).details.elementAt(i);
@@ -217,15 +226,17 @@ public class ShowDetail extends Activity {
 			System.out.println("NFC product price: " + str[3]);
 			System.out.println("NFC product amount: " + str[4]);
 			
-			name += addElementToURL(getNameFromEAN(str[0]), first);
-			qty += addElementToURL(str[1], first);
-			price += addElementToURL(str[3], first);
+			name += addElementToURL(getNameFromEAN(str[0]), "product");
+			qty += addElementToURL(str[1], "anzahl");
+			price += addElementToURL(str[3], "preis");
+			
 			first = false;
 
 		}
-		updateURL += "&product=["+name+"]";
-		updateURL += "&anzahl=["+qty+"]";
-		updateURL += "&preis=["+price+"]";
+
+		updateURL += name;
+		updateURL += qty;
+		updateURL += price;
 		
 		System.out.println("updateURL: " + updateURL);
 		
