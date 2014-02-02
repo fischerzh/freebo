@@ -70,7 +70,6 @@ public class ImageAdapter extends BaseAdapter{
 		mContext = c;
 		this.items = new ArrayList<Object>(items);
 		this.layoutId = layoutId;
-		editor = new SharedPrefEditor(c);
 	}
 	
 	@Override
@@ -83,6 +82,8 @@ public class ImageAdapter extends BaseAdapter{
 		imageView = new ImageView(mContext);
 		
 		View gridView;
+		
+		editor = new SharedPrefEditor(mContext);
 		
 		if(convertView == null)
 		{

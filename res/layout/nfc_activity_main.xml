@@ -1,0 +1,77 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".NFCMainActivity" >
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="Carrier ID:" />
+
+    <EditText
+        android:id="@+id/editText1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:text="12345678" >
+
+        <requestFocus />
+    </EditText>
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editText1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:src="@drawable/nfc_logo" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imageView1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="39dp"
+        android:text="Warte auf NFC connection!"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <Button
+        android:id="@+id/loyalty_card_next_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:background="@android:color/black"
+        android:text="Zurück"
+        android:textColor="@android:color/white" />
+
+    <ProgressBar
+        android:id="@+id/progressBar1"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/textView1"
+        android:layout_below="@+id/imageView1"
+        android:layout_marginTop="21dp" 
+        android:visibility="invisible"
+        />
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView2"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="19dp"
+        android:text="Starte Simulation!" />
+
+</RelativeLayout>

@@ -1,6 +1,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
-        <item
+    <item
+        android:id="@+id/action_nfc_view"
+        android:title="NFC"
+        />
+    <item
         android:id="@+id/action_sync"
         android:title="Sync"
         />

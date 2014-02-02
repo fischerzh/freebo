@@ -11,6 +11,7 @@ import ch.mobileking.classes.override.ProductBaseAdapter;
 import ch.mobileking.exception.CustomExceptionHandler;
 import ch.mobileking.login.AsyncLogin;
 import ch.mobileking.login.AsyncUpdate;
+import ch.mobileking.nfcreceipt.NFCMainActivity;
 import ch.mobileking.tabs.intro.BaseSampleActivity;
 import ch.mobileking.tabs.intro.IntroSequenceActivity;
 import ch.mobileking.utils.ITaskComplete;
@@ -292,6 +293,8 @@ public class MainProductFragment extends Fragment implements ITaskComplete {
 	        	reloadUserInfo("");
 	        	Utils.onSyncRequest();
 	        	return true;
+	        case R.id.action_nfc_view:
+	        	startNFCReceiver();
             }
             return super.onOptionsItemSelected(item);
     }
@@ -328,6 +331,12 @@ public class MainProductFragment extends Fragment implements ITaskComplete {
 		Intent intent = new Intent(getActivity(), IntroSequenceActivity.class);
 		startActivity(intent);
 //		getActivity().finish();
+	}
+	
+	private void startNFCReceiver()
+	{
+		Intent intent = new Intent(getActivity(), NFCMainActivity.class);
+		startActivity(intent);
 	}
 	
 	private void startBarcodeScanner()

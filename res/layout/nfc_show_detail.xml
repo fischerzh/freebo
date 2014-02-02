@@ -1,0 +1,46 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context=".ShowDetail" >
+
+    <!-- orgianl -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.15" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="Verifizierte Einkäufe übermittelt!"
+            android:textSize="26px" />
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/inoviceList"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.6" >
+    </ListView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.15"
+        android:gravity="center" >
+
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="10dp"
+            android:text="Next"
+            android:visibility="invisible" />
+    </LinearLayout>
+
+</LinearLayout>

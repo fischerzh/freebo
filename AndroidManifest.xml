@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ch.mobileking"
-    android:versionCode="2"
-    android:versionName="1.2" >
+    android:versionCode="4"
+    android:versionName="2.0" >
 
     <uses-sdk
         android:minSdkVersion="9"
@@ -180,7 +180,16 @@
                         <meta-data android:name="android.support.PARENT_ACTIVITY"
         		android:value=".MainTabActivity" />
         </activity>       
-   
-     </application>
+        <activity
+            android:name="ch.mobileking.nfcreceipt.NFCMainActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/app_name" >
+        </activity>         
+        <activity
+            android:name="ch.mobileking.nfcreceipt.ShowDetail"
+            android:screenOrientation="portrait"
+            android:label="@string/app_name" >
+        </activity>        
+    </application>
 
 </manifest>
