@@ -28,6 +28,8 @@ public class ProductDetailOverview extends ActionBarActivity {
 	private SharedPrefEditor editor;
 	private ImageView product_detail_avatar;
 	
+	ImageAdapter adapter;
+	
 	@SuppressLint("NewApi")
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -88,8 +90,7 @@ public class ProductDetailOverview extends ActionBarActivity {
 //			storeItems.addAll(ProductKing.getInstance().getStaticLeaderboard());
 			leaderBoardItems.addAll(product.getLeaderboard());
 			
-			ImageAdapter adapter = new ImageAdapter(getApplicationContext(), leaderBoardItems, R.layout.activity_leaderboard_item); 
-			
+			adapter = new ImageAdapter(getApplicationContext(), leaderBoardItems, R.layout.activity_leaderboard_item); 
 			storehero_lv.setAdapter(adapter);
 			
 			
@@ -97,6 +98,12 @@ public class ProductDetailOverview extends ActionBarActivity {
 		
 	}
 	
-	
+	@Override
+	protected void onResume() {
+	    super.onResume();
+	    System.out.println("Resume ProductDetailOverview");
+		adapter.notifyDataSetChanged();
+
+	}
 
 }

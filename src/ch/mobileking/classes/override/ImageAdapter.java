@@ -83,8 +83,6 @@ public class ImageAdapter extends BaseAdapter{
 		
 		View gridView;
 		
-		editor = new SharedPrefEditor(mContext);
-		
 		if(convertView == null)
 		{
 			gridView = new View(mContext);
@@ -94,6 +92,9 @@ public class ImageAdapter extends BaseAdapter{
 		{
 			gridView = (View)convertView;
 		}
+		
+		editor = new SharedPrefEditor(mContext);
+		
 		/** 
 		 * Layout items for CROWN DETAIL list view items
 		**/
@@ -201,18 +202,17 @@ public class ImageAdapter extends BaseAdapter{
 			leaderboard_item_pts_txt.setText(item.getPoints()+" Pkt.");
 			
 			TextView leaderboard_item_user = (TextView) gridView.findViewById(R.id.leaderboard_item_user);
-			leaderboard_item_user.setText(""+item.getUsername());
-
+			leaderboard_item_user.setTextColor(mContext.getResources().getColor(android.R.color.black));
+			leaderboard_item_user.setTypeface(null, Typeface.NORMAL);
 
 			TextView leaderboard_item_rank_txt = (TextView) gridView.findViewById(R.id.leaderboard_item_rank_txt);
 			leaderboard_item_rank_txt.setText(""+item.getRank());
 			
 			ImageView storehero_item_crown = (ImageView) gridView.findViewById(R.id.leaderboard_item_user_img);
 			
-			if(username.isEmpty() || username==null)
-				username = editor.getUsername().toLowerCase();
+
 			
-			if (item.getUsername().toLowerCase().contentEquals(username))
+			if (item.getUserid() == editor.getUserId())
 			{
 				
 				storehero_item_crown.setImageResource(Utils.resourceAvatarId[editor.getAvatarId()]);
@@ -223,7 +223,11 @@ public class ImageAdapter extends BaseAdapter{
 //					leaderboard_item_user.setTextColor(mContext.getResources().getColor(android.R.color.darker_gray));
 
 				}
+				else
+				{
+					leaderboard_item_user.setText(""+editor.getUsername());
 
+				}
 				leaderboard_item_user.setTextColor(mContext.getResources().getColor(android.R.color.black));
 				leaderboard_item_user.setTypeface(null, Typeface.BOLD);
 //				leaderboard_item_user.setTextColor(mContext.getResources().getColor(R.color.red_light));
@@ -231,6 +235,7 @@ public class ImageAdapter extends BaseAdapter{
 			}
 			else
 			{
+				leaderboard_item_user.setText(""+item.getUsername());
 				leaderboard_item_user.setTextColor(mContext.getResources().getColor(android.R.color.darker_gray));
 				leaderboard_item_user.setTypeface(null, Typeface.NORMAL);
 				storehero_item_crown.setImageResource(Utils.resourceAvatarId[item.getAvatarId()]);

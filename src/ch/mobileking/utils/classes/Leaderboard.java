@@ -4,11 +4,14 @@ import com.google.gson.annotations.SerializedName;
 
 public class Leaderboard {
 	
+	@SerializedName("userid")
+	private Integer userid;
+	
 	@SerializedName("rank")
 	private int rank;
 
 	@SerializedName("points")
-	private int points;
+	private Float points;
 
 	@SerializedName("username")
 	private String username;
@@ -24,6 +27,20 @@ public class Leaderboard {
 	}
 
 	/**
+	 * @return the userid
+	 */
+	public Integer getUserid() {
+		return userid;
+	}
+
+	/**
+	 * @param userid the userid to set
+	 */
+	public void setUserid(Integer userid) {
+		this.userid = userid;
+	}
+
+	/**
 	 * @param rank the rank to set
 	 */
 	public void setRank(int rank) {
@@ -33,14 +50,14 @@ public class Leaderboard {
 	/**
 	 * @return the points
 	 */
-	public int getPoints() {
+	public Float getPoints() {
 		return points;
 	}
 
 	/**
 	 * @param points the points to set
 	 */
-	public void setPoints(int points) {
+	public void setPoints(Float points) {
 		this.points = points;
 	}
 

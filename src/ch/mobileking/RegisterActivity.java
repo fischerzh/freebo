@@ -98,6 +98,11 @@ public class RegisterActivity extends ActionBarActivity implements ITaskComplete
 					register_username_txt.setError("Bitte Benutzernamen angeben!");
 					return;
 				}
+				if(register_username_txt.getText().toString().contains(" "))
+				{
+					register_username_txt.setError("Bitte keine Leerzeichen verwenden!");
+					return;
+				}
 				register_progressLayout.setVisibility(View.VISIBLE);
 				ServerRequest httpRequester = new ServerRequest(getAct(), RegisterActivity.this);
 				httpRequester.startRegisterUser(register_username_txt.getText().toString(), pwd1.getText().toString());

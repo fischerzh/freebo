@@ -38,6 +38,7 @@ import com.google.gson.Gson;
 import ch.mobileking.R;
 import ch.mobileking.activity.old.ProductOverview;
 import ch.mobileking.activity.old.RecommActivity;
+import ch.mobileking.exception.CustomExceptionHandler;
 import ch.mobileking.utils.ITaskComplete;
 import ch.mobileking.utils.JSONResponse;
 import ch.mobileking.utils.ProductKing;
@@ -76,12 +77,20 @@ public class ServerRequest {
 	public ServerRequest(SharedPrefEditor editor)
 	{
 		this.editor = editor;
+		
+		if(!(Thread.getDefaultUncaughtExceptionHandler() instanceof CustomExceptionHandler)) {
+		    Thread.setDefaultUncaughtExceptionHandler(new CustomExceptionHandler(editor.getUsername()));
+		}
 	}
 	
 	public ServerRequest(Context ctx, SharedPrefEditor editor)
 	{
 		setContext(ctx);
 		this.editor = editor;
+		
+		if(!(Thread.getDefaultUncaughtExceptionHandler() instanceof CustomExceptionHandler)) {
+		    Thread.setDefaultUncaughtExceptionHandler(new CustomExceptionHandler(editor.getUsername()));
+		}
 	}
 	
 	public ServerRequest(Activity act, ITaskComplete listener)
@@ -209,6 +218,8 @@ public class ServerRequest {
 	private void setUpHttpClient()
 	{
 		httpClient = new DefaultHttpClient();
+		httpClient.getParams().setParameter(HttpConnectionParams.CONNECTION_TIMEOUT, 60000);
+		httpClient.getParams().setParameter(HttpConnectionParams.SO_TIMEOUT, 60000);
 	}
 	
 	

@@ -230,6 +230,7 @@ public class AsyncLogin extends AsyncTask<String, String, String>{
         	editor.setAvatarId(prodKing.getAvatarId());
         	editor.setAnonymous(prodKing.getIsanonymous());
         	editor.setNotifications(prodKing.getIsnotification());
+        	editor.setUserId(prodKing.getUserid());
         	
         	if(prodKing.getProducts()!=null)
         	{
