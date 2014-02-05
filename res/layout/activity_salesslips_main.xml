@@ -3,6 +3,32 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
+    
+    <LinearLayout
+        android:id="@+id/sales_slip_ll_intro_help"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:orientation="vertical" 
+        android:visibility="visible"
+        >
+	    <ImageView
+	        android:id="@+id/sales_slip_intro_help_image"
+	        android:layout_width="150dp"
+	        android:layout_height="wrap_content"
+	        android:layout_centerHorizontal="true"
+	        android:layout_gravity="center_horizontal"
+	        android:layout_marginBottom="10dp"
+	        android:layout_marginTop="5dp"
+	        android:src="@drawable/ic_foto_arrow" />
+
+	    <ch.mobileking.classes.override.RobotoTextView
+	        android:id="@+id/sales_slip_intro_help_text"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="center_horizontal"
+	        android:text="Scanne einen ersten Kassenzettel ein!" />
+	</LinearLayout>
 
     <LinearLayout
         android:id="@+id/salesslip_main_progress_layout"

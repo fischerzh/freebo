@@ -80,10 +80,6 @@ public class MainActivity extends Activity implements ITaskComplete{
 		setTitle("ProductKing");
 		
 		setContentView(R.layout.activity_main);
-		
-		if(!(Thread.getDefaultUncaughtExceptionHandler() instanceof CustomExceptionHandler)) {
-		    Thread.setDefaultUncaughtExceptionHandler(new CustomExceptionHandler(editor.getUsername()));
-		}
 
     	Utils.addLogMsg(this.getLocalClassName());
 		

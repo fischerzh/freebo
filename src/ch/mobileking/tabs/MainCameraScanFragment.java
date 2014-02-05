@@ -67,6 +67,7 @@ public class MainCameraScanFragment extends Fragment implements ITaskComplete{
 	ListView salesslips_listView;
 	private ProgressBar salesslip_progress;
 	private LinearLayout salesslip_main_progress_layout;
+	private LinearLayout sales_slip_ll_intro_help;
 
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -111,6 +112,13 @@ public class MainCameraScanFragment extends Fragment implements ITaskComplete{
 		}
 		
 		System.out.println("SalesSlip count: " + editor.getSalesSlips().size());
+		
+		sales_slip_ll_intro_help = (LinearLayout) getActivity().findViewById(R.id.sales_slip_ll_intro_help);
+		
+		if(ProductKing.getInstance().getStaticSalesSlips().size()>0)
+			sales_slip_ll_intro_help.setVisibility(View.GONE);
+		else
+			sales_slip_ll_intro_help.setVisibility(View.VISIBLE);
 		
         salesslip_progress =(ProgressBar) getActivity().findViewById(R.id.salesslip_progress);
         salesslip_main_progress_layout = (LinearLayout) getActivity().findViewById(R.id.salesslip_main_progress_layout);
@@ -229,7 +237,7 @@ public class MainCameraScanFragment extends Fragment implements ITaskComplete{
 			}
 		}
 		salesSlipItems.addAll(ProductKing.getInstance().getStaticSalesSlips());
-
+		
 //			salesSlipItems.addAll(editor.getSalesSlips());
 		ImageAdapter adapter = new ImageAdapter(getActivity().getApplicationContext(), salesSlipItems, R.layout.activity_salesslips_item); 
 		salesslips_listView.setAdapter(adapter);
@@ -263,6 +271,11 @@ public class MainCameraScanFragment extends Fragment implements ITaskComplete{
 		// TODO Auto-generated method stub
 		System.out.println("MainCameraScanFramgent.onUpdateCompleted: " +string);
 
+		if(ProductKing.getInstance().getStaticSalesSlips().size()>0)
+			sales_slip_ll_intro_help.setVisibility(View.GONE);
+		else
+			sales_slip_ll_intro_help.setVisibility(View.VISIBLE);
+		
         salesslip_main_progress_layout.setVisibility(View.GONE);
 
 //		createAlert("Besten Dank, Dein Einkauf wurde uns übermittelt. Wir werden diesen in kürze prüfen!", "Einkauf registriert!", R.drawable.ic_store_hero);
@@ -277,6 +290,7 @@ public class MainCameraScanFragment extends Fragment implements ITaskComplete{
 //		reloadAdapterInfo();
 //		salesslip_progress.setVisibility(View.VISIBLE);
         salesslip_main_progress_layout.setVisibility(View.VISIBLE);
+		sales_slip_ll_intro_help.setVisibility(View.GONE);
 
 	}
 

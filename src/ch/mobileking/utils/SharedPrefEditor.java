@@ -28,11 +28,14 @@ public class SharedPrefEditor {
 	
 	private static final String PREFS_PWD = "Password";
 	private static final String PREFS_USERNAME = "Username";
+	private static final String PREFS_USERID = "Userid";
+
 	private static final String PREFS_MAIL = "Email";
 	private static final String PREFS_FIRST_LOGIN = "Login";
 	private static final String PREFS_STAY_LOGGED_IN = "LoggedIn";
 	private static final String PREFS_REGID = "Registration";
 	private static final String PREFS_APPV = "Appversion";
+	
 	private static final String PREFS_TOTAL_PTS = "TotalPoints";
 	private static final String PREFS_NOTIFICATIONS = "Notifications";
 	private static final String PREFS_ANON = "Anonymous";
@@ -75,6 +78,29 @@ public class SharedPrefEditor {
 //		return sharedPrefs.getString(PREFS_USERNAME, "");
 	}
 	
+	public void setUserId(Integer userid) {
+		// TODO Auto-generated method stub
+	    SharedPreferences settings = cont.getSharedPreferences(PREFS_USERID, 0);
+	    SharedPreferences.Editor editor = settings.edit();
+	    editor.putInt(PREFS_USERID, userid);
+	    System.out.println("setUserId #PREFS_USERID: " + userid);
+	    // Commit the edits!
+	    editor.commit();
+	}
+	
+	public Integer getUserId()
+	{
+	    Integer userid;
+	    // Restore preferences
+	    SharedPreferences settings = cont.getSharedPreferences(PREFS_USERID, 0);
+	    userid = settings.getInt(PREFS_USERID, Integer.MIN_VALUE);
+	    System.out.println("getSharedPref #PREFS_USERID: " + userid);
+		
+		return userid;
+//		return sharedPrefs.getString(PREFS_USERNAME, "");
+	}
+	
+
 	public void setPwd(String pwd)
 	{	    
 	    SharedPreferences settings = cont.getSharedPreferences(PREFS_PWD, 0);
@@ -273,6 +299,7 @@ public class SharedPrefEditor {
 	    Boolean anon;
 	    SharedPreferences settings = cont.getSharedPreferences(PREFS_ANON, 0);
 	    anon = settings.getBoolean(PREFS_ANON, false);
+	    System.out.println("#PREFS_ANON: " + anon);
 	    return anon;
 	}
 	
@@ -405,6 +432,7 @@ public class SharedPrefEditor {
 	public static void setUpdateErrorLogsURL(String updateErrorLogsURL) {
 		SharedPrefEditor.updateErrorLogsURL = updateErrorLogsURL;
 	}
+
 
 
 }

@@ -225,7 +225,7 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
 
 			if(Utils.isNetworkAvailable(this)){
 	        	this.listener.startUpdate();
-        		createAlert("Besten Dank, Dein Einkauf wird uns übermittelt. Wir werden diesen in kürze prüfen!\n(Beachte: Der Einkaufszettel muss spätestens innert 1 Stunde nach Einkauf hochgeladen werden!)", "Einkauf registriert!", R.drawable.ic_store_hero );
+        		createAlert("Besten Dank, Dein Einkauf wird uns übermittelt. Wir werden diesen in kürze prüfen!\n", "Einkauf registriert!", R.drawable.ic_store_hero );
 				updateSalesSlipInfo();
 
 			}

@@ -30,6 +30,9 @@ public class ProductKing implements Serializable{
 	@SerializedName("username")
 	private String username = " ";
 	
+	@SerializedName("userid")
+	private Integer userid;
+	
 	@SerializedName("isactiveapp")
 	private Boolean isactiveapp;
 	
@@ -139,6 +142,20 @@ public class ProductKing implements Serializable{
 	 */
 	public String getUsername() {
 		return username;
+	}
+
+	/**
+	 * @return the userid
+	 */
+	public Integer getUserid() {
+		return userid;
+	}
+
+	/**
+	 * @param userid the userid to set
+	 */
+	public void setUserid(Integer userid) {
+		this.userid = userid;
 	}
 
 	/**
