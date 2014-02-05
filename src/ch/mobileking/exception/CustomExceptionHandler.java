@@ -63,7 +63,9 @@ public class CustomExceptionHandler implements UncaughtExceptionHandler {
         final Writer result = new StringWriter();
         final PrintWriter printWriter = new PrintWriter(result);
         e.printStackTrace(printWriter);
-        String stacktrace = result.toString();
+        String stacktrace = "Smartphone Info: " + Utils.getAndroidInfo() + "\n";
+        
+        stacktrace += result.toString();
         printWriter.close();
         String filename = username+" - "+timestamp + ".stacktrace";
                 

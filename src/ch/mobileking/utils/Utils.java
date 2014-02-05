@@ -259,6 +259,18 @@ public class Utils {
 		request.startUpdateLogs();
 	}
 
+	public static String getAndroidInfo() {
+		String returnURL = "";
+		String osVersion = android.os.Build.VERSION.RELEASE;
+		String manufacturer = android.os.Build.MANUFACTURER;
+		String model = android.os.Build.MODEL;
+//		@SuppressWarnings("deprecation")
+//		String screenSize = getAct().getWindowManager().getDefaultDisplay().getWidth() +"x" + getAct().getWindowManager().getDefaultDisplay().getHeight();
+//		String regId = Utils.getRegistrationId(getAct());
+		returnURL += "deviceType: "+manufacturer+":"+model+", deviceOs:"+osVersion;
+		return returnURL;
+	}
+	
 	public static void processFileFromSD(String filePath) {
 		// bitmap = BitmapFactory.decodeStream((InputStream)new
 		// URL(imgUri).getContent());
@@ -470,16 +482,18 @@ public class Utils {
 			// default
 			Criteria criteria = new Criteria();
 			String provider = locationManager.getBestProvider(criteria, true);
-			android.location.Location location = locationManager
-					.getLastKnownLocation(provider);
+			if(provider!=null)
+			{
+				android.location.Location location = locationManager.getLastKnownLocation(provider);
+
+				if (location != null) {
+					locationResponse += provider + "; lat: "
+							+ location.getLatitude() + "; long: "
+							+ location.getLongitude();
+				}
+			}
 //			System.out.println("Location " + provider + " has been selected.");
 
-			if (location != null) {
-				locationResponse += provider + "; lat: "
-						+ location.getLatitude() + "; long: "
-						+ location.getLongitude();
-			}
-//			System.out.println("Location: " + locationResponse);
 		}
 
 		return locationResponse;
