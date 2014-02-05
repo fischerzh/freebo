@@ -71,6 +71,7 @@ public class NdefreceiveActivity extends Activity implements OnClickListener{
     	case R.id.button1:
 			Intent intent = new Intent();
     		Bundle b = new Bundle();
+    		System.out.println("json onClick: " + jsonstr);
     		b.putString("jsonstr",jsonstr);
 			intent.setClass(this, ShowDetail.class);
 			intent.putExtras(b);

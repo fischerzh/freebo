@@ -101,8 +101,8 @@ public class NFCMainActivity extends Activity implements CreateNdefMessageCallba
 		});
 
 	    mAdapter = NfcAdapter.getDefaultAdapter(this);
-//	    mAdapter.setNdefPushMessageCallback(this, this);
-//	    mAdapter.setOnNdefPushCompleteCallback(this, this);
+	    mAdapter.setNdefPushMessageCallback(this, this);
+	    mAdapter.setOnNdefPushCompleteCallback(this, this);
         
         
 	}

@@ -18,6 +18,8 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.NFC" />
+    
 
 
     <!--
@@ -184,7 +186,12 @@
             android:name="ch.mobileking.nfcreceipt.NFCMainActivity"
             android:screenOrientation="portrait"
             android:label="@string/app_name" >
-        </activity>         
+        </activity>    
+                <activity
+            android:name="ch.mobileking.nfcreceipt.NdefreceiveActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/app_name" >
+        </activity>        
         <activity
             android:name="ch.mobileking.nfcreceipt.ShowDetail"
             android:screenOrientation="portrait"

@@ -48,45 +48,47 @@ public class ShowDetail extends Activity {
 		setListener();
 
 		Bundle b = this.getIntent().getExtras();
-//		String jsonstr = b.getString("jsonstr");
+		String jsonstr = b.getString("jsonstr");
+		
+		System.out.println("JSON string: " + jsonstr);
 		
 		editor = new SharedPrefEditor(this.getApplicationContext());
 		
-		sendServerRequest();
+//		sendServerRequest();
 
 
-//		if (jsonstr.trim().length() > 0) {
-//			try {
-//
-//				Hashtable hash = MessageGenerator.verifySignedInvoiceOperation(jsonstr);
-//				String request = (String) hash.get("request");
-//
-//				// System.out.println(request);
-//				String type = (String) hash.get("type");
-//				InvoiceFactory fac = null;
-//				InvoiceOperation op = null;
-//				if (type.compareTo("C0401") == 0) {
-//					fac = new C0401Factory();
-//					op = fac.getInstance(request);
-//					// tv2.setText(request);
-//				} else {
-//					throw new Exception("error");
-//				}
-//
+		if (jsonstr.trim().length() > 0) {
+			try {
+
+				Hashtable hash = MessageGenerator.verifySignedInvoiceOperation(jsonstr);
+				String request = (String) hash.get("request");
+
+				// System.out.println(request);
+				String type = (String) hash.get("type");
+				InvoiceFactory fac = null;
+				InvoiceOperation op = null;
+				if (type.compareTo("C0401") == 0) {
+					fac = new C0401Factory();
+					op = fac.getInstance(request);
+					// tv2.setText(request);
+				} else {
+					throw new Exception("error");
+				}
+
 //				mdesc.setText(hash.get("mDesc").toString());
-//				setContent(op);
-//
-//				// tv0.setText("T=" + (NFCMainActivity.t4 - NFCMainActivity.t3)
-//				// + ",pk len=" + NFCMainActivity.len3 + ",len="
-//				// + NFCMainActivity.len4);
-//				
-//				/** REGISTER SHOPPING TO BACKEND SERVER **/
-//				addShoppingToServer(op);
-//				
-//			} catch (Exception e) {
-//				// tv1.setText("Error");
-//			}
-//		}
+				setContent(op);
+
+				// tv0.setText("T=" + (NFCMainActivity.t4 - NFCMainActivity.t3)
+				// + ",pk len=" + NFCMainActivity.len3 + ",len="
+				// + NFCMainActivity.len4);
+				
+				/** REGISTER SHOPPING TO BACKEND SERVER **/
+				addShoppingToServer(op);
+				
+			} catch (Exception e) {
+				// tv1.setText("Error");
+			}
+		}
 
 	}
 
@@ -113,11 +115,11 @@ public class ShowDetail extends Activity {
 
 	private void setContent(InvoiceOperation io) {
 
-		seller.setText(((C0401Operation) io).seller);
-		invoiceN.setText(((C0401Operation) io).invoiceNumber);
-		invoiceD.setText(((C0401Operation) io).invoiceDate);
-		carrier.setText(((C0401Operation) io).carrierId1);
-		total.setText(((C0401Operation) io).totalAmount);
+//		seller.setText(((C0401Operation) io).seller);
+//		invoiceN.setText(((C0401Operation) io).invoiceNumber);
+//		invoiceD.setText(((C0401Operation) io).invoiceDate);
+//		carrier.setText(((C0401Operation) io).carrierId1);
+//		total.setText(((C0401Operation) io).totalAmount);
 
 		
 		adapter = new InvoiceAdapter(this, io);
@@ -140,7 +142,7 @@ public class ShowDetail extends Activity {
 			//Product Amount
 			System.out.println("NFC product amount: " + str[4]);
 		}
-//		sendServerRequest(io);
+		sendServerRequest(io);
 	}
 	
 	private String getNameFromEAN(String productName)
@@ -185,13 +187,13 @@ public class ShowDetail extends Activity {
         return details;
 	}
 	
-//	private void sendServerRequest(InvoiceOperation io )
-	private void sendServerRequest()
+	private void sendServerRequest(InvoiceOperation io )
+//	private void sendServerRequest()
 	{
 		
 		nameToEan = new HashMap<String, String>();
-		nameToEan.put("Coca-Cola Zero", "5449000131836");
-		nameToEan.put("Rivella Rot","7610097111072" );
+		nameToEan.put("Coca-Cola Zero", "3");
+		nameToEan.put("Rivella Rot","1" );
 		
 		HttpClient httpClient = new DefaultHttpClient();
 
@@ -212,15 +214,16 @@ public class ShowDetail extends Activity {
 		 * http://localhost:8080/Freebo/controlPanel/createShopping?user=2&retailer=2&product=5449000131836&product=7610097111072&anzahl=2&anzahl=3&preis=2&preis=3
 		 */
 		
-		String updateURL = "http://192.168.0.16:8080/Freebo/controlPanel/createShopping?user=2&retailer=3";
-//		int size = ((C0401Operation) io).details.size();
+		String updateURL = "http://www.sagax.ch:8080/Freebo/controlPanel/createShopping?retailer=3&user="+editor.getUserId();
+		int size = ((C0401Operation) io).details.size();
 		
-		int size = getElements().size();
+//		int size = getElements().size();
+//		int size = 
 		String name = "", qty = "", price = "", amount;
 		boolean first = true;
 		for (int i = 0; i < size; i++) {
-//			String[] str = (String[]) ((C0401Operation) io).details.elementAt(i);
-			String[] str = (String[]) getElements().elementAt(i);
+			String[] str = (String[]) ((C0401Operation) io).details.elementAt(i);
+//			String[] str = (String[]) getElements().elementAt(i);
 			System.out.println("NFC product name: " + str[0]);
 			System.out.println("NFC product qty: " + str[1]);
 			System.out.println("NFC product price: " + str[3]);
