@@ -268,6 +268,7 @@ public class Utils {
 //		String screenSize = getAct().getWindowManager().getDefaultDisplay().getWidth() +"x" + getAct().getWindowManager().getDefaultDisplay().getHeight();
 //		String regId = Utils.getRegistrationId(getAct());
 		returnURL += "deviceType: "+manufacturer+":"+model+", deviceOs:"+osVersion;
+		System.out.println("Android Info: " + returnURL);
 		return returnURL;
 	}
 	
@@ -461,13 +462,12 @@ public class Utils {
 
 	public static void addLogMsg(String msg) {
 
-		GcmMessage gcmMsg = new GcmMessage(msg, "UserActivityLog", "",
-				getLocationInformation());
+		GcmMessage gcmMsg = new GcmMessage(msg, "UserActivityLog", "",getLocationInformation());
 		if (getUserLogData() == null)
 			initUserLogData();
 		getUserLogData().add(gcmMsg);
-
-//		System.out.println("Add Log Message: " + msg + gcmMsg.getCreateDate());
+		
+		System.out.println("Add Log Message: " + Utils.getAndroidInfo());
 
 	}
 
@@ -491,8 +491,14 @@ public class Utils {
 							+ location.getLatitude() + "; long: "
 							+ location.getLongitude();
 				}
+				System.out.println("Location '" + provider + "' has been selected.");
+
 			}
-//			System.out.println("Location " + provider + " has been selected.");
+			else
+			{
+				System.out.println("Location provider is empty!");
+
+			}
 
 		}
 

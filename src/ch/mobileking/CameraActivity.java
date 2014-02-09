@@ -221,6 +221,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
 	private void startPreview()
 	{
 		mPreviewRunning = true;
+
 		mCamera.startPreview();
 	}
 
@@ -316,14 +317,15 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
                     break;
             }
             mCamera.setDisplayOrientation(angle);
-            
-        Camera.Size size = getBestPreviewSize(display.getWidth(), display.getHeight());
-        cameraParams.setPreviewSize(size.width, size.height);
-        cameraParams.setPictureSize(size.width, size.height);
+        
+//          Camera.Size size = getBestPreviewSize(display.getWidth(), display.getHeight());
+//          cameraParams.setPreviewSize(size.width, size.height);
+//          cameraParams.setPictureSize(size.width, size.height);
         cameraParams.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
         cameraParams.setFlashMode(Parameters.FLASH_MODE_AUTO);
         
         mCamera.setParameters(cameraParams);
+
     }
 	
 	private Camera.Size getBestPreviewSize(int width, int height)
