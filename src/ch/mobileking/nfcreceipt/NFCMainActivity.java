@@ -69,7 +69,6 @@ public class NFCMainActivity extends Activity implements CreateNdefMessageCallba
 	@Override
 	public void onNdefPushComplete(NfcEvent event) {
 		// TODO Auto-generated method stub
-		t1=System.currentTimeMillis();
 		Intent intent = new Intent();
 		intent.setClass(this, NdefreceiveActivity.class);
 		startActivity(intent);
@@ -83,9 +82,9 @@ public class NFCMainActivity extends Activity implements CreateNdefMessageCallba
 		setContentView(R.layout.nfc_activity_main);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         
-        textBox = (EditText)findViewById(R.id.editText1);
-        tv = (TextView)findViewById(R.id.textView1);
-        button = (Button)findViewById(R.id.button1);
+        textBox = (EditText)findViewById(R.id.nfc_editText1);
+        tv = (TextView)findViewById(R.id.nfc_textView1);
+        button = (Button)findViewById(R.id.nfc_activity_btn);
         button.setOnClickListener(new OnClickListener() {
 			
 			@Override

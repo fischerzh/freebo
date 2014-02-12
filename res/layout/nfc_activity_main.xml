@@ -5,17 +5,17 @@
     tools:context=".NFCMainActivity" >
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/nfc_textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:text="Carrier ID:" />
 
     <EditText
-        android:id="@+id/editText1"
+        android:id="@+id/nfc_editText1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView1"
+        android:layout_below="@+id/nfc_textView1"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
         android:ems="10"
@@ -28,7 +28,7 @@
         android:id="@+id/imageView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/editText1"
+        android:layout_below="@+id/nfc_editText1"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp"
         android:src="@drawable/nfc_logo" />
@@ -59,14 +59,14 @@
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/textView1"
+        android:layout_alignRight="@+id/nfc_textView1"
         android:layout_below="@+id/imageView1"
         android:layout_marginTop="21dp" 
         android:visibility="invisible"
         />
 
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/nfc_activity_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textView2"

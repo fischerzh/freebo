@@ -14,16 +14,19 @@ public class SharedPrefEditor {
 	
 	private static String testServer = "http://192.168.0.16:8080";
 	private static String liveServer = "http://www.sagax.ch:8080";
-	private static String prefix = liveServer+"/Freebo/";
-	private static String updateURL = prefix+"updateFavorites"; //192.168.0.16:8080;
-	private static String loginURL = prefix+"loginFromApp"; //192.168.0.16:8080;
+	private static String nfcServer = "http://www.sagax.ch:8090";
+	private static String prefix = testServer+"/Freebo/";
+	private static String prefix_nfc = nfcServer+"/ProductKingNFC/";
+	private static String updateURL = prefix_nfc+"updateFavorites"; //192.168.0.16:8080;
+	private static String loginURL = prefix_nfc+"loginFromApp"; //192.168.0.16:8080;
 //	private static String updateUserInfo = prefix+"updateUserInfo";
-	private static String updateCumulusURL = prefix+"updateCumulusInfo"; //192.168.0.16:8080;
-	private static String updateLogURL = prefix+"updateUserLog";
-	private static String registerURL = prefix+"user/create";
-	private static String updateUserSettingURL = prefix+"updateUserSettings";
-	private static String updateUserFilesURL = prefix+"updateUserFiles?";
-	private static String updateErrorLogsURL = prefix+"updateErrorLogs?";
+	private static String updateCumulusURL = prefix_nfc+"updateCumulusInfo"; //192.168.0.16:8080;
+	private static String updateLogURL = prefix_nfc+"updateUserLog";
+	private static String registerURL = prefix_nfc+"user/create";
+	private static String updateUserSettingURL = prefix_nfc+"updateUserSettings";
+	private static String updateUserFilesURL = prefix_nfc+"updateUserFiles?";
+	private static String updateErrorLogsURL = prefix_nfc+"updateErrorLogs?";
+	private static String updateShoppingForNfcURL = prefix_nfc+"controlPanel/createShopping?";
 
 	
 	private static final String PREFS_PWD = "Password";
@@ -432,6 +435,14 @@ public class SharedPrefEditor {
 	public static void setUpdateErrorLogsURL(String updateErrorLogsURL) {
 		SharedPrefEditor.updateErrorLogsURL = updateErrorLogsURL;
 	}
+
+	/**
+	 * @return the updateShoppingForNFC
+	 */
+	public static String getUpdateShoppingForNfcURL() {
+		return updateShoppingForNfcURL;
+	}
+
 
 
 

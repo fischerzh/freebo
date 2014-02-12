@@ -24,6 +24,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 @SuppressLint("NewApi")
@@ -42,16 +43,7 @@ public class NdefreceiveActivity extends Activity implements OnClickListener{
     	//Validation
     	try {                
     		byte[] payload = record.getPayload();                               
-    		/*             
-    		 * payload[0] contains the "Status Byte Encodings" field, per the             
-    		 * NFC Forum "Text Record Type Definition" section 3.2.1.             
-    		 * bit7 is the Text Encoding Field.             
-    		 * if (Bit_7 == 0): The text is encoded in UTF-8 if (Bit_7 == 1):             
-    		 * The text is encoded in UTF16             
- 			 * Bit_6 is reserved for future use and must be set to zero.
- 			 * Bits 5 to 0 are the length of the IANA language code.
- 			 */
-    		//Get the Text Encoding                
+        
     		String textEncoding = ((payload[0] & 0200) == 0) ? "UTF-8" : "UTF-16";
     		//Get the Language Code                
     		int languageCodeLength = payload[0] & 0077;                
@@ -66,6 +58,7 @@ public class NdefreceiveActivity extends Activity implements OnClickListener{
     }
 
     String jsonstr;
+	private ProgressBar nfc_ndefreceive_progress;
     public void onClick(View v) {
     	switch(v.getId()) {
     	case R.id.button1:
@@ -88,6 +81,9 @@ public class NdefreceiveActivity extends Activity implements OnClickListener{
         requestWindowFeature(Window.FEATURE_NO_TITLE);         
 		setContentView(R.layout.nfc_ndefreceive);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+       
+        nfc_ndefreceive_progress = (ProgressBar) findViewById(R.id.nfc_ndefreceive_progress);
+        nfc_ndefreceive_progress.setVisibility(View.VISIBLE);
         
 	    mAdapter = NfcAdapter.getDefaultAdapter(this);
 	    
@@ -111,9 +107,6 @@ public class NdefreceiveActivity extends Activity implements OnClickListener{
 	    mTechLists = new String[][] { new String[] { MifareUltralight.class.getName(), Ndef.class.getName(), NfcA.class.getName()},
 	            new String[] { MifareClassic.class.getName(), Ndef.class.getName(), NfcA.class.getName()}};
 
-        mbutton = (Button)findViewById(R.id.button1);
-        mbutton.setOnClickListener(this);
-        
 
 	}
 
@@ -159,17 +152,28 @@ public class NdefreceiveActivity extends Activity implements OnClickListener{
         String type = new String(firstr.getType());
         if(firstr.getTnf() == NdefRecord.TNF_WELL_KNOWN && Arrays.equals(firstr.getType(), NdefRecord.RTD_TEXT)) {
         	jsonstr=parseText(firstr);
-        	tv0.setText("TTL="+(NFCMainActivity.t2-NFCMainActivity.t1)+",len="+jsonstr.length());
-        	tv.setText(jsonstr);
+
         }
         else {
         	jsonstr="";
         	tv.setText(""+new String(firstr.getPayload()));
         }
+        nfc_ndefreceive_progress.setVisibility(View.INVISIBLE);
+        
+        Intent newIntent = new Intent();
+		Bundle b = new Bundle();
+		System.out.println("json onClick: " + jsonstr);
+		b.putString("jsonstr",jsonstr);
+		newIntent.setClass(this, ShowDetail.class);
+		newIntent.putExtras(b);
+		startActivity(newIntent);
+		this.finish();
+        
 	}
 	
 	@Override
 	public void onNewIntent(Intent intent) {
+		System.out.println("New Intent: " +intent);
 		 String action = intent.getAction();
 		 if(NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action) || NfcAdapter.ACTION_TAG_DISCOVERED.equals(action)) {
 			 processIntent(intent);

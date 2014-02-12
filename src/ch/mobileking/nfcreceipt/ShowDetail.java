@@ -192,8 +192,15 @@ public class ShowDetail extends Activity {
 	{
 		
 		nameToEan = new HashMap<String, String>();
-		nameToEan.put("Coca-Cola Zero", "3");
-		nameToEan.put("Rivella Rot","1" );
+		nameToEan.put("Coca-Cola Zero", "5449000131836"); //OK
+		nameToEan.put("Rivella Rot","7610097111072" );//OK
+		nameToEan.put("Ovomaltine", "7612100054826");
+		nameToEan.put("Toblerone Honey & Crisp", "7622300299477"); //OK
+		nameToEan.put("Gerber Fondue", "7611700006204"); //OK
+		nameToEan.put("Zweifel Paprika Chips", "7610095012005"); //OK
+		nameToEan.put("Rindsfleisch",	"2147830000003"); //OK
+		nameToEan.put("MIGROS Rinds-Hackfleisch", "2900516004104");//OK
+		nameToEan.put("Heineken - Bier","9028800635759");//OK
 		
 		HttpClient httpClient = new DefaultHttpClient();
 
@@ -214,7 +221,10 @@ public class ShowDetail extends Activity {
 		 * http://localhost:8080/Freebo/controlPanel/createShopping?user=2&retailer=2&product=5449000131836&product=7610097111072&anzahl=2&anzahl=3&preis=2&preis=3
 		 */
 		
-		String updateURL = "http://www.sagax.ch:8080/Freebo/controlPanel/createShopping?retailer=3&user="+editor.getUserId();
+//		String updateURL = "http://www.sagax.ch:8080/Freebo/controlPanel/createShopping?retailer=3&user="+editor.getUserId();
+		
+		String updateURL = editor.getUpdateShoppingForNfcURL()+"retailer=3&user="+editor.getUserId();
+		
 		int size = ((C0401Operation) io).details.size();
 		
 //		int size = getElements().size();
