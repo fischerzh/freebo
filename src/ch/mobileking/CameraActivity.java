@@ -199,10 +199,12 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
 					+ c.getParameters().getPictureFormat());
 
 			BitmapFactory.Options options = new BitmapFactory.Options();
-			options.inSampleSize = 1;
-
-			image = BitmapFactory.decodeByteArray(imageData, 0,
-					imageData.length, options);
+			// First decode with inJustDecodeBounds=true to check dimensions
+//            options.inJustDecodeBounds = true;
+			options.inSampleSize = 2;
+            
+            options.inJustDecodeBounds = false;
+			image = BitmapFactory.decodeByteArray(imageData, 0,	imageData.length, options);
 
 			Matrix matrix = new Matrix();
 			matrix.setRotate(90);
@@ -215,8 +217,26 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
 
 //			surfaceDestroyed(mSurfaceHolder);
 		}
+		
+		private int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+            // Raw height and width of image
+            final int height = options.outHeight;
+            final int width = options.outWidth;
+            int inSampleSize = 1;
+
+            if (height > reqHeight || width > reqWidth) {
+                if (width > height) {
+                    inSampleSize = Math.round((float)height / (float)reqHeight);
+                } else {
+                    inSampleSize = Math.round((float)width / (float)reqWidth);
+                }
+            }
+            return inSampleSize;
+        }
 
 	};
+	
+	
 	
 	private void startPreview()
 	{
@@ -321,6 +341,13 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
 //          Camera.Size size = getBestPreviewSize(display.getWidth(), display.getHeight());
 //          cameraParams.setPreviewSize(size.width, size.height);
 //          cameraParams.setPictureSize(size.width, size.height);
+            List<Camera.Size> sizes = cameraParams.getSupportedPreviewSizes();  
+            for(Camera.Size sz : sizes)
+            {
+            	System.out.println("Size: " + sz.width + " x "  + sz.height);
+            }
+            Camera.Size cs = sizes.get(0);  
+            cameraParams.setPreviewSize(cs.width, cs.height);  
         cameraParams.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
         cameraParams.setFlashMode(Parameters.FLASH_MODE_AUTO);
         
