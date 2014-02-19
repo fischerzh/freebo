@@ -12,7 +12,7 @@ import android.preference.PreferenceManager;
 
 public class SharedPrefEditor {
 	
-	private static String testServer = "http://192.168.0.16:8080";
+	private static String testServer = "http://192.168.0.19:8080";
 	private static String liveServer = "http://www.sagax.ch:8080";
 	private static String prefix = liveServer+"/Freebo/";
 	private static String updateURL = prefix+"updateFavorites"; //192.168.0.16:8080;
