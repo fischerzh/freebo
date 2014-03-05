@@ -9,7 +9,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:text="Carrier ID:" />
+        android:text="Carrier ID:" 
+                android:visibility="gone"
+        />
 
     <EditText
         android:id="@+id/nfc_editText1"
@@ -19,7 +21,9 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
         android:ems="10"
-        android:text="12345678" >
+        android:text="12345678"
+        android:visibility="gone"
+         >
 
         <requestFocus />
     </EditText>
@@ -72,6 +76,9 @@
         android:layout_below="@+id/textView2"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="19dp"
-        android:text="Starte Simulation!" />
+        android:text="Starte Simulation!" 
+                android:visibility="gone"
+        
+        />
 
 </RelativeLayout>

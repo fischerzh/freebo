@@ -8,18 +8,19 @@
 
     <!-- orgianl -->
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.15" >
+        <ImageButton
+            android:id="@+id/nfc_show_detail_btn"
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/nfc_logo" />
 
         <TextView
+            android:id="@+id/nfc_show_detail_shopping_registered"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:text="Verifizierte Einkäufe übermittelt!"
-            android:textSize="26px" />
-    </LinearLayout>
+            android:text="Einkäufe erfasst!"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <ListView
         android:id="@+id/inoviceList"
@@ -30,17 +31,19 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.15"
+        android:layout_height="wrap_content"
         android:gravity="center" >
 
         <Button
-            android:id="@+id/button1"
+            android:id="@+id/nfc_show_detail_back"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingBottom="10dp"
-            android:text="Next"
-            android:visibility="invisible" />
+            android:layout_height="fill_parent"
+            android:layout_weight="0.53"
+            android:background="@android:color/black"
+            android:textColor="@android:color/white"
+            android:text="Zurück"
+            android:visibility="visible" />
+
     </LinearLayout>
 
 </LinearLayout>

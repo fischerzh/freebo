@@ -78,9 +78,10 @@ public class NFCMainActivity extends Activity implements CreateNdefMessageCallba
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);         
 		setContentView(R.layout.nfc_activity_main);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        
+		setTitle("ProductKing");
         
         textBox = (EditText)findViewById(R.id.nfc_editText1);
         tv = (TextView)findViewById(R.id.nfc_textView1);

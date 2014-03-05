@@ -59,6 +59,7 @@ public class NdefreceiveActivity extends Activity implements OnClickListener{
 
     String jsonstr;
 	private ProgressBar nfc_ndefreceive_progress;
+	
     public void onClick(View v) {
     	switch(v.getId()) {
     	case R.id.button1:
@@ -78,10 +79,9 @@ public class NdefreceiveActivity extends Activity implements OnClickListener{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);         
 		setContentView(R.layout.nfc_ndefreceive);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-       
+        
         nfc_ndefreceive_progress = (ProgressBar) findViewById(R.id.nfc_ndefreceive_progress);
         nfc_ndefreceive_progress.setVisibility(View.VISIBLE);
         
@@ -114,7 +114,6 @@ public class NdefreceiveActivity extends Activity implements OnClickListener{
     public void onResume()
     {
         super.onResume();
-
         mAdapter.enableForegroundDispatch(this, mPendingIntent, mFilters, mTechLists);
         
     }
@@ -181,11 +180,5 @@ public class NdefreceiveActivity extends Activity implements OnClickListener{
 	 }
 
 	
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.nfc_ndefreceive_menu, menu);
-		return true;
-	}
 
 }

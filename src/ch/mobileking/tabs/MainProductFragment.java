@@ -12,6 +12,7 @@ import ch.mobileking.exception.CustomExceptionHandler;
 import ch.mobileking.login.AsyncLogin;
 import ch.mobileking.login.AsyncUpdate;
 import ch.mobileking.nfcreceipt.NFCMainActivity;
+import ch.mobileking.nfcreceipt.ShowDetail;
 import ch.mobileking.tabs.intro.BaseSampleActivity;
 import ch.mobileking.tabs.intro.IntroSequenceActivity;
 import ch.mobileking.utils.ITaskComplete;
@@ -335,8 +336,12 @@ public class MainProductFragment extends Fragment implements ITaskComplete {
 	
 	private void startNFCReceiver()
 	{
+//		Intent intent = new Intent(getActivity(), ShowDetail.class);
+//		startActivity(intent);
+		
 		Intent intent = new Intent(getActivity(), NFCMainActivity.class);
 		startActivity(intent);
+		
 	}
 	
 	private void startBarcodeScanner()
